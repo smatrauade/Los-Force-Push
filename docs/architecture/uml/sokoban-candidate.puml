@@ -1,0 +1,433 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 35
+skinparam ranksep 45
+hide empty members
+
+title Sokoban — UML integral v0.5 (candidato post Clase 9: Builder, 2026-09-30)
+
+package "presentation (Swing)" {
+  interface GameView {
+    + render(state : RestorableLevelState) : void
+    + updateHud(hud : HudData) : void
+    + showLevelSummary(result : LevelResult) : void
+  }
+
+  interface SpriteProvider {
+    + spriteFor(terrain : Terrain) : Image
+    + spriteFor(occupant : Occupant) : Image
+  }
+
+  class HudData <<DTO>> {
+    + levelId : String
+    + moves : int
+    + pushes : int
+  }
+
+  class GameFrame
+  class BoardPanel
+  class HudPanel
+  class ControlPanel
+
+  GameView <|.. GameFrame
+  GameFrame *-- BoardPanel
+  GameFrame *-- HudPanel
+  GameFrame *-- ControlPanel
+  BoardPanel --> SpriteProvider
+}
+
+package "application / controller" {
+  interface GameActions {
+    + onDirection(direction : Direction) : void
+    + onUndo() : void
+    + onRestart() : void
+  }
+
+  interface AudioService {
+    + play(event : SoundEvent) : void
+  }
+
+  enum SoundEvent {
+    MOVE
+    PUSH
+    BREAK
+    UNDO
+    VICTORY
+  }
+
+  class GameController <<GRASP Controller>> {
+    + onDirection(direction : Direction) : void
+    + onUndo() : void
+    + onRestart() : void
+    + startLevel(id : String) : void
+    - refreshView() : void
+  }
+
+  GameActions <|.. GameController
+}
+
+package domain {
+  class GameSession <<Originator>> {
+    {static} MAX_CONSECUTIVE_UNDO_USES : int = 3
+    + start(level : Level) : void
+    + move(direction : Direction) : MoveResult
+    + undoFive() : boolean
+    + restart() : void
+    + isWon() : boolean
+    + finishLevel() : LevelResult
+    + currentLevelId() : String
+    + currentState() : RestorableLevelState
+    + metrics() : SessionMetrics
+    + createMemento() : GameMemento
+    + restore(memento : GameMemento) : void
+  }
+
+  class Level {
+    - id : String
+  }
+
+  class RestorableLevelState {
+    - moveCount : int
+    - pushCount : int
+    + moves() : int
+    + pushes() : int
+  }
+
+  class SessionMetrics {
+    - undoUsesTotal : int
+    - consecutiveUndoUses : int
+    + undoUsesTotal() : int
+    + consecutiveUndoUses() : int
+  }
+
+  class LevelStats {
+    - moves : int
+    - pushes : int
+    - undoUses : int
+  }
+
+  class LevelResult {
+    - score : int
+  }
+
+  class Board <<Information Expert>> {
+    + cellAt(position : Position) : Cell
+    + occupantAt(position : Position) : Occupant
+    + isBlocked(position : Position) : boolean
+    + moveOccupant(from : Position, to : Position) : void
+    + removeOccupant(position : Position) : void
+  }
+
+  class Cell {
+    + isEmpty() : boolean
+  }
+
+  abstract class Terrain {
+    + isTraversable() : boolean
+    + causesSliding() : boolean
+    + onBoxLanded(box : Box) : void
+  }
+
+  class Floor
+  class Wall
+  class Goal
+  class Ice
+
+  class LockTile <<Subject>> {
+    + subscribe(observer : LockObserver) : void
+    + activate() : void
+    + onBoxLanded(box : Box) : void
+  }
+
+  class OpenableWall <<Observer>> {
+    - open : boolean
+    + onLockActivated() : void
+    + isTraversable() : boolean
+  }
+
+  interface LockObserver <<Observer>> {
+    + onLockActivated() : void
+  }
+
+  abstract class Occupant
+
+  class Player
+
+  abstract class Box {
+    + afterPush() : BoxPushOutcome
+    + canActivateLock() : boolean
+  }
+
+  class NormalBox
+
+  class FragileBox {
+    - resistance : int
+    + afterPush() : BoxPushOutcome
+  }
+
+  class KeyBox {
+    + canActivateLock() : boolean
+  }
+
+  enum BoxPushOutcome {
+    OK
+    BROKEN
+  }
+
+  class MovementEngine <<Domain Service>> {
+    + attemptMove(state : RestorableLevelState, direction : Direction) : MoveResult
+  }
+
+  class MoveResult {
+    - status : MoveStatus
+    - boxTravelDistance : int
+    + changedWorld() : boolean
+  }
+
+  enum MoveStatus {
+    MOVED
+    PUSHED
+    BOX_BROKEN
+    BLOCKED
+    RULE_UNRESOLVED
+  }
+
+  enum Direction {
+    UP
+    DOWN
+    LEFT
+    RIGHT
+  }
+
+  class Position <<value object>> {
+    + row : int
+    + col : int
+  }
+}
+
+package "domain.history" {
+  class UndoManager <<Caretaker>> {
+    {static} STEPS_PER_UNDO : int = 5
+    {static} MAX_HISTORY : int = 15
+    + record(memento : GameMemento) : void
+    + undoFive() : GameMemento
+    + canUndoFive() : boolean
+    + clear() : void
+  }
+
+  class GameMemento <<Memento>> {
+  }
+}
+
+package "domain.score" {
+  interface ScoreStrategy <<Strategy>> {
+    + calculate(stats : LevelStats) : int
+  }
+}
+
+package "level loading / infrastructure" {
+  interface LevelRepository {
+    + read(levelId : String) : String
+  }
+
+  class FileLevelRepository
+
+  interface LevelCatalog {
+    + nextAfter(levelId : String) : Optional<String>
+  }
+
+  class FileLevelCatalog
+
+  class LevelLoader {
+    + load(levelId : String) : Level
+  }
+
+  class LevelParser <<Director>> {
+    + parse(text : String) : Level
+  }
+
+  interface LevelBuilder <<Builder>> {
+    + reset() : void
+    + setLevelId(id : String) : void
+    + placeTerrain(position : Position, terrain : Terrain) : void
+    + placeOccupant(position : Position, occupant : Occupant) : void
+    + build() : Level
+  }
+
+  class SokobanLevelBuilder <<ConcreteBuilder>> {
+    + reset() : void
+    + setLevelId(id : String) : void
+    + placeTerrain(position : Position, terrain : Terrain) : void
+    + placeOccupant(position : Position, occupant : Occupant) : void
+    + build() : Level
+  }
+
+  class SoundManager <<Singleton? PROPOSED>> {
+    {static} - instance : SoundManager
+    - SoundManager()
+    {static} + getInstance() : SoundManager
+    + play(event : SoundEvent) : void
+  }
+
+  class ClasspathSpriteProvider
+}
+
+GameFrame --> GameActions : delegates input
+
+GameController --> GameSession
+GameController --> GameView
+GameController --> LevelLoader
+GameController --> LevelCatalog
+GameController --> AudioService
+GameController ..> HudData : builds
+
+GameSession *-- RestorableLevelState : currentState
+GameSession *-- SessionMetrics
+GameSession --> Level : currentLevel
+GameSession --> MovementEngine
+GameSession --> UndoManager
+GameSession --> ScoreStrategy
+GameSession ..> LevelStats : builds
+GameSession ..> LevelResult : creates
+GameSession ..> GameMemento : creates/restores
+
+Level *-- RestorableLevelState : initialState
+RestorableLevelState *-- Board
+Board *-- "1..*" Cell
+Cell *-- "1" Terrain
+Cell o-- "0..1" Occupant
+
+Terrain <|-- Floor
+Terrain <|-- Wall
+Terrain <|-- Goal
+Terrain <|-- Ice
+Terrain <|-- LockTile
+Terrain <|-- OpenableWall
+
+Occupant <|-- Player
+Occupant <|-- Box
+Box <|-- NormalBox
+Box <|-- FragileBox
+Box <|-- KeyBox
+Box ..> BoxPushOutcome
+
+MovementEngine --> RestorableLevelState
+MovementEngine ..> MoveResult
+MovementEngine ..> BoxPushOutcome
+MoveResult --> MoveStatus
+MovementEngine ..> Direction
+Board ..> Position
+
+LockObserver <|.. OpenableWall
+LockTile o-- "0..*" LockObserver
+LockTile ..> Box : checks canActivateLock()
+
+UndoManager o-- "0..15" GameMemento
+GameMemento *-- RestorableLevelState : opaque snapshot
+
+ScoreStrategy ..> LevelStats
+LevelResult *-- LevelStats
+
+LevelRepository <|.. FileLevelRepository
+LevelCatalog <|.. FileLevelCatalog
+LevelLoader --> LevelRepository
+LevelLoader --> LevelParser
+LevelParser --> LevelBuilder : directs construction
+LevelBuilder <|.. SokobanLevelBuilder
+SokobanLevelBuilder --> Level : builds
+SokobanLevelBuilder ..> Position
+SokobanLevelBuilder ..> Terrain
+SokobanLevelBuilder ..> Occupant
+
+AudioService <|.. SoundManager
+SpriteProvider <|.. ClasspathSpriteProvider
+
+note right of GameMemento
+MEMENTO BOUNDARY:
+- Originator: GameSession
+- Caretaker: UndoManager
+- Caretaker stores GameMemento, not raw state
+- snapshot remains opaque outside Originator/Memento
+end note
+
+note right of LevelParser
+POST CLASS-9 CREATIONAL STATUS:
+Builder is PREFERRED, not yet team-accepted.
+
+Rationale:
+- Level is a complex aggregate
+- TXT is interpreted step by step
+- Parser naturally acts as optional Director
+- Builder separates textual parsing from assembly
+
+Not selected for this problem:
+- Factory Method: no natural Creator hierarchy
+- Abstract Factory: no product families in level loading
+- Prototype: no cloning requirement for loading
+
+A small internal token/object factory may still be used,
+but it must not be mislabeled as GoF Factory Method.
+end note
+
+note bottom of SokobanLevelBuilder
+Exact construction operations are provisional until
+the final TXT grammar is agreed by the team.
+Metadata for fragile resistance and lock/wall groups
+must not be invented merely to satisfy the pattern.
+end note
+
+note right of ScoreStrategy
+ConcreteStrategy remains pending because
+the official assignment delegates the score
+formula to the development team.
+end note
+
+note right of GameSession
+OPEN BY OFFICIAL ASSIGNMENT:
+- victory with KeyBox/Lock interaction
+- undo edge cases (<5 moves / reset of consecutiveness)
+- exact score formula
+- restart semantics for undo metrics
+end note
+
+note bottom of FragileBox
+Interaction validation exposed an OPEN point:
+if resistance reaches zero on a push entering ice,
+the exact break position/timing must be defined.
+end note
+
+note bottom of Ice
+Normal sliding is clarified by the teacher example.
+If the strip ends directly against an obstacle,
+the exact final state remains OPEN.
+end note
+
+note bottom of OpenableWall
+Official term: "muros abiertos/cerrados".
+Re-closing semantics remains OPEN.
+Observer remains local to the domain collaboration.
+end note
+
+note bottom of SoundManager
+Singleton remains PROPOSED.
+GameController depends on AudioService (DIP);
+composition root may supply SoundManager.getInstance().
+end note
+
+note bottom of BoardPanel
+Official:
+- board elements use images
+- actions use appropriate sounds
+- assets are public domain
+end note
+
+note bottom of GameController
+LevelCatalog makes "advance to next level" explicit.
+
+The two mandatory additional functionalities
+remain intentionally absent until selected.
+end note
+
+@enduml

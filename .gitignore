@@ -1,0 +1,16 @@
+*.class
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+/target/
+/build/
+/out/
+/.gradle/
+/.idea/
+*.iml
+/.vscode/
+.env
+.env.*
+!.env.example
