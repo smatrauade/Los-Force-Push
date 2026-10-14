@@ -47,3 +47,7 @@ El formato referido por D-020 y OQ-08 sigue OPEN: una capa provisional limitada 
 ## Seguimiento de validación R3 — 2026-10-14
 
 Correcciones del diagnóstico de tamaño y validación temprana, 38 casos PASS con compilación/ejecución real en JDK 17 y JDK 26, contrafactual detectado y UML experimental compilado/renderizado. Son controles del incremento, no decisiones del equipo: D-011/D-012 continúan PREFERRED, OQ-08/OQ-11 OPEN. [Detalle reproducible](../experiments/LEVEL_LOADING_R1.md).
+
+## Hipótesis experimental de movimiento R1 — 2026-10-14
+
+Por solicitud del usuario se ensaya transición funcional `Board + Direction → MoveResult + Board`, frente a agregado runtime encapsulado. Se reutiliza Board inmutable de Level Loading sin modificarlo ni duplicar posiciones. El coste de copia/validación y la alternativa futura quedan en [MOVEMENT_R1](../experiments/MOVEMENT_R1.md). Alcance: piso/destino/pared/borde/jugador/caja normal; no Memento ni otras mecánicas. Estado EXPERIMENTAL, sin ratificación del equipo ni nueva autoridad docente. D-001/002/003/004/005/006/007/011/012 y OQ-01…OQ-11 mantienen sus estados anteriores; los PASS sólo validan este subconjunto.

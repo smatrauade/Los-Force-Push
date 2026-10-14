@@ -1,4 +1,6 @@
 # Windows PowerShell 5.1 / PowerShell 7; no shell emulation or build framework.
+param([switch]$IncludeMovement)
+
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 $runDirectory = $null
@@ -55,11 +57,14 @@ try {
         ('@' + $sourceList))
     & $compiler @compileArgs
     if ($LASTEXITCODE -ne 0) { throw 'Java compilation failed.' }
-    $testArgs = @('--limit-modules', 'java.base', ('-Djava.io.tmpdir=' + $runDirectory),
-        '-cp', $classes, 'ar.edu.uade.sokoban.level.LevelLoadingTest',
-        (Join-Path $root 'src/test/resources/levels'))
-    & $runtime @testArgs
-    if ($LASTEXITCODE -ne 0) { throw 'Level-loading tests failed.' }
+    $testClasses = @('ar.edu.uade.sokoban.level.LevelLoadingTest')
+    if ($IncludeMovement) { $testClasses += 'ar.edu.uade.sokoban.movement.MovementTest' }
+    foreach ($testClass in $testClasses) {
+        $testArgs = @('--limit-modules', 'java.base', ('-Djava.io.tmpdir=' + $runDirectory),
+            '-cp', $classes, $testClass, (Join-Path $root 'src/test/resources/levels'))
+        & $runtime @testArgs
+        if ($LASTEXITCODE -ne 0) { throw ('Tests failed: ' + $testClass) }
+    }
     $exitCode = 0
 } catch {
     Write-Error -Message $_.Exception.Message -ErrorAction Continue

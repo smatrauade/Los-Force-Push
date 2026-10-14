@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # Bash 3.2+; compilation and mutable fixtures stay in an owned temporary directory.
 set -euo pipefail
+include_movement=0
+if [[ "$#" -eq 1 && "$1" == --movement ]]; then
+    include_movement=1
+elif [[ "$#" -ne 0 ]]; then
+    printf 'Usage: bash test-level-loading.sh [--movement]\n' >&2
+    exit 2
+fi
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 selected_jdk="${SPIKE_JDK_HOME:-${JAVA_HOME:-}}"
 if [[ -n "$selected_jdk" ]]; then
@@ -36,3 +43,8 @@ find src/main/java src/test/java -name '*.java' -type f | LC_ALL=C sort > "$spik
 "$runtime" --limit-modules java.base -Djava.io.tmpdir="$spike_run_dir" \
     -cp "$spike_run_dir/classes" ar.edu.uade.sokoban.level.LevelLoadingTest \
     "$root/src/test/resources/levels"
+if [[ "$include_movement" -eq 1 ]]; then
+    "$runtime" --limit-modules java.base -Djava.io.tmpdir="$spike_run_dir" \
+        -cp "$spike_run_dir/classes" ar.edu.uade.sokoban.movement.MovementTest \
+        "$root/src/test/resources/levels"
+fi

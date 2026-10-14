@@ -17,7 +17,7 @@ El bootstrap documental y estructural está integrado en `main`: el [PR #1](http
 | Versión Java / herramienta de build | `OPEN` |
 | StarUML, assets, video e informe final | Pendientes |
 
-Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. Esta rama contiene un [incremento experimental de carga TXT](docs/experiments/LEVEL_LOADING_R1.md): 40 casos ejecutados en Java 17 y Java 26, compilación directa, modelo inmutable y comparación Builder/directa. El contrato y el diseño siguen sin ratificación productiva; OQ-08/OQ-11 permanecen abiertas. El siguiente paso es revisión del contrato, diseño y diff local por el equipo.
+Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. Este snapshot contiene el [core experimental de carga TXT](docs/experiments/LEVEL_LOADING_R1.md), movimiento cardinal y empuje de una caja normal, pruebas automatizadas, runners Bash/PowerShell y UML/documentación del incremento. La base histórica de carga es `44b3c63b437465b5f54c1f0f5ca5cbadb5def0e5`; no representa un HEAD permanente. El contrato y el diseño siguen sin ratificación del equipo; OQ-08/OQ-11 permanecen abiertas.
 
 ## Empezar sin chats anteriores
 
@@ -69,10 +69,24 @@ Evidencia R4 (2026-10-14): Linux nativo PASS con JDK 17/26; Windows y macOS nati
 
 No existe aún un comando para ejecutar el juego. Java/build del producto siguen en OQ-11 OPEN: la compilación directa del spike no los ratifica ni introduce Maven/Gradle. La base histórica reservaba directorios con placeholders; esta rama contiene únicamente las fuentes y pruebas experimentales.
 
+## Movimiento básico experimental
+
+Este incremento contiene el núcleo experimental de movimiento cardinal y empuje de una caja normal, con pruebas reproducibles. El [informe histórico R1](docs/experiments/MOVEMENT_R1.md) describe su contrato y alternativas. Board sigue inmutable y Level conserva su estado inicial. El estado es **IMPLEMENTED_EXPERIMENTAL** y **TESTED**; **TEAM_ACCEPTED** no está registrado y **INTEGRATED_IN_MAIN** no está acreditado para movimiento. El versionado local no implica esos estados ni un juego gráfico completo.
+
+Para ejecutar carga y movimiento con una sola compilación, agregar `--movement` al comando Bash o `-IncludeMovement` al comando PowerShell. Resultado esperado: `RESULT: 40 PASS, 0 FAIL` seguido de `MOVEMENT RESULT: 31 PASS, 0 FAIL`, con salida 0. Sin opción se mantienen los 40 casos de carga.
+
+| Iteración de movimiento — 2026-10-14 | Java 17 | Java 26 | Procedencia |
+|---|---|---|---|
+| R1 | 40 + 31 PASS reportados | 40 + 31 PASS reportados | Informe histórico R1 |
+| R2 | 40 + 31 PASS reproducidos | NOT_RUN | Revisión independiente; sin defectos funcionales bloqueantes |
+| R3 | 40 + 31 PASS reproducidos | 40 + 31 PASS reproducidos | Linux nativo, JDK 17.0.20.1 y 26.0.2, compilación estricta y salida 0 |
+
+La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md) distingue suites versionadas y evidencia temporal de auditoría. Windows/macOS nativos siguen NOT_RUN; compatibilidad por diseño no equivale a ejecución nativa. La versión Java/build definitiva sigue OPEN. El [UML acotado](docs/architecture/uml/movement-core-spike-v1.puml) corresponde a este subconjunto. Revisión grupal y eventual publicación/integración siguen pendientes. No hay hielo, cajas especiales, Undo, victoria, score, Swing ni audio.
+
 ## Colaboración y entrega
 
 Seguir [CONTRIBUTING.md](CONTRIBUTING.md): rama de alcance acotado, commits, PR y revisión por otro integrante. No escribir directamente en `main`, usar force-push ni activar GitHub Actions en este alcance.
 
 El repositorio permanece **privado**. La consigna exige uno público para la entrega: el equipo deberá decidir y ejecutar ese cambio más adelante. También faltan README de ejecución, gameplay en video, diagrama de clases StarUML e informe técnico; la entrega institucional deberá incluir a los integrantes en copia.
 
-El bootstrap, la reconciliación documental y este spike fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. No se implementó gameplay ni se volvió a ejecutar ningún spike histórico.
+El bootstrap, la reconciliación documental y este spike fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. Se implementó únicamente el core experimental de carga y movimiento básico; no se volvió a ejecutar ningún spike histórico.

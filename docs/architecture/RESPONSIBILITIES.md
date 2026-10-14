@@ -44,3 +44,16 @@ ScoreStrategy y LockObserver representan variaciones/roles identificables. GameV
 | LevelFormatException | Error explícito del contrato experimental |
 
 Las demás responsabilidades candidatas permanecen sin implementación. No se adoptan contratos de cajas especiales ni interfaz Builder por anticipación.
+
+## Roles del movimiento experimental R1 — 2026-10-14
+
+[Informe](../experiments/MOVEMENT_R1.md) y [UML](uml/movement-core-spike-v1.puml).
+
+| Tipo | Responsabilidad y límite |
+|---|---|
+| Direction | Desplazamiento cardinal de una celda, sin teclado ni UI |
+| MovementEngine | Consultar Board y Direction, bloquear colisiones, crear un Board válido nuevo tras checks; sin estado retenido |
+| MoveResult / Kind | Resultado MOVED/PUSHED/BLOCKED y Board resultante; sin estadísticas o semántica de conteo |
+| Board/Cell/Position heredados | Expert espacial, terreno conservado e invariantes; contratos y fuentes sin cambios |
+
+El llamador conserva la referencia al Board vigente; el motor no es otro propietario de estado ni una sesión. Level mantiene el valor inicial. No se agrega GameState, jerarquía de cajas o interfaces sin variación real. Clases productivas del resto del modelo siguen pendientes.
