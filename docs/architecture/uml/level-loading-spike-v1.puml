@@ -1,0 +1,89 @@
+@startuml
+title Level loading R1 — experimento local, no ratificado
+hide empty members
+package ar.edu.uade.sokoban.level {
+  class Position <<record>> {
+    -row : int
+    -column : int
+    +row() : int
+    +column() : int
+  }
+  enum Terrain {
+    WALL
+    FLOOR
+    GOAL
+  }
+  enum Occupant {
+    EMPTY
+    PLAYER
+    BOX
+  }
+  class Cell <<record>> {
+    -terrain : Terrain
+    -occupant : Occupant
+    +terrain() : Terrain
+    +occupant() : Occupant
+  }
+  class Board <<record>> {
+    {static} +MAX_DIMENSION : int = 100
+    -rows : List<List<Cell>>
+    +rows() : List<List<Cell>>
+    +width() : int
+    +height() : int
+    +cellAt(position : Position) : Cell
+    +playerPosition() : Position
+    +boxCount() : long
+    +goalCount() : long
+  }
+  class Level <<record>> {
+    -board : Board
+    +board() : Board
+  }
+  class LevelBuilder <<internal>> {
+    -rows : List<List<Cell>>
+    -published : boolean
+    ~addRow(row : List<Cell>) : void
+    ~build() : Level
+  }
+  class LevelParser {
+    +parse(text : String) : Level
+  }
+  class LevelLoader {
+    {static} +MAX_FILE_BYTES : int = 65536
+    -parser : LevelParser
+    +LevelLoader(parser : LevelParser)
+    +load(path : Path) : Level
+  }
+  class LevelFormatException
+}
+class "IllegalArgumentException (JDK)" as IllegalArgumentException
+IllegalArgumentException <|-- LevelFormatException
+LevelLoader --> LevelParser
+LevelParser ..> LevelBuilder : per load
+LevelParser ..> Cell : decodes
+LevelBuilder ..> Level : assembles
+LevelBuilder ..> Board : validates on construction
+Level --> "1" Board : immutable value
+Board --> "1..*" Cell : immutable rows
+Cell --> Terrain
+Cell --> Occupant
+Board ..> Position
+LevelParser ..> LevelFormatException
+LevelBuilder ..> LevelFormatException
+LevelLoader ..> LevelFormatException
+Board ..> LevelFormatException
+note bottom of LevelBuilder
+Concrete/internal; no Builder interface or alternate builders.
+D-011 remains PREFERRED. Direct construction stays an alternative.
+end note
+note bottom of Level
+Immutable initial product only; no gameplay or Swing.
+OQ-08 / OQ-11 remain OPEN. Separate from integral candidate v0.5.
+Record constructors validate values; accessors expose immutable data.
+Associations do not require exclusive identity ownership.
+end note
+note bottom of LevelParser
+Early dimensions/rectangularity checks bound assembly work.
+Board keeps the same final invariants for direct construction.
+end note
+@enduml

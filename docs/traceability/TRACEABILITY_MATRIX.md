@@ -1,6 +1,6 @@
 # Matriz viva de trazabilidad
 
-Revisado 2026-10-08. **Todas las implementaciones y pruebas productivas están pendientes.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. Las responsabilidades y UML son candidatos.
+Revisado 2026-10-14 (evidencia experimental R1–R4). **Todas las implementaciones y pruebas productivas están pendientes.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. Las responsabilidades y UML son candidatos.
 
 | Req | Responsabilidad / UML candidato | Principio/patrón candidato | Prueba prevista / historial | Decisiones abiertas |
 |---|---|---|---|---|
@@ -24,3 +24,13 @@ Revisado 2026-10-08. **Todas las implementaciones y pruebas productivas están p
 [UML](../architecture/uml/sokoban-candidate.puml), [responsabilidades](../architecture/RESPONSIBILITIES.md), [plan de pruebas](../testing/TEST_STRATEGY.md), [historial](../testing/HISTORICAL_EVIDENCE.md) y [preguntas](../requirements/OPEN_QUESTIONS.md) permiten continuar sin otro chat.
 
 Para marcar DONE: requisito → decisión/autoridad → responsabilidad → implementación real (ruta/commit) → test ejecutado (comando/resultado) → documentación. Completar rutas sólo cuando existan; no inventarlas en este bootstrap.
+
+## Evidencia local R1, sin DONE productivo
+
+| Requisito | Implementación experimental | Evidencia actual / límite |
+|---|---|---|
+| RF-01 | Position/Terrain/Occupant/Cell/Board en `src/main/java/ar/edu/uade/sokoban/level` | Pared/piso/destino/jugador/caja normal; entidades especiales pendientes |
+| RF-02 | LevelLoader/LevelParser/LevelBuilder/Level | TXT reales, distintos/modificados; errores, determinismo y atomicidad; OQ-08 OPEN |
+| RT-01 | `scripts/test-level-loading.sh` / `test-level-loading.ps1` | Compilación/ejecución real con JDK 17 y 26; release 17 y sólo java.base; Linux nativo PASS, Windows/macOS NOT_RUN; OQ-11 OPEN |
+
+[40 casos R4 y comandos](../experiments/LEVEL_LOADING_R1.md), [tests reales](../../src/test/java/ar/edu/uade/sokoban/level/LevelLoadingTest.java). Evidencia experimental R4 sobre las fuentes referenciadas, con base histórica del merge PR #2; no es la reproducción A/B histórica ni aceptación final de requisitos. Los demás RF permanecen pendientes.

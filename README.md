@@ -4,7 +4,7 @@ Proyecto académico de Ingeniería en Informática, UADE: **Proceso de Desarroll
 
 ## Estado al 2026-10-14
 
-El bootstrap documental y estructural está integrado en `main`: el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1) se fusionó el 2026-10-08. La auditoría del 2026-10-14 no encontró avances posteriores. **Todavía no hay juego ejecutable, clases Java ni build configurado.** La documentación y la estructura inicial del proyecto están creadas; el merge no ratifica las propuestas de diseño. El [estado vivo](docs/continuity/CURRENT_STATE.md) registra el evento histórico y su SHA.
+El bootstrap documental y estructural está integrado en `main`: el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1) se fusionó el 2026-10-08. El PR #2 de reconciliación se fusionó el 2026-10-14. **La base histórica `1943053ec520ff3d8be0aecb21c2f417f3126380` todavía no contenía clases Java ni build.** El incremento de esta rama es experimental y no contiene un juego ejecutable. La documentación y la estructura inicial del proyecto están creadas; el merge no ratifica las propuestas de diseño. El [estado vivo](docs/continuity/CURRENT_STATE.md) registra el evento histórico y su SHA.
 
 | Área | Estado |
 |---|---|
@@ -17,7 +17,7 @@ El bootstrap documental y estructural está integrado en `main`: el [PR #1](http
 | Versión Java / herramienta de build | `OPEN` |
 | StarUML, assets, video e informe final | Pendientes |
 
-Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. El próximo dominio técnico previsto es el cargador de niveles TXT: contrato candidato y spike para comparar Builder con construcción directa, tras revisar esta reconciliación y con las precondiciones pertinentes verificadas.
+Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. Esta rama contiene un [incremento experimental de carga TXT](docs/experiments/LEVEL_LOADING_R1.md): 40 casos ejecutados en Java 17 y Java 26, compilación directa, modelo inmutable y comparación Builder/directa. El contrato y el diseño siguen sin ratificación productiva; OQ-08/OQ-11 permanecen abiertas. El siguiente paso es revisión del contrato, diseño y diff local por el equipo.
 
 ## Empezar sin chats anteriores
 
@@ -47,7 +47,27 @@ bash scripts/verify-repo-readonly.sh
 
 Requiere Git, Bash y Python 3 para la auditoría documental; **Python no es una decisión sobre el runtime del juego**. El script inspecciona archivos y Git, no hace fetch, commits ni escrituras. Para verificar un checkout limpio agregar `--require-clean`; usarlo antes de editar o después de un commit exitoso. El modo `--bootstrap` audita exclusivamente la rama original `docs/bootstrap-sokoban-autocontenido-v1` y exige ese nombre de rama; no corresponde a la reconciliación ni al checkout de `main`. No reemplaza el preflight remoto de permisos/PRs.
 
-No existe aún un comando para ejecutar el juego. El primer build reproducible requiere cerrar OQ-11 con una versión Java y sistema de construcción, documentar instalación/compilación/ejecución/pruebas y verificar esos comandos desde un clon limpio. La estructura `src/main/java`, `src/main/resources` y `src/test/java` se reserva sin clases vacías ni versiones inventadas.
+## Ejecutar las pruebas del incremento experimental
+
+Se necesita un JDK completo 17 o superior. Desde la raíz del checkout:
+
+```bash
+# Linux/macOS: Bash 3.2+ y find, sort, mktemp (GNU o BSD).
+SPIKE_JDK_HOME='<directorio-del-JDK>' bash scripts/test-level-loading.sh
+```
+
+```powershell
+# Windows 10/11: Windows PowerShell 5.1 o PowerShell 7.
+$env:SPIKE_JDK_HOME = '<directorio-del-JDK>'
+powershell -NoProfile -File .\scripts\test-level-loading.ps1
+# Con PowerShell 7, reemplazar powershell por pwsh.
+```
+
+Ambos runners seleccionan `SPIKE_JDK_HOME` → `JAVA_HOME` → PATH, compilan las mismas fuentes y ejecutan los mismos tests Java; Windows no necesita Bash, WSL, Python ni GNU coreutils. También pueden invocarse desde otro directorio indicando la ruta del script. Las clases y archivos de prueba mutables se crean en un temporal propio fuera del checkout y se eliminan al terminar. Resultado esperado: `RESULT: 40 PASS, 0 FAIL` y código 0; fallos de JDK, compilación, tests o cleanup deben investigarse ante una salida no cero. No se instalan herramientas ni se cambian políticas globales. Si una política Windows impide ejecutar el script, seguir un procedimiento autorizado para scripts confiables o firmados; el runner no cambia ExecutionPolicy.
+
+Evidencia R4 (2026-10-14): Linux nativo PASS con JDK 17/26; Windows y macOS nativos NOT_RUN. El runner PowerShell recibió revisión estática y Bash revisión de compatibilidad con macOS; estas revisiones no prueban ejecución en esos sistemas. Ver [comandos, matriz y límites](docs/experiments/LEVEL_LOADING_R1.md). Fuentes: `src/main/java/ar/edu/uade/sokoban/level`; pruebas: `src/test/java`; fixtures: `src/test/resources/levels`. EditorConfig preserva espacios de piso en TXT de niveles y Git fija LF sin recortarlos.
+
+No existe aún un comando para ejecutar el juego. Java/build del producto siguen en OQ-11 OPEN: la compilación directa del spike no los ratifica ni introduce Maven/Gradle. La base histórica reservaba directorios con placeholders; esta rama contiene únicamente las fuentes y pruebas experimentales.
 
 ## Colaboración y entrega
 
@@ -55,4 +75,4 @@ Seguir [CONTRIBUTING.md](CONTRIBUTING.md): rama de alcance acotado, commits, PR 
 
 El repositorio permanece **privado**. La consigna exige uno público para la entrega: el equipo deberá decidir y ejecutar ese cambio más adelante. También faltan README de ejecución, gameplay en video, diagrama de clases StarUML e informe técnico; la entrega institucional deberá incluir a los integrantes en copia.
 
-El bootstrap y esta reconciliación documental fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. No se implementó gameplay ni se volvió a ejecutar ningún spike histórico.
+El bootstrap, la reconciliación documental y este spike fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. No se implementó gameplay ni se volvió a ejecutar ningún spike histórico.

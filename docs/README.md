@@ -14,6 +14,7 @@
 | Bibliografía/cátedra | [BIBLIOGRAPHY](references/BIBLIOGRAPHY.md) |
 | Investigación previa | [GITHUB_REFERENCES](references/GITHUB_REFERENCES.md) |
 | Licencias de assets | [ASSET_POLICY](assets/ASSET_POLICY.md) |
+| Experimento local de carga TXT | [LEVEL_LOADING_R1](experiments/LEVEL_LOADING_R1.md), [UML del spike](architecture/uml/level-loading-spike-v1.puml) |
 | Estado vivo y riesgos | [CURRENT_STATE](continuity/CURRENT_STATE.md) |
 | Mantenimiento | [FRESHNESS_POLICY](continuity/FRESHNESS_POLICY.md) |
 | Disponibilidad de fuentes | [SOURCE_REGISTRY](continuity/SOURCE_REGISTRY.md) |

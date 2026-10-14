@@ -1,6 +1,6 @@
 # Registro vivo de decisiones
 
-`LAST_REVIEWED = 2026-10-08`. La autoridad se separa del estado. No hay ratificación formal de arquitectura aportada a este bootstrap. Ninguna fila `PREFERRED`/`TEAM-PROPOSAL` se considera `ACCEPTED`. Las pruebas históricas no modifican ese estado.
+`LAST_REVIEWED = 2026-10-14` (comparación local R1, sin ratificación). La autoridad se separa del estado. No hay ratificación formal de arquitectura aportada a este bootstrap. Ninguna fila `PREFERRED`/`TEAM-PROPOSAL` se considera `ACCEPTED`. Las pruebas históricas no modifican ese estado.
 
 | ID | Problema / opción | Alternativa y estado | Justificación y consecuencias |
 |---|---|---|---|
@@ -37,3 +37,13 @@ El relato histórico pasó de fábrica probable a Builder preferido tras Clase 9
 Los IDs D-* de la cápsula anterior tienen otra asignación: mapear por tema, no inferir identidad sólo por número. La evidencia `E3` de allí se reexpresa como `HISTORICAL_EXTERNAL_EVIDENCE` en documentos vivos.
 
 Para cada nueva decisión registrar problema, opciones, estado, autoridad/fuente, fecha, participantes que ratifican, justificación, consecuencias, pruebas y documentos afectados. Una supersesión referencia la decisión anterior; no borra historia ni reescribe cápsulas.
+
+## Seguimiento experimental R1 — 2026-10-14
+
+D-011/D-012 permanecen PREFERRED: [comparación Builder/directa](../experiments/LEVEL_LOADING_R1.md) sobre el mismo contrato e invariantes. Se ensaya un Builder concreto interno por carga, sin interfaz/Director adicional; encapsula acumulación y publicación a coste de una clase. La alternativa directa puede satisfacer las mismas garantías. 30 casos PASS no equivalen a ratificación del equipo.
+
+El formato referido por D-020 y OQ-08 sigue OPEN: una capa provisional limitada a siete símbolos, sin resolver resistencia, IDs ni entidades fuera del alcance. Java target/build (OQ-11, dentro de D-001) siguen OPEN; Java/Swing permanece OFFICIAL: release 17 con compilador/runtime 26.0.2 es un entorno experimental, no target/build aceptado. Autoridad de esta ejecución: solicitud del usuario del 2026-10-14; hipótesis y análisis propios, sin nuevas aclaraciones docentes ni decisiones grupales. No se cierran otras preguntas ni se adoptan jerarquías de cajas a partir de enums temporales.
+
+## Seguimiento de validación R3 — 2026-10-14
+
+Correcciones del diagnóstico de tamaño y validación temprana, 38 casos PASS con compilación/ejecución real en JDK 17 y JDK 26, contrafactual detectado y UML experimental compilado/renderizado. Son controles del incremento, no decisiones del equipo: D-011/D-012 continúan PREFERRED, OQ-08/OQ-11 OPEN. [Detalle reproducible](../experiments/LEVEL_LOADING_R1.md).
