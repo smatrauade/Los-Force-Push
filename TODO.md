@@ -19,7 +19,6 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Runners Unix/Windows sobre las mismas fuentes; revisión Bash 3.2/PowerShell 5.1, pruebas Linux con rutas/temporales Unicode y espacios, protección TXT/EOL.
 - [ ] Ejecutar los mismos 40 casos nativamente en Windows 10/11 (PowerShell 5.1 y 7) y macOS; registrar sistema/JDK/comando/salida y cleanup.
 - [ ] Revisar contrato, coste de Builder, modelo y pruebas con el equipo; D-011 sigue PREFERRED.
-- [ ] Revisar el incremento y autorizar por separado las operaciones de integración/publicación.
 
 ## Movimiento experimental — implementación y validación R1–R3
 
@@ -31,7 +30,6 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Preparar el incremento experimental de movimiento con código, pruebas, UML y documentación coherentes para su versionado.
 - [x] Reproducir en R3 los 40 casos de carga y 31 de movimiento con JDK 17/26 en Linux, sin warnings y con salida 0.
 - [ ] Revisar el movimiento con el equipo; la aceptación grupal no está registrada.
-- [ ] Publicar e integrar el incremento sólo tras revisión y autorización posteriores.
 - [ ] Pruebas nativas Windows/macOS de ambas suites; preservar decisiones OPEN/PREFERRED.
 
 ## Bloqueantes y decisiones
@@ -79,3 +77,5 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 ## Mantenimiento
 
 Actualizar estado, decisiones, arquitectura/UML, fuentes y trazabilidad junto a cada cambio según [FRESHNESS_POLICY.md](docs/continuity/FRESHNESS_POLICY.md). Los pasos de implementación no quedan autorizados por su presencia en esta lista.
+
+Las operaciones de publicación e integración de ramas se rastrean mediante Git/GitHub y el PR correspondiente. Este backlog conserva las capacidades implementadas, las tareas funcionales y los controles técnicos o grupales que todavía corresponden al producto.

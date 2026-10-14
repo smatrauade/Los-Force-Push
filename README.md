@@ -71,7 +71,7 @@ No existe aún un comando para ejecutar el juego. Java/build del producto siguen
 
 ## Movimiento básico experimental
 
-Este incremento contiene el núcleo experimental de movimiento cardinal y empuje de una caja normal, con pruebas reproducibles. El [informe histórico R1](docs/experiments/MOVEMENT_R1.md) describe su contrato y alternativas. Board sigue inmutable y Level conserva su estado inicial. El estado es **IMPLEMENTED_EXPERIMENTAL** y **TESTED**; **TEAM_ACCEPTED** no está registrado y **INTEGRATED_IN_MAIN** no está acreditado para movimiento. El versionado local no implica esos estados ni un juego gráfico completo.
+Este incremento contiene el núcleo experimental de movimiento cardinal y empuje de una caja normal, con pruebas reproducibles. El [informe histórico R1](docs/experiments/MOVEMENT_R1.md) describe su contrato y alternativas. Board sigue inmutable y Level conserva su estado inicial. El núcleo es **IMPLEMENTED_EXPERIMENTAL** y **TESTED**; este snapshot no registra ratificación grupal del diseño experimental ni contiene un juego gráfico completo. La implementación, las pruebas, la aceptación del equipo y la integración en la rama principal son estados independientes. La integración efectiva se comprueba mediante el historial Git y el Pull Request correspondiente.
 
 Para ejecutar carga y movimiento con una sola compilación, agregar `--movement` al comando Bash o `-IncludeMovement` al comando PowerShell. Resultado esperado: `RESULT: 40 PASS, 0 FAIL` seguido de `MOVEMENT RESULT: 31 PASS, 0 FAIL`, con salida 0. Sin opción se mantienen los 40 casos de carga.
 
@@ -81,7 +81,7 @@ Para ejecutar carga y movimiento con una sola compilación, agregar `--movement`
 | R2 | 40 + 31 PASS reproducidos | NOT_RUN | Revisión independiente; sin defectos funcionales bloqueantes |
 | R3 | 40 + 31 PASS reproducidos | 40 + 31 PASS reproducidos | Linux nativo, JDK 17.0.20.1 y 26.0.2, compilación estricta y salida 0 |
 
-La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md) distingue suites versionadas y evidencia temporal de auditoría. Windows/macOS nativos siguen NOT_RUN; compatibilidad por diseño no equivale a ejecución nativa. La versión Java/build definitiva sigue OPEN. El [UML acotado](docs/architecture/uml/movement-core-spike-v1.puml) corresponde a este subconjunto. Revisión grupal y eventual publicación/integración siguen pendientes. No hay hielo, cajas especiales, Undo, victoria, score, Swing ni audio.
+La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md) distingue suites versionadas y evidencia temporal de auditoría. Windows/macOS nativos siguen NOT_RUN; compatibilidad por diseño no equivale a ejecución nativa. La versión Java/build definitiva sigue OPEN. El [UML acotado](docs/architecture/uml/movement-core-spike-v1.puml) corresponde a este subconjunto. El backlog conserva la revisión grupal y las validaciones técnicas pendientes; el estado operativo de publicación y PR se consulta en Git/GitHub. No hay hielo, cajas especiales, Undo, victoria, score, Swing ni audio.
 
 ## Colaboración y entrega
 
