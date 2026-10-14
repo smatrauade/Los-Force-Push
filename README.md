@@ -2,9 +2,9 @@
 
 Proyecto académico de Ingeniería en Informática, UADE: **Proceso de Desarrollo de Software**, profesor **Jonathan Leonel Pepe**. La tecnología exigida es **Java, Swing y GUI 2D**. El objetivo es un diseño defendible mediante SOLID, GRASP, MVC y GoF.
 
-## Estado al 2026-10-08
+## Estado al 2026-10-14
 
-Este bootstrap es documental y estructural. **Todavía no hay juego ejecutable, clases Java ni build configurado.** El repositorio auditado tenía sólo `README.md` con `# Los-Force-Push`, un commit, una rama `main` y ningún PR. La base fue `12f9a7fbc956f40bd3bac526ec2aaf66d8458593`.
+El bootstrap documental y estructural está integrado en `main`: el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1) se fusionó el 2026-10-08. La auditoría del 2026-10-14 no encontró avances posteriores. **Todavía no hay juego ejecutable, clases Java ni build configurado.** La documentación y la estructura inicial del proyecto están creadas; el merge no ratifica las propuestas de diseño. El [estado vivo](docs/continuity/CURRENT_STATE.md) registra el evento histórico y su SHA.
 
 | Área | Estado |
 |---|---|
@@ -17,7 +17,7 @@ Este bootstrap es documental y estructural. **Todavía no hay juego ejecutable, 
 | Versión Java / herramienta de build | `OPEN` |
 | StarUML, assets, video e informe final | Pendientes |
 
-Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste.
+Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. El próximo dominio técnico previsto es el cargador de niveles TXT: contrato candidato y spike para comparar Builder con construcción directa, tras revisar esta reconciliación y con las precondiciones pertinentes verificadas.
 
 ## Empezar sin chats anteriores
 
@@ -35,7 +35,7 @@ Niveles leídos realmente desde TXT externos; jugador por flechas; empuje de una
 
 Todos los elementos del tablero usan imágenes y las acciones tienen efectos sonoros. Los assets deben ser de dominio público, con licencia verificada individualmente. Se requieren **dos funcionalidades adicionales** que apliquen patrones; resolver un requisito obligatorio con un patrón no lo convierte automáticamente en adicional.
 
-El profesor podría modificar o escribir un TXT compatible para verificar que los niveles no están hardcodeados. No hace falta medir tiempo ni incorporar animaciones. Las ambigüedades están identificadas como OQ-01 a OQ-11 y no se resuelven en este PR.
+El profesor podría modificar o escribir un TXT compatible para verificar que los niveles no están hardcodeados. No hace falta medir tiempo ni incorporar animaciones. Las ambigüedades están identificadas como OQ-01 a OQ-11 y permanecen abiertas.
 
 ## Clonar y verificar la documentación
 
@@ -45,7 +45,7 @@ cd Los-Force-Push
 bash scripts/verify-repo-readonly.sh
 ```
 
-Requiere Git, Bash y Python 3 para la auditoría documental; **Python no es una decisión sobre el runtime del juego**. El script inspecciona archivos y Git, no hace fetch, commits ni escrituras. Para auditar el alcance de este bootstrap usar `--bootstrap`; después del commit agregar `--require-clean`. No reemplaza el preflight remoto de permisos/PRs.
+Requiere Git, Bash y Python 3 para la auditoría documental; **Python no es una decisión sobre el runtime del juego**. El script inspecciona archivos y Git, no hace fetch, commits ni escrituras. Para verificar un checkout limpio agregar `--require-clean`; usarlo antes de editar o después de un commit exitoso. El modo `--bootstrap` audita exclusivamente la rama original `docs/bootstrap-sokoban-autocontenido-v1` y exige ese nombre de rama; no corresponde a la reconciliación ni al checkout de `main`. No reemplaza el preflight remoto de permisos/PRs.
 
 No existe aún un comando para ejecutar el juego. El primer build reproducible requiere cerrar OQ-11 con una versión Java y sistema de construcción, documentar instalación/compilación/ejecución/pruebas y verificar esos comandos desde un clon limpio. La estructura `src/main/java`, `src/main/resources` y `src/test/java` se reserva sin clases vacías ni versiones inventadas.
 
@@ -55,4 +55,4 @@ Seguir [CONTRIBUTING.md](CONTRIBUTING.md): rama de alcance acotado, commits, PR 
 
 El repositorio permanece **privado**. La consigna exige uno público para la entrega: el equipo deberá decidir y ejecutar ese cambio más adelante. También faltan README de ejecución, gameplay en video, diagrama de clases StarUML e informe técnico; la entrega institucional deberá incluir a los integrantes en copia.
 
-Este bootstrap fue preparado y revisado con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. No se implementó gameplay ni se volvió a ejecutar ningún spike histórico.
+El bootstrap y esta reconciliación documental fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. No se implementó gameplay ni se volvió a ejecutar ningún spike histórico.
