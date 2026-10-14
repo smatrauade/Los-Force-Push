@@ -1,10 +1,19 @@
 # TODO — backlog vivo
 
-Revisado 2026-10-08. El bootstrap prepara documentación y estructura; ninguna mecánica está implementada.
+Revisado 2026-10-14 tras verificar el merge del PR #1. El bootstrap documental y estructural está integrado; ninguna mecánica está implementada.
+
+## Bootstrap completado y verificado
+
+- [x] Incorporar requisitos normalizados, decisiones, arquitectura/UML candidatos, trazabilidad, estrategia de pruebas y continuidad documental.
+- [x] Crear la estructura inicial `src/main/java`, `src/main/resources` y `src/test/java` con placeholders, sin clases ni build.
+- [x] Integrar el bootstrap en `main` mediante el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1), fusionado el 2026-10-08.
+- [x] Ejecutar el control read-only de documentación sobre la base integrada y limpia: PASS, 32 archivos y 49 enlaces relativos (2026-10-14).
+
+La integración y estos controles no prueban revisión por otro integrante ni ratificación del diseño. Las tareas siguientes conservan su estado pendiente.
 
 ## Bloqueantes y decisiones
 
-- [ ] Revisar el PR documental por otro integrante y ratificar/corregir las propuestas.
+- [ ] Revisar con otro integrante y ratificar/corregir las propuestas documentales y arquitectónicas; registrar las decisiones explícitas del equipo.
 - [ ] OQ-01: victoria con KeyBox sobre Lock.
 - [ ] OQ-02: salida del hielo bloqueada.
 - [ ] OQ-03: Fragile a resistencia cero al entrar en hielo.
