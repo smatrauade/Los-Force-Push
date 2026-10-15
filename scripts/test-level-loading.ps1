@@ -1,4 +1,5 @@
 # Windows PowerShell 5.1 / PowerShell 7; no shell emulation or build framework.
+[CmdletBinding()]
 param([switch]$IncludeMovement)
 
 Set-StrictMode -Version 2.0

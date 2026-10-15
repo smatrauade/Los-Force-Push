@@ -14,7 +14,8 @@ VALIDATION_ITERATION = MOVEMENT_R3
 LEVEL_LOADING_TESTS = 40_PASS_0_FAIL_ON_JAVA_17_AND_26
 MOVEMENT_TESTS = 31_PASS_0_FAIL_ON_JAVA_17_AND_26
 LINUX_NATIVE_TEST = PASS
-WINDOWS_NATIVE_TEST = NOT_RUN
+WINDOWS_NATIVE_TEST = PASS
+RUNNER_VALIDATION_ITERATION = WINDOWS_RUNNER_R3
 MACOS_NATIVE_TEST = NOT_RUN
 DEFAULT_BRANCH = main
 BOOTSTRAP_STATUS = INTEGRATED
@@ -61,7 +62,7 @@ Este incremento contiene el núcleo experimental de movimiento cardinal y empuje
 | R3, validación del incremento | Reprodujo 40/40 carga y 31/31 movimiento en Linux/JDK 17.0.20.1 y 26.0.2, salida 0, release 17, UTF-8, -Xlint:all, -Werror y sólo java.base; temporales del runner eliminados |
 | R3, UML | Sintaxis y renderizado comprobados con PlantUML; correspondencia con tipos, firma y contrato revisada |
 
-Los 31 casos incluyen 2.664 transiciones dentro del caso 30, integración TXT, destinos y preservación de estados anteriores. El caso 30 comprueba invariantes, pero no determina independientemente el outcome correcto de cada intento; los casos golden sí comparan Kind y tableros esperados. Ambos runners compilan una vez y admiten la suite adicional opcional; la revisión estática para Bash 3.2 y PowerShell 5.1/7 no demuestra ejecución nativa Windows/macOS, que sigue NOT_RUN. [Comandos, pruebas y límites](../testing/TEST_STRATEGY.md).
+Los 31 casos incluyen 2.664 transiciones dentro del caso 30, integración TXT, destinos y preservación de estados anteriores. El caso 30 comprueba invariantes, pero no determina independientemente el outcome correcto de cada intento; los casos golden sí comparan Kind y tableros esperados. Ambos runners compilan una vez y admiten la suite adicional opcional; aquella revisión estática para Bash 3.2 y PowerShell 5.1/7 no constituía ejecución nativa Windows/macOS. La validación posterior del runner Windows R3 está en [TEST_STRATEGY](../testing/TEST_STRATEGY.md#contrato-cli-powershell--runner-r3): PS5.1/PS7, JDK 21, 40 Loading y 31 Movement, contrato CLI, rutas Unicode y cleanup. macOS nativo sigue NOT_RUN.
 
 RF-03/RF-04 tienen cobertura PARTIAL: jugador y caja normal sobre piso/destino, paredes y bordes. Flechas/UI, hielo, cajas especiales, cerrojos, Undo, Restart, victoria/progresión, score, audio y extras siguen pendientes. IMPLEMENTED_EXPERIMENTAL y TESTED describen capacidades y evidencia; TEAM_ACCEPTED requiere ratificación explícita. La integración efectiva se comprueba mediante el historial Git y el Pull Request correspondiente, independientemente de la cobertura funcional. Publicar o fusionar el mismo snapshot no ratifica por sí solo la arquitectura ni cierra OQ-08/OQ-11/D-011.
 
@@ -89,7 +90,7 @@ Permanecen OQ-01…OQ-11: victoria/llave, salida hielo bloqueada, fragile cero/h
 
 ## Próxima iteración segura
 
-La revisión técnica independiente R2 está realizada y la validación R3 confirma el subconjunto experimental. Los siguientes gates son revisión grupal del contrato/modelo y pruebas nativas Windows/macOS antes de afirmar validación nativa completa. Las operaciones de publicación e integración se rastrean en Git/GitHub y no cambian por sí solas las capacidades ni las decisiones del producto. Conservar las decisiones abiertas y el alcance; cualquier ampliación funcional requiere una iteración autorizada. Builder permanece PREFERRED, TXT experimental/OQ-08 OPEN y Java/build OQ-11 OPEN.
+La revisión técnica independiente R2 está realizada y la validación R3 confirma el subconjunto experimental. La validación nativa Windows del runner R3 está registrada en TEST_STRATEGY; no ratifica contrato, modelo ni decisiones académicas. Los siguientes gates son revisión grupal del contrato/modelo y pruebas nativas macOS antes de afirmar validación nativa completa. Las operaciones de publicación e integración se rastrean en Git/GitHub y no cambian por sí solas las capacidades ni las decisiones del producto. Conservar las decisiones abiertas y el alcance; cualquier ampliación funcional requiere una iteración autorizada. Builder permanece PREFERRED, TXT experimental/OQ-08 OPEN y Java/build OQ-11 OPEN.
 
 Resolver las preguntas que afecten cada mecánica antes de implementarla. Obtener los bytes de los spikes históricos si se desean reutilizar, sin tratarlos como código productivo auditado. El spike no convierte la carga en una funcionalidad productiva completa ni autoriza por sí solo su integración o una ampliación de alcance.
 
