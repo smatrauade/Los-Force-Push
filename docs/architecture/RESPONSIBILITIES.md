@@ -1,6 +1,6 @@
 # Responsabilidades candidatas
 
-Roles al 2026-10-08; no clases implementadas. Aplicar GRASP Expert/Creator/Controller, bajo acoplamiento y alta cohesión antes de adoptar un patrón.
+Roles candidatos al 2026-10-08; sin clases implementadas en la base histórica del merge PR #2. El subconjunto local R1 se distingue abajo. Aplicar GRASP Expert/Creator/Controller, bajo acoplamiento y alta cohesión antes de adoptar un patrón.
 
 | Rol | Responsabilidad y colaboradores | Límite |
 |---|---|---|
@@ -26,3 +26,34 @@ Roles al 2026-10-08; no clases implementadas. Aplicar GRASP Expert/Creator/Contr
 | SpriteProvider | Imagen adecuada para presentación | Assets auditados; no reglas de juego |
 
 ScoreStrategy y LockObserver representan variaciones/roles identificables. GameView, AudioService, Repository y SpriteProvider pueden justificar una frontera concreta/testabilidad. GameActions y LevelCatalog requieren revisión especial para evitar indirección ornamental. LevelBuilder depende de que el spike demuestre valor.
+
+## Roles implementados únicamente en el experimento R1
+
+[Informe y clases reales](../experiments/LEVEL_LOADING_R1.md); [UML específico](uml/level-loading-spike-v1.puml).
+
+| Tipo real | Responsabilidad |
+|---|---|
+| Position | Coordenadas no negativas; Board verifica límites |
+| Terrain / Occupant | Valores del subconjunto; sin comportamiento de gameplay |
+| Cell | Composición terreno/ocupante; pared sin ocupante |
+| Board | Agregado inmutable, dimensiones/rectángulo/jugador único, consultas y conteos |
+| Level | Producto válido que contiene Board, sin metadata artificial |
+| LevelBuilder | Acumulación interna por carga y publicación única tras validar |
+| LevelParser | Forma de filas validada antes de ensamblar; siete símbolos/EOL, sin estado entre cargas |
+| LevelLoader | Lectura externa limitada y UTF-8 estricto; delegación al parser |
+| LevelFormatException | Error explícito del contrato experimental |
+
+Las demás responsabilidades candidatas permanecen sin implementación. No se adoptan contratos de cajas especiales ni interfaz Builder por anticipación.
+
+## Roles del movimiento experimental R1 — 2026-10-14
+
+[Informe](../experiments/MOVEMENT_R1.md) y [UML](uml/movement-core-spike-v1.puml).
+
+| Tipo | Responsabilidad y límite |
+|---|---|
+| Direction | Desplazamiento cardinal de una celda, sin teclado ni UI |
+| MovementEngine | Consultar Board y Direction, bloquear colisiones, crear un Board válido nuevo tras checks; sin estado retenido |
+| MoveResult / Kind | Resultado MOVED/PUSHED/BLOCKED y Board resultante; sin estadísticas o semántica de conteo |
+| Board/Cell/Position heredados | Expert espacial, terreno conservado e invariantes; contratos y fuentes sin cambios |
+
+El llamador conserva la referencia al Board vigente; el motor no es otro propietario de estado ni una sesión. Level mantiene el valor inicial. No se agrega GameState, jerarquía de cajas o interfaces sin variación real. Clases productivas del resto del modelo siguen pendientes.

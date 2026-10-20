@@ -10,3 +10,7 @@ trim_trailing_whitespace = true
 
 [*.md]
 indent_size = 2
+
+# Floor spaces in external level maps are significant, including at line ends.
+[**/levels/**.txt]
+trim_trailing_whitespace = false

@@ -1,6 +1,6 @@
 # Arquitectura candidata
 
-`STATUS = CANDIDATE`, `LAST_REVIEWED = 2026-10-08`. Ninguna clase de este modelo se implementa en el bootstrap. Los roles y firmas están sujetos a ratificación; [DECISION_LOG](../decisions/DECISION_LOG.md) describe alternativas.
+`STATUS = CANDIDATE`, `LAST_REVIEWED = 2026-10-14` (subconjunto experimental R1; sin ratificación). Ninguna clase de este modelo se implementa en el bootstrap. Los roles y firmas están sujetos a ratificación; [DECISION_LOG](../decisions/DECISION_LOG.md) describe alternativas.
 
 ## Flujo y fronteras
 
@@ -53,3 +53,13 @@ Se reportó v0.2 → auditoría v0.3 → interacciones v0.4 → candidato v0.5 c
 El [PlantUML candidato](uml/sokoban-candidate.puml) **estaba disponible en el ZIP**: se preservó byte a byte, no se reconstruyó ni se declara nuevo. Las secuencias revisadas históricamente fueron carga, movimiento, push, hielo, fragile, cerrojo/Observer, Undo, victoria/progresión y Restart. Su validación histórica no equivale a ejecución actual. Ver [STARUML_STATUS](uml/STARUML_STATUS.md).
 
 Java target y build siguen abiertos. El siguiente desarrollo requiere decisiones pertinentes, pruebas del core sin Swing y sincronización de UML/trazabilidad.
+
+## Implementación experimental local R1
+
+Separada del UML integral histórico: [informe y límites](../experiments/LEVEL_LOADING_R1.md), [UML del spike](uml/level-loading-spike-v1.puml). LevelLoader lee bytes UTF-8, LevelParser decodifica, LevelBuilder concreto interno acumula filas por carga y publica Level con Board validado e inmutable. Terrain/Occupant son enums del subconjunto, no la jerarquía definitiva de gameplay. No hay Repository/Director/interfaces adicionales sin variación demostrada. El modelo completo de arriba sigue CANDIDATE; D-011/OQ-08/OQ-11 no están ratificados.
+
+## Movimiento básico experimental R1 — 2026-10-14
+
+[Comparación funcional/runtime y alcance](../experiments/MOVEMENT_R1.md), [UML acotado](uml/movement-core-spike-v1.puml). Movimiento sobre Board inmutable, con Direction y MoveResult; MovementEngine no conserva estado. Cada éxito reconstruye un Board validado y cada bloqueo devuelve la misma instancia. Level conserva su Board cargado inicial. No se duplican posiciones/ocupantes ni se introduce GameState que sólo lo envuelva. El coste O(alto × ancho) y la alternativa runtime encapsulada quedan explícitos para revisar cuando existan otras entidades. Se preserva sin cambios el agregado de Level Loading.
+
+Esta implementación acotada no es el motor integral candidato de arriba: no hay sesión, estado restaurable de estadísticas/cajas especiales, Undo, Observer, score ni Swing. La elección funcional es EXPERIMENTAL por autorización del usuario; no reemplaza decisiones PREFERRED ni ratifica arquitectura. No se implementa Memento por conservar valores previos.

@@ -1,0 +1,69 @@
+@startuml
+title Basic movement R1 — experimental, no gameplay GUI
+hide empty members
+package ar.edu.uade.sokoban.level {
+  class Level <<record>>
+  class Board <<immutable record>> {
+    +playerPosition() : Position
+    +cellAt(position : Position) : Cell
+    +rows() : List<List<Cell>>
+    +width() : int
+    +height() : int
+  }
+  class Cell <<immutable record>>
+  class Position <<record>>
+}
+package ar.edu.uade.sokoban.movement {
+  enum Direction {
+    UP
+    DOWN
+    LEFT
+    RIGHT
+    --
+    -rowDelta : int
+    -columnDelta : int
+    ~rowDelta() : int
+    ~columnDelta() : int
+  }
+  enum "MoveResult.Kind" as Kind {
+    MOVED
+    PUSHED
+    BLOCKED
+  }
+  class MoveResult <<record>> {
+    -kind : Kind
+    -board : Board
+    +kind() : Kind
+    +board() : Board
+  }
+  class MovementEngine <<stateless>> {
+    +move(state : Board, direction : Direction) : MoveResult
+  }
+}
+Level --> "1" Board : initial loaded value
+Board --> "1..*" Cell : immutable rows
+Board ..> Position
+MovementEngine ..> Board : reads / constructs validated next state
+MovementEngine ..> Cell : replaces occupants, preserves terrain
+MovementEngine ..> Position : bounded coordinates
+MovementEngine ..> Direction
+MovementEngine ..> MoveResult : creates outcome
+MoveResult --> "1" Board : resulting state
+MoveResult --> Kind
+note bottom of MovementEngine
+Functional experiment: Board + Direction -> MoveResult.
+MOVED/PUSHED: new validated Board. BLOCKED: same Board.
+No retained current state, counters, history or Undo.
+Only normal boxes, floor, goals, walls and bounds.
+end note
+note bottom of Board
+Existing Level Loading aggregate, unchanged.
+Prior Boards / loaded Level remain immutable.
+No additional GameState wrapper in this subset.
+end note
+note bottom of MoveResult
+Data only; engine establishes transition semantics.
+Records validate non-null values.
+Design remains experimental, without team ratification.
+end note
+@enduml

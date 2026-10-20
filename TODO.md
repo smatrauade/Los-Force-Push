@@ -1,6 +1,6 @@
 # TODO — backlog vivo
 
-Revisado 2026-10-14 tras verificar el merge del PR #1. El bootstrap documental y estructural está integrado; ninguna mecánica está implementada.
+Revisado 2026-10-14 tras la revisión independiente de movimiento R2 y validación R3. El bootstrap documental y estructural está integrado. Este snapshot contiene carga y movimiento/empuje básico experimentales; GUI y mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
 
 ## Bootstrap completado y verificado
 
@@ -9,7 +9,28 @@ Revisado 2026-10-14 tras verificar el merge del PR #1. El bootstrap documental y
 - [x] Integrar el bootstrap en `main` mediante el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1), fusionado el 2026-10-08.
 - [x] Ejecutar el control read-only de documentación sobre la base integrada y limpia: PASS, 32 archivos y 49 enlaces relativos (2026-10-14).
 
-La integración y estos controles no prueban revisión por otro integrante ni ratificación del diseño. Las tareas siguientes conservan su estado pendiente.
+La integración y estos controles no prueban revisión por otro integrante ni ratificación del diseño. Cada tarea siguiente distingue el trabajo experimental completado de los gates todavía pendientes.
+
+## Experimento local de carga R1
+
+- [x] Contrato experimental de una capa y comparación con dos capas; OQ-08 continúa OPEN.
+- [x] Subconjunto TXT externo → Parser → Builder → Level/Board, sin Swing.
+- [x] Compilar sin warnings y ejecutar 40 casos reales con JDK 17 y JDK 26; evidencia en [LEVEL_LOADING_R1](docs/experiments/LEVEL_LOADING_R1.md).
+- [x] Runners Unix/Windows sobre las mismas fuentes; revisión Bash 3.2/PowerShell 5.1, pruebas Linux con rutas/temporales Unicode y espacios, protección TXT/EOL.
+- [ ] Ejecutar los mismos 40 casos nativamente en Windows 10/11 (PowerShell 5.1 y 7) y macOS; registrar sistema/JDK/comando/salida y cleanup.
+- [ ] Revisar contrato, coste de Builder, modelo y pruebas con el equipo; D-011 sigue PREFERRED.
+
+## Movimiento experimental — implementación y validación R1–R3
+
+- [x] Comparar transición funcional y agregado runtime; ensayar Board inmutable sin GameState redundante.
+- [x] Implementar movimiento cardinal y empuje básico de una caja normal sobre piso/destino, con bloqueos por pared/borde y sin arrastre ni cadenas; alcance IMPLEMENTED_EXPERIMENTAL validado, RF-03/RF-04 PARTIAL.
+- [x] Mantener íntegros los 40 tests de carga y ejecutar 31 de movimiento con Java 17/26; 2.664 transiciones adicionales dentro del caso de invariantes.
+- [x] Runners con suite adicional opcional y una sola compilación; UML y [evidencia](docs/experiments/MOVEMENT_R1.md).
+- [x] Revisión técnica independiente R2 del movimiento, tests, UML y documentación; sin defectos funcionales bloqueantes.
+- [x] Preparar el incremento experimental de movimiento con código, pruebas, UML y documentación coherentes para su versionado.
+- [x] Reproducir en R3 los 40 casos de carga y 31 de movimiento con JDK 17/26 en Linux, sin warnings y con salida 0.
+- [ ] Revisar el movimiento con el equipo; la aceptación grupal no está registrada.
+- [ ] Pruebas nativas Windows/macOS de ambas suites; preservar decisiones OPEN/PREFERRED.
 
 ## Bloqueantes y decisiones
 
@@ -25,7 +46,7 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [ ] OQ-09: fórmula score y ratificación de métricas no restaurables.
 - [ ] OQ-10: dos funcionalidades adicionales, problema, patrón, consecuencias y prueba.
 - [ ] OQ-11: Java target y build; producir y verificar comandos desde clon limpio.
-- [ ] Comparar Builder con construcción directa mediante spike acotado, tras especificar TXT.
+- [ ] Ratificar Builder frente a construcción directa después de revisar la comparación experimental R1; no aceptado por compilar.
 - [ ] Ratificar Terrain/Occupant, cajas polimórficas y herencia frente a composición.
 - [ ] Revisar fronteras Memento, Observer y ScoreStrategy sin interfaces ceremoniales.
 - [ ] Decidir AudioService/SoundManager; Singleton sólo es una propuesta.
@@ -33,14 +54,14 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 ## Implementación posterior — otra iteración autorizada
 
 - [ ] Primer build reproducible y organización de packages.
-- [ ] TXT externo → parser/construcción → Level/Board y pruebas de validación.
-- [ ] Movimiento y bloqueo; empuje de una sola caja.
+- [ ] Carga productiva TXT externo → parser/construcción → Level/Board: el spike R1 es parcial y experimental; contrato final y entidades restantes siguen pendientes.
+- [ ] Consolidar movimiento productivo tras revisión del subconjunto experimental; input por flechas y reglas adicionales permanecen pendientes.
 - [ ] Cajas especiales, hielo y cerrojos conforme a decisiones cerradas.
 - [ ] Undo, estado frágil/muros y métricas; Restart.
 - [ ] Victoria/progresión, score y resumen.
 - [ ] Swing: flechas, HUD, Undo/Restart visibles, render y SFX.
 - [ ] Dos funcionalidades adicionales ratificadas.
-- [ ] Actualizar UML/trazabilidad con código y evidencia real; no integrar spikes sin bytes auditados.
+- [ ] Mantener UML/trazabilidad del resto de mecánicas al implementarlas, con código y evidencia real; no integrar spikes sin bytes auditados.
 
 ## Entregables
 
@@ -56,3 +77,5 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 ## Mantenimiento
 
 Actualizar estado, decisiones, arquitectura/UML, fuentes y trazabilidad junto a cada cambio según [FRESHNESS_POLICY.md](docs/continuity/FRESHNESS_POLICY.md). Los pasos de implementación no quedan autorizados por su presencia en esta lista.
+
+Las operaciones de publicación e integración de ramas se rastrean mediante Git/GitHub y el PR correspondiente. Este backlog conserva las capacidades implementadas, las tareas funcionales y los controles técnicos o grupales que todavía corresponden al producto.

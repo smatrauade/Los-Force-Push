@@ -1,2 +1,9 @@
 # Preserve the received capsule's intentional Markdown hard line breaks byte for byte.
 docs/continuity/capsules/SOKOBAN_CAPSULA_EQUIPO_AUTOCONTENIDA_SCHEMA9_v4.0_2026-10-07.md whitespace=-blank-at-eol
+
+# Limit normalization to the experimental sources, runners and level maps.
+src/**/*.java text eol=lf
+scripts/*.sh text eol=lf
+scripts/*.ps1 text eol=lf
+src/test/resources/levels/**/*.txt text eol=lf whitespace=-blank-at-eol
+src/main/resources/levels/**/*.txt text eol=lf whitespace=-blank-at-eol
