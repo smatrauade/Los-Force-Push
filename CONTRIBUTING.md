@@ -18,4 +18,4 @@ Antes del PR, revisar `git diff --check`, diff completo y verificaciones pertine
 
 Actualizar [política de frescura](docs/continuity/FRESHNESS_POLICY.md), decisiones, arquitectura/UML y trazabilidad cuando corresponda. No editar cápsulas antiguas. No agregar una dependencia sin justificar problema, alternativa estándar, coste y decisión. No implementar una regla abierta sin registrar su cierre.
 
-La aprobación y el merge pertenecen al equipo y requieren autorización separada. La visibilidad pública de entrega también es una decisión futura, no una acción de este bootstrap.
+La aprobación y el merge pertenecen al equipo y requieren autorización separada. El repositorio es público según la verificación API del 2026-10-21; cambiar visibilidad o permisos requiere autorización específica y no forma parte de esta revisión.

@@ -1,6 +1,6 @@
 # Matriz viva de trazabilidad
 
-Revisado 2026-10-14 (carga R1–R4 y movimiento R1–R3 experimentales). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
+Revisado 2026-10-21 (recuperación Swing R2 sobre core e aislamiento integrados). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
 
 | Req | Responsabilidad / UML candidato | Principio/patrón candidato | Prueba prevista / historial | Decisiones abiertas |
 |---|---|---|---|---|
@@ -17,7 +17,7 @@ Revisado 2026-10-14 (carga R1–R4 y movimiento R1–R3 experimentales). **La ac
 | RF-11 | BoardPanel, SpriteProvider, AudioService | MVC/fronteras justificadas | Cobertura imágenes/SFX y licencias; plan | D-016, selección assets |
 | RF-12 | No hay clases definitivas | Patrón TBD | Dos extras; plan | OQ-10 |
 | RT-01 | Estructura src, configuración futura | Restricción stack | Build/ejecución clon limpio; plan | OQ-11 |
-| RT-02 | README, docs, StarUML/video/informe futuros | Proceso | Lista entrega; plan | Visibilidad pública futura |
+| RT-02 | README, docs, StarUML/video/informe futuros | Proceso | Lista entrega; plan | Repo público verificado 21/10; resto de entrega pendiente |
 | RT-03 | Responsabilidades/decisiones/trazabilidad | SOLID/GRASP/MVC/GoF | Revisión y defensa individual; plan | Ratificación arquitectura |
 | RT-04 | Revisión humana/declaración IA | Trazabilidad | Informe y defensa; plan | Revisión del equipo |
 
@@ -46,3 +46,21 @@ Para marcar DONE: requisito → decisión/autoridad → responsabilidad → impl
 | RT-01 | Runners opcionales Bash/PowerShell, compilación única | Movimiento R3: 40 + 31 PASS por JDK 17/26 en Linux, salida 0, release 17 y sólo java.base; Windows/macOS nativos NOT_RUN, OQ-11 OPEN | PARTIAL |
 
 [MovementTest real: 31 casos](../../src/test/java/ar/edu/uade/sokoban/movement/MovementTest.java), [contrato histórico R1](../experiments/MOVEMENT_R1.md), [UML del subconjunto](../architecture/uml/movement-core-spike-v1.puml) y [evidencia separada R1/R2/R3 y comandos](../testing/TEST_STRATEGY.md). Este snapshot contiene el núcleo experimental de movimiento sobre la base histórica de carga `44b3c63b437465b5f54c1f0f5ca5cbadb5def0e5`. La revisión independiente R2 está realizada; reprodujo Java 17 y no ejecutó Java 26. R3 reprodujo ambas suites con los dos JDK. El oráculo temporal de R2 no forma parte de los tests versionados. RF-03/RF-04 conservan PARTIAL independientemente de la ubicación de la rama. La aceptación del equipo requiere ratificación expresa; la integración se verifica en el historial Git y el PR correspondiente. No se reprodujeron los spikes históricos A/B ni se declara DONE productivo.
+
+## Integración Swing V1 — cobertura adicional PARTIAL, 2026-10-15
+
+| Requisito | Implementación real | Evidencia / límite |
+|---|---|---|
+| RF-01 / RF-11 | BoardPanel consume Terrain/Occupant del Board existente | Render Windows observado: pared, piso, destino, jugador, caja y superposiciones. Placeholders Graphics2D; imágenes definitivas y audio pendientes |
+| RF-02 | GameController.load → LevelLoader; selector y LevelPath | TXT externo, recarga y errores controlados; gramática experimental sin ampliar, OQ-08 OPEN |
+| RF-03 / RF-04 | ArrowBindings → GameController.move → MovementEngine | Cuatro direcciones, MOVED/PUSHED/BLOCKED; integración headless y secuencia visual Windows. Hielo, especiales y motor integral pendientes |
+| RF-10 | GameWindow + GamePresentation | Nivel y contadores demostrativos, sin Undo/Restart ni resumen |
+| RT-01 / RT-03 | Fuentes desktop separadas, run-swing.ps1, GameView | release 17, MVC con mismo Board inmutable, 16 pruebas nuevas PASS; core 40 + 31 PASS sin cambios. Java/build OPEN, revisión humana pendiente |
+
+[Rutas, comandos y resultados](../experiments/SWING_VERTICAL_SLICE_V1.md), [UML real acotado](../architecture/uml/swing-playable-spike-v1.puml). La evidencia anterior de cada iteración se preserva como historia; la ejecución Windows corresponde al incremento original del 15/10. La validación integrada Linux R2 reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, salida 0, JDK 17/release 17 y C.utf8; detalle en la guía y TEST_STRATEGY; GUI interactiva Linux y macOS: NOT_RUN. Ningún requisito integral pasa a DONE ni se ratifica una decisión por estos tests.
+
+## Evidencia Windows adicional del PR #5 (2026-10-21, posterior a R5)
+
+[QA nativa Windows](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) validó el HEAD experimental `0670a4d5137f0e9f1db221866a02c29987024847`, base integrada `ee83f9ebd30ee1b553c555c89d9ea453131d6678`: **40 casos Loading y 31 Movement únicos** ejecutados dentro de la regresión CLI 9/9 por PS5.1/7; 16/16 Swing headless; GUI real reportada con capturas (flechas, empujes, bloqueo, contadores, TXT externo válido/inválido). Es **evidencia de plataforma adicional** para las filas del subconjunto implementado (carga TXT, movimiento, presentación), no una nueva funcionalidad ni aceptación integral.
+
+Los estados RF parciales, cobertura futura, dependencias de OQ-01…OQ-11 y StarUML permanecen como estaban. Las notas previas Windows `NOT_RUN` o históricas se refieren a sus iteraciones fechadas, no al checkpoint actual. Logs/capturas completos permanecen externos; no inferir reejecución desde Git. Revisión humana del Draft PR #5 pendiente.

@@ -1,6 +1,6 @@
 # Estrategia de pruebas y evidencia experimental
 
-Revisado 2026-10-14 (carga R1–R4 y movimiento R1–R3 experimentales). El snapshot contiene 40 casos de Level Loading y 31 de movimiento; la base histórica del bootstrap precede a esas suites. La tabla siguiente conserva el **plan de aceptación del producto completo**, no resultados ni negación de la cobertura parcial ejecutable descrita después. Herramienta/framework y Java definitivos dependen de OQ-11. Core se prueba sin Swing.
+Revisado 2026-10-21 (recuperación Swing R2 y revisión de consistencia R3). El snapshot contiene 40 casos de Level Loading y 31 de movimiento; la base histórica del bootstrap precede a esas suites. La tabla siguiente conserva el **plan de aceptación del producto completo**, no resultados ni negación de la cobertura parcial ejecutable descrita después. Herramienta/framework y Java definitivos dependen de OQ-11. Core se prueba sin Swing.
 
 | Área | Casos previstos | Gate |
 |---|---|---|
@@ -35,7 +35,7 @@ Level Loading R4 preservó los 38 casos y agregó 39 (archivo externo con nombre
 
 Windows usa `powershell -NoProfile -File scripts/test-level-loading.ps1` o `pwsh` con el mismo archivo; no duplica tests Java ni necesita Python/Bash. En la evidencia histórica de carga R4, Windows/macOS nativos estaban NOT_RUN; la validación posterior de Windows figura en el contrato CLI al final. macOS nativo continúa pendiente. La revisión estática PowerShell 5.1/7 y Bash 3.2/GNU/BSD no sustituye pruebas nativas. [Instrucciones y matriz](../experiments/LEVEL_LOADING_R1.md).
 
-## Aislamiento del core frente a la futura GUI (cambio propuesto)
+## Aislamiento del core frente a la GUI — PR #4 integrado
 
 Los runners `scripts/test-level-loading.sh` y `scripts/test-level-loading.ps1` solo
 compilan recursivamente fuentes Java de `level` y `movement` en `src/main/java`
@@ -56,7 +56,7 @@ paquetes debe revisarse en conjunto con sus tests y con este runner.
 ejecutar ambas suites con `java.base` y verificar que sigan pasando. Luego
 introducir un error de compilación en una clase `level` de otra copia
 independiente y verificar que el runner falle. No incorporar estos probes al
-repositorio. Validar el runner PowerShell en Windows nativo antes del merge.
+repositorio. El PR #4 fue fusionado el 21/10; sigue pendiente acreditar la regresión Windows nativa del parche de selección por paquetes. La evidencia anterior del runner original no demuestra esa ejecución.
 
 ## Movimiento básico R1 — evidencia 2026-10-14
 
@@ -81,7 +81,7 @@ Como auditoría adicional, R2 ejecutó un oráculo ASCII independiente en tempor
 
 Comando para cada JDK: `SPIKE_JDK_HOME='<directorio-del-JDK>' bash scripts/test-level-loading.sh --movement`. Ambos compilaron con `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`, sin warnings, y ejecutaron con sólo java.base. Los temporales propios del runner se eliminaron. PlantUML comprobó sintaxis y renderizó el UML de movimiento; se contrastaron sus firmas y relaciones con las clases.
 
-Esta evidencia mantiene RF-03/RF-04 PARTIAL: input por flechas y hielo siguen pendientes, al igual que las demás mecánicas. La implementación experimental, las pruebas, la ratificación del equipo y la integración en main son estados separados. Los controles pendientes de aquella validación R3 se distinguen de la validación posterior del runner Windows registrada abajo. La revisión grupal y macOS nativo continúan pendientes; ampliar funcionalidades requiere autorización y decisiones pertinentes. Java/build continúa OPEN.
+Aquella evidencia del core mantiene RF-03/RF-04 PARTIAL: no validaba input por flechas ni hielo. El incremento Swing posterior agrega las flechas; hielo y las demás mecánicas siguen pendientes. La implementación experimental, las pruebas, la ratificación del equipo y la integración en main son estados separados. Los controles pendientes de aquella validación R3 se distinguen de la validación posterior del runner Windows registrada abajo. La revisión grupal y macOS nativo continúan pendientes; ampliar funcionalidades requiere autorización y decisiones pertinentes. Java/build continúa OPEN.
 
 ## Contrato CLI PowerShell — RUNNER R3
 
@@ -117,3 +117,38 @@ Validación nativa Windows del runner R3 (2026-10-14), Temurin JDK 21.0.12.1, co
 Las ejecuciones válidas terminaron en 0; los cinco casos inválidos por shell fueron rechazados antes de iniciar Java. La sensibilidad se comprueba ejecutando esta misma regresión sobre un snapshot aislado con el runner original: debe conservar los controles válidos y detectar los negativos aceptados incorrectamente, con salida no cero. Esto no cambia HEAD ni reescribe la evidencia histórica de RUNNER-01.
 
 La validación incluye rutas con espacios/`ñ`, TEMP/TMP alternativos, CWD externo y preservación byte a byte de TXT. Se distingue la eliminación del temporal propio del runner de una carpeta vacía `hsperfdata` que puede crear HotSpot; no se altera el JDK para ocultarla. macOS nativo sigue NOT_RUN. Las matrices anteriores describen sus iteraciones Linux históricas; esta sección registra la validación posterior del contrato Windows. El checklist combinado Windows/macOS sigue pendiente mientras falte macOS. Esta corrección no ratifica arquitectura, formato TXT, versión/build del producto ni reglas de juego; la revisión grupal continúa pendiente.
+
+## Integración Swing V1 — 2026-10-15
+
+[Guía reproducible y matriz acotada](../experiments/SWING_VERTICAL_SLICE_V1.md). Fuentes en src/desktop/java y 16 casos en [DesktopIntegrationTest](../../src/desktop-test/java/ar/edu/uade/sokoban/desktop/DesktopIntegrationTest.java), sin framework adicional. Ejecutar con el mismo JDK seleccionado: powershell -NoProfile -File scripts/run-swing.ps1 -Test; admite pwsh en Windows, ya que busca ejecutables .exe. Compilación estricta release 17 con java.base y java.desktop; el runner core de aquel original estaba limitado a java.base. La recuperación R2 conserva los runners heredados del PR #4 con selección por paquetes.
+
+Casos automáticos: demo real, TXT externo modificado/recargado, cuatro direcciones, empuje a piso/destino, dos bloqueos sin publicación, bindings reales en EDT, correspondencia/inmutabilidad del Board mostrado, contadores/recarga y errores atómicos. La pintura BufferedImage en EDT es headless y sólo comprueba que la vista puede consumir el modelo; no certifica una interfaz visual.
+
+Windows 25H2 x64 / Temurin 21.0.12.1: core 40 Loading + 31 Movement PASS y salida 0, una vez en PS5.1; 16 tests desktop PASS y salida 0 en PS5.1/PS7.6.5. Exportación del índice, rutas Unicode/espacios, TEMP/TMP y CWD externos: PASS, sin residuos del runner (hsperfdata vacío de JVM separado). Interacción gráfica nativa observada por separado: Right, Right, Right, Up, Up; último intento bloqueado, posición (1,5), caja en destino (2,6), movimientos 4/empujes 2, sin cambios tras bloqueo. Capturas externas de entrega. Comando de GUI: powershell -NoProfile -File scripts/run-swing.ps1; cierre con salida 0.
+
+En la evidencia original del 15/10, Linux/macOS Swing estaban NOT_RUN; la recuperación Linux R2 se registra por separado a continuación. El placeholder gráfico no satisface imágenes definitivas/SFX y no hay pruebas de mecánicas fuera del alcance. Los tests no ratifican Java/build, TXT, reglas abiertas ni diseño; revisión grupal pendiente.
+
+## Recuperación integrada Linux — SWING_RECOVERY_R2, 2026-10-21
+
+Base `ee83f9ebd30ee1b553c555c89d9ea453131d6678` con #3/#4 integrados, más el delta exclusivo del original `1303a33748e129f3d8a55ab2b1799518aaa8df5d` y documentación reconciliada. [Comandos reproducibles, entorno y límites](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21). Java/Swing, tests, fixtures y scripts heredados sin modificaciones; sólo se recompilan y ejecutan las suites existentes, sin sumar casos.
+
+Linux x86_64, OpenJDK/java/javac 17.0.20.1, release 17, LC_ALL=C.utf8: **Loading 40 PASS / 0 FAIL; Movement 31 PASS / 0 FAIL; Desktop 16 PASS / 0 FAIL**, salida 0 en compilación y suites. Ejecución real antes del commit con -encoding UTF-8 -Xlint:all -Werror; temporales propios eliminados. Logs, comandos y SHA final en el informe externo de recuperación. GUI interactiva Linux y macOS: NOT_RUN. Windows no se repite; sus resultados anteriores son históricos. Core usa java.base; desktop se compila por separado con java.base,java.desktop y se prueba con java.awt.headless=true. La pintura en BufferedImage y los bindings en EDT no certifican una ventana interactiva.
+
+
+## Revisión de consistencia Swing R3 — 2026-10-21
+
+Antes de editar documentación, se exportó el commit `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd` con `git archive`; sus 67 archivos coincidieron con los blobs del commit. En esa copia sin metadatos Git se ejecutaron el runner core y el bloque Linux desktop versionado en la [guía](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21), sustituyendo únicamente el directorio del JDK instalado. No se requirieron bundle, logs QA, clases previas ni rutas personales.
+
+Linux x86_64, OpenJDK/java/javac 17.0.20.1, release 17, LC_ALL=C.utf8: **Loading 40 PASS / 0 FAIL; Movement 31 PASS / 0 FAIL; Desktop 16 PASS / 0 FAIL**, compilación y ejecuciones con salida 0. Se verificaron java.base/java.desktop, UTF-8, -Xlint:all -Werror y cleanup de temporales propios. GUI interactiva Linux y macOS: NOT_RUN. No se repitió Windows.
+
+R3 sólo corrige documentación. La evidencia de esa exportación se conserva para el contenido final tras demostrar identidad de fuentes, tests, recursos y runners. `git archive HEAD` no incluye staging ni cambios locales; no se utiliza una exportación del HEAD anterior para certificar código nuevo. El verificador documental necesita Git: se ejecuta en el worktree real, con `--require-clean` sólo cuando esté limpio. La validación de enlaces/consistencia se repite sobre la documentación corregida; no equivale a ratificar decisiones académicas.
+
+## QA Windows nativa del PR #5, posterior a R5 (2026-10-21)
+
+[Checkpoint](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y [JSON](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json). HEAD **del código probado** `0670a4d5137f0e9f1db221866a02c29987024847` sobre `main=ee83f9ebd30ee1b553c555c89d9ea453131d6678`; no confundir con Windows del incremento original de 15/10.
+
+- Una invocación de `scripts/test-level-loading-arguments.ps1` en Windows nativo: PS5.1 y PS7, 9 casos por shell, **18/18 PASS**, exit 0. Loading 40 y Movement 31 son **casos únicos** cubiertos transitivamente; repetición deliberada por contratos CLI; no hubo core standalone adicional. Los casos CLI negativos con exit 1 eran **esperados**.
+- Una invocación de `scripts/run-swing.ps1 -Test`: **16/16 headless PASS**, exit 0, JDK 21 y `--release 17`, compilación estricta sin warnings.
+- GUI observada realmente por agente con capturas: movimiento, empujes, bloqueo, contadores, carga de TXT externo Unicode válido, error por inválido y conservación del nivel previo; cierre exit 0. No inferir interacción de pintura headless.
+- Dos worktrees históricos y contenido del clone reportados intactos; GitHub sin cambio de HEAD. Logs/capturas originales permanecen fuera de Git; esta rama contiene resumen/trazabilidad, no una nueva reejecución.
+- `NOT_RUN`: GUI Linux/macOS, macOS nativo y aceptación del producto completo. PR #5 sigue Draft, sin ratificación académica, Java/build definitivos, `.mdj` StarUML o cierre de OQ-01…OQ-11.

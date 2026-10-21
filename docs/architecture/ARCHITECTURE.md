@@ -1,6 +1,6 @@
 # Arquitectura candidata
 
-`STATUS = CANDIDATE`, `LAST_REVIEWED = 2026-10-14` (subconjunto experimental R1; sin ratificación). Ninguna clase de este modelo se implementa en el bootstrap. Los roles y firmas están sujetos a ratificación; [DECISION_LOG](../decisions/DECISION_LOG.md) describe alternativas.
+`STATUS = CANDIDATE`, `LAST_REVIEWED = 2026-10-21` (recuperación del subconjunto Swing; sin ratificación). Ninguna clase de este modelo se implementa en el bootstrap. Los roles y firmas están sujetos a ratificación; [DECISION_LOG](../decisions/DECISION_LOG.md) describe alternativas.
 
 ## Flujo y fronteras
 
@@ -63,3 +63,9 @@ Separada del UML integral histórico: [informe y límites](../experiments/LEVEL_
 [Comparación funcional/runtime y alcance](../experiments/MOVEMENT_R1.md), [UML acotado](uml/movement-core-spike-v1.puml). Movimiento sobre Board inmutable, con Direction y MoveResult; MovementEngine no conserva estado. Cada éxito reconstruye un Board validado y cada bloqueo devuelve la misma instancia. Level conserva su Board cargado inicial. No se duplican posiciones/ocupantes ni se introduce GameState que sólo lo envuelva. El coste O(alto × ancho) y la alternativa runtime encapsulada quedan explícitos para revisar cuando existan otras entidades. Se preserva sin cambios el agregado de Level Loading.
 
 Esta implementación acotada no es el motor integral candidato de arriba: no hay sesión, estado restaurable de estadísticas/cajas especiales, Undo, Observer, score ni Swing. La elección funcional es EXPERIMENTAL por autorización del usuario; no reemplaza decisiones PREFERRED ni ratifica arquitectura. No se implementa Memento por conservar valores previos.
+
+## Integración Swing experimental V1 — 2026-10-15
+
+La [guía del incremento](../experiments/SWING_VERTICAL_SLICE_V1.md) y su [UML acotado](uml/swing-playable-spike-v1.puml) describen las clases reales, separadas del candidato integral. SwingApplication/GameWindow y BoardPanel representan; ArrowBindings captura flechas; GameController coordina LevelLoader y MovementEngine sin replicar reglas. GamePresentation mantiene el Board inmutable del core y contadores demostrativos. GameView se justifica como frontera de presentación probada sin JFrame; no se añade una sesión que duplique Board.
+
+Recuperación R2 sobre main con PR #3/#4 integrados: fuentes desktop separadas y runners core heredados con selección por paquetes, manteniendo java.base en core/tests existentes. No se altera Java ni se adopta un nuevo diseño. UI y callbacks en EDT, sin loop ni polling. Lectura TXT acotada síncrona: un origen lento puede bloquear temporalmente la ventana; evaluar SwingWorker sólo si ese escenario entra en alcance. Los gráficos son placeholders propios. Candidatos/PREFERRED, OQ-08/OQ-11 y aceptación grupal permanecen sin ratificación.

@@ -1,0 +1,61 @@
+{
+  "schema": "sokoban-pr5-windows-native-qa-continuity/v1",
+  "checkpoint": "SOKOBAN_WINDOWS_PR5_NATIVE_VALIDATION",
+  "as_of_date": "2026-10-21",
+  "result": "PASS_REPORTED_BY_LOCAL_AGENT_WITH_CORROBORATED_ARTIFACTS",
+  "repository": "smatrauade/Los-Force-Push",
+  "pr": 5,
+  "pr_state_as_of_date": "OPEN_DRAFT_UNMERGED",
+  "main_sha": "ee83f9ebd30ee1b553c555c89d9ea453131d6678",
+  "tested_pr_head_sha": "0670a4d5137f0e9f1db221866a02c29987024847",
+  "head_branch": "feat/swing-playable-notebook-v1",
+  "ahead_main": 3,
+  "behind_main": 0,
+  "environment": {
+    "os": "Windows 11 Pro 25H2",
+    "build": "26200.9711",
+    "arch": "x64",
+    "shells": [
+      "PowerShell 5.1.26100.9711",
+      "PowerShell 7.6.5"
+    ],
+    "jdk": "Temurin 21.0.12.1",
+    "java_release": 17
+  },
+  "gates": {
+    "G0": "PASS_REPORTED",
+    "G1": "PASS_REPORTED",
+    "G2": "PASS_REPORTED",
+    "G3": "PASS_REPORTED",
+    "G4": "PASS_REPORTED",
+    "G5": "PASS_REPORTED",
+    "G6": "PASS_REPORTED"
+  },
+  "tests": {
+    "cli_scenarios_pass": 18,
+    "cli_scenarios_fail": 0,
+    "cli_scenarios_per_shell": 9,
+    "unique_loading_cases": 40,
+    "unique_movement_cases": 31,
+    "core_standalone_additional_runs": 0,
+    "swing_headless_pass": 16,
+    "swing_headless_fail": 0,
+    "gui_interactive": "REPORTED_BY_AGENT_WITH_SCREENSHOTS",
+    "external_valid_txt": "PASS_REPORTED",
+    "invalid_txt_preserves_state": "PASS_REPORTED"
+  },
+  "evidence": {
+    "manifest_entries": 48,
+    "whole_bundle_versioned": false,
+    "report_sha256": "4720bfe8679b306a4c374b4cb7a964355c7c7a30c344e79beb2dfb6abf682fbc",
+    "result_sha256": "7500b808422caf9c5187ce18f1aa32b8070078e7ac2d30958a4a9f177b0ca27",
+    "manifest_sha256": "9327efa2ae9f7c66791e894545ee01f418eaaa2a3be27ad10c7190d5d7a077c7"
+  },
+  "historical_worktrees": "UNCHANGED_REPORTED_BY_AGENT",
+  "team_acceptance": "NOT_RECORDED",
+  "macos_gui": "NOT_RUN",
+  "next_gate": "POST_PR5_INTEGRATION_AUDIT_AND_SCOPED_BACKLOG",
+  "planned_integration": "OWNER_AUTHORIZED_CONDITIONAL_ON_GATES",
+  "post_merge_state": "REVALIDATE_GITHUB_NOT_PREDECLARED",
+  "formal_self_approval": "NOT_POSSIBLE_ON_OWN_PR"
+}

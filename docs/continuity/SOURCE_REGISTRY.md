@@ -1,6 +1,6 @@
 # Registro de fuentes y disponibilidad
 
-Revisado 2026-10-08. Prioridad: consigna → aclaraciones posteriores → oral → cátedra → equipo → bibliografía → GitHub → inferencia. No mezclar rango de autoridad con disponibilidad de bytes.
+Revisado 2026-10-21 para anexar fuentes posteriores. La tabla conserva la disponibilidad al bootstrap del 08/10. Prioridad: consigna → aclaraciones posteriores → oral → cátedra → equipo → bibliografía → GitHub → inferencia. No mezclar rango de autoridad con disponibilidad de bytes.
 
 | Fuente | Disponibilidad actual | Uso / limitación |
 |---|---|---|
@@ -29,3 +29,13 @@ Hash **histórico reportado**, no comprobado hoy, del PDF oficial: `2222cf4ca087
 La fecha de la cápsula y sus declaraciones de no autorización reflejan la tarea anterior. En esta integración prevalece la solicitud actual de bootstrap. Las conclusiones nuevas se etiquetan como análisis, no citas inventadas del profesor. No hay libros/PDFs/ZIPs de spikes incorporados.
 
 La cápsula histórica contiene dos saltos duros Markdown con espacios finales intencionales. `.gitattributes` admite esos espacios exclusivamente para ese archivo, para preservar su hash sin desactivar los controles de whitespace del resto.
+
+## Fuentes reabiertas externamente el 2026-10-21 (no disponibles automáticamente en Git)
+
+- PDF oficial `PDS - TI - Prof Pepe.pdf`: archivo recibido directamente en la conversación externa, SHA-256 **recalculado** `2222cf4ca087946f74a55ea786ca7773a91f42fb5e40c2900cf55b3b51688a49` idéntico al hash histórico. **No alojado en el repositorio**; REQUIREMENTS contiene la normalización.
+- Materiales de clases, UML, DIP y Resort: adjuntos externos; no fueron todos reanalizados en esta reconciliación, y el lector de un clon no puede afirmar disponibilidad de sus originales. No redistribuir materiales sin permiso.
+- Cápsula Schema 9 R6.0 externa: SHA-256 `2889e3f6c6d6d2163d9a9f0294d1542ac1821719b2f895d9b3cc8b4aa26c2985`; snapshot histórico, no autorización ni sustituto de Git.
+- QA Windows PR #5: artefactos externos `report.md` SHA-256 `4720bfe8679b306a4c374b4cb7a964355c7c7a30c344e79beb2dfb6abf682fbc`, `result.json` SHA-256 `7500b808422caf9c5187ce18f1aa32b8070078e7ac2d30958a4a9f177b0ca27`, manifiesto `9327efa2ae9f7c66791e894545ee01f418eaaa2a3be27ad10c7190d5d7a077c7`. Los **48 archivos** NO se suben; sólo [resumen versionado](checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y [JSON](checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json). Resultado de test/GUI/preservación `REPORTED_BY_AGENT`; hashes de adjuntos `VERIFIED`.
+- GitHub consultado el 21/10: `main=ee83f9ebd30ee1b553c555c89d9ea453131d6678`, PR #5 `0670a4d5137f0e9f1db221866a02c29987024847`, OPEN/Draft no fusionado. Son lecturas fechadas: revalidar antes de actuar.
+
+La tabla superior refleja **disponibilidad al bootstrap del 08/10**, no disponibilidad universal en todo chat; no atribuir acceso a bytes ausentes.

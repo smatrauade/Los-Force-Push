@@ -1,6 +1,6 @@
 # Registro vivo de decisiones
 
-`LAST_REVIEWED = 2026-10-14` (comparación local R1, sin ratificación). La autoridad se separa del estado. No hay ratificación formal de arquitectura aportada a este bootstrap. Ninguna fila `PREFERRED`/`TEAM-PROPOSAL` se considera `ACCEPTED`. Las pruebas históricas no modifican ese estado.
+`LAST_REVIEWED = 2026-10-21` (recuperación Swing R2, sin nuevas decisiones ni ratificación). La autoridad se separa del estado. No hay ratificación formal de arquitectura aportada a este bootstrap. Ninguna fila `PREFERRED`/`TEAM-PROPOSAL` se considera `ACCEPTED`. Las pruebas históricas no modifican ese estado.
 
 | ID | Problema / opción | Alternativa y estado | Justificación y consecuencias |
 |---|---|---|---|
@@ -51,3 +51,9 @@ Correcciones del diagnóstico de tamaño y validación temprana, 38 casos PASS c
 ## Hipótesis experimental de movimiento R1 — 2026-10-14
 
 Por solicitud del usuario se ensaya transición funcional `Board + Direction → MoveResult + Board`, frente a agregado runtime encapsulado. Se reutiliza Board inmutable de Level Loading sin modificarlo ni duplicar posiciones. El coste de copia/validación y la alternativa futura quedan en [MOVEMENT_R1](../experiments/MOVEMENT_R1.md). Alcance: piso/destino/pared/borde/jugador/caja normal; no Memento ni otras mecánicas. Estado EXPERIMENTAL, sin ratificación del equipo ni nueva autoridad docente. D-001/002/003/004/005/006/007/011/012 y OQ-01…OQ-11 mantienen sus estados anteriores; los PASS sólo validan este subconjunto.
+
+## Ensayo Swing autorizado — 2026-10-15
+
+Procedencia: solicitud directa del usuario para SOKOBAN_SWING_UI_INTEGRATION; implementación EXPERIMENTAL, sin ratificación TEAM. Se ensayan D-002/D-003 con eventos discretos y separación MVC. GameView permite pruebas sin pantalla frente a acoplar el controlador a JFrame. GamePresentation comparte el Board inmutable; copiar una grilla mutable introduciría otra autoridad espacial sin necesidad. En el baseline del 15/10, las fuentes desktop separadas mantenían el límite java.base del core frente a runners que recorrían raíces completas. El PR #4 posteriormente restringió core a los paquetes level/movement. La recuperación del 21/10 conserva ambos mecanismos, sin cambiar el estado de estas decisiones.
+
+[Implementación, consecuencias, pruebas y límites](../experiments/SWING_VERTICAL_SLICE_V1.md). Contadores sólo demostrativos, sin adoptar semántica Undo/score. La lectura local acotada en EDT evita concurrencia adicional en este spike, con riesgo explícito de demora en filesystems lentos. No se modifican estados de las decisiones, no se cierra OQ-01…OQ-11 y no se agregan patrones para mecánicas pendientes.

@@ -1,6 +1,6 @@
 # TODO — backlog vivo
 
-Revisado 2026-10-14 tras la revisión independiente de movimiento R2 y validación R3. El bootstrap documental y estructural está integrado. Este snapshot contiene carga y movimiento/empuje básico experimentales; GUI y mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
+Revisado 2026-10-21 tras publicar Swing V1 mediante el Draft PR #5 contra main con los PR #3 y #4 integrados. El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
 
 ## Bootstrap completado y verificado
 
@@ -17,7 +17,7 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Subconjunto TXT externo → Parser → Builder → Level/Board, sin Swing.
 - [x] Compilar sin warnings y ejecutar 40 casos reales con JDK 17 y JDK 26; evidencia en [LEVEL_LOADING_R1](docs/experiments/LEVEL_LOADING_R1.md).
 - [x] Runners Unix/Windows sobre las mismas fuentes; revisión Bash 3.2/PowerShell 5.1, pruebas Linux con rutas/temporales Unicode y espacios, protección TXT/EOL.
-- [ ] Ejecutar los mismos 40 casos nativamente en Windows 10/11 (PowerShell 5.1 y 7) y macOS; registrar sistema/JDK/comando/salida y cleanup.
+- [ ] Completar validación nativa macOS de los 40 casos; Windows PS5.1/PS7 ya fue validado en RUNNER R3, registrado en TEST_STRATEGY.
 - [ ] Revisar contrato, coste de Builder, modelo y pruebas con el equipo; D-011 sigue PREFERRED.
 
 ## Movimiento experimental — implementación y validación R1–R3
@@ -30,7 +30,22 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Preparar el incremento experimental de movimiento con código, pruebas, UML y documentación coherentes para su versionado.
 - [x] Reproducir en R3 los 40 casos de carga y 31 de movimiento con JDK 17/26 en Linux, sin warnings y con salida 0.
 - [ ] Revisar el movimiento con el equipo; la aceptación grupal no está registrada.
-- [ ] Pruebas nativas Windows/macOS de ambas suites; preservar decisiones OPEN/PREFERRED.
+- [ ] Completar pruebas nativas macOS de ambas suites; Windows ya validado, preservar decisiones OPEN/PREFERRED.
+
+## Primer incremento Swing — experimental, 2026-10-15
+
+- [x] Integrar carga TXT externa, Board inmutable y MovementEngine sin modificar el core; ventana 2D, cuatro flechas, empuje normal y contadores demostrativos.
+- [x] Comando Windows de compilación/ejecución y 16 pruebas de integración sin pantalla.
+- [x] Ejecutar core 40/40 + 31/31 e interacción gráfica real Windows con movimiento, empuje y bloqueo; [evidencia y límites](docs/experiments/SWING_VERTICAL_SLICE_V1.md).
+- [x] Revisión técnica Swing R3: MVC/responsabilidades, UML implementado frente a candidato y autocontención del baseline recuperado; 87 pruebas PASS desde exportación limpia y correcciones sólo documentales.
+- [x] Publicar `feat/swing-playable-notebook-v1` y abrir el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) contra `main`; OPEN/Draft, sin fusionar. Los dos commits publicados en R4 se conservan, registrados en [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
+- [ ] Revisión humana independiente del código Swing: si el PR #5 fue integrado por decisión del autor, realizar revisión **posterior** y registrar observaciones/correcciones en otro PR. No inferir aprobación grupal de un merge técnico.
+- [x] Validación Linux R2 del árbol combinado: 40 Loading + 31 Movement + 16 desktop headless PASS, cero FAIL y salida 0, JDK 17/release 17 y C.utf8; evidencia en la guía y TEST_STRATEGY.
+- [x] Revalidar GUI interactiva **Windows del HEAD PR #5**: flechas, empujes, bloqueo, contadores, TXT externos válidos/inválidos; [evidencia](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md).
+- [ ] GUI Swing interactiva Linux y macOS nativo; Windows actual no los sustituye.
+- [x] Acreditar la regresión Windows del aislamiento #4 en el árbol combinado del PR #5: CLI 9/9 casos por PowerShell 5.1/7; [checkpoint actual](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md).
+- [ ] Resolver carga asíncrona/cancelable si se necesitan filesystems lentos o remotos.
+- [ ] Ratificación del contrato TXT/Java/build y arquitectura; placeholders no sustituyen imágenes definitivas.
 
 ## Bloqueantes y decisiones
 
@@ -55,11 +70,11 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 
 - [ ] Primer build reproducible y organización de packages.
 - [ ] Carga productiva TXT externo → parser/construcción → Level/Board: el spike R1 es parcial y experimental; contrato final y entidades restantes siguen pendientes.
-- [ ] Consolidar movimiento productivo tras revisión del subconjunto experimental; input por flechas y reglas adicionales permanecen pendientes.
+- [ ] Consolidar movimiento productivo tras revisión del subconjunto experimental; el incremento Swing agrega flechas; las reglas adicionales y consolidación productiva permanecen pendientes.
 - [ ] Cajas especiales, hielo y cerrojos conforme a decisiones cerradas.
 - [ ] Undo, estado frágil/muros y métricas; Restart.
 - [ ] Victoria/progresión, score y resumen.
-- [ ] Swing: flechas, HUD, Undo/Restart visibles, render y SFX.
+- [ ] Completar presentación del producto: HUD definitivo, Undo/Restart funcionales, imágenes auditadas y SFX; el spike Swing básico no cierra este entregable.
 - [ ] Dos funcionalidades adicionales ratificadas.
 - [ ] Mantener UML/trazabilidad del resto de mecánicas al implementarlas, con código y evidencia real; no integrar spikes sin bytes auditados.
 
@@ -70,7 +85,7 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [ ] Informe de decisiones/justificaciones y declaración de IA.
 - [ ] Assets de dominio público con registro de licencia individual.
 - [ ] Video de gameplay.
-- [ ] Decisión del equipo y cambio autorizado a repositorio público antes de entregar.
+- [x] Visibilidad pública verificada mediante API el 2026-10-21; esta recuperación no la modifica.
 - [ ] Entrega por correo institucional con integrantes en copia.
 - [ ] Ensayo de defensa individual del diseño, código, pruebas y patrones.
 

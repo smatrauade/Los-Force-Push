@@ -16,6 +16,8 @@
 | Licencias de assets | [ASSET_POLICY](assets/ASSET_POLICY.md) |
 | Experimento local de carga TXT | [LEVEL_LOADING_R1](experiments/LEVEL_LOADING_R1.md), [UML del spike](architecture/uml/level-loading-spike-v1.puml) |
 | Movimiento básico experimental | [MOVEMENT_R1](experiments/MOVEMENT_R1.md), [UML acotado](architecture/uml/movement-core-spike-v1.puml) |
+| Primer incremento Swing | [Guía y evidencia](experiments/SWING_VERTICAL_SLICE_V1.md), [UML acotado](architecture/uml/swing-playable-spike-v1.puml) |
+| QA Windows posterior a R5 | [Checkpoint PR #5](continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md), [JSON](continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json) |
 | Estado vivo y riesgos | [CURRENT_STATE](continuity/CURRENT_STATE.md) |
 | Mantenimiento | [FRESHNESS_POLICY](continuity/FRESHNESS_POLICY.md) |
 | Disponibilidad de fuentes | [SOURCE_REGISTRY](continuity/SOURCE_REGISTRY.md) |
