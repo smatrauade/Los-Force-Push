@@ -35,6 +35,29 @@ Level Loading R4 preservó los 38 casos y agregó 39 (archivo externo con nombre
 
 Windows usa `powershell -NoProfile -File scripts/test-level-loading.ps1` o `pwsh` con el mismo archivo; no duplica tests Java ni necesita Python/Bash. En la evidencia histórica de carga R4, Windows/macOS nativos estaban NOT_RUN; la validación posterior de Windows figura en el contrato CLI al final. macOS nativo continúa pendiente. La revisión estática PowerShell 5.1/7 y Bash 3.2/GNU/BSD no sustituye pruebas nativas. [Instrucciones y matriz](../experiments/LEVEL_LOADING_R1.md).
 
+## Aislamiento del core frente a la futura GUI (cambio propuesto)
+
+Los runners `scripts/test-level-loading.sh` y `scripts/test-level-loading.ps1` solo
+compilan recursivamente fuentes Java de `level` y `movement` en `src/main/java`
+y `src/test/java`, con `--limit-modules java.base`. No compilan por accidente
+una futura interfaz Swing de `src/main/java/ar/edu/uade/sokoban/ui` u otros
+paquetes ajenos a estas dos suites. Las pruebas de CLI del runner PowerShell
+siguen invocando el mismo runner, sin modificar sus nueve expectativas.
+
+**Contrato del gate:** fallo de compilación o test en `level`/`movement` implica
+exit code distinto de cero. Un PASS demuestra únicamente el core ensayado,
+no compila ni prueba el producto completo. Incorporar un build y tests de
+integración/GUI por separado cuando se cierre OQ-11. La partición por paquete
+es deliberadamente acotada: una dependencia futura del core fuera de esos
+paquetes debe revisarse en conjunto con sus tests y con este runner.
+
+**Prueba de aislamiento:** agregar solamente en una copia descartable
+`src/main/java/ar/edu/uade/sokoban/ui/Preview.java` que importe `javax.swing.JPanel`;
+ejecutar ambas suites con `java.base` y verificar que sigan pasando. Luego
+introducir un error de compilación en una clase `level` de otra copia
+independiente y verificar que el runner falle. No incorporar estos probes al
+repositorio. Validar el runner PowerShell en Windows nativo antes del merge.
+
 ## Movimiento básico R1 — evidencia 2026-10-14
 
 [Suite MovementTest](../../src/test/java/ar/edu/uade/sokoban/movement/MovementTest.java), [contrato, casos y resultados](../experiments/MOVEMENT_R1.md). Ejecutar `SPIKE_JDK_HOME='<JDK>' bash scripts/test-level-loading.sh --movement` o `powershell -NoProfile -File scripts/test-level-loading.ps1 -IncludeMovement` (pwsh también admitido). Sin opción se mantienen los 40 casos de carga. Una compilación estricta, dos suites sobre las mismas clases, sólo java.base; cada error produce exitcode no cero.
