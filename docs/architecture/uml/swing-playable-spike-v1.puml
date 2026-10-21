@@ -1,0 +1,54 @@
+@startuml
+title Swing playable slice V1 - experimental, not team-ratified
+package "existing core (unchanged)" {
+  class Board <<immutable>>
+  class LevelLoader
+  class MovementEngine
+  enum Direction
+  class MoveResult
+}
+package "desktop integration" {
+  class SwingApplication
+  class "SwingApplication.GameWindow" as GameWindow {
+    render(GamePresentation)
+    showLoadError(String)
+  }
+  interface GameView {
+    render(GamePresentation)
+    showLoadError(String)
+  }
+  class GameController {
+    load(Path)
+    move(Direction)
+  }
+  class GamePresentation <<immutable record>> {
+    Board board
+    String levelName
+    long moves
+    long pushes
+  }
+  class BoardPanel {
+    showBoard(Board)
+  }
+  class ArrowBindings {
+    {static} install(JComponent, Consumer<Direction>)
+  }
+}
+SwingApplication ..> GameWindow : creates on EDT
+GameWindow ..|> GameView
+GameWindow *-- BoardPanel
+GameWindow *-- GameController
+GameWindow ..> ArrowBindings : installs callbacks
+ArrowBindings ..> Direction : input translation
+GameController --> GameView
+GameController --> LevelLoader
+GameController --> MovementEngine
+GameController --> GamePresentation : current value
+GamePresentation --> Board : same immutable reference
+BoardPanel --> Board : read only
+MovementEngine ..> MoveResult
+note bottom of GameController
+No parser, rendering or collision rules.
+Blocked: no publication or counter change.
+end note
+@enduml

@@ -57,3 +57,19 @@ Las demás responsabilidades candidatas permanecen sin implementación. No se ad
 | Board/Cell/Position heredados | Expert espacial, terreno conservado e invariantes; contratos y fuentes sin cambios |
 
 El llamador conserva la referencia al Board vigente; el motor no es otro propietario de estado ni una sesión. Level mantiene el valor inicial. No se agrega GameState, jerarquía de cajas o interfaces sin variación real. Clases productivas del resto del modelo siguen pendientes.
+
+## Roles implementados en el incremento Swing V1 — 2026-10-15
+
+LAST_REVIEWED = 2026-10-15. [Guía y límites](../experiments/SWING_VERTICAL_SLICE_V1.md), [UML](uml/swing-playable-spike-v1.puml). Estos roles concretan sólo el subconjunto gráfico experimental.
+
+| Tipo real | Responsabilidad / límite |
+|---|---|
+| SwingApplication / GameWindow | Entrada y construcción EDT, selección de TXT, widgets y errores de carga; sin reglas |
+| ArrowBindings | Flechas de ventana a Direction; no decide resultados |
+| GameController | Carga atómica, delegación a MovementEngine, publicación y dos contadores demostrativos; sin parser/render/colisiones |
+| GameView | Frontera render/error sustituible por una sonda de test sin pantalla |
+| GamePresentation | Board inmutable compartido, nombre de nivel y contadores; sin grilla mutable |
+| BoardPanel | Pinta Terrain/Occupant con placeholders; retiene sólo referencia al Board para repintar |
+| LevelLoader / Board / MovementEngine | Contratos del core existentes, sin cambios |
+
+No se implementan GameSession, Undo, victoria, cajas especiales, audio ni el resto del candidato integral.

@@ -2,9 +2,11 @@
 
 Proyecto académico de Ingeniería en Informática, UADE: **Proceso de Desarrollo de Software**, profesor **Jonathan Leonel Pepe**. La tecnología exigida es **Java, Swing y GUI 2D**. El objetivo es un diseño defendible mediante SOLID, GRASP, MVC y GoF.
 
-## Estado al 2026-10-14
+## Estado al 2026-10-21
 
-El bootstrap documental y estructural está integrado en `main`: el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1) se fusionó el 2026-10-08. El PR #2 de reconciliación se fusionó el 2026-10-14. **La base histórica `1943053ec520ff3d8be0aecb21c2f417f3126380` todavía no contenía clases Java ni build.** El incremento de esta rama es experimental y no contiene un juego ejecutable. La documentación y la estructura inicial del proyecto están creadas; el merge no ratifica las propuestas de diseño. El [estado vivo](docs/continuity/CURRENT_STATE.md) registra el evento histórico y su SHA.
+El bootstrap documental y estructural está integrado en `main`: el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1) se fusionó el 2026-10-08. El PR #2 de reconciliación se fusionó el 2026-10-14. **La base histórica `1943053ec520ff3d8be0aecb21c2f417f3126380` todavía no contenía clases Java ni build.** Esta rama incorpora un primer incremento Swing jugable experimental sobre el core de carga y movimiento; no es el producto completo. La documentación y la estructura inicial del proyecto están creadas; el merge no ratifica las propuestas de diseño. El [estado vivo](docs/continuity/CURRENT_STATE.md) registra el evento histórico y su SHA.
+
+El core se integró mediante el [PR #3](https://github.com/smatrauade/Los-Force-Push/pull/3) el 20/10 y el aislamiento de runners mediante el [PR #4](https://github.com/smatrauade/Los-Force-Push/pull/4) el 21/10. Esta recuperación incorpora sólo Swing V1 sobre la base integrada `ee83f9ebd30ee1b553c555c89d9ea453131d6678`, conservando el código y los runners del core; no publica este incremento.
 
 | Área | Estado |
 |---|---|
@@ -65,11 +67,11 @@ powershell -NoProfile -File .\scripts\test-level-loading.ps1
 
 Ambos runners seleccionan `SPIKE_JDK_HOME` → `JAVA_HOME` → PATH, compilan las mismas fuentes y ejecutan los mismos tests Java; Windows no necesita Bash, WSL, Python ni GNU coreutils. También pueden invocarse desde otro directorio indicando la ruta del script. Las clases y archivos de prueba mutables se crean en un temporal propio fuera del checkout y se eliminan al terminar. Resultado esperado: `RESULT: 40 PASS, 0 FAIL` y código 0; fallos de JDK, compilación, tests o cleanup deben investigarse ante una salida no cero. No se instalan herramientas ni se cambian políticas globales. Si una política Windows impide ejecutar el script, seguir un procedimiento autorizado para scripts confiables o firmados; el runner no cambia ExecutionPolicy.
 
-**Límite de los runners experimentales:** compilan solo los paquetes `level` y `movement` y sus pruebas, con `java.base`. Los futuros componentes Swing (`java.desktop`) no deben entrar en esa compilación. La compilación y las pruebas de *todo* el producto requerirán un build separado cuando el equipo cierre OQ-11; un PASS del core no valida la aplicación gráfica.
+**Límite de los runners experimentales:** compilan solo los paquetes `level` y `movement` y sus pruebas, con `java.base`. Los componentes Swing (`java.desktop`) quedan fuera de esa compilación. La compilación y las pruebas de *todo* el producto requerirán un build separado cuando el equipo cierre OQ-11; un PASS del core no valida la aplicación gráfica.
 
 Evidencia R4 (2026-10-14): Linux nativo PASS con JDK 17/26; Windows y macOS nativos NOT_RUN. El runner PowerShell recibió revisión estática y Bash revisión de compatibilidad con macOS; estas revisiones no prueban ejecución en esos sistemas. Ver [comandos, matriz y límites](docs/experiments/LEVEL_LOADING_R1.md). Fuentes: `src/main/java/ar/edu/uade/sokoban/level`; pruebas: `src/test/java`; fixtures: `src/test/resources/levels`. EditorConfig preserva espacios de piso en TXT de niveles y Git fija LF sin recortarlos.
 
-No existe aún un comando para ejecutar el juego. Java/build del producto siguen en OQ-11 OPEN: la compilación directa del spike no los ratifica ni introduce Maven/Gradle. La base histórica reservaba directorios con placeholders; esta rama contiene únicamente las fuentes y pruebas experimentales.
+En Windows, el incremento Swing se inicia con `powershell -NoProfile -File .\scripts\run-swing.ps1`; usa el mismo JDK seleccionado arriba. `-LevelPath '<archivo.txt>'` permite otro TXT y `-Test` ejecuta las 16 pruebas de integración sin pantalla. También admite pwsh en Windows; el script busca ejecutables `.exe`. [Alcance, comandos y validación](docs/experiments/SWING_VERTICAL_SLICE_V1.md). Java/build del producto siguen en OQ-11 OPEN; estos comandos experimentales no los ratifican ni introducen Maven/Gradle.
 
 ## Movimiento básico experimental
 
@@ -83,12 +85,18 @@ Para ejecutar carga y movimiento con una sola compilación, agregar `--movement`
 | R2 | 40 + 31 PASS reproducidos | NOT_RUN | Revisión independiente; sin defectos funcionales bloqueantes |
 | R3 | 40 + 31 PASS reproducidos | 40 + 31 PASS reproducidos | Linux nativo, JDK 17.0.20.1 y 26.0.2, compilación estricta y salida 0 |
 
-La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md#contrato-cli-powershell--runner-r3) distingue suites versionadas, evidencia histórica y la validación nativa Windows del runner. macOS nativo continúa NOT_RUN; compatibilidad por diseño no equivale a ejecución nativa. La versión Java/build definitiva sigue OPEN. El [UML acotado](docs/architecture/uml/movement-core-spike-v1.puml) corresponde a este subconjunto. El backlog conserva la revisión grupal y las validaciones técnicas pendientes; el estado operativo de publicación y PR se consulta en Git/GitHub. No hay hielo, cajas especiales, Undo, victoria, score, Swing ni audio.
+La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md#contrato-cli-powershell--runner-r3) distingue suites versionadas, evidencia histórica y la validación nativa Windows del runner. macOS nativo continúa NOT_RUN; compatibilidad por diseño no equivale a ejecución nativa. La versión Java/build definitiva sigue OPEN. El [UML acotado](docs/architecture/uml/movement-core-spike-v1.puml) corresponde a este subconjunto. El backlog conserva la revisión grupal y las validaciones técnicas pendientes; el estado operativo de publicación y PR se consulta en Git/GitHub. El Swing experimental descrito abajo añade flechas y presentación. No hay hielo, cajas especiales, Undo, victoria, score ni audio.
+
+## Primer incremento Swing jugable
+
+En Windows, `powershell -NoProfile -File .\scripts\run-swing.ps1` compila con release 17 y abre el TXT versionado [demo.txt](src/desktop/resources/levels/demo.txt). Flechas para mover/empujar, selector Abrir TXT y contadores demostrativos; los bloqueos conservan el estado. Los gráficos son placeholders propios, pendientes de imágenes definitivas y licencias. No hay progresión, victoria, Undo/Restart ni audio. [Guía, arquitectura MVC, pruebas y límites](docs/experiments/SWING_VERTICAL_SLICE_V1.md).
+
+Fuentes en src/desktop/java y tests en src/desktop-test/java conservan sin cambios los runners heredados del PR #4 y su independencia de java.desktop. La validación gráfica Windows es histórica; la validación Linux de esta recuperación se registra por separado en la [guía](docs/experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21). Linux R2: 40 Loading + 31 Movement + 16 desktop headless PASS, cero FAIL y salida 0 con JDK 17/release 17 y C.utf8. GUI interactiva Linux y macOS: NOT_RUN. OQ-01…OQ-11 y la ratificación grupal siguen pendientes.
 
 ## Colaboración y entrega
 
 Seguir [CONTRIBUTING.md](CONTRIBUTING.md): rama de alcance acotado, commits, PR y revisión por otro integrante. No escribir directamente en `main`, usar force-push ni activar GitHub Actions en este alcance.
 
-El repositorio permanece **privado**. La consigna exige uno público para la entrega: el equipo deberá decidir y ejecutar ese cambio más adelante. También faltan README de ejecución, gameplay en video, diagrama de clases StarUML e informe técnico; la entrega institucional deberá incluir a los integrantes en copia.
+El repositorio es **público**, verificado mediante la API de GitHub el 2026-10-21. Esta recuperación no cambió su visibilidad. También faltan la guía de instalación/ejecución del producto completo, gameplay en video, diagrama de clases StarUML e informe técnico; la entrega institucional deberá incluir a los integrantes en copia.
 
-El bootstrap, la reconciliación documental y este spike fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. Se implementó únicamente el core experimental de carga y movimiento básico; no se volvió a ejecutar ningún spike histórico.
+El bootstrap, la reconciliación documental y este spike fueron preparados y revisados con apoyo de IA (Codex). El equipo debe revisar las propuestas, declarar el uso de IA en el informe y comprender, validar, adaptar y defender individualmente el resultado. El incremento Swing reutiliza ese core sin cambiar sus reglas; no se volvieron a ejecutar los spikes históricos A/B.
