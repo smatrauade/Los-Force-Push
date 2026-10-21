@@ -3,7 +3,7 @@
 ```text
 AS_OF = 2026-10-21
 REPOSITORY = smatrauade/Los-Force-Push
-PRIMARY_DOMAIN = SOKOBAN_SWING_V1_ISOLATED_RECOVERY
+PRIMARY_DOMAIN = SOKOBAN_SWING_RELEASE_CONSISTENCY
 IMPLEMENTATION_STATUS = IMPLEMENTED_EXPERIMENTAL
 TEST_STATUS = TESTED
 TEAM_ACCEPTANCE = NOT_RECORDED
@@ -12,7 +12,8 @@ EXPERIMENT_ORIGIN_BRANCH = feat/swing-playable-spike-v1
 EXPERIMENT_BASE = be490aecb2bbcb92b863778a63499c587313146c
 ORIGINAL_SWING_COMMIT = 1303a33748e129f3d8a55ab2b1799518aaa8df5d
 RECOVERY_BASE = ee83f9ebd30ee1b553c555c89d9ea453131d6678
-VALIDATION_ITERATION = SWING_RECOVERY_R2
+VALIDATION_ITERATION = SWING_RELEASE_CONSISTENCY_R3
+RECOVERED_SWING_BASELINE = 99b81c5aa04dd6c6a19cc72f42c766ce53551bbd
 DESKTOP_INTEGRATION_TESTS = 16_PASS_0_FAIL_LINUX_JDK17_RELEASE17
 INTERACTIVE_GUI_WINDOWS = HISTORICAL_PASS_SWING_V1
 INTERACTIVE_GUI_LINUX = NOT_RUN
@@ -20,9 +21,9 @@ SWING_BASE = be490aecb2bbcb92b863778a63499c587313146c
 LEVEL_LOADING_TESTS = 40_PASS_0_FAIL_LINUX_JDK17_RELEASE17
 MOVEMENT_TESTS = 31_PASS_0_FAIL_LINUX_JDK17_RELEASE17
 LINUX_CORE_HISTORICAL_TEST = PASS
-LINUX_SWING_TEST = PASS_HEADLESS_R2
+LINUX_SWING_TEST = PASS_HEADLESS_R3_CLEAN_SNAPSHOT
 WINDOWS_NATIVE_TEST = HISTORICAL_PASS_SWING_V1_AND_RUNNER_R3
-RUNNER_VALIDATION_ITERATION = LINUX_RECOVERY_R2
+RUNNER_VALIDATION_ITERATION = LINUX_CLEAN_SNAPSHOT_R3
 WINDOWS_RUNNER_HISTORICAL_VALIDATION = RUNNER_R3
 MACOS_NATIVE_TEST = NOT_RUN
 DEFAULT_BRANCH = main
@@ -31,10 +32,12 @@ PRODUCTION_IMPLEMENTATION = NONE
 JAVA_TARGET = OPEN
 BUILD_TOOL = OPEN
 TXT_FORMAT = OPEN
-NEXT_GATE = INDEPENDENT_RECOVERED_SWING_REVIEW_AND_DRAFT_PR_PREPARATION
+NEXT_GATE = TEAM_REVIEW_AND_SEPARATE_DRAFT_PR_PREPARATION
 ```
 
 ## Estado comprobado y cómo continuar
+
+Revisión técnica R3 del 21/10 sobre `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd`: MVC y colaboraciones de los UML implementados contrastados con el código; cuatro PlantUML comprobados/renderizados, candidato integral separado y StarUML pendiente. Una exportación limpia de ese commit reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, JDK 17.0.20.1/release 17 y C.utf8, sin bundle ni QA externos. Las correcciones R3 son sólo documentales: se conserva la evidencia por identidad de los blobs ejecutables; [detalle](../testing/TEST_STRATEGY.md#revisión-de-consistencia-swing-r3--2026-10-21). La rama Swing continúa local, sin publicación; main remoto incluye #3/#4 y no Swing al control de esta revisión. Revisión humana del equipo, GUI interactiva Linux y macOS siguen pendientes.
 
 Recuperación R2 del 2026-10-21: repositorio público verificado mediante API; [PR #3](https://github.com/smatrauade/Los-Force-Push/pull/3) MERGED el 20/10, merge `e8f76cec23de019cd244b6d089bd6de3a24251a3`; [PR #4](https://github.com/smatrauade/Los-Force-Push/pull/4) MERGED el 21/10, merge `ee83f9ebd30ee1b553c555c89d9ea453131d6678`. La nueva base incluye ambos, y se incorpora únicamente el delta Swing original `1303a33748e129f3d8a55ab2b1799518aaa8df5d`, cuyo padre es `be490aecb2bbcb92b863778a63499c587313146c`. Se conservan los runners con selección por paquetes del #4, las fuentes/tests/fixtures del core y los bytes Java/Swing originales. Linux R2: 40 Loading, 31 Movement y 16 desktop headless PASS, cero FAIL y salida 0 con OpenJDK 17.0.20.1/release 17 y C.utf8. GUI interactiva Linux y macOS NOT_RUN. No hay publicación ni aceptación académica implícita. La validación Linux R2 se registra separadamente de la evidencia histórica Windows en la [guía](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21).
 

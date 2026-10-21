@@ -1,6 +1,6 @@
 # Requisitos normalizados
 
-`LAST_REVIEWED = 2026-10-08`. Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no está disponible y su hash histórico no se ha recalculado. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
+`LAST_REVIEWED = 2026-10-21` (estado de visibilidad; normalización de requisitos del 2026-10-08 preservada). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no está disponible y su hash histórico no se ha recalculado. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
 
 ## Baseline oficial
 
@@ -19,7 +19,7 @@
 | RF-11 | Todos los elementos del tablero mediante imágenes; acciones con efectos sonoros apropiados; assets de dominio público | Cobertura visual/sonora y registro individual de licencias |
 | RF-12 | Dos funcionalidades adicionales que impliquen patrones de diseño | Selección OQ-10; no contar automáticamente requisitos obligatorios |
 | RT-01 | Java + Swing + GUI 2D | Build/ejecución reproducibles tras OQ-11 |
-| RT-02 | Repo GitHub público, README de ejecución, video gameplay, clases en StarUML, informe con decisiones/justificaciones y envío institucional con integrantes en copia | Entregables auditables; visibilidad queda a decisión futura del equipo |
+| RT-02 | Repo GitHub público, README de ejecución, video gameplay, clases en StarUML, informe con decisiones/justificaciones y envío institucional con integrantes en copia | Entregables auditables; visibilidad pública verificada por API el 2026-10-21, demás entregables pendientes |
 | RT-03 | SOLID, GRASP, MVC, GoF, calidad de diseño, creatividad y documentación; defensa individual | Diseño/código/evidencia coherentes y explicación por cada integrante |
 | RT-04 | IA como apoyo declarada; equipo comprende, valida, adapta y defiende el resultado | Declaración y revisión humana |
 

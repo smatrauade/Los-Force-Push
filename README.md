@@ -41,11 +41,15 @@ El profesor podría modificar o escribir un TXT compatible para verificar que lo
 
 ## Clonar y verificar la documentación
 
+El clon siguiente selecciona la rama por defecto `main`. Al control del 2026-10-21, main contiene el core y el aislamiento de los PR #3/#4, pero Swing V1 sólo está en esta rama local y todavía no se publicó. Los comandos desktop de esta guía requieren un checkout que contenga el incremento Swing.
+
 ```bash
 git clone https://github.com/smatrauade/Los-Force-Push.git
 cd Los-Force-Push
 bash scripts/verify-repo-readonly.sh
 ```
+
+Cuando se autorice y publique `feat/swing-playable-notebook-v1`, podrá obtenerse directamente con `git clone --branch feat/swing-playable-notebook-v1 https://github.com/smatrauade/Los-Force-Push.git Los-Force-Push-Swing` y entrando en `Los-Force-Push-Swing`. Antes de compilar, verificar el SHA de la rama o del futuro PR; no ejecutar ese clon de rama mientras la referencia remota no exista.
 
 Requiere Git, Bash y Python 3 para la auditoría documental; **Python no es una decisión sobre el runtime del juego**. El script inspecciona archivos y Git, no hace fetch, commits ni escrituras. Para verificar un checkout limpio agregar `--require-clean`; usarlo antes de editar o después de un commit exitoso. El modo `--bootstrap` audita exclusivamente la rama original `docs/bootstrap-sokoban-autocontenido-v1` y exige ese nombre de rama; no corresponde a la reconciliación ni al checkout de `main`. No reemplaza el preflight remoto de permisos/PRs.
 

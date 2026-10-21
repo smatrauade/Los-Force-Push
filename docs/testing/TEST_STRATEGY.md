@@ -1,6 +1,6 @@
 # Estrategia de pruebas y evidencia experimental
 
-Revisado 2026-10-21 (recuperación Swing R2 sobre core e aislamiento integrados). El snapshot contiene 40 casos de Level Loading y 31 de movimiento; la base histórica del bootstrap precede a esas suites. La tabla siguiente conserva el **plan de aceptación del producto completo**, no resultados ni negación de la cobertura parcial ejecutable descrita después. Herramienta/framework y Java definitivos dependen de OQ-11. Core se prueba sin Swing.
+Revisado 2026-10-21 (recuperación Swing R2 y revisión de consistencia R3). El snapshot contiene 40 casos de Level Loading y 31 de movimiento; la base histórica del bootstrap precede a esas suites. La tabla siguiente conserva el **plan de aceptación del producto completo**, no resultados ni negación de la cobertura parcial ejecutable descrita después. Herramienta/framework y Java definitivos dependen de OQ-11. Core se prueba sin Swing.
 
 | Área | Casos previstos | Gate |
 |---|---|---|
@@ -133,3 +133,12 @@ En la evidencia original del 15/10, Linux/macOS Swing estaban NOT_RUN; la recupe
 Base `ee83f9ebd30ee1b553c555c89d9ea453131d6678` con #3/#4 integrados, más el delta exclusivo del original `1303a33748e129f3d8a55ab2b1799518aaa8df5d` y documentación reconciliada. [Comandos reproducibles, entorno y límites](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21). Java/Swing, tests, fixtures y scripts heredados sin modificaciones; sólo se recompilan y ejecutan las suites existentes, sin sumar casos.
 
 Linux x86_64, OpenJDK/java/javac 17.0.20.1, release 17, LC_ALL=C.utf8: **Loading 40 PASS / 0 FAIL; Movement 31 PASS / 0 FAIL; Desktop 16 PASS / 0 FAIL**, salida 0 en compilación y suites. Ejecución real antes del commit con -encoding UTF-8 -Xlint:all -Werror; temporales propios eliminados. Logs, comandos y SHA final en el informe externo de recuperación. GUI interactiva Linux y macOS: NOT_RUN. Windows no se repite; sus resultados anteriores son históricos. Core usa java.base; desktop se compila por separado con java.base,java.desktop y se prueba con java.awt.headless=true. La pintura en BufferedImage y los bindings en EDT no certifican una ventana interactiva.
+
+
+## Revisión de consistencia Swing R3 — 2026-10-21
+
+Antes de editar documentación, se exportó el commit `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd` con `git archive`; sus 67 archivos coincidieron con los blobs del commit. En esa copia sin metadatos Git se ejecutaron el runner core y el bloque Linux desktop versionado en la [guía](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21), sustituyendo únicamente el directorio del JDK instalado. No se requirieron bundle, logs QA, clases previas ni rutas personales.
+
+Linux x86_64, OpenJDK/java/javac 17.0.20.1, release 17, LC_ALL=C.utf8: **Loading 40 PASS / 0 FAIL; Movement 31 PASS / 0 FAIL; Desktop 16 PASS / 0 FAIL**, compilación y ejecuciones con salida 0. Se verificaron java.base/java.desktop, UTF-8, -Xlint:all -Werror y cleanup de temporales propios. GUI interactiva Linux y macOS: NOT_RUN. No se repitió Windows.
+
+R3 sólo corrige documentación. La evidencia de esa exportación se conserva para el contenido final tras demostrar identidad de fuentes, tests, recursos y runners. `git archive HEAD` no incluye staging ni cambios locales; no se utiliza una exportación del HEAD anterior para certificar código nuevo. El verificador documental necesita Git: se ejecuta en el worktree real, con `--require-clean` sólo cuando esté limpio. La validación de enlaces/consistencia se repite sobre la documentación corregida; no equivale a ratificar decisiones académicas.

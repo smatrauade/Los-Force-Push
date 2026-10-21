@@ -37,7 +37,8 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Integrar carga TXT externa, Board inmutable y MovementEngine sin modificar el core; ventana 2D, cuatro flechas, empuje normal y contadores demostrativos.
 - [x] Comando Windows de compilación/ejecución y 16 pruebas de integración sin pantalla.
 - [x] Ejecutar core 40/40 + 31/31 e interacción gráfica real Windows con movimiento, empuje y bloqueo; [evidencia y límites](docs/experiments/SWING_VERTICAL_SLICE_V1.md).
-- [ ] Revisión independiente del commit recuperado y preparación de un Draft PR contra main; el core #3 y el aislamiento #4 ya están integrados. Publicación requiere autorización posterior.
+- [x] Revisión técnica Swing R3: MVC/responsabilidades, UML implementado frente a candidato y autocontención del baseline recuperado; 87 pruebas PASS desde exportación limpia y correcciones sólo documentales.
+- [ ] Revisión por otro integrante y preparación de un Draft PR contra main; core #3 y aislamiento #4 ya integrados, Swing aún local. Publicación requiere autorización posterior.
 - [x] Validación Linux R2 del árbol combinado: 40 Loading + 31 Movement + 16 desktop headless PASS, cero FAIL y salida 0, JDK 17/release 17 y C.utf8; evidencia en la guía y TEST_STRATEGY.
 - [ ] GUI Swing interactiva Linux y macOS nativo; Windows histórico no los sustituye.
 - [ ] Acreditar la regresión Windows del parche de aislamiento #4; no confundirla con Windows del original.
