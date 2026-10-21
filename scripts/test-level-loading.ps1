@@ -42,10 +42,18 @@ try {
     $created = $true
     $classes = Join-Path $runDirectory 'classes'
     New-Item -ItemType Directory -Path $classes | Out-Null
-    $sources = @(
-        Get-ChildItem -LiteralPath (Join-Path $root 'src/main/java') -Recurse -File -Filter '*.java'
-        Get-ChildItem -LiteralPath (Join-Path $root 'src/test/java') -Recurse -File -Filter '*.java'
-    ) | Sort-Object FullName
+    # Compile only the experimental core. UI classes require java.desktop and
+    # must not enter a deliberately java.base-only regression runner.
+    # A product-wide build will be defined when OQ-11 is resolved.
+    $coreDirectories = @(
+        'src/main/java/ar/edu/uade/sokoban/level'
+        'src/main/java/ar/edu/uade/sokoban/movement'
+        'src/test/java/ar/edu/uade/sokoban/level'
+        'src/test/java/ar/edu/uade/sokoban/movement'
+    )
+    $sources = @($coreDirectories | ForEach-Object {
+        Get-ChildItem -LiteralPath (Join-Path $root $_) -Recurse -File -Filter '*.java'
+    }) | Sort-Object FullName
     if (@($sources).Count -eq 0) { throw 'No Java sources found.' }
     $sourceList = Join-Path $runDirectory 'sources'
     # javac argfile: explicit UTF-8 without BOM, quoted paths and forward slashes.
