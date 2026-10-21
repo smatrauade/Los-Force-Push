@@ -1,6 +1,6 @@
 # TODO — backlog vivo
 
-Revisado 2026-10-21 tras recuperar Swing V1 sobre main con los PR #3 y #4 integrados. El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
+Revisado 2026-10-21 tras publicar Swing V1 mediante el Draft PR #5 contra main con los PR #3 y #4 integrados. El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
 
 ## Bootstrap completado y verificado
 
@@ -38,7 +38,8 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Comando Windows de compilación/ejecución y 16 pruebas de integración sin pantalla.
 - [x] Ejecutar core 40/40 + 31/31 e interacción gráfica real Windows con movimiento, empuje y bloqueo; [evidencia y límites](docs/experiments/SWING_VERTICAL_SLICE_V1.md).
 - [x] Revisión técnica Swing R3: MVC/responsabilidades, UML implementado frente a candidato y autocontención del baseline recuperado; 87 pruebas PASS desde exportación limpia y correcciones sólo documentales.
-- [ ] Revisión por otro integrante y preparación de un Draft PR contra main; core #3 y aislamiento #4 ya integrados, Swing aún local. Publicación requiere autorización posterior.
+- [x] Publicar `feat/swing-playable-notebook-v1` y abrir el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) contra `main`; OPEN/Draft, sin fusionar. Los dos commits publicados en R4 se conservan, registrados en [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
+- [ ] Revisión humana del PR #5 por otro integrante; mantener el Draft mientras están pendientes la revisión y las decisiones del equipo.
 - [x] Validación Linux R2 del árbol combinado: 40 Loading + 31 Movement + 16 desktop headless PASS, cero FAIL y salida 0, JDK 17/release 17 y C.utf8; evidencia en la guía y TEST_STRATEGY.
 - [ ] GUI Swing interactiva Linux y macOS nativo; Windows histórico no los sustituye.
 - [ ] Acreditar la regresión Windows del parche de aislamiento #4; no confundirla con Windows del original.

@@ -6,7 +6,7 @@ Proyecto académico de Ingeniería en Informática, UADE: **Proceso de Desarroll
 
 El bootstrap documental y estructural está integrado en `main`: el [PR #1](https://github.com/smatrauade/Los-Force-Push/pull/1) se fusionó el 2026-10-08. El PR #2 de reconciliación se fusionó el 2026-10-14. **La base histórica `1943053ec520ff3d8be0aecb21c2f417f3126380` todavía no contenía clases Java ni build.** Esta rama incorpora un primer incremento Swing jugable experimental sobre el core de carga y movimiento; no es el producto completo. La documentación y la estructura inicial del proyecto están creadas; el merge no ratifica las propuestas de diseño. El [estado vivo](docs/continuity/CURRENT_STATE.md) registra el evento histórico y su SHA.
 
-El core se integró mediante el [PR #3](https://github.com/smatrauade/Los-Force-Push/pull/3) el 20/10 y el aislamiento de runners mediante el [PR #4](https://github.com/smatrauade/Los-Force-Push/pull/4) el 21/10. Esta recuperación incorpora sólo Swing V1 sobre la base integrada `ee83f9ebd30ee1b553c555c89d9ea453131d6678`, conservando el código y los runners del core; no publica este incremento.
+El core se integró mediante el [PR #3](https://github.com/smatrauade/Los-Force-Push/pull/3) el 20/10 y el aislamiento de runners mediante el [PR #4](https://github.com/smatrauade/Los-Force-Push/pull/4) el 21/10. Esta recuperación incorpora sólo Swing V1 sobre la base integrada `ee83f9ebd30ee1b553c555c89d9ea453131d6678`, conservando el código y los runners del core. La rama `feat/swing-playable-notebook-v1` está publicada mediante el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5), abierto como Draft contra `main`, sin fusionar y pendiente de revisión humana.
 
 | Área | Estado |
 |---|---|
@@ -41,7 +41,7 @@ El profesor podría modificar o escribir un TXT compatible para verificar que lo
 
 ## Clonar y verificar la documentación
 
-El clon siguiente selecciona la rama por defecto `main`. Al control del 2026-10-21, main contiene el core y el aislamiento de los PR #3/#4, pero Swing V1 sólo está en esta rama local y todavía no se publicó. Los comandos desktop de esta guía requieren un checkout que contenga el incremento Swing.
+El clon siguiente selecciona la rama por defecto `main`. Al control del 2026-10-21 posterior a la publicación, main contiene el core y el aislamiento de los PR #3/#4; Swing V1 está en la rama publicada `feat/swing-playable-notebook-v1` del PR #5 y aún no está integrado en main. Los comandos desktop de esta guía requieren un checkout que contenga el incremento Swing.
 
 ```bash
 git clone https://github.com/smatrauade/Los-Force-Push.git
@@ -49,7 +49,7 @@ cd Los-Force-Push
 bash scripts/verify-repo-readonly.sh
 ```
 
-Cuando se autorice y publique `feat/swing-playable-notebook-v1`, podrá obtenerse directamente con `git clone --branch feat/swing-playable-notebook-v1 https://github.com/smatrauade/Los-Force-Push.git Los-Force-Push-Swing` y entrando en `Los-Force-Push-Swing`. Antes de compilar, verificar el SHA de la rama o del futuro PR; no ejecutar ese clon de rama mientras la referencia remota no exista.
+La rama publicada puede obtenerse directamente con `git clone --branch feat/swing-playable-notebook-v1 https://github.com/smatrauade/Los-Force-Push.git Los-Force-Push-Swing` y entrando en `Los-Force-Push-Swing`. Antes de compilar, verificar el SHA de la rama y del [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5); el [estado vivo](docs/continuity/CURRENT_STATE.md) registra el último HEAD observado y los dos commits publicados en R4.
 
 Requiere Git, Bash y Python 3 para la auditoría documental; **Python no es una decisión sobre el runtime del juego**. El script inspecciona archivos y Git, no hace fetch, commits ni escrituras. Para verificar un checkout limpio agregar `--require-clean`; usarlo antes de editar o después de un commit exitoso. El modo `--bootstrap` audita exclusivamente la rama original `docs/bootstrap-sokoban-autocontenido-v1` y exige ese nombre de rama; no corresponde a la reconciliación ni al checkout de `main`. No reemplaza el preflight remoto de permisos/PRs.
 

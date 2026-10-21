@@ -3,7 +3,7 @@
 ```text
 AS_OF = 2026-10-21
 REPOSITORY = smatrauade/Los-Force-Push
-PRIMARY_DOMAIN = SOKOBAN_SWING_RELEASE_CONSISTENCY
+PRIMARY_DOMAIN = SWING_POST_PUBLICATION_DOCUMENTATION
 IMPLEMENTATION_STATUS = IMPLEMENTED_EXPERIMENTAL
 TEST_STATUS = TESTED
 TEAM_ACCEPTANCE = NOT_RECORDED
@@ -32,12 +32,14 @@ PRODUCTION_IMPLEMENTATION = NONE
 JAVA_TARGET = OPEN
 BUILD_TOOL = OPEN
 TXT_FORMAT = OPEN
-NEXT_GATE = TEAM_REVIEW_AND_SEPARATE_DRAFT_PR_PREPARATION
+NEXT_GATE = HUMAN_REVIEW_OF_PR5
 ```
 
 ## Estado comprobado y cómo continuar
 
-Revisión técnica R3 del 21/10 sobre `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd`: MVC y colaboraciones de los UML implementados contrastados con el código; cuatro PlantUML comprobados/renderizados, candidato integral separado y StarUML pendiente. Una exportación limpia de ese commit reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, JDK 17.0.20.1/release 17 y C.utf8, sin bundle ni QA externos. Las correcciones R3 son sólo documentales: se conserva la evidencia por identidad de los blobs ejecutables; [detalle](../testing/TEST_STRATEGY.md#revisión-de-consistencia-swing-r3--2026-10-21). La rama Swing continúa local, sin publicación; main remoto incluye #3/#4 y no Swing al control de esta revisión. Revisión humana del equipo, GUI interactiva Linux y macOS siguen pendientes.
+Publicación R4 confirmada el 2026-10-21: rama `feat/swing-playable-notebook-v1` publicada y [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) OPEN/Draft, sin fusionar, con base `main` en `ee83f9ebd30ee1b553c555c89d9ea453131d6678`. Conserva los dos commits publicados: recuperación R2 `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd` y reconciliación documental R3 `422886d653c6862fcb061f5ceddc1e1830b0cafe`, último HEAD remoto observado antes de esta actualización documental. La revisión humana del PR sigue pendiente; publicación y Draft no ratifican el diseño ni incorporan Swing a main.
+
+Revisión técnica R3 del 21/10 sobre `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd`: MVC y colaboraciones de los UML implementados contrastados con el código; cuatro PlantUML comprobados/renderizados, candidato integral separado y StarUML pendiente. Una exportación limpia de ese commit reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, JDK 17.0.20.1/release 17 y C.utf8, sin bundle ni QA externos. Las correcciones R3 son sólo documentales: se conserva la evidencia por identidad de los blobs ejecutables; [detalle](../testing/TEST_STRATEGY.md#revisión-de-consistencia-swing-r3--2026-10-21). Al cierre de aquella revisión R3 la rama Swing todavía era local; su publicación posterior mediante R4 se registra arriba. Main remoto conserva #3/#4 y no contiene Swing. Revisión humana del equipo, GUI interactiva Linux y macOS siguen pendientes.
 
 Recuperación R2 del 2026-10-21: repositorio público verificado mediante API; [PR #3](https://github.com/smatrauade/Los-Force-Push/pull/3) MERGED el 20/10, merge `e8f76cec23de019cd244b6d089bd6de3a24251a3`; [PR #4](https://github.com/smatrauade/Los-Force-Push/pull/4) MERGED el 21/10, merge `ee83f9ebd30ee1b553c555c89d9ea453131d6678`. La nueva base incluye ambos, y se incorpora únicamente el delta Swing original `1303a33748e129f3d8a55ab2b1799518aaa8df5d`, cuyo padre es `be490aecb2bbcb92b863778a63499c587313146c`. Se conservan los runners con selección por paquetes del #4, las fuentes/tests/fixtures del core y los bytes Java/Swing originales. Linux R2: 40 Loading, 31 Movement y 16 desktop headless PASS, cero FAIL y salida 0 con OpenJDK 17.0.20.1/release 17 y C.utf8. GUI interactiva Linux y macOS NOT_RUN. No hay publicación ni aceptación académica implícita. La validación Linux R2 se registra separadamente de la evidencia histórica Windows en la [guía](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21).
 
@@ -85,7 +87,7 @@ Base be490aecb2bbcb92b863778a63499c587313146c; fuentes separadas en src/desktop/
 
 [Guía autocontenida, comandos y límites](../experiments/SWING_VERTICAL_SLICE_V1.md), [UML real del subconjunto](../architecture/uml/swing-playable-spike-v1.puml). Windows nativo, Temurin 21/release 17: 40 Loading y 31 Movement PASS, 16 pruebas de integración PASS; interacción gráfica observada con movimiento, empujes, destino y pared bloqueada. En aquel incremento del 15/10 no se ejecutó Swing Linux/macOS; la validación headless Linux R2 se registra separadamente al inicio de este estado y en la guía. La carga local acotada es síncrona en el EDT; archivos remotos/lentos pueden demorar la ventana. Graphics2D es placeholder y no cumple aún imágenes definitivas. No hay victoria, Undo/Restart, score, especiales ni audio.
 
-Las evidencias históricas del core y su runner no sustituyen los tests desktop. La recuperación Linux R2 descrita al inicio prueba el incremento sin pantalla; no certifica GUI interactiva ni macOS. La aceptación del equipo no está registrada, OQ-01…OQ-11 permanecen OPEN. Siguiente gate: revisión independiente del incremento recuperado sobre main integrado y preparación de un futuro Draft PR. GUI interactiva Linux y macOS siguen pendientes; publicar requiere autorización posterior.
+Las evidencias históricas del core y su runner no sustituyen los tests desktop. La recuperación Linux R2 descrita al inicio prueba el incremento sin pantalla; no certifica GUI interactiva ni macOS. La aceptación del equipo no está registrada, OQ-01…OQ-11 permanecen OPEN. La revisión independiente R3 está realizada y R4 publicó el Draft PR #5 contra main integrado. Siguiente gate: revisión humana del PR #5. GUI interactiva Linux y macOS siguen pendientes; cualquier integración posterior requiere una decisión explícita del equipo.
 
 ## Diseño, evidencia y decisiones
 
