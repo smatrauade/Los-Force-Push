@@ -39,10 +39,11 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Ejecutar core 40/40 + 31/31 e interacción gráfica real Windows con movimiento, empuje y bloqueo; [evidencia y límites](docs/experiments/SWING_VERTICAL_SLICE_V1.md).
 - [x] Revisión técnica Swing R3: MVC/responsabilidades, UML implementado frente a candidato y autocontención del baseline recuperado; 87 pruebas PASS desde exportación limpia y correcciones sólo documentales.
 - [x] Publicar `feat/swing-playable-notebook-v1` y abrir el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) contra `main`; OPEN/Draft, sin fusionar. Los dos commits publicados en R4 se conservan, registrados en [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
-- [ ] Revisión humana del PR #5 por otro integrante; mantener el Draft mientras están pendientes la revisión y las decisiones del equipo.
+- [ ] Revisión humana independiente del código Swing: si el PR #5 fue integrado por decisión del autor, realizar revisión **posterior** y registrar observaciones/correcciones en otro PR. No inferir aprobación grupal de un merge técnico.
 - [x] Validación Linux R2 del árbol combinado: 40 Loading + 31 Movement + 16 desktop headless PASS, cero FAIL y salida 0, JDK 17/release 17 y C.utf8; evidencia en la guía y TEST_STRATEGY.
-- [ ] GUI Swing interactiva Linux y macOS nativo; Windows histórico no los sustituye.
-- [ ] Acreditar la regresión Windows del parche de aislamiento #4; no confundirla con Windows del original.
+- [x] Revalidar GUI interactiva **Windows del HEAD PR #5**: flechas, empujes, bloqueo, contadores, TXT externos válidos/inválidos; [evidencia](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md).
+- [ ] GUI Swing interactiva Linux y macOS nativo; Windows actual no los sustituye.
+- [x] Acreditar la regresión Windows del aislamiento #4 en el árbol combinado del PR #5: CLI 9/9 casos por PowerShell 5.1/7; [checkpoint actual](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md).
 - [ ] Resolver carga asíncrona/cancelable si se necesitan filesystems lentos o remotos.
 - [ ] Ratificación del contrato TXT/Java/build y arquitectura; placeholders no sustituyen imágenes definitivas.
 

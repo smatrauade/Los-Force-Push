@@ -2,7 +2,7 @@
 
 ## Alcance y autoridad
 
-`PRIMARY_TECHNICAL_DOMAIN = SOKOBAN_REPOSITORY_BOOTSTRAP_AND_PROJECT_CONTINUITY` para este bootstrap. La continuación autorizada del proyecto es Sokoban Java/Swing; mantener una responsabilidad técnica por iteración y no mezclar otros proyectos. Este contrato permite desarrollar posteriormente mediante tareas expresamente autorizadas; no otorga por sí solo permiso de publicación, merge o cambio de visibilidad.
+La etiqueta histórica `SOKOBAN_REPOSITORY_BOOTSTRAP_AND_PROJECT_CONTINUITY` corresponde sólo al bootstrap. Cada tarea futura debe declarar un dominio técnico **único**, su alcance y autorización; este documento no los concede por sí mismo. La continuación autorizada del proyecto es Sokoban Java/Swing; mantener una responsabilidad técnica por iteración y no mezclar otros proyectos. Este contrato permite desarrollar posteriormente mediante tareas expresamente autorizadas; no otorga por sí solo permiso de publicación, merge o cambio de visibilidad.
 
 Jerarquía: (1) consigna oficial; (2) aclaración directa posterior del profesor; (3) explicaciones orales; (4) materiales oficiales de cátedra; (5) decisiones explícitas del equipo; (6) bibliografía; (7) investigación GitHub; (8) inferencias. Registrar procedencia y disponibilidad. No atribuir lectura directa a fuentes ausentes.
 
@@ -20,7 +20,7 @@ Leer `README.md`, este contrato y, en orden:
 6. `TODO.md` y `docs/continuity/FRESHNESS_POLICY.md`.
 7. `docs/continuity/SOURCE_REGISTRY.md` si la tarea depende de una fuente.
 
-Contrastar HEAD, commits posteriores, PRs y archivos vivos. Una cápsula más reciente no necesariamente describe el HEAD actual.
+Contrastar HEAD, commits posteriores, PRs y archivos vivos. Una cápsula más reciente no necesariamente describe el HEAD actual. Para el checkpoint posterior a R5 leer además [Windows PR #5](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y su [JSON](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json), distinguiendo el commit del código probado del nuevo commit documental.
 
 ## Estados
 

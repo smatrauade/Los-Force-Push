@@ -58,3 +58,9 @@ Para marcar DONE: requisito → decisión/autoridad → responsabilidad → impl
 | RT-01 / RT-03 | Fuentes desktop separadas, run-swing.ps1, GameView | release 17, MVC con mismo Board inmutable, 16 pruebas nuevas PASS; core 40 + 31 PASS sin cambios. Java/build OPEN, revisión humana pendiente |
 
 [Rutas, comandos y resultados](../experiments/SWING_VERTICAL_SLICE_V1.md), [UML real acotado](../architecture/uml/swing-playable-spike-v1.puml). La evidencia anterior de cada iteración se preserva como historia; la ejecución Windows corresponde al incremento original del 15/10. La validación integrada Linux R2 reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, salida 0, JDK 17/release 17 y C.utf8; detalle en la guía y TEST_STRATEGY; GUI interactiva Linux y macOS: NOT_RUN. Ningún requisito integral pasa a DONE ni se ratifica una decisión por estos tests.
+
+## Evidencia Windows adicional del PR #5 (2026-10-21, posterior a R5)
+
+[QA nativa Windows](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) validó el HEAD experimental `0670a4d5137f0e9f1db221866a02c29987024847`, base integrada `ee83f9ebd30ee1b553c555c89d9ea453131d6678`: **40 casos Loading y 31 Movement únicos** ejecutados dentro de la regresión CLI 9/9 por PS5.1/7; 16/16 Swing headless; GUI real reportada con capturas (flechas, empujes, bloqueo, contadores, TXT externo válido/inválido). Es **evidencia de plataforma adicional** para las filas del subconjunto implementado (carga TXT, movimiento, presentación), no una nueva funcionalidad ni aceptación integral.
+
+Los estados RF parciales, cobertura futura, dependencias de OQ-01…OQ-11 y StarUML permanecen como estaban. Las notas previas Windows `NOT_RUN` o históricas se refieren a sus iteraciones fechadas, no al checkpoint actual. Logs/capturas completos permanecen externos; no inferir reejecución desde Git. Revisión humana del Draft PR #5 pendiente.

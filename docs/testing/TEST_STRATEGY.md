@@ -142,3 +142,13 @@ Antes de editar documentación, se exportó el commit `99b81c5aa04dd6c6a19cc72f4
 Linux x86_64, OpenJDK/java/javac 17.0.20.1, release 17, LC_ALL=C.utf8: **Loading 40 PASS / 0 FAIL; Movement 31 PASS / 0 FAIL; Desktop 16 PASS / 0 FAIL**, compilación y ejecuciones con salida 0. Se verificaron java.base/java.desktop, UTF-8, -Xlint:all -Werror y cleanup de temporales propios. GUI interactiva Linux y macOS: NOT_RUN. No se repitió Windows.
 
 R3 sólo corrige documentación. La evidencia de esa exportación se conserva para el contenido final tras demostrar identidad de fuentes, tests, recursos y runners. `git archive HEAD` no incluye staging ni cambios locales; no se utiliza una exportación del HEAD anterior para certificar código nuevo. El verificador documental necesita Git: se ejecuta en el worktree real, con `--require-clean` sólo cuando esté limpio. La validación de enlaces/consistencia se repite sobre la documentación corregida; no equivale a ratificar decisiones académicas.
+
+## QA Windows nativa del PR #5, posterior a R5 (2026-10-21)
+
+[Checkpoint](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y [JSON](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json). HEAD **del código probado** `0670a4d5137f0e9f1db221866a02c29987024847` sobre `main=ee83f9ebd30ee1b553c555c89d9ea453131d6678`; no confundir con Windows del incremento original de 15/10.
+
+- Una invocación de `scripts/test-level-loading-arguments.ps1` en Windows nativo: PS5.1 y PS7, 9 casos por shell, **18/18 PASS**, exit 0. Loading 40 y Movement 31 son **casos únicos** cubiertos transitivamente; repetición deliberada por contratos CLI; no hubo core standalone adicional. Los casos CLI negativos con exit 1 eran **esperados**.
+- Una invocación de `scripts/run-swing.ps1 -Test`: **16/16 headless PASS**, exit 0, JDK 21 y `--release 17`, compilación estricta sin warnings.
+- GUI observada realmente por agente con capturas: movimiento, empujes, bloqueo, contadores, carga de TXT externo Unicode válido, error por inválido y conservación del nivel previo; cierre exit 0. No inferir interacción de pintura headless.
+- Dos worktrees históricos y contenido del clone reportados intactos; GitHub sin cambio de HEAD. Logs/capturas originales permanecen fuera de Git; esta rama contiene resumen/trazabilidad, no una nueva reejecución.
+- `NOT_RUN`: GUI Linux/macOS, macOS nativo y aceptación del producto completo. PR #5 sigue Draft, sin ratificación académica, Java/build definitivos, `.mdj` StarUML o cierre de OQ-01…OQ-11.
