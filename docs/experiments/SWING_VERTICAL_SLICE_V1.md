@@ -52,7 +52,7 @@ Graphics2D genera placeholders propios: no satisfacen el requisito académico de
 
 OQ-01 a OQ-11 siguen OPEN y los patrones conservan sus estados. La integración no ratifica TXT, Java/build, reglas abiertas ni arquitectura. Preparado con asistencia de IA (Codex), requiere revisión y comprensión individual.
 
-La revisión independiente R3 está realizada y R4 publicó la rama `feat/swing-playable-notebook-v1` mediante el [Draft PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5), abierto contra main y sin fusionar. Siguiente paso: revisión humana del PR; conservar el alcance experimental y las decisiones pendientes. [Estado de publicación y commits observados](../continuity/CURRENT_STATE.md#estado-comprobado-y-cómo-continuar).
+La revisión independiente R3 está realizada y el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) está fusionado en main; [CURRENT_STATE](../continuity/CURRENT_STATE.md) identifica el merge. Siguiente paso: revisión humana posterior al merge y triage de preguntas abiertas; conservar el alcance experimental y las decisiones pendientes. [Estado de publicación y commits observados](../continuity/CURRENT_STATE.md#estado-comprobado-y-cómo-continuar).
 
 ## Recuperación Linux R2 — 2026-10-21
 

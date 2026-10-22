@@ -1,6 +1,6 @@
 # TODO — backlog vivo
 
-Revisado 2026-10-21 tras publicar Swing V1 mediante el Draft PR #5 contra main con los PR #3 y #4 integrados. El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
+Revisado 2026-10-21 tras el merge del PR #5: Swing V1 está integrado en main con el core (#3) y el aislamiento de runners (#4). El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
 
 ## Bootstrap completado y verificado
 
@@ -38,8 +38,8 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [x] Comando Windows de compilación/ejecución y 16 pruebas de integración sin pantalla.
 - [x] Ejecutar core 40/40 + 31/31 e interacción gráfica real Windows con movimiento, empuje y bloqueo; [evidencia y límites](docs/experiments/SWING_VERTICAL_SLICE_V1.md).
 - [x] Revisión técnica Swing R3: MVC/responsabilidades, UML implementado frente a candidato y autocontención del baseline recuperado; 87 pruebas PASS desde exportación limpia y correcciones sólo documentales.
-- [x] Publicar `feat/swing-playable-notebook-v1` y abrir el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) contra `main`; OPEN/Draft, sin fusionar. Los dos commits publicados en R4 se conservan, registrados en [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
-- [ ] Revisión humana independiente del código Swing: si el PR #5 fue integrado por decisión del autor, realizar revisión **posterior** y registrar observaciones/correcciones en otro PR. No inferir aprobación grupal de un merge técnico.
+- [x] Publicar `feat/swing-playable-notebook-v1` y abrir el [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) contra `main`; posteriormente fusionado el 21/10 mediante `54c03d4520dfc542c125686e5446687dc07d85db`. Los cuatro commits del PR se conservan, registrados en [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
+- [ ] Revisión humana independiente **posterior al merge** del código Swing integrado mediante PR #5 y triage de OQ-01…OQ-11; registrar observaciones y propuestas acotadas, y correcciones sólo en otra iteración autorizada. No inferir aprobación grupal de un merge técnico.
 - [x] Validación Linux R2 del árbol combinado: 40 Loading + 31 Movement + 16 desktop headless PASS, cero FAIL y salida 0, JDK 17/release 17 y C.utf8; evidencia en la guía y TEST_STRATEGY.
 - [x] Revalidar GUI interactiva **Windows del HEAD PR #5**: flechas, empujes, bloqueo, contadores, TXT externos válidos/inválidos; [evidencia](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md).
 - [ ] GUI Swing interactiva Linux y macOS nativo; Windows actual no los sustituye.
@@ -48,6 +48,8 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 - [ ] Ratificación del contrato TXT/Java/build y arquitectura; placeholders no sustituyen imágenes definitivas.
 
 ## Bloqueantes y decisiones
+
+Siguiente dominio: `SOKOBAN_POST_MERGE_HUMAN_REVIEW_AND_OQ_TRIAGE`. Preparar una revisión de responsabilidades, contratos, pruebas y decisiones, con fuentes y ejemplos; no implementar ni cerrar OQ por inferencia. `TEAM_ACCEPTANCE = NOT_RECORDED`.
 
 - [ ] Revisar con otro integrante y ratificar/corregir las propuestas documentales y arquitectónicas; registrar las decisiones explícitas del equipo.
 - [ ] OQ-01: victoria con KeyBox sobre Lock.
