@@ -56,7 +56,7 @@ paquetes debe revisarse en conjunto con sus tests y con este runner.
 ejecutar ambas suites con `java.base` y verificar que sigan pasando. Luego
 introducir un error de compilación en una clase `level` de otra copia
 independiente y verificar que el runner falle. No incorporar estos probes al
-repositorio. El PR #4 fue fusionado el 21/10; sigue pendiente acreditar la regresión Windows nativa del parche de selección por paquetes. La evidencia anterior del runner original no demuestra esa ejecución.
+repositorio. El PR #4 fue fusionado el 21/10. El [checkpoint Windows del PR #5](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) registra posteriormente la regresión nativa del árbol combinado, 18/18 escenarios CLI PS5.1/PS7; no confundirla con el runner original ni con una reejecución durante el mantenimiento documental.
 
 ## Movimiento básico R1 — evidencia 2026-10-14
 
@@ -151,4 +151,4 @@ R3 sólo corrige documentación. La evidencia de esa exportación se conserva pa
 - Una invocación de `scripts/run-swing.ps1 -Test`: **16/16 headless PASS**, exit 0, JDK 21 y `--release 17`, compilación estricta sin warnings.
 - GUI observada realmente por agente con capturas: movimiento, empujes, bloqueo, contadores, carga de TXT externo Unicode válido, error por inválido y conservación del nivel previo; cierre exit 0. No inferir interacción de pintura headless.
 - Dos worktrees históricos y contenido del clone reportados intactos; GitHub sin cambio de HEAD. Logs/capturas originales permanecen fuera de Git; esta rama contiene resumen/trazabilidad, no una nueva reejecución.
-- `NOT_RUN`: GUI Linux/macOS, macOS nativo y aceptación del producto completo. PR #5 sigue Draft, sin ratificación académica, Java/build definitivos, `.mdj` StarUML o cierre de OQ-01…OQ-11.
+- `NOT_RUN`: GUI Linux/macOS, macOS nativo y aceptación del producto completo. Al corte de aquella QA, PR #5 estaba Draft; su merge posterior está en [CURRENT_STATE](../continuity/CURRENT_STATE.md). Siguen pendientes ratificación académica, Java/build definitivos, `.mdj` StarUML y OQ-01…OQ-11.

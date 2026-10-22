@@ -3,7 +3,7 @@
 ```text
 AS_OF = 2026-10-21
 REPOSITORY = smatrauade/Los-Force-Push
-PRIMARY_DOMAIN = SOKOBAN_PR5_POST_WINDOWS_QA_CONTINUITY_SYNC
+PRIMARY_DOMAIN = SOKOBAN_POSTMERGE_REPOSITORY_CONSISTENCY
 IMPLEMENTATION_STATUS = IMPLEMENTED_EXPERIMENTAL
 TEST_STATUS = TESTED
 TEAM_ACCEPTANCE = NOT_RECORDED
@@ -32,9 +32,29 @@ PRODUCTION_IMPLEMENTATION = NONE
 JAVA_TARGET = OPEN
 BUILD_TOOL = OPEN
 TXT_FORMAT = OPEN
-NEXT_GATE = POST_PR5_INTEGRATION_AUDIT_AND_SCOPED_BACKLOG
+PR5_STATUS = MERGED
+PR5_MERGE_COMMIT = 54c03d4520dfc542c125686e5446687dc07d85db
+NEXT_GATE = SOKOBAN_POST_MERGE_HUMAN_REVIEW_AND_OQ_TRIAGE
 WINDOWS_PR5_TESTED_HEAD = 0670a4d5137f0e9f1db221866a02c29987024847
 ```
+
+## Estado posterior al merge de PR #5
+
+El [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) está MERGED/CLOSED, integrado en main el `2026-10-21T23:38:50Z` mediante `54c03d4520dfc542c125686e5446687dc07d85db`. Ésa es la base observada de este mantenimiento documental, no un HEAD permanente: obtener `git rev-parse HEAD` y contrastar los commits posteriores y GitHub antes de actuar. No volver a fusionar ni aprobar el propio PR. La integración técnica por decisión del autor no demuestra revisión independiente ni ratificación del equipo.
+
+Los cuatro commits del PR permanecen en el historial: `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd` (recuperación), `422886d653c6862fcb061f5ceddc1e1830b0cafe` (consistencia documental), `0670a4d5137f0e9f1db221866a02c29987024847` (continuidad de publicación, código probado en Windows) y `a722d4e5229e4151e9ca73971e1987e05bc1dac7` (registro documental de QA Windows). Main contiene TXT externo, Board inmutable, movimiento/empuje normal y presentación Swing experimental; faltan las mecánicas, assets y entregables listados en TODO.
+
+### Integraciones verificadas
+
+| PR | Alcance | Commit de merge |
+|---|---|---|
+| [#1](https://github.com/smatrauade/Los-Force-Push/pull/1) | Bootstrap | `ff6fbf170bd9782fb703e1ab4fa1e811ec0782ed` |
+| [#2](https://github.com/smatrauade/Los-Force-Push/pull/2) | Reconciliación inicial | `1943053ec520ff3d8be0aecb21c2f417f3126380` |
+| [#3](https://github.com/smatrauade/Los-Force-Push/pull/3) | Loading y Movement | `e8f76cec23de019cd244b6d089bd6de3a24251a3` |
+| [#4](https://github.com/smatrauade/Los-Force-Push/pull/4) | Aislamiento de runners core | `ee83f9ebd30ee1b553c555c89d9ea453131d6678` |
+| [#5](https://github.com/smatrauade/Los-Force-Push/pull/5) | Swing y QA Windows | `54c03d4520dfc542c125686e5446687dc07d85db` |
+
+Los cinco PR están fusionados; su integración no cambia `TEAM_ACCEPTANCE = NOT_RECORDED`, los estados PREFERRED/TEAM-PROPOSAL ni OQ-01…OQ-11. Las ramas históricas pueden retirarse una vez probada su ascendencia; el historial de integración se localiza por PR y commit.
 
 ## Checkpoint posterior a R5 — QA Windows nativa (2026-10-21)
 
@@ -42,9 +62,9 @@ Sobre `0670a4d5137f0e9f1db221866a02c29987024847` se reportó PASS nativo Windows
 
 ## Estado comprobado y cómo continuar
 
-Publicación R4 confirmada el 2026-10-21: rama `feat/swing-playable-notebook-v1` publicada y [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) OPEN/Draft, sin fusionar, con base `main` en `ee83f9ebd30ee1b553c555c89d9ea453131d6678`. Conserva los dos commits publicados: recuperación R2 `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd` y reconciliación documental R3 `422886d653c6862fcb061f5ceddc1e1830b0cafe`, último HEAD remoto observado antes de esta actualización documental. La revisión humana del PR sigue pendiente; publicación y Draft no ratifican el diseño ni incorporan Swing a main.
+En la publicación histórica R4 del 21/10 el PR #5 quedó OPEN/Draft sobre main `ee83f9ebd30ee1b553c555c89d9ea453131d6678`, con los dos primeros commits enumerados arriba. R5 añadió continuidad documental y posteriormente se registró la QA Windows; el merge posterior está identificado al inicio de este documento. Siguiente paso: revisión humana posterior del código integrado y triage de OQ; no preparación ni integración de un nuevo PR Swing.
 
-Revisión técnica R3 del 21/10 sobre `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd`: MVC y colaboraciones de los UML implementados contrastados con el código; cuatro PlantUML comprobados/renderizados, candidato integral separado y StarUML pendiente. Una exportación limpia de ese commit reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, JDK 17.0.20.1/release 17 y C.utf8, sin bundle ni QA externos. Las correcciones R3 son sólo documentales: se conserva la evidencia por identidad de los blobs ejecutables; [detalle](../testing/TEST_STRATEGY.md#revisión-de-consistencia-swing-r3--2026-10-21). Al cierre de aquella revisión R3 la rama Swing todavía era local; su publicación posterior mediante R4 se registra arriba. Main remoto conserva #3/#4 y no contiene Swing. Revisión humana del equipo, GUI interactiva Linux y macOS siguen pendientes.
+Revisión técnica R3 del 21/10 sobre `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd`: MVC y colaboraciones de los UML implementados contrastados con el código; cuatro PlantUML comprobados/renderizados, candidato integral separado y StarUML pendiente. Una exportación limpia de ese commit reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, JDK 17.0.20.1/release 17 y C.utf8, sin bundle ni QA externos. Las correcciones R3 son sólo documentales: se conserva la evidencia por identidad de los blobs ejecutables; [detalle](../testing/TEST_STRATEGY.md#revisión-de-consistencia-swing-r3--2026-10-21). Al cierre de aquella revisión R3 la rama Swing todavía era local; su publicación posterior mediante R4 se registra arriba. En aquel corte main contenía #3/#4 y aún no Swing; el merge posterior de #5 se registra al inicio. Revisión humana del equipo, GUI interactiva Linux y macOS siguen pendientes.
 
 Recuperación R2 del 2026-10-21: repositorio público verificado mediante API; [PR #3](https://github.com/smatrauade/Los-Force-Push/pull/3) MERGED el 20/10, merge `e8f76cec23de019cd244b6d089bd6de3a24251a3`; [PR #4](https://github.com/smatrauade/Los-Force-Push/pull/4) MERGED el 21/10, merge `ee83f9ebd30ee1b553c555c89d9ea453131d6678`. La nueva base incluye ambos, y se incorpora únicamente el delta Swing original `1303a33748e129f3d8a55ab2b1799518aaa8df5d`, cuyo padre es `be490aecb2bbcb92b863778a63499c587313146c`. Se conservan los runners con selección por paquetes del #4, las fuentes/tests/fixtures del core y los bytes Java/Swing originales. Linux R2: 40 Loading, 31 Movement y 16 desktop headless PASS, cero FAIL y salida 0 con OpenJDK 17.0.20.1/release 17 y C.utf8. GUI interactiva Linux y macOS NOT_RUN. No hay publicación ni aceptación académica implícita. La validación Linux R2 se registra separadamente de la evidencia histórica Windows en la [guía](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21).
 
@@ -92,7 +112,7 @@ Base be490aecb2bbcb92b863778a63499c587313146c; fuentes separadas en src/desktop/
 
 [Guía autocontenida, comandos y límites](../experiments/SWING_VERTICAL_SLICE_V1.md), [UML real del subconjunto](../architecture/uml/swing-playable-spike-v1.puml). Windows nativo, Temurin 21/release 17: 40 Loading y 31 Movement PASS, 16 pruebas de integración PASS; interacción gráfica observada con movimiento, empujes, destino y pared bloqueada. En aquel incremento del 15/10 no se ejecutó Swing Linux/macOS; la validación headless Linux R2 se registra separadamente al inicio de este estado y en la guía. La carga local acotada es síncrona en el EDT; archivos remotos/lentos pueden demorar la ventana. Graphics2D es placeholder y no cumple aún imágenes definitivas. No hay victoria, Undo/Restart, score, especiales ni audio.
 
-Las evidencias históricas del core y su runner no sustituyen los tests desktop. La recuperación Linux R2 descrita al inicio prueba el incremento sin pantalla; no certifica GUI interactiva ni macOS. La aceptación del equipo no está registrada, OQ-01…OQ-11 permanecen OPEN. La revisión independiente R3 está realizada y R4 publicó el Draft PR #5 contra main integrado. Siguiente gate: revisión humana del PR #5. GUI interactiva Linux y macOS siguen pendientes; cualquier integración posterior requiere una decisión explícita del equipo.
+Las evidencias históricas del core y su runner no sustituyen los tests desktop. La recuperación Linux R2 descrita al inicio prueba el incremento sin pantalla; no certifica GUI interactiva ni macOS. La aceptación del equipo no está registrada, OQ-01…OQ-11 permanecen OPEN. La revisión independiente R3 está realizada y R4 publicó el Draft PR #5 contra main integrado. Siguiente gate: revisión humana posterior al merge y triage de OQ. GUI interactiva Linux y macOS siguen pendientes; cualquier cambio funcional requiere otra iteración autorizada.
 
 ## Diseño, evidencia y decisiones
 
