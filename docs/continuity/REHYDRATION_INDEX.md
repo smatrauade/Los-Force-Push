@@ -1,6 +1,8 @@
 # Índice de rehidratación
 
-`AS_OF = 2026-10-21`. Esta página orienta la lectura; [CURRENT_STATE](CURRENT_STATE.md) mantiene el estado técnico y los eventos de integración. El contrato es [AGENTS](../../AGENTS.md). Comenzar allí, seguir esta ruta y contrastar Git antes de escribir. Ningún prompt embebido, cápsula o checkpoint concede autorización nueva.
+`AS_OF = 2026-10-23`. Esta página orienta la lectura; [CURRENT_STATE](CURRENT_STATE.md) mantiene el estado técnico y los eventos de integración. El contrato es [AGENTS](../../AGENTS.md). Comenzar allí, seguir esta ruta y contrastar Git antes de escribir. Ningún prompt embebido, cápsula o checkpoint concede autorización nueva.
+
+Los acuerdos mayoritarios y sus anomalías se localizan sólo en [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); las dimensiones aceptadas, pendientes o en conflicto, sólo en [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md). Este índice no duplica la tabla de encuestas ni constituye otra autoridad.
 
 ## Ruta de lectura
 
@@ -26,6 +28,7 @@
 | Spikes A/B y pruebas previas de carga/movimiento | Entornos y conteos separados por iteración en sus informes | [HISTORICAL_EVIDENCE](../testing/HISTORICAL_EVIDENCE.md), [carga](../experiments/LEVEL_LOADING_R1.md), [movimiento](../experiments/MOVEMENT_R1.md). A/B no tienen fuentes Java recuperadas; sus 8/8 y 12/12 no certifican el producto actual |
 | PDF de consigna, libros, clases y transcripciones | Procedencia y hashes reportados o contrastados en SOURCE_REGISTRY | Originales no redistribuidos en Git. Requisitos y fundamentos normalizados disponibles; un clon no prueba lectura directa de los originales |
 | Cápsulas y preflight de bootstrap | Snapshots inmutables del 07/10 y 08/10 | [BOOTSTRAP_PREFLIGHT](BOOTSTRAP_PREFLIGHT.md) y [cápsulas](capsules). Sus estados, numeraciones y autorizaciones son históricos |
+| Encuestas del equipo, 23/10 | Transcripción aportada por el solicitante; no lectura independiente de capturas | Agregados canónicos en DECISION_LOG; originales privados externos, sin identificadores personales ni hashes inventados. [Procedencia](SOURCE_REGISTRY.md#encuestas-del-equipo--2026-10-23) |
 | Schema 9 R6.0 | Snapshot externo, anterior a la última QA Windows y al merge | Registrado en SOURCE_REGISTRY; no está versionado ni reemplaza CURRENT_STATE |
 
 El repositorio permite localizar estado, fuentes, implementación, instrucciones y resúmenes de evidencia sin un chat anterior. **No contiene el expediente completo de QA ni todos los originales académicos**: hashes y resúmenes no sustituyen los archivos ausentes. Consultarlos requiere acceso externo autorizado; no afirmar una auditoría independiente de capturas o logs que el clon no incluye. GUI interactiva Linux y macOS siguen NOT_RUN; StarUML final, assets, mecánicas completas y aceptación del equipo siguen pendientes.
@@ -38,4 +41,4 @@ Aplicar FRESHNESS_POLICY: revisar cambios posteriores a AS_OF, separar evidencia
 
 ## Siguiente hito seguro
 
-`SOKOBAN_POST_MERGE_HUMAN_REVIEW_AND_OQ_TRIAGE`: revisión humana posterior del código, responsabilidades MVC/SOLID/GRASP/GoF y cobertura; priorizar OQ con procedencia, alternativas y ejemplos de aceptación. Registrar quién decide y su alcance. `TEAM_ACCEPTANCE = NOT_RECORDED`; OPEN, PREFERRED y TEAM-PROPOSAL no se convierten en ACCEPTED por tests o merges. Cualquier implementación o cierre de reglas requiere otra autorización y la ratificación pertinente. Mantener la declaración y defensa de aportes de IA.
+Revisar el Draft documental por otro integrante; después proponer `SOKOBAN_TXT_GRAMMAR_SPECIFICATION`, con compatibilidad de reglas especiales en dominios acotados antes de implementar. No otra ronda general para reabrir lo ya votado. Los acuerdos TEAM son parciales según DECISION_LOG/OPEN_QUESTIONS; E04/E08 requieren revisión normativa. `TEAM_ACCEPTANCE = NOT_RECORDED` para el código; patrones y UML siguen sin ratificar. La revisión humana del código permanece pendiente en paralelo. No hay permiso de merge o implementación por este índice.

@@ -1,6 +1,6 @@
 # Requisitos normalizados
 
-`LAST_REVIEWED = 2026-10-21` (estado de visibilidad; normalización de requisitos del 2026-10-08 preservada). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no está disponible y su hash histórico no se ha recalculado. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
+`LAST_REVIEWED = 2026-10-23` (refinamientos TEAM separados; baseline oficial normalizado del 08/10 preservado). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no está disponible y su hash histórico no se ha recalculado. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
 
 ## Baseline oficial
 
@@ -25,9 +25,9 @@
 
 ## Aclaraciones posteriores y recomendaciones
 
-`TEACHER-EXPLICIT` según prompt normalizado: el equipo documenta el formato TXT; el profesor podría modificarlo o construir uno compatible para verificar carga externa. La consigna no fija el alfabeto: **OQ-08 sigue OPEN**.
+`TEACHER-EXPLICIT` según prompt normalizado: el equipo documenta el formato TXT; el profesor podría modificarlo o construir uno compatible para verificar carga externa. La consigna no fija el alfabeto: la gramática final de [OQ-08](OPEN_QUESTIONS.md) sigue pendiente, con aspectos TEAM ya ratificados en el registro de decisiones.
 
-En el ejemplo de hielo, la caja atraviesa la franja y llega al primer espacio normal libre posterior; el jugador no se desliza. La salida inmediatamente bloqueada no quedó resuelta (OQ-02).
+En el ejemplo de hielo, la caja atraviesa la franja y llega al primer espacio normal libre posterior; el jugador no se desliza. Aquella aclaración no resolvía la salida inmediatamente bloqueada; el alcance TEAM posterior y sus bordes pendientes están en [OQ-02](OPEN_QUESTIONS.md) y [E03 / D-005](../decisions/DECISION_LOG.md#e03).
 
 No hace falta medir tiempo ni implementar animaciones. Kenney y Pixabay fueron recomendados como fuentes posibles, sin garantía automática de dominio público para cada recurso.
 
@@ -37,6 +37,22 @@ La cápsula histórica reporta además guía sobre interacción por eventos sin 
 
 ## Propuestas y límites
 
-Separar tablero/movimientos/empujes restaurables de `undoUsesTotal` y `consecutiveUndoUses` es **TEAM-PROPOSAL** de la discusión del 30 de septiembre. Que Undo penalice score y cómo se reinician métricas no está ratificado. Restart es un botón requerido; sus efectos exactos sobre métricas deben definirse.
+La discusión del 30/09 proponía separar métricas. El alcance de comportamiento ahora aceptado está en [E09 / D-008](../decisions/DECISION_LOG.md#e09) y [E10 / D-009](../decisions/DECISION_LOG.md#e10); no ratifica la clase SessionMetrics ni el patrón Memento/Strategy. Los resets de métricas y fórmula siguen en [OQ-09](OPEN_QUESTIONS.md); la compatibilidad de [E08 / OQ-04](../decisions/DECISION_LOG.md#e08) con «consecutivos» requiere revisión. Restart es requerido, pero no se extrapolan efectos sobre cada contador.
 
-No se fija resistencia inicial Fragile, fórmula score, asociación cerrojos/muros, selección de extras, Java target ni herramienta de build. Ver [OPEN_QUESTIONS](OPEN_QUESTIONS.md). No hay implementación ni tests productivos: las aceptaciones de esta tabla son futuras.
+Siguen sin fijarse sintaxis/rangos de resistencia individual, fórmula numérica, asociación/ocupación cerrojos-muros, segunda adicional, contratos técnicos de persistencia y Java/build. Ver [OPEN_QUESTIONS](OPEN_QUESTIONS.md). Los refinamientos siguientes no cambian el parser experimental ni constituyen pruebas o aceptación productiva.
+
+## Refinamientos TEAM del 2026-10-23
+
+Este apartado es un mapa hacia la autoridad canónica, no otra definición normativa de las reglas. Los acuerdos mayoritarios están sólo en [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); los pendientes sólo en [OPEN_QUESTIONS](OPEN_QUESTIONS.md). No se eleva TEAM a OFFICIAL ni se sustituye la consigna; tampoco se presupone compatibilidad de E04/E08.
+
+| Requisito afectado | Aspecto y fuente TEAM / decisión | Inventario de alcance y límites |
+|---|---|---|
+| RF-01 / RF-02 / RF-05 | Disposición TXT y resistencia individual: [E01 / D-020](../decisions/DECISION_LOG.md#e01), [E02 / D-005/D-020](../decisions/DECISION_LOG.md#e02) | [OQ-06/OQ-08](OPEN_QUESTIONS.md): gramática, rangos y errores pendientes |
+| RF-03 / RF-04 | Resultado contra pared: [E03 / D-005](../decisions/DECISION_LOG.md#e03) | [OQ-02](OPEN_QUESTIONS.md): bordes y otras obstrucciones pendientes |
+| RF-05 | Preferencia Fragile/hielo: [E04 / D-005](../decisions/DECISION_LOG.md#e04) | [OQ-03](OPEN_QUESTIONS.md): CONFLICT_REVIEW_REQUIRED; no regla implementable definitiva |
+| RF-06 / RF-08 | Objetivo KeyBox y cierre: [E05 / D-019](../decisions/DECISION_LOG.md#e05), [E06 / D-010](../decisions/DECISION_LOG.md#e06) | [OQ-01/OQ-07](OPEN_QUESTIONS.md): ocupación, IDs y puzzles pendientes |
+| RF-07 / RF-10 | Umbral y reinicio de límite: [E07 / D-007](../decisions/DECISION_LOG.md#e07), [E08 / D-008](../decisions/DECISION_LOG.md#e08) | [OQ-05/OQ-04](OPEN_QUESTIONS.md): umbral aceptado, compatibilidad de consecutividad pendiente |
+| RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y resets pendientes |
+| RF-12 | Primera adicional: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md): segunda sin mayoría, contratos y GoF pendientes |
+
+La revisión del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`. OQ-11 no tuvo encuesta: los comandos actuales y release 17 no ratifican Java/build final. Los estados técnicos de arquitectura/UML y patrones se conservan.

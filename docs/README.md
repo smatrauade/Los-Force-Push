@@ -1,17 +1,17 @@
 # Índice documental
 
-`LAST_REVIEWED = 2026-10-21` (continuidad posterior a PR #5).
+`LAST_REVIEWED = 2026-10-23` (navegación de decisiones mayoritarias).
 
 Empezar por [AGENTS](../AGENTS.md) y el [índice de rehidratación](continuity/REHYDRATION_INDEX.md); después contrastar [CURRENT_STATE](continuity/CURRENT_STATE.md) con Git. El PR #5 está integrado en main; el índice orienta, no duplica el estado vivo.
 
 | Tema | Documento |
 |---|---|
 | Requisitos normalizados | [REQUIREMENTS](requirements/REQUIREMENTS.md) |
-| Ambigüedades y gates | [OPEN_QUESTIONS](requirements/OPEN_QUESTIONS.md) |
+| Alcances aceptados, detalles y conflictos | [OPEN_QUESTIONS](requirements/OPEN_QUESTIONS.md), inventario canónico OQ-01…OQ-11 |
 | Arquitectura candidata | [ARCHITECTURE](architecture/ARCHITECTURE.md) |
 | Responsabilidades | [RESPONSIBILITIES](architecture/RESPONSIBILITIES.md) |
 | UML versionable / entrega | [PlantUML](architecture/uml/sokoban-candidate.puml), [STARUML_STATUS](architecture/uml/STARUML_STATUS.md) |
-| Decisiones y alternativas | [DECISION_LOG](decisions/DECISION_LOG.md) |
+| Decisiones y alternativas | [DECISION_LOG](decisions/DECISION_LOG.md), [ratificación mayoritaria del 23/10](decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23), autoridad canónica E01–E11 |
 | Requisito → diseño → pruebas | [TRACEABILITY_MATRIX](traceability/TRACEABILITY_MATRIX.md) |
 | Plan de pruebas y resultados por iteración | [TEST_STRATEGY](testing/TEST_STRATEGY.md) |
 | Spikes reportados | [HISTORICAL_EVIDENCE](testing/HISTORICAL_EVIDENCE.md) |

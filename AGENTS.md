@@ -1,6 +1,6 @@
 # Contrato operativo para personas y agentes
 
-`LAST_REVIEWED = 2026-10-21` (ruta de rehidratación posterior al merge de PR #5).
+`LAST_REVIEWED = 2026-10-23` (autoridad canónica de acuerdos mayoritarios y pendientes).
 
 ## Alcance y autoridad
 
@@ -25,6 +25,8 @@ Leer este contrato y el [índice de rehidratación](docs/continuity/REHYDRATION_
 Contrastar HEAD, commits posteriores, PRs y archivos vivos. El PR #5 está integrado; [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) identifica el merge y el siguiente gate de revisión humana posterior. Una cápsula o checkpoint no representa el HEAD actual ni concede autorización a otra tarea. Para la evidencia Windows previa al merge leer además [Windows PR #5](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y su [JSON](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json), distinguiendo el commit del código probado del nuevo commit documental.
 
 ## Estados
+
+Las decisiones de reglas del 23/10 están únicamente en [DECISION_LOG — ratificación por mayoría](docs/decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); el inventario de alcance/pedidos restantes es [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). Leerlos juntos: ACCEPTED_SCOPE no cierra detalles y CONFLICT_REVIEW_REQUIRED bloquea la afirmación normativa absoluta. No crear otro catálogo, volver a votar por defecto aspectos ya aceptados ni confundir votos con aprobación del código, patrones o UML. `TEAM_ACCEPTANCE = NOT_RECORDED` del código se conserva.
 
 Separar **autoridad** de **estado de decisión** y **evidencia**:
 

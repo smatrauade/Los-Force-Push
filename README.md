@@ -2,9 +2,9 @@
 
 Proyecto académico de Ingeniería en Informática, UADE: **Proceso de Desarrollo de Software**, profesor **Jonathan Leonel Pepe**. La tecnología exigida es **Java, Swing y GUI 2D**. El objetivo es un diseño defendible mediante SOLID, GRASP, MVC y GoF.
 
-## Estado al 2026-10-21
+## Estado al 2026-10-23
 
-El [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) está **MERGED/CLOSED**: Swing experimental se integró en `main` mediante `54c03d4520dfc542c125686e5446687dc07d85db` el `2026-10-21T23:38:50Z`. El incremento sigue siendo parcial; `TEAM_ACCEPTANCE = NOT_RECORDED`. El siguiente gate es revisión humana posterior y triage de OQ, no otra fusión del PR #5. Para empezar, leer [AGENTS](AGENTS.md) y el [índice de rehidratación](docs/continuity/REHYDRATION_INDEX.md).
+El [PR #5](https://github.com/smatrauade/Los-Force-Push/pull/5) está **MERGED/CLOSED**: Swing experimental se integró en `main` mediante `54c03d4520dfc542c125686e5446687dc07d85db` el `2026-10-21T23:38:50Z`. El incremento sigue siendo parcial; `TEAM_ACCEPTANCE = NOT_RECORDED`. El siguiente gate de decisiones es revisión del Draft documental y especificación del TXT/compatibilidad, sin otra fusión del PR #5. Para empezar, leer [AGENTS](AGENTS.md) y el [índice de rehidratación](docs/continuity/REHYDRATION_INDEX.md).
 
 **Checkpoint posterior R5:** QA Windows nativa del HEAD PR #5 `0670a4d5137f0e9f1db221866a02c29987024847` con **18/18 escenarios CLI** (PS5.1/PS7), Loading 40 y Movement 31 transitivos, 16/16 Swing headless y GUI real con TXT externos válidos/inválidos, todos **reportados por el agente local con artefactos contrastados**. [Evidencia y límites](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md). Al corte de QA previo a la integración, `main` no contenía Swing y PR #5 estaba Draft; **el estado vigente debe consultarse en Git/GitHub**. Su integración posterior por decisión del autor no equivale a revisión independiente ni a aceptación académica. Las referencias posteriores a Windows histórico/NOT_RUN describen otras iteraciones, no este checkpoint.
 
@@ -18,13 +18,15 @@ El core se integró mediante el [PR #3](https://github.com/smatrauade/Los-Force-
 | Requisitos | Normalizados desde el prompt autorizado; PDF original no disponible |
 | Arquitectura y UML | Candidatos; requieren revisión del equipo |
 | Builder / Memento / Observer / Strategy | `PREFERRED`, no decisiones aceptadas |
-| Métricas de Undo fuera del Memento | `TEAM-PROPOSAL`, pendiente de ratificación |
+| Métricas Undo | Comportamiento parcial ratificado en [E09](docs/decisions/DECISION_LOG.md#e09); diseño SessionMetrics aún `TEAM-PROPOSAL` |
 | Spikes Java 21 | Resultados históricos reportados 8/8 y 12/12; no reproducidos aquí |
-| TXT, score, dos funcionalidades adicionales | `OPEN` |
+| TXT, score, adicionales | [Acuerdos parciales TEAM](docs/decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); gramática, fórmula y segunda adicional pendientes |
 | Versión Java / herramienta de build | `OPEN` |
 | StarUML, assets, video e informe final | Pendientes |
 
-Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. Este snapshot contiene el [core experimental de carga TXT](docs/experiments/LEVEL_LOADING_R1.md), movimiento cardinal y empuje de una caja normal, pruebas automatizadas, runners Bash/PowerShell y UML/documentación del incremento. La base histórica de carga es `44b3c63b437465b5f54c1f0f5ca5cbadb5def0e5`; no representa un HEAD permanente. El contrato y el diseño siguen sin ratificación del equipo; OQ-08/OQ-11 permanecen abiertas.
+Consultar siempre el [estado vivo](docs/continuity/CURRENT_STATE.md) y contrastarlo con el HEAD actual. Las cápsulas son snapshots históricos y no reemplazan ese contraste. Este snapshot contiene el [core experimental de carga TXT](docs/experiments/LEVEL_LOADING_R1.md), movimiento cardinal y empuje de una caja normal, pruebas automatizadas, runners Bash/PowerShell y UML/documentación del incremento. La base histórica de carga es `44b3c63b437465b5f54c1f0f5ca5cbadb5def0e5`; no representa un HEAD permanente. Los aspectos de reglas acordados el 23/10 están en DECISION_LOG; el diseño técnico, la gramática final OQ-08 y Java/build OQ-11 siguen pendientes.
+
+El [registro canónico de mayoría](docs/decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) conserva la transcripción agregada y sus límites; [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md) conserva la deuda residual. `GAME_RULE_DECISIONS = MAJORITY_ACCEPTED_PARTIAL` no modifica `TEAM_ACCEPTANCE = NOT_RECORDED` del código, ni ratifica patrones/UML. E04/E08 requieren compatibilidad; las capturas originales son privadas y externas.
 
 ## Empezar sin chats anteriores
 
@@ -42,7 +44,7 @@ Niveles leídos realmente desde TXT externos; jugador por flechas; empuje de una
 
 Todos los elementos del tablero usan imágenes y las acciones tienen efectos sonoros. Los assets deben ser de dominio público, con licencia verificada individualmente. Se requieren **dos funcionalidades adicionales** que apliquen patrones; resolver un requisito obligatorio con un patrón no lo convierte automáticamente en adicional.
 
-El profesor podría modificar o escribir un TXT compatible para verificar que los niveles no están hardcodeados. No hace falta medir tiempo ni incorporar animaciones. Las ambigüedades están identificadas como OQ-01 a OQ-11 y permanecen abiertas.
+El profesor podría modificar o escribir un TXT compatible para verificar que los niveles no están hardcodeados. No hace falta medir tiempo ni incorporar animaciones. [OQ-01 a OQ-11](docs/requirements/OPEN_QUESTIONS.md) distinguen alcance aceptado, detalles pendientes y compatibilidad normativa, sin tratar todas las dimensiones como aún no votadas.
 
 ## Clonar y verificar la documentación
 
