@@ -49,10 +49,11 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 
 ## Bloqueantes y decisiones
 
-Siguiente dominio propuesto: `SOKOBAN_TXT_GRAMMAR_SPECIFICATION`, tras revisión humana del Draft documental, con compatibilidad de reglas especiales en dominios acotados. No repetir una ronda general de encuestas ni implementar por inferencia. `TEAM_ACCEPTANCE = NOT_RECORDED` del código.
+Siguiente dominio propuesto: `SOKOBAN_TXT_GRAMMAR_SPECIFICATION`, con las decisiones del PR #7 ya integradas y compatibilidad de reglas especiales en dominios acotados. No repetir una ronda general de encuestas ni implementar por inferencia. `TEAM_ACCEPTANCE = NOT_RECORDED` del código.
 
 - [x] Registrar las once encuestas en [DECISION_LOG](docs/decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) y sus alcances/pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md), sin otro catálogo.
-- [ ] Otro integrante revisa transcripción y alcance del Draft; merge requiere autorización separada. Revisar código y propuestas arquitectónicas por separado.
+- [x] Integrar decisiones mayoritarias mediante PR #7 con autorización del autor; no equivale a revisión formal independiente.
+- [ ] Revisar código y propuestas arquitectónicas por separado; `TEAM_ACCEPTANCE = NOT_RECORDED`.
 - [ ] OQ-01: completar criterios de victoria/puzzle tras E05 y compatibilidad con E06.
 - [ ] OQ-02: especificar bordes de E03, sin reabrir el comportamiento ya mayoritario.
 - [ ] OQ-03: resolver compatibilidad normativa de E04 antes de fijar la regla implementable.

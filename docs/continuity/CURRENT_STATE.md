@@ -3,11 +3,12 @@
 ```text
 AS_OF = 2026-10-23
 REPOSITORY = smatrauade/Los-Force-Push
-PRIMARY_DOMAIN = SOKOBAN_TEAM_MAJORITY_DECISIONS_DOCUMENTATION
+PRIMARY_DOMAIN = SOKOBAN_POSTMERGE_DECISIONS_CONTINUITY
 IMPLEMENTATION_STATUS = IMPLEMENTED_EXPERIMENTAL
 TEST_STATUS = TESTED
 TEAM_ACCEPTANCE = NOT_RECORDED
 GAME_RULE_DECISIONS = MAJORITY_ACCEPTED_PARTIAL
+POSTMERGE_CONTINUITY = AUTHOR_EXPLICITLY_AUTHORIZED_ONE_TIME_DOC_CORRECTION
 MOVEMENT_INTEGRATION_EVIDENCE = GIT_HISTORY_AND_PULL_REQUEST
 EXPERIMENT_ORIGIN_BRANCH = feat/swing-playable-spike-v1
 EXPERIMENT_BASE = be490aecb2bbcb92b863778a63499c587313146c
@@ -35,6 +36,8 @@ BUILD_TOOL = OPEN
 TXT_FORMAT = MAJORITY_ACCEPTED_LAYOUT_GRAMMAR_PENDING
 PR5_STATUS = MERGED
 PR5_MERGE_COMMIT = 54c03d4520dfc542c125686e5446687dc07d85db
+PR7_STATUS = MERGED
+PR7_MERGE_COMMIT = 7d3a30f04285d526709bbbf91e8725c61a187aac
 NEXT_GATE = SOKOBAN_TXT_GRAMMAR_SPECIFICATION
 WINDOWS_PR5_TESTED_HEAD = 0670a4d5137f0e9f1db221866a02c29987024847
 ```
@@ -43,7 +46,7 @@ WINDOWS_PR5_TESTED_HEAD = 0670a4d5137f0e9f1db221866a02c29987024847
 
 [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) registra E01–E11 completos, método de mayoría y anomalías; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) conserva OQ-01…OQ-11 con dimensiones aceptadas y pendientes. Fuente: transcripción del solicitante, capturas privadas externas no verificadas independientemente aquí. Se documentan acuerdos de reglas, no aceptación del código ni del diseño. E04/E08 mantienen CONFLICT_REVIEW_REQUIRED, fórmula/gramática/segunda adicional y Java/build siguen pendientes. Pistas no está aprobada.
 
-Revisar este Draft documental por otra persona; el siguiente dominio propuesto es especificar TXT y revisar compatibilidad de reglas especiales, sin implementación ni otra ronda general de encuestas. La revisión humana del código sigue pendiente. Base Git observada de esta tarea: `2c2c2e4c6180ca0639e511c480ca5b93cd4e4a01`, merge de PR #6; no es un HEAD permanente. No hubo nuevas pruebas Java ni cambios de fuentes/UML.
+El [PR #7](https://github.com/smatrauade/Los-Force-Push/pull/7) se integró por autorización del autor, mediante merge `7d3a30f04285d526709bbbf91e8725c61a187aac`. Las once votaciones y su deuda residual ya están en `main`; no consta una aprobación formal de otra persona. El siguiente dominio es especificar TXT y revisar E04/E08 antes de implementar esas reglas. La revisión humana del código sigue pendiente. Los resultados de pruebas históricas no se reejecutaron en esta integración documental.
 
 ## Estado posterior al merge de PR #5
 
@@ -61,8 +64,9 @@ Los cuatro commits del PR permanecen en el historial: `99b81c5aa04dd6c6a19cc72f4
 | [#4](https://github.com/smatrauade/Los-Force-Push/pull/4) | Aislamiento de runners core | `ee83f9ebd30ee1b553c555c89d9ea453131d6678` |
 | [#5](https://github.com/smatrauade/Los-Force-Push/pull/5) | Swing y QA Windows | `54c03d4520dfc542c125686e5446687dc07d85db` |
 | [#6](https://github.com/smatrauade/Los-Force-Push/pull/6) | Rehidratación postmerge | `2c2c2e4c6180ca0639e511c480ca5b93cd4e4a01` |
+| [#7](https://github.com/smatrauade/Los-Force-Push/pull/7) | Decisiones mayoritarias TEAM | `7d3a30f04285d526709bbbf91e8725c61a187aac` |
 
-Los seis PR históricos están fusionados; esos merges no ratifican reglas ni cambian `TEAM_ACCEPTANCE = NOT_RECORDED` del código. Los acuerdos posteriores del 23/10 tienen fuente TEAM independiente, en el checkpoint inicial; las elecciones de patrones siguen sin ratificar. Las ramas históricas pueden retirarse una vez probada su ascendencia; el historial de integración se localiza por PR y commit.
+Los PR #1–#7 están fusionados al corte de esta integración; los merges no sustituyen el voto sobre reglas ni cambian `TEAM_ACCEPTANCE = NOT_RECORDED` del código. Los acuerdos posteriores del 23/10 tienen fuente TEAM independiente, en el checkpoint inicial; las elecciones de patrones siguen sin ratificar. Las ramas históricas pueden retirarse una vez probada su ascendencia; el historial de integración se localiza por PR y commit.
 
 ## Checkpoint posterior a R5 — QA Windows nativa (2026-10-21)
 
@@ -146,7 +150,7 @@ OQ-01…OQ-11 conservan sus IDs, con acuerdos por alcance y deuda residual en [O
 
 ## Próxima iteración segura
 
-Los resultados técnicos R2/R3 y Windows conservan su SHA y alcance, sin pruebas nuevas aquí. Tras revisar el Draft de decisiones, especificar el contrato TXT en `SOKOBAN_TXT_GRAMMAR_SPECIFICATION` y contrastar E04/E08 y combinaciones especiales antes de implementar. El inventario canónico distingue dimensiones aceptadas de las pendientes; no se propone otra encuesta general. Builder sigue PREFERRED, la gramática OQ-08 y Java/build OQ-11 siguen pendientes. Revisión del código, GUI Linux/macOS y entregables restantes no se cierran por esta votación.
+Los resultados técnicos R2/R3 y Windows conservan su SHA y alcance, sin pruebas nuevas aquí. Con el PR #7 integrado, especificar el contrato TXT en `SOKOBAN_TXT_GRAMMAR_SPECIFICATION` y contrastar E04/E08 y combinaciones especiales antes de implementar. El inventario canónico distingue dimensiones aceptadas de las pendientes; no se propone otra encuesta general. Builder sigue PREFERRED, la gramática OQ-08 y Java/build OQ-11 siguen pendientes. Revisión del código, GUI Linux/macOS y entregables restantes no se cierran por esta votación.
 
 Resolver las preguntas que afecten cada mecánica antes de implementarla. Obtener los bytes de los spikes históricos si se desean reutilizar, sin tratarlos como código productivo auditado. El spike no convierte la carga en una funcionalidad productiva completa ni autoriza por sí solo su integración o una ampliación de alcance.
 

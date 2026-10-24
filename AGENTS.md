@@ -24,6 +24,15 @@ Leer este contrato y el [índice de rehidratación](docs/continuity/REHYDRATION_
 
 Contrastar HEAD, commits posteriores, PRs y archivos vivos. El PR #5 está integrado; [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) identifica el merge y el siguiente gate de revisión humana posterior. Una cápsula o checkpoint no representa el HEAD actual ni concede autorización a otra tarea. Para la evidencia Windows previa al merge leer además [Windows PR #5](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y su [JSON](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json), distinguiendo el commit del código probado del nuevo commit documental.
 
+
+## Gate de rehidratación verificable
+
+Antes de modificar archivos, leer **íntegros** `AGENTS.md`, `docs/continuity/REHYDRATION_INDEX.md`, `docs/continuity/CURRENT_STATE.md`, `README.md`, `docs/requirements/REQUIREMENTS.md`, `docs/requirements/OPEN_QUESTIONS.md`, `docs/decisions/DECISION_LOG.md`, `docs/continuity/SOURCE_REGISTRY.md`, `docs/traceability/TRACEABILITY_MATRIX.md`, `TODO.md` y `docs/continuity/FRESHNESS_POLICY.md`. Lecturas parciales, resúmenes truncados o resultados de búsqueda **no** equivalen a la lectura completa de una autoridad.
+
+Enumerar `git ls-files`; para el dominio autorizado localizar y leer adicionalmente todos los documentos, código, pruebas, UML, checkpoints y recursos relevantes enlazados desde el índice. Comprobar `HEAD`, estado remoto y fechas; distinguir documentación viva de checkpoints históricos, evidencia externa ausente y propuestas de reglas aceptadas. No es obligatorio leer archivos ajenos al dominio por rutina, pero tampoco saltear fuentes citadas que afecten una decisión.
+
+Reportar `HYDRATION_GATE = PASS` solamente si se pueden identificar autoridad de requisitos, reglas votadas, OQ pendientes, archivos afectados, evidencia ejecutada/histórica y siguiente gate sin depender de un chat previo. Ante archivos inaccesibles, truncados o contradicciones materiales: `HYDRATION_GATE = BLOCKED`, listar fuentes faltantes y no inventar el contenido. Este procedimiento **no** concede permiso de merge o escritura: se requiere autorización vigente.
+
 ## Estados
 
 Las decisiones de reglas del 23/10 están únicamente en [DECISION_LOG — ratificación por mayoría](docs/decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); el inventario de alcance/pedidos restantes es [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). Leerlos juntos: ACCEPTED_SCOPE no cierra detalles y CONFLICT_REVIEW_REQUIRED bloquea la afirmación normativa absoluta. No crear otro catálogo, volver a votar por defecto aspectos ya aceptados ni confundir votos con aprobación del código, patrones o UML. `TEAM_ACCEPTANCE = NOT_RECORDED` del código se conserva.
