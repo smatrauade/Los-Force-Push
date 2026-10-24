@@ -1,6 +1,6 @@
 # Matriz viva de trazabilidad
 
-Revisado 2026-10-21 (recuperación Swing R2 sobre core e aislamiento integrados). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
+Revisado 2026-10-23 (mapa de decisiones TEAM; evidencia ejecutada anterior preservada). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
 
 | Req | Responsabilidad / UML candidato | Principio/patrón candidato | Prueba prevista / historial | Decisiones abiertas |
 |---|---|---|---|---|
@@ -64,3 +64,23 @@ Para marcar DONE: requisito → decisión/autoridad → responsabilidad → impl
 [QA nativa Windows](../continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) validó el HEAD experimental `0670a4d5137f0e9f1db221866a02c29987024847`, base integrada `ee83f9ebd30ee1b553c555c89d9ea453131d6678`: **40 casos Loading y 31 Movement únicos** ejecutados dentro de la regresión CLI 9/9 por PS5.1/7; 16/16 Swing headless; GUI real reportada con capturas (flechas, empujes, bloqueo, contadores, TXT externo válido/inválido). Es **evidencia de plataforma adicional** para las filas del subconjunto implementado (carga TXT, movimiento, presentación), no una nueva funcionalidad ni aceptación integral.
 
 Los estados RF parciales, cobertura futura, dependencias de OQ-01…OQ-11 y StarUML permanecen como estaban. Las notas previas Windows `NOT_RUN` o históricas se refieren a sus iteraciones fechadas, no al checkpoint actual. Logs/capturas completos permanecen externos; no inferir reejecución desde Git. Revisión humana posterior al merge del PR #5 pendiente; integración y SHA en [CURRENT_STATE](../continuity/CURRENT_STATE.md).
+
+## Decisiones TEAM y casos futuros — 2026-10-23
+
+Fuente normativa TEAM única: [Ratificación por mayoría](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23). [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) conserva las dimensiones pendientes. Las tablas de evidencia anteriores corresponden a sus fechas y no se reescriben como cobertura de estas reglas. Todos los casos siguientes son **PLAN / NOT_RUN**, no implementación ni tests ejecutados.
+
+| RF | Encuesta / D | OQ | Caso futuro o gate de aceptación |
+|---|---|---|---|
+| RF-01 / RF-02 | [E01 / D-020](../decisions/DECISION_LOG.md#e01) | OQ-08 | Contrato de una capa con superposiciones y ejemplos válidos/inválidos, sin inventar sintaxis |
+| RF-02 / RF-05 | [E02 / D-005/D-020](../decisions/DECISION_LOG.md#e02) | OQ-06/OQ-08 | Dos Fragile con valores individuales; errores/rangos después de especificarlos |
+| RF-03 / RF-04 | [E03 / D-005](../decisions/DECISION_LOG.md#e03) | OQ-02 | Comparar fin contra pared, sin casilla libre y bordes; no generalizar a otros obstáculos sin especificación |
+| RF-05 | [E04 / D-005](../decisions/DECISION_LOG.md#e04) | OQ-03 | Resolver compatibilidad de resistencia cero antes de fijar outcomes de hielo/rotura |
+| RF-06 / RF-08 | [E05 / D-019](../decisions/DECISION_LOG.md#e05) | OQ-01 | Criterios KeyBox/Goal y puzzle al combinar retorno de muros, sin asumir resolubilidad |
+| RF-06 / RF-07 | [E06 / D-010](../decisions/DECISION_LOG.md#e06) | OQ-07 | Definir cierre con jugador/caja ocupando muro, múltiples cerrojos y restauración Undo antes de probar |
+| RF-07 / RF-10 | [E07 / D-007](../decisions/DECISION_LOG.md#e07) | OQ-05 | Disponibilidad con 4/5 movimientos, historial 15, intento bloqueado y cambio de nivel |
+| RF-07 | [E08 / D-008](../decisions/DECISION_LOG.md#e08) | OQ-04 | Ejemplos de Undo, movimiento, Restart y nivel; resolver «consecutivos» sin reinterpretar el voto |
+| RF-07 / RF-09 | [E09 / D-008](../decisions/DECISION_LOG.md#e09) | OQ-09 | Restauración de contadores frente a total de usos y tratamiento de Restart una vez especificado |
+| RF-09 | [E10 / D-009](../decisions/DECISION_LOG.md#e10) | OQ-09 | Tablas numéricas deterministas cuando existan base, pesos, límites y normalización aprobados |
+| RF-12 | [E11 / D-022](../decisions/DECISION_LOG.md#e11) | OQ-10 | Guardar/recuperar estado validado con Undo/errores y GoF justificado después del contrato; segunda adicional aún pendiente |
+
+Pistas no cuenta como adicional aprobada; consultar E11 para el resultado y el umbral. Ningún caso ratifica D-011/D-012/D-016 ni el UML. La aceptación del código sigue NOT_RECORDED y OQ-11 continúa como decisión técnica sin encuesta.

@@ -1,23 +1,23 @@
 # Preguntas abiertas
 
-Todos los ítems son `OPEN` al 2026-10-08. El gate pide una decisión explícita con procedencia, ejemplos y actualización de decisiones/requisitos/trazabilidad; no se selecciona silenciosamente una alternativa.
+`LAST_REVIEWED = 2026-10-23`. Inventario canónico de **dimensiones pendientes**, con OQ-01…OQ-11 preservadas. La autoridad de los acuerdos está exclusivamente en [Ratificación por mayoría — 2026-10-23](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23). Los recuentos completos se mantienen allí, sin catálogo paralelo. `ACCEPTED_SCOPE` reconoce la dimensión votada; `PENDING_DETAILS` no reabre esa elección. `CONFLICT_REVIEW_REQUIRED` bloquea una afirmación normativa absoluta y su implementación, no el registro de la preferencia del equipo. Ninguna fila implica cierre total del contrato técnico.
 
-| ID | Cuestión | Alternativas a discutir y gate | Impacto |
-|---|---|---|---|
-| OQ-01 | Victoria con KeyBox sobre Lock | ¿Lock cuenta como destino, la llave debe salir a un destino o hay otra regla? Consultar al docente sin cambiar “todas las cajas” por conveniencia | Victoria, nivel, cierre de muros |
-| OQ-02 | Hielo termina contra obstáculo | ¿Frenar en última celda libre o rechazar el empuje? Aclaración con diagrama antes/después | Movimiento atómico |
-| OQ-03 | Fragile llega a cero al entrar en hielo | ¿Rotura antes/durante/después de deslizar y en qué celda? Registrar ejemplo y respuesta | Resistencia y reversión |
-| OQ-04 | Qué reinicia 3 Undo consecutivos | Movimiento nuevo, intento bloqueado, Restart/cambio de nivel; definir cada evento y sus métricas | Historial/sesión |
-| OQ-05 | Menos de 5 movimientos disponibles | Deshabilitar/rechazar o retroceso parcial sólo si compatible con aclaración; no asumir | Botón y borde de Undo |
-| OQ-06 | Resistencia inicial Fragile | Global o configurable por nivel/caja; especificar rangos, formato y validación | Parser, cajas |
-| OQ-07 | Lock↔Walls y cierre posterior | IDs, 1:1/1:N, varios cerrojos y permanencia; pruebas de Undo/Restart | Observer, estado mutable |
-| OQ-08 | Formato TXT definitivo | Una/dos capas, símbolos, dimensiones, metadata, charset, errores y representación de todas las entidades | Carga externa |
-| OQ-09 | Fórmula score | Variables y límites; ratificar total de Undo no restaurable y penalización con ejemplos | ScoreStrategy/métricas |
-| OQ-10 | Dos adicionales | Definir funcionalidad, problema real, patrón, alternativa simple, coste y prueba | Alcance académico |
-| OQ-11 | Java/build | Java target y Maven/Gradle/otra opción; instalación, comandos y build desde clon limpio | Primer build reproducible |
+| ID | Cuestión | Estado | Dimensión resuelta o preferencia registrada (fuente canónica) | Dimensión pendiente / bloqueador | Siguiente responsable |
+|---|---|---|---|---|---|
+| OQ-01 | Victoria con KeyBox sobre Lock | `ACCEPTED_SCOPE; PENDING_DETAILS` | Alcance KeyBox/Goal de [E05](../decisions/DECISION_LOG.md#e05), D-019 | Criterios completos de victoria/puzzle y combinación E06; no asumir resolubilidad ni cierre seguro | Equipo de reglas; docente si persiste contradicción normativa |
+| OQ-02 | Hielo termina contra obstáculo | `ACCEPTED_SCOPE; PENDING_DETAILS` | Comportamiento contra pared de [E03](../decisions/DECISION_LOG.md#e03), D-005 | Sin celda libre, límites y otros obstáculos; ejemplos antes/después, sin volver a votar la regla aceptada | Equipo de reglas y especificación de casos |
+| OQ-03 | Fragile llega a cero al entrar en hielo | `CONFLICT_REVIEW_REQUIRED` | Preferencia mayoritaria [E04](../decisions/DECISION_LOG.md#e04), D-005, con doble selección registrada | Rotura al cero frente a fin del deslizamiento; transición atómica es hipótesis, no compatibilidad demostrada | Equipo contrasta consigna y ejemplos; docente sólo si persiste conflicto |
+| OQ-04 | Qué reinicia el límite de tres Undo | `CONFLICT_REVIEW_REQUIRED` | Semántica literal de [E08](../decisions/DECISION_LOG.md#e08), D-008 | Lectura de «consecutivos» y eventos de sesión; no reinterpretar movimiento nuevo como reinicio ni extrapolar resets de métricas | Equipo de reglas/sesión; docente si persiste conflicto |
+| OQ-05 | Menos de cinco movimientos disponibles | `ACCEPTED_SCOPE; PENDING_DETAILS` | Umbral de disponibilidad de [E07](../decisions/DECISION_LOG.md#e07), D-007 | Interfaz/diagnóstico, pruebas de 4/5 movimientos, historial 15, bloqueos y nuevo nivel; umbral ya resuelto | Equipo de sesión/UI y casos de aceptación |
+| OQ-06 | Resistencia inicial Fragile | `ACCEPTED_SCOPE; PENDING_DETAILS` | Configuración individual por TXT de [E02](../decisions/DECISION_LOG.md#e02), D-005/D-020 | Sintaxis, rango y errores; no escoger global/por nivel ni valor fijo por inferencia | Equipo de contrato TXT |
+| OQ-07 | Lock↔Walls y cierre posterior | `ACCEPTED_SCOPE; PENDING_DETAILS` | Retorno al estado cerrado de [E06](../decisions/DECISION_LOG.md#e06), D-010 | IDs, cardinalidad, múltiples cerrojos, ocupación al cerrar, Undo y seguridad/resolubilidad al combinar E05 | Equipo de reglas y contrato de nivel |
+| OQ-08 | Formato TXT definitivo | `ACCEPTED_SCOPE; PENDING_DETAILS` | Disposición y resistencia individual: [E01](../decisions/DECISION_LOG.md#e01)/[E02](../decisions/DECISION_LOG.md#e02), D-020 | Gramática/alfabeto, parámetros/metadata, dimensiones, entidades, IDs, charset/errores finales y ejemplos; siete símbolos actuales no ratificados como formato completo | Equipo de contrato TXT |
+| OQ-09 | Fórmula score y métricas | `ACCEPTED_SCOPE; PENDING_DETAILS` | Dimensiones de [E09](../decisions/DECISION_LOG.md#e09)/[E10](../decisions/DECISION_LOG.md#e10), D-008/D-009 | Base, coeficientes, normalización, límites/negativos y efectos de Restart/cambio de nivel en cada métrica | Equipo de sesión/score |
+| OQ-10 | Dos adicionales | `ACCEPTED_SCOPE; PENDING_DETAILS` | Primera adicional de [E11](../decisions/DECISION_LOG.md#e11), D-022; pistas y otra propuesta `NOT_APPROVED` | Segunda sin mayoría; contrato de persistencia, validación/seguridad, Undo, criterios y GoF; no contar guardar/recuperar como dos | Equipo: mayoría para segunda y especificación de persistencia |
+| OQ-11 | Java/build | `OPEN` | Sin encuesta ni elección técnica; [límites de ratificación](../decisions/DECISION_LOG.md#límites-de-la-ratificación), D-001 | Java target, build y comandos reproducibles definitivos; no imponer encuesta ni Maven/Gradle | Equipo técnico con evidencia reproducible |
 
-Además siguen sin ratificar Builder frente a construcción directa, Terrain/Occupant, herencia frente a composición de cajas y uso de Singleton para audio. Son propuestas de arquitectura, no nuevas reglas oficiales.
+Los casos futuros y enlaces RF están en [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md); no son tests ejecutados. Las OQ-08/09/10/11 no están completamente cerradas. E04/E08 requieren revisión prioritaria de compatibilidad, con precedencia de cátedra. Mantener `TEAM_ACCEPTANCE = NOT_RECORDED` del código.
 
-La cápsula anterior usa OQ-001…OQ-012 con otra numeración: mapear por tema, no por coincidencia numérica. En estos documentos vivos rige OQ-01…OQ-11 del prompt de bootstrap. Restart y movimiento nuevo están incluidos en OQ-04; Singleton en D-016.
+Builder frente a construcción directa, Terrain/Occupant, herencia/composición, Memento, Observer, Strategy y Singleton/audio conservan sus estados técnicos: votos de reglas no los ratifican. La cápsula anterior usa OQ-001…OQ-012 con otra numeración; mapear por tema y mantener los IDs vivos aquí. Singleton corresponde a D-016.
 
-Para cerrar: registrar quién decidió, fecha, fuente/autoridad, alcance, alternativa elegida, consecuencias y casos de aceptación; sólo entonces cambiar estado. Trabajo independiente puede continuar en otra iteración autorizada.
+Para cerrar **un detalle restante**, registrar fuente/autoridad, quién decide, fecha, alcance, alternativa, consecuencias y ejemplos de aceptación; actualizar DECISION_LOG y trazabilidad. No reabrir por defecto el aspecto ya aprobado por mayoría ni implementar reglas en esta misión.

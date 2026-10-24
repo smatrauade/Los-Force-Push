@@ -1,6 +1,6 @@
 # Registro de fuentes y disponibilidad
 
-Revisado 2026-10-21 para anexar fuentes posteriores. La tabla conserva la disponibilidad al bootstrap del 08/10. Prioridad: consigna → aclaraciones posteriores → oral → cátedra → equipo → bibliografía → GitHub → inferencia. No mezclar rango de autoridad con disponibilidad de bytes.
+Revisado 2026-10-23 para anexar la procedencia de encuestas. La tabla conserva la disponibilidad al bootstrap del 08/10. Prioridad: consigna → aclaraciones posteriores → oral → cátedra → equipo → bibliografía → GitHub → inferencia. No mezclar rango de autoridad con disponibilidad de bytes.
 
 | Fuente | Disponibilidad actual | Uso / limitación |
 |---|---|---|
@@ -39,3 +39,15 @@ La cápsula histórica contiene dos saltos duros Markdown con espacios finales i
 - GitHub consultado el 21/10: `main=ee83f9ebd30ee1b553c555c89d9ea453131d6678`, PR #5 `0670a4d5137f0e9f1db221866a02c29987024847`, OPEN/Draft no fusionado. Son lecturas fechadas: revalidar antes de actuar.
 
 La tabla superior refleja **disponibilidad al bootstrap del 08/10**, no disponibilidad universal en todo chat; no atribuir acceso a bytes ausentes.
+
+## Encuestas del equipo — 2026-10-23
+
+```text
+SOURCE = USER_SUPPLIED_SCREENSHOT_TRANSCRIPTION
+RAW_SCREENSHOTS = EXTERNAL_PRIVATE
+RAW_VERIFICATION = NOT_PERFORMED_BY_THIS_AGENT
+```
+
+El solicitante aportó una transcripción revisada de once capturas de detalles de encuesta del 23/10 y confirmó el método de mayoría absoluta del equipo. Esta ejecución leyó esa transcripción, **no** las capturas originales ni el ZIP de WhatsApp. La exportación mencionada contiene preguntas/discusiones pero no votos; no atribuirle los recuentos ni afirmar verificación independiente de imágenes no disponibles.
+
+Sólo los agregados anónimos se incorporan a [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el alcance y los pendientes. Las anomalías de selección E04/E05 y la selección múltiple E11 se conservan allí. No se publican originales, datos personales ni hashes de capturas cuyos bytes no se tienen. La fuente TEAM no sustituye el enunciado ni las aclaraciones documentadas de cátedra; no es una prueba del juego, del diseño ni del código. El PDF original no se releyó en esta misión.

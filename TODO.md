@@ -1,6 +1,6 @@
 # TODO — backlog vivo
 
-Revisado 2026-10-21 tras el merge del PR #5: Swing V1 está integrado en main con el core (#3) y el aislamiento de runners (#4). El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
+Revisado 2026-10-23 tras registrar las decisiones mayoritarias, sin cambios de implementación. Tras el merge del PR #5: Swing V1 está integrado en main con el core (#3) y el aislamiento de runners (#4). El bootstrap documental y estructural está integrado. Este snapshot contiene carga, movimiento/empuje básico e integración Swing experimentales; el producto completo y sus mecánicas restantes siguen pendientes. Los resultados históricos de carga y movimiento se distinguen de las reproducciones en [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md).
 
 ## Bootstrap completado y verificado
 
@@ -13,7 +13,7 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 
 ## Experimento local de carga R1
 
-- [x] Contrato experimental de una capa y comparación con dos capas; OQ-08 continúa OPEN.
+- [x] Contrato experimental R1 y comparación histórica; el alcance mayoritario posterior y gramática pendiente de OQ-08 se consultan en DECISION_LOG/OPEN_QUESTIONS.
 - [x] Subconjunto TXT externo → Parser → Builder → Level/Board, sin Swing.
 - [x] Compilar sin warnings y ejecutar 40 casos reales con JDK 17 y JDK 26; evidencia en [LEVEL_LOADING_R1](docs/experiments/LEVEL_LOADING_R1.md).
 - [x] Runners Unix/Windows sobre las mismas fuentes; revisión Bash 3.2/PowerShell 5.1, pruebas Linux con rutas/temporales Unicode y espacios, protección TXT/EOL.
@@ -49,19 +49,21 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 
 ## Bloqueantes y decisiones
 
-Siguiente dominio: `SOKOBAN_POST_MERGE_HUMAN_REVIEW_AND_OQ_TRIAGE`. Preparar una revisión de responsabilidades, contratos, pruebas y decisiones, con fuentes y ejemplos; no implementar ni cerrar OQ por inferencia. `TEAM_ACCEPTANCE = NOT_RECORDED`.
+Siguiente dominio propuesto: `SOKOBAN_TXT_GRAMMAR_SPECIFICATION`, tras revisión humana del Draft documental, con compatibilidad de reglas especiales en dominios acotados. No repetir una ronda general de encuestas ni implementar por inferencia. `TEAM_ACCEPTANCE = NOT_RECORDED` del código.
 
-- [ ] Revisar con otro integrante y ratificar/corregir las propuestas documentales y arquitectónicas; registrar las decisiones explícitas del equipo.
-- [ ] OQ-01: victoria con KeyBox sobre Lock.
-- [ ] OQ-02: salida del hielo bloqueada.
-- [ ] OQ-03: Fragile a resistencia cero al entrar en hielo.
-- [ ] OQ-04: reinicio de consecutividad Undo (incluye movimiento nuevo y Restart).
-- [ ] OQ-05: Undo con menos de cinco movimientos.
-- [ ] OQ-06: resistencia inicial/configurable Fragile.
-- [ ] OQ-07: IDs, cardinalidad Lock↔Walls y cierre posterior.
-- [ ] OQ-08: formato TXT, símbolos, capas, dimensiones, metadata, errores y charset.
-- [ ] OQ-09: fórmula score y ratificación de métricas no restaurables.
-- [ ] OQ-10: dos funcionalidades adicionales, problema, patrón, consecuencias y prueba.
+- [x] Registrar las once encuestas en [DECISION_LOG](docs/decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) y sus alcances/pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md), sin otro catálogo.
+- [ ] Otro integrante revisa transcripción y alcance del Draft; merge requiere autorización separada. Revisar código y propuestas arquitectónicas por separado.
+- [ ] OQ-01: completar criterios de victoria/puzzle tras E05 y compatibilidad con E06.
+- [ ] OQ-02: especificar bordes de E03, sin reabrir el comportamiento ya mayoritario.
+- [ ] OQ-03: resolver compatibilidad normativa de E04 antes de fijar la regla implementable.
+- [ ] OQ-04: contrastar la semántica literal de E08 con «consecutivos», sin reinterpretarla.
+- [x] OQ-05: registrar el umbral aceptado E07; no implica cerrar el contrato completo.
+- [ ] OQ-05: especificar interfaz y casos de borde del historial/disponibilidad.
+- [ ] OQ-06: sintaxis, rango y errores de la configuración individual ya aceptada en E02.
+- [ ] OQ-07: IDs, cardinalidad, ocupación y Undo del cierre aceptado en E06; combinar con E05.
+- [ ] OQ-08: gramática, símbolos/metadata, dimensiones, entidades e IDs de E01/E02; no inventar otra capa.
+- [ ] OQ-09: fórmula numérica y efectos de Restart/cambio de nivel tras el alcance E09/E10.
+- [ ] OQ-10: segunda adicional con mayoría y contratos/GoF de la primera seleccionada E11; pistas no aprobada.
 - [ ] OQ-11: Java target y build; producir y verificar comandos desde clon limpio.
 - [ ] Ratificar Builder frente a construcción directa después de revisar la comparación experimental R1; no aceptado por compilar.
 - [ ] Ratificar Terrain/Occupant, cajas polimórficas y herencia frente a composición.
@@ -77,7 +79,7 @@ Siguiente dominio: `SOKOBAN_POST_MERGE_HUMAN_REVIEW_AND_OQ_TRIAGE`. Preparar una
 - [ ] Undo, estado frágil/muros y métricas; Restart.
 - [ ] Victoria/progresión, score y resumen.
 - [ ] Completar presentación del producto: HUD definitivo, Undo/Restart funcionales, imágenes auditadas y SFX; el spike Swing básico no cierra este entregable.
-- [ ] Dos funcionalidades adicionales ratificadas.
+- [ ] Especificar y validar primera adicional seleccionada y obtener mayoría para la segunda; no contar guardar/recuperar como dos.
 - [ ] Mantener UML/trazabilidad del resto de mecánicas al implementarlas, con código y evidencia real; no integrar spikes sin bytes auditados.
 
 ## Entregables

@@ -1,12 +1,13 @@
 # Estado vivo — Los Force Push
 
 ```text
-AS_OF = 2026-10-21
+AS_OF = 2026-10-23
 REPOSITORY = smatrauade/Los-Force-Push
-PRIMARY_DOMAIN = SOKOBAN_POSTMERGE_REPOSITORY_CONSISTENCY
+PRIMARY_DOMAIN = SOKOBAN_TEAM_MAJORITY_DECISIONS_DOCUMENTATION
 IMPLEMENTATION_STATUS = IMPLEMENTED_EXPERIMENTAL
 TEST_STATUS = TESTED
 TEAM_ACCEPTANCE = NOT_RECORDED
+GAME_RULE_DECISIONS = MAJORITY_ACCEPTED_PARTIAL
 MOVEMENT_INTEGRATION_EVIDENCE = GIT_HISTORY_AND_PULL_REQUEST
 EXPERIMENT_ORIGIN_BRANCH = feat/swing-playable-spike-v1
 EXPERIMENT_BASE = be490aecb2bbcb92b863778a63499c587313146c
@@ -31,12 +32,18 @@ BOOTSTRAP_STATUS = INTEGRATED
 PRODUCTION_IMPLEMENTATION = NONE
 JAVA_TARGET = OPEN
 BUILD_TOOL = OPEN
-TXT_FORMAT = OPEN
+TXT_FORMAT = MAJORITY_ACCEPTED_LAYOUT_GRAMMAR_PENDING
 PR5_STATUS = MERGED
 PR5_MERGE_COMMIT = 54c03d4520dfc542c125686e5446687dc07d85db
-NEXT_GATE = SOKOBAN_POST_MERGE_HUMAN_REVIEW_AND_OQ_TRIAGE
+NEXT_GATE = SOKOBAN_TXT_GRAMMAR_SPECIFICATION
 WINDOWS_PR5_TESTED_HEAD = 0670a4d5137f0e9f1db221866a02c29987024847
 ```
+
+## Checkpoint mayoritario del equipo — 2026-10-23
+
+[DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) registra E01–E11 completos, método de mayoría y anomalías; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) conserva OQ-01…OQ-11 con dimensiones aceptadas y pendientes. Fuente: transcripción del solicitante, capturas privadas externas no verificadas independientemente aquí. Se documentan acuerdos de reglas, no aceptación del código ni del diseño. E04/E08 mantienen CONFLICT_REVIEW_REQUIRED, fórmula/gramática/segunda adicional y Java/build siguen pendientes. Pistas no está aprobada.
+
+Revisar este Draft documental por otra persona; el siguiente dominio propuesto es especificar TXT y revisar compatibilidad de reglas especiales, sin implementación ni otra ronda general de encuestas. La revisión humana del código sigue pendiente. Base Git observada de esta tarea: `2c2c2e4c6180ca0639e511c480ca5b93cd4e4a01`, merge de PR #6; no es un HEAD permanente. No hubo nuevas pruebas Java ni cambios de fuentes/UML.
 
 ## Estado posterior al merge de PR #5
 
@@ -53,8 +60,9 @@ Los cuatro commits del PR permanecen en el historial: `99b81c5aa04dd6c6a19cc72f4
 | [#3](https://github.com/smatrauade/Los-Force-Push/pull/3) | Loading y Movement | `e8f76cec23de019cd244b6d089bd6de3a24251a3` |
 | [#4](https://github.com/smatrauade/Los-Force-Push/pull/4) | Aislamiento de runners core | `ee83f9ebd30ee1b553c555c89d9ea453131d6678` |
 | [#5](https://github.com/smatrauade/Los-Force-Push/pull/5) | Swing y QA Windows | `54c03d4520dfc542c125686e5446687dc07d85db` |
+| [#6](https://github.com/smatrauade/Los-Force-Push/pull/6) | Rehidratación postmerge | `2c2c2e4c6180ca0639e511c480ca5b93cd4e4a01` |
 
-Los cinco PR están fusionados; su integración no cambia `TEAM_ACCEPTANCE = NOT_RECORDED`, los estados PREFERRED/TEAM-PROPOSAL ni OQ-01…OQ-11. Las ramas históricas pueden retirarse una vez probada su ascendencia; el historial de integración se localiza por PR y commit.
+Los seis PR históricos están fusionados; esos merges no ratifican reglas ni cambian `TEAM_ACCEPTANCE = NOT_RECORDED` del código. Los acuerdos posteriores del 23/10 tienen fuente TEAM independiente, en el checkpoint inicial; las elecciones de patrones siguen sin ratificar. Las ramas históricas pueden retirarse una vez probada su ascendencia; el historial de integración se localiza por PR y commit.
 
 ## Checkpoint posterior a R5 — QA Windows nativa (2026-10-21)
 
@@ -62,7 +70,7 @@ Sobre `0670a4d5137f0e9f1db221866a02c29987024847` se reportó PASS nativo Windows
 
 ## Estado comprobado y cómo continuar
 
-En la publicación histórica R4 del 21/10 el PR #5 quedó OPEN/Draft sobre main `ee83f9ebd30ee1b553c555c89d9ea453131d6678`, con los dos primeros commits enumerados arriba. R5 añadió continuidad documental y posteriormente se registró la QA Windows; el merge posterior está identificado al inicio de este documento. Siguiente paso: revisión humana posterior del código integrado y triage de OQ; no preparación ni integración de un nuevo PR Swing.
+En la publicación histórica R4 del 21/10 el PR #5 quedó OPEN/Draft sobre main `ee83f9ebd30ee1b553c555c89d9ea453131d6678`, con los dos primeros commits enumerados arriba. R5 añadió continuidad documental y posteriormente se registró la QA Windows; el merge posterior está identificado al inicio de este documento. La revisión humana del código integrado sigue pendiente; para especificación de reglas rige el checkpoint del 23/10, no una preparación ni integración de un nuevo PR Swing.
 
 Revisión técnica R3 del 21/10 sobre `99b81c5aa04dd6c6a19cc72f42c766ce53551bbd`: MVC y colaboraciones de los UML implementados contrastados con el código; cuatro PlantUML comprobados/renderizados, candidato integral separado y StarUML pendiente. Una exportación limpia de ese commit reprodujo 40 Loading + 31 Movement + 16 desktop headless PASS, JDK 17.0.20.1/release 17 y C.utf8, sin bundle ni QA externos. Las correcciones R3 son sólo documentales: se conserva la evidencia por identidad de los blobs ejecutables; [detalle](../testing/TEST_STRATEGY.md#revisión-de-consistencia-swing-r3--2026-10-21). Al cierre de aquella revisión R3 la rama Swing todavía era local; su publicación posterior mediante R4 se registra arriba. En aquel corte main contenía #3/#4 y aún no Swing; el merge posterior de #5 se registra al inicio. Revisión humana del equipo, GUI interactiva Linux y macOS siguen pendientes.
 
@@ -112,15 +120,15 @@ Base be490aecb2bbcb92b863778a63499c587313146c; fuentes separadas en src/desktop/
 
 [Guía autocontenida, comandos y límites](../experiments/SWING_VERTICAL_SLICE_V1.md), [UML real del subconjunto](../architecture/uml/swing-playable-spike-v1.puml). Windows nativo, Temurin 21/release 17: 40 Loading y 31 Movement PASS, 16 pruebas de integración PASS; interacción gráfica observada con movimiento, empujes, destino y pared bloqueada. En aquel incremento del 15/10 no se ejecutó Swing Linux/macOS; la validación headless Linux R2 se registra separadamente al inicio de este estado y en la guía. La carga local acotada es síncrona en el EDT; archivos remotos/lentos pueden demorar la ventana. Graphics2D es placeholder y no cumple aún imágenes definitivas. No hay victoria, Undo/Restart, score, especiales ni audio.
 
-Las evidencias históricas del core y su runner no sustituyen los tests desktop. La recuperación Linux R2 descrita al inicio prueba el incremento sin pantalla; no certifica GUI interactiva ni macOS. La aceptación del equipo no está registrada, OQ-01…OQ-11 permanecen OPEN. La revisión independiente R3 está realizada y R4 publicó el Draft PR #5 contra main integrado. Siguiente gate: revisión humana posterior al merge y triage de OQ. GUI interactiva Linux y macOS siguen pendientes; cualquier cambio funcional requiere otra iteración autorizada.
+Las evidencias históricas del core y su runner no sustituyen los tests desktop. La recuperación Linux R2 descrita al inicio prueba el incremento sin pantalla; no certifica GUI interactiva ni macOS. La aceptación del código no está registrada; el estado actual de cada dimensión OQ está en OPEN_QUESTIONS y no se infiere de los tests históricos. La revisión independiente R3 está realizada y R4 publicó el Draft PR #5 contra main integrado. En ese corte se proponía revisión posterior y triage; el checkpoint del 23/10 registra los acuerdos y el siguiente gate de especificación. GUI interactiva Linux y macOS siguen pendientes; cualquier cambio funcional requiere otra iteración autorizada.
 
 ## Diseño, evidencia y decisiones
 
-Terrain/Occupant, polimorfismo de cajas, Builder, Memento, Observer y Strategy son **PREFERRED**, no ACCEPTED. Herencia/composición sigue abierta. SoundManager Singleton es propuesto; Adapter no se justifica en baseline, Decorator depende de futuras funcionalidades. Métricas Undo separadas son **TEAM-PROPOSAL**, no decisión ratificada ni fórmula aprobada.
+Terrain/Occupant, polimorfismo de cajas, Builder, Memento, Observer y Strategy son **PREFERRED**, no ACCEPTED. Herencia/composición sigue abierta. SoundManager Singleton es propuesto; Adapter no se justifica en baseline, Decorator depende de futuras funcionalidades. El diseño SessionMetrics sigue TEAM-PROPOSAL; los aspectos de comportamiento E09/E10 se ratifican sólo según [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23), sin fórmula ni efectos de Restart elegidos.
 
 Los spikes A/B reportaron 8/8 y 12/12 con Java 21 y sin warnings históricamente. Son `HISTORICAL_EXTERNAL_EVIDENCE`; `REPRODUCIBILITY_IN_CURRENT_REPOSITORY = NOT_VERIFIED`. **No se ejecutaron tests Java en R3A.** En el preflight se ejecutaron `bash scripts/verify-repo-readonly.sh --require-clean` (PASS: 32 archivos y 49 enlaces relativos), `git fsck --full --no-progress` y `git diff --check` (PASS). Son verificaciones documentales y de Git; no validan gameplay ni la semántica del UML mediante un compilador.
 
-Permanecen OQ-01…OQ-11: victoria/llave, salida hielo bloqueada, fragile cero/hielo, reinicio Undo, menos de 5, resistencia inicial, asociación/cierre muros, TXT, score, dos extras, Java/build. También revisar decisiones arquitectónicas y política de audio.
+OQ-01…OQ-11 conservan sus IDs, con acuerdos por alcance y deuda residual en [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md). No reabrir los acuerdos por falta de gramática, fórmula o bordes; E04/E08 sí requieren compatibilidad. Arquitectura y audio mantienen sus estados previos.
 
 ## Riesgos y mitigación
 
@@ -129,7 +137,7 @@ Permanecen OQ-01…OQ-11: victoria/llave, salida hielo bloqueada, fragile cero/h
 | TXT hardcodeado o formato tácito | Contrato ratificado y prueba con TXT escrito/modificado por otra persona |
 | Patrones ornamentales / interfaces ceremoniales | Comparar alternativa simple y justificar fuerzas/colaboraciones |
 | Snapshot alias o reversión incompleta | Pruebas de resistencia/muros/contadores y aislamiento |
-| Métricas borran coste de Undo | Ratificar propuesta; ejemplos score y reinicios antes de implementar |
+| Métricas/score incompletos | Aplicar alcance E09/E10; especificar fórmula y reinicios, sin ratificar diseño por el voto |
 | Controller monolítico, reglas Swing o datos duplicados | Roles explícitos y core testeable sin GUI |
 | UML/cápsula se confunden con estado ejecutado | Contrastar HEAD/vivos; pruebas históricas etiquetadas |
 | Licencia no cumple dominio público | Ledger por recurso; no incorporar hasta verificar |
@@ -138,7 +146,7 @@ Permanecen OQ-01…OQ-11: victoria/llave, salida hielo bloqueada, fragile cero/h
 
 ## Próxima iteración segura
 
-La revisión técnica independiente R2 del movimiento (14/10) está realizada y la validación R3 confirma aquel subconjunto experimental. La validación nativa Windows del runner R3 está registrada en TEST_STRATEGY; no ratifica contrato, modelo ni decisiones académicas. Los siguientes gates son revisión grupal del contrato/modelo y pruebas nativas macOS antes de afirmar validación nativa completa. Las operaciones de publicación e integración se rastrean en Git/GitHub y no cambian por sí solas las capacidades ni las decisiones del producto. Conservar las decisiones abiertas y el alcance; cualquier ampliación funcional requiere una iteración autorizada. Builder permanece PREFERRED, TXT experimental/OQ-08 OPEN y Java/build OQ-11 OPEN.
+Los resultados técnicos R2/R3 y Windows conservan su SHA y alcance, sin pruebas nuevas aquí. Tras revisar el Draft de decisiones, especificar el contrato TXT en `SOKOBAN_TXT_GRAMMAR_SPECIFICATION` y contrastar E04/E08 y combinaciones especiales antes de implementar. El inventario canónico distingue dimensiones aceptadas de las pendientes; no se propone otra encuesta general. Builder sigue PREFERRED, la gramática OQ-08 y Java/build OQ-11 siguen pendientes. Revisión del código, GUI Linux/macOS y entregables restantes no se cierran por esta votación.
 
 Resolver las preguntas que afecten cada mecánica antes de implementarla. Obtener los bytes de los spikes históricos si se desean reutilizar, sin tratarlos como código productivo auditado. El spike no convierte la carga en una funcionalidad productiva completa ni autoriza por sí solo su integración o una ampliación de alcance.
 

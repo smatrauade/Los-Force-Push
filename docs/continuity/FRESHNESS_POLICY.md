@@ -1,6 +1,6 @@
 # Política anti-desactualización
 
-`LAST_REVIEWED = 2026-10-21` (reconciliación Windows; original 08/10). CURRENT_STATE, DECISION_LOG, TODO, arquitectura y UML son documentos **vivos**. CAPSULES son snapshots **históricos inmutables**. El repositorio debe permitir continuar sin chats anteriores.
+`LAST_REVIEWED = 2026-10-23` (trazabilidad de mayoría por alcance; política original 08/10). CURRENT_STATE, DECISION_LOG, TODO, arquitectura y UML son documentos **vivos**. CAPSULES son snapshots **históricos inmutables**. El repositorio debe permitir continuar sin chats anteriores.
 
 ## Matriz de mantenimiento
 
@@ -40,3 +40,9 @@ Antes de cada PR: ejecutar controles pertinentes, comprobar enlaces, estados abi
 5. Antes de publicar: comparar SHA de base, `git diff --check`, enlaces relativos, dominio único, ausencia de cambios fuente/UML fuera de alcance y revisión humana. No cambiar `main`, PR Draft ni permisos sin **autorización expresa y gate separado**; las autorizaciones antiguas de integración, incluidas las del checkpoint PR #5 ya fusionado, son historia y no se heredan como permiso para otra tarea.
 
 **Resultado:** `FRESHNESS_GATE=PASS` sólo con estado versionado/localizable desde `AGENTS.md` y `docs/README.md`, excepciones justificadas y siguiente gate concreto; de lo contrario `BLOCKED` con preservación. [Ejemplo: QA Windows PR #5](checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md).
+
+## Decisiones por alcance y evidencia privada
+
+La [ratificación del 23/10](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) permanece sólo en DECISION_LOG; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el inventario residual. Registrar autoridad TEAM, método, participación/selecciones, alcance, anomalías y límites; corregir en ambos documentos cuando proceda, sin tabla paralela ni reabrir por defecto lo ya mayoritario. Conflictos normativos requieren contraste con cátedra antes de implementación, sin borrar el resultado del equipo.
+
+Publicar sólo agregados anónimos de la transcripción del solicitante; originales privados externos no equivalen a evidencia bruta verificada por este agente. No incluir capturas, nombres/IDs ligados a votos, teléfonos ni hashes inventados. Votos y QA no cambian por sí solos TEAM_ACCEPTANCE del código ni estados técnicos de patrones/UML. El siguiente gate es especificación/compatibilidad, no una nueva encuesta general ni permiso de merge.
