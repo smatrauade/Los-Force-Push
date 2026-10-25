@@ -25,7 +25,7 @@ Para documentación actual: `bash scripts/verify-repo-readonly.sh`, enlaces/ruta
 
 ## Spike experimental C2-L7 — 2026-10-24
 
-`EXPERIMENTAL_NOT_RATIFIED`, sólo rama local `spike/level-txt-c2-l7-r1`, base `5bf6b6524251aee00788be4ae37ade623f4dc745`. Pruebas ejecutadas sobre el contenido modificado real del worktree antes del commit; SHA final en la entrega y correspondencia de blobs comprobada al confirmar. No atribuir las pruebas al HEAD antiguo sin sus modificaciones.
+`EXPERIMENTAL_NOT_RATIFIED`, rama experimental `spike/level-txt-c2-l7-r1`, base `5bf6b6524251aee00788be4ae37ade623f4dc745`. La ejecución inicial siguiente se realizó localmente antes del commit, sobre el contenido modificado real del worktree; SHA final en la entrega y correspondencia de blobs comprobada al confirmar. No atribuir las pruebas al HEAD antiguo sin sus modificaciones ni inferir el estado posterior de publicación de esta evidencia inicial.
 
 Ubuntu/Linux, OpenJDK `java`/`javac` 17.0.20.1, release 17, C.utf8, UTF-8, `-Xlint:all -Werror`: **Loading 40/40, Movement 31/31, C2 32/32, Desktop headless 16/16 PASS**, compilaciones y suites con salida 0. Core sólo `java.base`; desktop se compiló aparte con `java.base,java.desktop` y `java.awt.headless=true`. La JVM emitió un aviso de bloqueo de su archivo de métricas `hsperfdata` durante las compilaciones simultáneas; no fue un warning de fuente de javac ni un fallo de compilación/test. Temporales propios de clases/argfiles/tests eliminados. No se ejecutaron Windows, macOS ni GUI interactiva; no se ratifican gramática, Java/build o código.
 
@@ -50,6 +50,8 @@ LC_ALL=C.utf8 bash scripts/test-level-loading.sh --movement
 ```
 
 Desktop: se usó el [procedimiento Linux existente](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21), sin modificar Swing ni su suite. C2 prueba aliases/formas largas, tokenización, dimensiones lógicas, límite experimental de 128 caracteres ASCII por token, fallos tardíos, UTF-8/BOM por Loader y cargas independientes. `parse(String)` conserva la ausencia de techo de bytes; Loader sigue limitando 65.536. Header/versión inválidos no vuelven a legacy; `[attributes]` debe estar vacío. Ninguna entidad especial se degrada a BOX/FLOOR.
+
+Revisión técnica por Codex del 24/10: ejecución nueva sobre los blobs de `0195f0e97e2bd4edde422f9acf4586591d75642c`, Ubuntu/Linux, mismo JDK 17.0.20.1 y opciones estrictas anteriores. Runner Bash `--movement`: Loading 40/40 y Movement 31/31; compilación core y ejecución explícita de `C2LevelLoadingTest`: 32/32; procedimiento Linux desktop y `DesktopIntegrationTest` headless: 16/16. Todas las compilaciones y ejecuciones salieron con código 0, sin warnings, secuencialmente y con temporales externos propios eliminados. Sólo se corrigió el alcance temporal de las afirmaciones documentales sobre publicación; fuentes, tests, recursos y runners se conservaron idénticos al SHA probado. No se ejecutaron Windows, macOS ni GUI interactiva; resultados y revisión por IA no sustituyen revisión humana ni ratificación de C2.
 
 ## Pruebas ejecutables del experimento local R1
 

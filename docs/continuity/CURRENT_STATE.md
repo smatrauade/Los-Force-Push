@@ -39,15 +39,15 @@ PR5_MERGE_COMMIT = 54c03d4520dfc542c125686e5446687dc07d85db
 PR7_STATUS = MERGED
 PR7_MERGE_COMMIT = 7d3a30f04285d526709bbbf91e8725c61a187aac
 NEXT_GATE = TEAM_REVIEW_OF_EXPERIMENTAL_C2_L7_AND_TXT_DETAILS
-C2_L7_STATUS = EXPERIMENTAL_NOT_RATIFIED_LOCAL_ONLY
+C2_L7_STATUS = EXPERIMENTAL_NOT_RATIFIED
 WINDOWS_PR5_TESTED_HEAD = 0670a4d5137f0e9f1db221866a02c29987024847
 ```
 
 ## Spike local C2-L7 — 2026-10-24
 
-Sólo en la rama local `spike/level-txt-c2-l7-r1`, basada en `5bf6b6524251aee00788be4ae37ade623f4dc745`: `LevelParser` reconoce el prefijo reservado `!sokoban-txt` y delega el envelope experimental a `C2LevelParser`, helper interno sin estado compartido. Header exacto `!sokoban-txt 2`, una grilla de tokens y sección `[attributes]` obligatoria vacía; siete aliases y sus siete formas largas producen el mismo Board. Las entidades especiales y cualquier atributo se rechazan antes de devolver Level. Legacy conserva su ruta y prioridades; modelo, movimiento, Swing, runners y UML se preservan.
+Implementado en la rama experimental `spike/level-txt-c2-l7-r1`, basada en `5bf6b6524251aee00788be4ae37ade623f4dc745`: `LevelParser` reconoce el prefijo reservado `!sokoban-txt` y delega el envelope experimental a `C2LevelParser`, helper interno sin estado compartido. Header exacto `!sokoban-txt 2`, una grilla de tokens y sección `[attributes]` obligatoria vacía; siete aliases y sus siete formas largas producen el mismo Board. Las entidades especiales y cualquier atributo se rechazan antes de devolver Level. Legacy conserva su ruta y prioridades; modelo, movimiento, Swing, runners y UML se preservan.
 
-`EXPERIMENTAL_NOT_RATIFIED`: no es contrato aceptado, no está integrado en main ni publicado. OQ-06/OQ-07/OQ-08/OQ-11 y `TEAM_ACCEPTANCE = NOT_RECORDED` siguen vigentes. La autorización del solicitante permite este spike para obtener evidencia, sin sustituir decisiones del equipo. [Comandos y evidencia de las cuatro suites](../testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24); siguiente acción: revisión humana del incremento y de los detalles TXT, antes de ampliar entidades o publicar.
+`EXPERIMENTAL_NOT_RATIFIED`: no es contrato aceptado ni está integrado en main. Al cierre de la implementación inicial todavía no estaba publicado; el estado posterior de publicación y Draft PR debe comprobarse en [GitHub](https://github.com/smatrauade/Los-Force-Push/pulls) y en las refs de la rama, sin inferirlo de ese corte local. OQ-06/OQ-07/OQ-08/OQ-11 y `TEAM_ACCEPTANCE = NOT_RECORDED` siguen vigentes. [Comandos y evidencia de las cuatro suites](../testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24); siguiente acción: revisión humana del incremento y comparación C2 frente a tokens inline B, antes de ratificar la gramática o ampliar entidades. Un Draft PR no constituye esa ratificación ni autorización de merge.
 
 ## Checkpoint mayoritario del equipo — 2026-10-23
 
