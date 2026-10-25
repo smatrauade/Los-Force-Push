@@ -13,6 +13,9 @@ La integración y estos controles no prueban revisión por otro integrante ni ra
 
 ## Experimento local de carga R1
 
+- [x] Spike local C2-L7 del 24/10: envelope opt-in, sólo siete combinaciones existentes, atributos/especiales rechazados; `EXPERIMENTAL_NOT_RATIFIED`, sin publicación. [Estado y límites](docs/continuity/CURRENT_STATE.md#spike-local-c2-l7--2026-10-24).
+- [x] Ejecutar Loading 40, Movement 31, C2 32 y Swing headless 16 con JDK 17/release 17; [evidencia y ejecución separada de C2](docs/testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24). Suites y runners históricos intactos.
+- [ ] Revisar el spike C2-L7 con el equipo; no cerrar OQ-06/07/08/11 ni habilitar entidades especiales por estos resultados.
 - [x] Contrato experimental R1 y comparación histórica; el alcance mayoritario posterior y gramática pendiente de OQ-08 se consultan en DECISION_LOG/OPEN_QUESTIONS.
 - [x] Subconjunto TXT externo → Parser → Builder → Level/Board, sin Swing.
 - [x] Compilar sin warnings y ejecutar 40 casos reales con JDK 17 y JDK 26; evidencia en [LEVEL_LOADING_R1](docs/experiments/LEVEL_LOADING_R1.md).

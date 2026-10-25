@@ -23,6 +23,34 @@ La evidencia [histórica](HISTORICAL_EVIDENCE.md) no sustituye estas pruebas. Un
 
 Para documentación actual: `bash scripts/verify-repo-readonly.sh`, enlaces/rutas, archivos requeridos, checks Git, identidad de históricos, revisión manual de autoridad/decisiones/evidencia. No instalar CI ni asumir toolchain Java.
 
+## Spike experimental C2-L7 — 2026-10-24
+
+`EXPERIMENTAL_NOT_RATIFIED`, sólo rama local `spike/level-txt-c2-l7-r1`, base `5bf6b6524251aee00788be4ae37ade623f4dc745`. Pruebas ejecutadas sobre el contenido modificado real del worktree antes del commit; SHA final en la entrega y correspondencia de blobs comprobada al confirmar. No atribuir las pruebas al HEAD antiguo sin sus modificaciones.
+
+Ubuntu/Linux, OpenJDK `java`/`javac` 17.0.20.1, release 17, C.utf8, UTF-8, `-Xlint:all -Werror`: **Loading 40/40, Movement 31/31, C2 32/32, Desktop headless 16/16 PASS**, compilaciones y suites con salida 0. Core sólo `java.base`; desktop se compiló aparte con `java.base,java.desktop` y `java.awt.headless=true`. La JVM emitió un aviso de bloqueo de su archivo de métricas `hsperfdata` durante las compilaciones simultáneas; no fue un warning de fuente de javac ni un fallo de compilación/test. Temporales propios de clases/argfiles/tests eliminados. No se ejecutaron Windows, macOS ni GUI interactiva; no se ratifican gramática, Java/build o código.
+
+Los 40 tests históricos y los runners se conservan. `C2LevelLoadingTest` es una suite **independiente**: compilarla no la ejecuta y no cambia los totales 40/31 esperados por la regresión PowerShell. Desde la raíz, con `SPIKE_JDK_HOME` apuntando a un JDK completo existente:
+
+```bash
+export SPIKE_JDK_HOME='<directorio-del-JDK-verificado>'
+LC_ALL=C.utf8 bash scripts/test-level-loading.sh --movement
+(
+    set -euo pipefail
+    c2_temp="$(mktemp -d /tmp/sokoban-c2-l7.XXXXXXXX)"
+    trap 'find "$c2_temp" -type f -delete; find "$c2_temp" -depth -type d -empty -delete' EXIT
+    mkdir "$c2_temp/classes"
+    find src/main/java/ar/edu/uade/sokoban/level src/main/java/ar/edu/uade/sokoban/movement \
+        src/test/java/ar/edu/uade/sokoban/level src/test/java/ar/edu/uade/sokoban/movement \
+        -name '*.java' -type f | LC_ALL=C sort > "$c2_temp/sources"
+    "$SPIKE_JDK_HOME/bin/javac" --release 17 --limit-modules java.base \
+        -encoding UTF-8 -Xlint:all -Werror -d "$c2_temp/classes" @"$c2_temp/sources"
+    "$SPIKE_JDK_HOME/bin/java" --limit-modules java.base -Djava.io.tmpdir="$c2_temp" \
+        -cp "$c2_temp/classes" ar.edu.uade.sokoban.level.C2LevelLoadingTest src/test/resources/levels
+)
+```
+
+Desktop: se usó el [procedimiento Linux existente](../experiments/SWING_VERTICAL_SLICE_V1.md#recuperación-linux-r2--2026-10-21), sin modificar Swing ni su suite. C2 prueba aliases/formas largas, tokenización, dimensiones lógicas, límite experimental de 128 caracteres ASCII por token, fallos tardíos, UTF-8/BOM por Loader y cargas independientes. `parse(String)` conserva la ausencia de techo de bytes; Loader sigue limitando 65.536. Header/versión inválidos no vuelven a legacy; `[attributes]` debe estar vacío. Ninguna entidad especial se degrada a BOX/FLOOR.
+
 ## Pruebas ejecutables del experimento local R1
 
 La tabla anterior conserva los gates de producto final. El incremento de carga ensayó un contrato **experimental** sin cerrar OQ-08/OQ-11. [LEVEL_LOADING_R1](../experiments/LEVEL_LOADING_R1.md) registra las ejecuciones históricas de Level Loading R3 de 38 casos y R4 de 40 casos PASS / 0 FAIL en JDK 17 y JDK 26 con archivos reales, UTF-8/EOL, dimensiones, jugadores, errores, determinismo, no publicación parcial, aislamiento e independencia de Swing. Comando: `SPIKE_JDK_HOME='<directorio-del-JDK>' bash scripts/test-level-loading.sh`.
