@@ -1,6 +1,6 @@
 # Índice de rehidratación
 
-AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5) y #10 (continuidad) están integrados.
+AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental) están integrados.
 
 ## Ruta principal
 
@@ -15,6 +15,7 @@ AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ru
 | 7 | ¿Dónde están pruebas y evidencia? | [TEST_STRATEGY](../testing/TEST_STRATEGY.md), [tests core](../../src/test/java), [tests desktop](../../src/desktop-test/java), [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md) |
 | 8 | ¿Qué recursos existen y qué derechos faltan? | [Manifiesto de 43 recursos](../punto5/ASSETS_REGISTRO_SHA256.csv), [ASSET_POLICY](../assets/ASSET_POLICY.md), [IA/licencias](../punto5/USO_IA_Y_LICENCIAS.md) |
 | 9 | ¿Qué sigue y cómo mantener la información? | [TODO](../../TODO.md), [FRESHNESS_POLICY](FRESHNESS_POLICY.md), [SOURCE_REGISTRY](SOURCE_REGISTRY.md) |
+| 10 | ¿Qué contrato TXT se propone para Fragile y qué falta ratificar? | [FRAGILE_TXT_CONTRACT_PROPOSAL](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) |
 
 El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente dominio TXT/niveles requiere revisar el contrato y su integración futura con el equipo. E01/E02 no fijan sintaxis ni rangos. E04/E08 requieren revisión normativa. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
 

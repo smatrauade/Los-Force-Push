@@ -102,6 +102,8 @@ El próximo paso TXT/niveles es revisar el contrato experimental con el equipo y
 
 ## Prototipo experimental de atributos individuales
 
+Para evaluar sintaxis, validaciones y los detalles pendientes de E01/E02 sin atribuir aprobación del equipo, consultar la [propuesta de contrato TXT Fragile](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md).
+
 ExperimentalFragileParser produce ExperimentalFragileLevel: un Board plantilla con celdas frágiles vacías y una lista inmutable de ID, posición y resistencia inicial. No es un Level jugable. Se conserva piso o destino y no se convierte Fragile en caja normal.
 
 ~~~text

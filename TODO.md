@@ -15,7 +15,7 @@ Revisado 28/10/2026. PR #8 (TXT C2-L7) y #9 (Swing pixel art) están integrados;
 
 ## Próximo dominio TXT/niveles
 
-**Contrato experimental de atributos individuales.** Revisar el prototipo inmutable y especificar su integración futura sin habilitar gameplay ni ratificar límites por inferencia.
+**Contrato experimental de atributos individuales.** Existe una [propuesta verificable para OQ-06/OQ-08](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), pendiente de acuerdo del equipo. Revisar el prototipo inmutable y especificar su integración futura sin habilitar gameplay ni ratificar límites por inferencia.
 
 - [ ] Definir sintaxis, rangos, errores y ejemplos de resistencia individual aceptada en E02, preservando la disposición E01.
 - [ ] Definir IDs, cardinalidad, ocupación al cerrar y restauración Lock↔Walls (OQ-07).
