@@ -21,3 +21,5 @@ Los casos futuros y enlaces RF están en [TRACEABILITY_MATRIX](../traceability/T
 Builder frente a construcción directa, Terrain/Occupant, herencia/composición, Memento, Observer, Strategy y Singleton/audio conservan sus estados técnicos: votos de reglas no los ratifican. La cápsula anterior usa OQ-001…OQ-012 con otra numeración; mapear por tema y mantener los IDs vivos aquí. Singleton corresponde a D-016.
 
 Para cerrar **un detalle restante**, registrar fuente/autoridad, quién decide, fecha, alcance, alternativa, consecuencias y ejemplos de aceptación; actualizar DECISION_LOG y trazabilidad. No reabrir por defecto el aspecto ya aprobado por mayoría ni implementar reglas en esta misión.
+
+Para OQ-06 y la porción Fragile de OQ-08, usar la [propuesta de contrato TXT Fragile](FRAGILE_TXT_CONTRACT_PROPOSAL.md) como insumo técnico `TEAM-PROPOSAL`, no como decisión aceptada. Los estados `PENDING_DETAILS` no cambian sin ratificación explícita.

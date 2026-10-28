@@ -16,8 +16,9 @@ AS_OF = 2026-10-28. Git/GitHub prevalece para el HEAD y los PR actuales. Este do
 | [#9](https://github.com/smatrauade/Los-Force-Push/pull/9) | Swing pixel art / Punto 5 | fafae98642cefd38e466c689b3c8a16825773738 |
 | [#8](https://github.com/smatrauade/Los-Force-Push/pull/8) | TXT C2-L7 | 565376452affa9b2146569e5da27dbfd1ee9d4f0 |
 | [#10](https://github.com/smatrauade/Los-Force-Push/pull/10) | Continuidad y verificador | c6eb755388da142b6c8424d2d46aec2dc03ce622 |
+| [#11](https://github.com/smatrauade/Los-Force-Push/pull/11) | Definición experimental Fragile e invariantes | 986ab548e7955752d3542035d6f9d573534b257d |
 
-PR #8 y #9 están MERGED. El merge de #8 tiene padres fafae98642cefd38e466c689b3c8a16825773738 y 289fef6eda97a2bbd5593c74f06382ae6caf433c; conserva sus dos commits y el árbol 1796932307df319e3636daee942cf49920b4eb05. Las ramas remotas de ambos incrementos se retiraron tras verificar integración y consumidores. Sus commits permanecen en main. Al corte posterior al merge de #8 no había otros PR abiertos; consultar GitHub para cambios posteriores y para el estado del mantenimiento documental.
+Los PR #8, #9, #10 y #11 están MERGED; los SHA de la tabla identifican eventos históricos, no un HEAD permanente. El merge de #8 tiene padres fafae98642cefd38e466c689b3c8a16825773738 y 289fef6eda97a2bbd5593c74f06382ae6caf433c; conserva sus dos commits y el árbol 1796932307df319e3636daee942cf49920b4eb05. Las ramas remotas de ambos incrementos se retiraron tras verificar integración y consumidores. Sus commits permanecen en main. Al corte posterior al merge de #8 no había otros PR abiertos; consultar GitHub para cambios posteriores y para el estado del mantenimiento documental.
 
 ## Software que existe
 
@@ -58,5 +59,7 @@ Próximo dominio TXT/niveles: revisión del contrato experimental de atributos i
 Los informes [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) conservan evidencias fechadas. [HISTORICAL_EVIDENCE](../testing/HISTORICAL_EVIDENCE.md) describe A/B sin fuentes recuperadas, no mecánicas disponibles hoy. Cápsulas y checkpoints permanecen inmutables. [SOURCE_REGISTRY](SOURCE_REGISTRY.md) distingue bytes presentes, fuentes externas y transcripciones TEAM; no atribuir lectura directa de originales académicos ausentes.
 
 ## Prototipo experimental de atributos individuales
+
+Integrado mediante PR #11; conserva sólo la definición inicial, no gameplay. [Propuesta técnica de contrato TXT para Fragile](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) (`TEAM-PROPOSAL`; OQ-06/OQ-08 siguen abiertas).
 
 ExperimentalFragileParser y ExperimentalFragileLevel son un spike no ratificado en el código de este snapshot; consultar Git/PR para el estado de integración. La plantilla espacial deja vacías las celdas frágiles y la lista inmutable conserva ID, posición y resistencia, sin crear un Level jugable con una caja normal sustituta. El agregado valida IDs y posiciones únicos, límites del tablero, piso/destino vacío, no nulos y resistencia positiva; preserva Board y lista inmutables. Loader/Parser públicos siguen rechazando el mismo TXT. [Contrato y límites](../../README.md#prototipo-experimental-de-atributos-individuales); [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06/OQ-08 no se cierran.
