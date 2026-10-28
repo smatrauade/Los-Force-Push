@@ -1,5 +1,22 @@
 # Matriz viva de trazabilidad
 
+## Cobertura integrada tras PR 8 y PR 9 — 2026-10-28
+
+[CURRENT_STATE](../continuity/CURRENT_STATE.md) identifica los merges; [TEST_STRATEGY](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28) registra el árbol probado y la QA anterior a este mantenimiento. La tabla de plan/candidato y las evidencias fechadas que siguen no niegan las capacidades actuales.
+
+| Req | Implementación integrada | Evidencia / límite |
+|---|---|---|
+| RF-01 / RF-02 | LevelLoader/LevelParser/C2LevelParser → LevelBuilder → Level/Board | Legacy 40 y C2 32 PASS en R1; siete combinaciones, rechazo de atributos/especiales; OQ-06/07/08 pendientes |
+| RF-03 / RF-04 | MovementEngine y ArrowBindings/GameController | Movement 31, Desktop 16 y UI Smoke 17 PASS; sin hielo ni cajas especiales |
+| RF-10 | GameWindow/GamePresentation, hooks GameView y UiCommands | HUD y navegación implementados; Undo/Restart/persistencia/Next sólo callbacks opcionales deshabilitados sin servicio |
+| RF-11 | BoardPanel, PixelAssets, PixelTheme y SoundManager/Effect | VisualAssets 44 y manifiesto 43 PASS; 29 sprites base, dos opcionales, 12 WAV; derechos/QA audible pendientes |
+| RF-08 / RF-09 | LevelResult y showVictory como presentación | Pantalla probada con DTO demostrativo; sin detección de victoria, score calculado ni progresión |
+| RT-01 / RT-03 | Runners core/desktop separados, UML implementado actualizado | Release 17 provisional, java.base/java.desktop; Java/build y ratificación pendientes |
+| RT-02 / RT-04 | Índices, README, contratos de módulos, manifiesto y declaración de IA | Clon autocontenido para el subconjunto; StarUML .mdj, entrega y revisión del equipo pendientes |
+
+Las suites anteriores son evidencia R1; R2 ejecuta la regresión del verificador y controles documentales. No se suman repeticiones CLI/C2 como nuevos casos Java. Los controles de integridad no convierten RF-11 ni otros requisitos completos en DONE.
+
+
 Revisado 2026-10-23 (mapa de decisiones TEAM; evidencia ejecutada anterior preservada). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
 
 | Req | Responsabilidad / UML candidato | Principio/patrón candidato | Prueba prevista / historial | Decisiones abiertas |
@@ -27,7 +44,7 @@ Para marcar DONE: requisito → decisión/autoridad → responsabilidad → impl
 
 ## Evidencia local R1, sin DONE productivo
 
-Actualización local 24/10, RF-02 **PARTIAL**: [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) delega sólo el prefijo reservado a [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java). [C2LevelLoadingTest](../../src/test/java/ar/edu/uade/sokoban/level/C2LevelLoadingTest.java), 32 casos ejecutados, cubre equivalencia de las siete combinaciones, estructura/cuotas, errores, recarga y rechazo de especiales/atributos sin publicación parcial. [Evidencia y comandos](../testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24). Es un spike `EXPERIMENTAL_NOT_RATIFIED`, en rama experimental y sin integración en main; no implementa E02 ni cierra OQ-06/07/08/11. Los UML se conservan y no se presentan como diagramas nuevos del helper.
+Actualización local 24/10, RF-02 **PARTIAL**: [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) delega sólo el prefijo reservado a [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java). [C2LevelLoadingTest](../../src/test/java/ar/edu/uade/sokoban/level/C2LevelLoadingTest.java), 32 casos ejecutados, cubre equivalencia de las siete combinaciones, estructura/cuotas, errores, recarga y rechazo de especiales/atributos sin publicación parcial. [Evidencia y comandos](../testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24). Es un spike `EXPERIMENTAL_NOT_RATIFIED`, integrado posteriormente por PR #8; no implementa E02 ni cierra OQ-06/07/08/11. En el corte del 24/10 los UML no incorporaban el helper; la revision integrada del 28/10 lo incluye en el diagrama de Loading, sin ratificar el candidato.
 
 | Requisito | Implementación experimental | Evidencia actual / límite |
 |---|---|---|

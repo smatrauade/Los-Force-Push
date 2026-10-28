@@ -1,21 +1,35 @@
 # Estado de UML y StarUML
 
-`LAST_REVIEWED = 2026-10-21`, `STARUML_DELIVERABLE = PENDING`.
+`LAST_REVIEWED = 2026-10-28`, `STARUML_DELIVERABLE = PENDING`.
 
 La entrega exige un diagrama de clases en **StarUML**. No hay `.mdj` versionado ni se afirma haber abierto StarUML. PlantUML facilita revisión/versionado y no sustituye ese entregable.
+
+## Reconciliacion tras PR #8/#9 — 28/10/2026
+
+Los diagramas de implementacion de Loading y Swing se actualizaron para C2LevelParser,
+PixelAssets, PixelTheme, SoundManager/Effect, UiCommands, LevelResult y hooks default de
+GameView. El diagrama Movement conserva sus bytes: no cambio ese contrato.
+El candidato integral conserva su hash historico y no representa clases implementadas
+por inferencia. SoundManager desktop es por ventana, no el Singleton propuesto;
+LevelResult desktop solo muestra datos calculados por un futuro servicio.
+
+La evidencia de validacion R3 que sigue corresponde a los diagramas del 21/10,
+no certifica estos cambios. La comprobacion nueva de sintaxis se registra en
+[TEST_STRATEGY](../../testing/TEST_STRATEGY.md). Sigue pendiente crear/revisar el .mdj
+en StarUML; ni un render ni el compilador de PlantUML lo sustituyen.
 
 ## Alcance de los diagramas
 
 | Diagrama | Clasificación | Alcance |
 |---|---|---|
-| [level-loading-spike-v1.puml](level-loading-spike-v1.puml) | AS_IMPLEMENTED | Contratos y asociaciones del cargador experimental, Board inmutable y Builder concreto interno |
+| [level-loading-spike-v1.puml](level-loading-spike-v1.puml) | AS_IMPLEMENTED | Contratos legacy/C2-L7, C2LevelParser interno, Board inmutable y Builder concreto |
 | [movement-core-spike-v1.puml](movement-core-spike-v1.puml) | AS_IMPLEMENTED | Motor sin estado, Direction, MoveResult y referencias inmutables al core |
-| [swing-playable-spike-v1.puml](swing-playable-spike-v1.puml) | AS_IMPLEMENTED | Coordinación MVC, GameView/GameWindow, BoardPanel, bindings y Board compartido |
+| [swing-playable-spike-v1.puml](swing-playable-spike-v1.puml) | AS_IMPLEMENTED | MVC pixel art, hooks GameView, recursos, audio y callbacks; Board compartido |
 | [sokoban-candidate.puml](sokoban-candidate.puml) | TO_BE / CANDIDATE | Modelo integral v0.5 y decisiones pendientes; no representa toda la implementación actual |
 
 El candidato v0.5 estaba en el ZIP: SHA-256 `07e86f32bc2ea5c7091508698b415efbf18e9bce45464bb477cb154e5a268901`, preservado byte a byte. La cápsula histórica también contiene el source. Sus títulos, fechas y participantes no significan aprobación actual.
 
-GameSession, cajas especiales, Memento, Observer, Strategy, audio y progresión pertenecen al candidato, no al incremento Swing implementado. Herencia, interfaces y firmas candidatas siguen revisables; SoundManager es propuesto y SessionMetrics no está ratificado. No hay extras definitivas modeladas.
+GameSession, cajas especiales, Memento, Observer, Strategy y progresion siguen siendo candidatos. Audio de presentacion ya esta implementado por SoundManager; el Singleton del candidato sigue propuesto. Herencia, interfaces y firmas candidatas siguen revisables; SessionMetrics no esta ratificado. No hay extras definitivas modeladas.
 
 ## Validación por iteración
 

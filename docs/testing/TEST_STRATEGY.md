@@ -1,5 +1,54 @@
 # Estrategia de pruebas y evidencia experimental
 
+## QA combinado PR 8 y PR 9 — 2026-10-28
+
+**Evidencia anterior a este mantenimiento**, ejecutada en SOKOBAN_POST_PR9_INTEGRATION_R1 por Codex sobre la referencia de merge de prueba 99783067a51dea8867924a629daf7fb017cae5ff y su árbol 1796932307df319e3636daee942cf49920b4eb05. Padres: main fafae98642cefd38e466c689b3c8a16825773738 y PR #8 289fef6eda97a2bbd5593c74f06382ae6caf433c. El merge real de #8, 565376452affa9b2146569e5da27dbfd1ee9d4f0, conserva exactamente ese árbol; la equivalencia se comprobó en R2, no se atribuye otra ejecución funcional al merge.
+
+Windows nativo, Temurin java/javac 21.0.12.1, --release 17, -encoding UTF-8, -Xlint:all -Werror; core sólo java.base y desktop java.base,java.desktop. Exportación limpia de Git, sin clases previas, ZIP originales ni rutas privadas. Los 130 archivos exportados coincidieron con blobs usando core.autocrlf=false.
+
+| Comando/procedimiento ejecutado en R1 | Resultado | Exit |
+|---|---|---|
+| powershell -NoProfile -File scripts/test-level-loading.ps1 -IncludeMovement | Loading 40/40 y Movement 31/31 | 0 |
+| Compilación core estricta y C2LevelLoadingTest, con fixtures src/test/resources/levels | C2 32/32 | 0 |
+| powershell -NoProfile -File scripts/run-swing.ps1 -Test | Desktop 16/16, VisualAssets 44/44 | 0 |
+| powershell -NoProfile -File scripts/run-swing.ps1 -UiTest | UI Smoke 17/17, ventana Windows automatizada | 0 |
+| powershell -NoProfile -File scripts/test-level-loading-arguments.ps1 | CLI 18/18 entre PS5.1 y PS7 | 0 |
+| SHA-256 del manifiesto, cabeceras PNG y decodificación WAV | 43/43; 31 PNG y 12 WAV | 0 |
+| Suites DesktopIntegrationTest y DesktopVisualAssetsTest con demo equivalente escrito como C2 | Repetición 16/16 y 44/44; Loader → GameController → Board/render | 0 |
+
+Los 44 controles de VisualAssets son 29 sprites base + 12 WAV + tres controles de panel/escala. Las dos variantes opcionales se incluyen en el manifiesto de 43 recursos y su validación de formato/hash. Las repeticiones C2 y CLI no suman nuevos casos Java únicos.
+
+NOT_RUN en R1: interacción manual nueva, escucha de altavoces, GUI Linux y macOS. Xvfb no estaba instalado. La reproducción no prueba derechos CC0 ni ratifica gramática, patrones, OQ o aceptación grupal. Logs/capturas completos no están versionados; el registro normalizado identifica comandos, árbol y límites.
+
+## Verificador del repositorio — mantenimiento R2, 2026-10-28
+
+Base integrada: 565376452affa9b2146569e5da27dbfd1ee9d4f0, árbol funcional citado arriba. Esta misión cambia documentación/UML y verificación, **cero archivos del juego, tests Java, recursos o runners funcionales**. El SHA final de mantenimiento se obtiene del historial/PR; no se inserta dentro del documento que lo contiene.
+
+El verificador es de sólo lectura. Selecciona Python 3.9+ ya instalado, primero python3 y luego python; necesita Git y Bash. Inspecciona indexados y untracked, incluidos ignorados, para que .gitignore no oculte residuos. Mantiene UTF-8 estricto, escaneo de secretos, enlaces, cuotas de 10 MiB y allowlist histórica de bootstrap. PNG/WAV se admiten sólo en las rutas autorizadas, con nombre/hash/manifiesto únicos, formato válido y detección de faltantes/no registrados. PNG verifica chunks/CRC y descompresión acotada; WAV verifica RIFF/PCM y longitud. El CSV no acredita licencias.
+
+~~~bash
+bash scripts/verify-repo-readonly.sh
+# Tras commit, en checkout limpio:
+bash scripts/verify-repo-readonly.sh --require-clean
+python3 -B scripts/test-verify-repo-readonly.py
+~~~
+
+Git Bash/Windows puede usar python. Desde PowerShell, seleccionar el Bash real si PATH apunta a WSL:
+
+~~~powershell
+python -B ./scripts/test-verify-repo-readonly.py --bash 'C:/Program Files/Git/bin/bash.exe'
+~~~
+
+La [regresión versionada](../../scripts/test-verify-repo-readonly.py) ejecuta el script real en copias Git temporales: **16 escenarios, dos positivos y 14 negativos**. Cubre PNG truncado/CRC corrupto con hash actualizado, WAV inválido con hash actualizado, hash distinto, manifiesto duplicado, faltante/no registrado, binario fuera de ruta/desconocido, texto UTF-8 inválido, enlace roto, residuo ignorado y patrón sintético de secreto. Prueba además el bootstrap histórico (exportación del merge #1 con el verificador actual trasplantado) y el rechazo de un untracked fuera de ese alcance. No modifica históricos ni utiliza secretos reales.
+
+Ejecución nueva R2: **16/16 PASS, exit 0 en Git Bash/Windows con Python 3.10 y en Ubuntu 24.04 WSL con Bash 5.2, Git 2.43 y Python 3.12.3**. Cada negativo exige exit no cero y la categoría de error esperada; los positivos exigen exit 0. No es una nueva ejecución de las suites funcionales. macOS del verificador: NOT_RUN; las dependencias son biblioteca estándar Python/Git/Bash.
+
+Bash -n y el parseo AST de ambos bloques Python: PASS. PlantUML instalado, con Java 21 y -checkonly sobre los dos diagramas modificados: exit 0. Se comprobó sintaxis; no se afirma render nuevo ni validación en StarUML. Las fuentes/tests Java, recursos, runners funcionales, manifiesto y snapshots históricos permanecen idénticos a la base integrada.
+
+## Lectura de los registros anteriores
+
+Los apartados siguientes conservan el plan de producto y las evidencias de sus fechas. Los estados operativos antiguos de ramas/PR y las menciones a placeholders/audio ausente corresponden a esos baselines. Para capacidades integradas actuales ver [CURRENT_STATE](../continuity/CURRENT_STATE.md), [README](../../README.md) y [contratos Punto 5](../punto5/INTEGRACION_EQUIPO.md).
+
 Revisado 2026-10-21 (recuperación Swing R2 y revisión de consistencia R3). El snapshot contiene 40 casos de Level Loading y 31 de movimiento; la base histórica del bootstrap precede a esas suites. La tabla siguiente conserva el **plan de aceptación del producto completo**, no resultados ni negación de la cobertura parcial ejecutable descrita después. Herramienta/framework y Java definitivos dependen de OQ-11. Core se prueba sin Swing.
 
 | Área | Casos previstos | Gate |

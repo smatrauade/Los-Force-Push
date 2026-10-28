@@ -1,5 +1,5 @@
 @startuml
-title Level loading R1 — experimento local, no ratificado
+title Loading / C2-L7 integrado — experimental, revision 2026-10-28
 hide empty members
 package ar.edu.uade.sokoban.level {
   class Position <<record>> {
@@ -48,6 +48,9 @@ package ar.edu.uade.sokoban.level {
   class LevelParser {
     +parse(text : String) : Level
   }
+  class C2LevelParser <<internal stateless>> {
+    {static} ~parse(text : String) : Level
+  }
   class LevelLoader {
     {static} +MAX_FILE_BYTES : int = 65536
     -parser : LevelParser
@@ -59,7 +62,11 @@ package ar.edu.uade.sokoban.level {
 class "IllegalArgumentException (JDK)" as IllegalArgumentException
 IllegalArgumentException <|-- LevelFormatException
 LevelLoader --> LevelParser
-LevelParser ..> LevelBuilder : per load
+LevelParser ..> LevelBuilder : legacy per load
+LevelParser ..> C2LevelParser : reserved prefix
+C2LevelParser ..> LevelBuilder : per C2 load
+C2LevelParser ..> Cell : seven combinations
+C2LevelParser ..> LevelFormatException
 LevelParser ..> Cell : decodes
 LevelBuilder ..> Level : assembles
 LevelBuilder ..> Board : validates on construction
@@ -78,12 +85,13 @@ D-011 remains PREFERRED. Direct construction stays an alternative.
 end note
 note bottom of Level
 Immutable initial product only; no gameplay or Swing.
-OQ-08 / OQ-11 remain OPEN. Separate from integral candidate v0.5.
+OQ-08 has pending details; OQ-11 remains OPEN. Separate from integral candidate v0.5.
 Record constructors validate values; accessors expose immutable data.
 Associations do not require exclusive identity ownership.
 end note
 note bottom of LevelParser
-Early dimensions/rectangularity checks bound assembly work.
+Legacy dimensions / C2 logical dimensions bound assembly work.
+C2 attributes/special entities are rejected; grammar not ratified.
 Board keeps the same final invariants for direct construction.
 end note
 @enduml

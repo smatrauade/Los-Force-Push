@@ -1,6 +1,6 @@
 # Contrato operativo para personas y agentes
 
-`LAST_REVIEWED = 2026-10-23` (autoridad canónica de acuerdos mayoritarios y pendientes).
+`LAST_REVIEWED = 2026-10-28` (continuidad tras integrar TXT C2-L7 y Swing pixel art; autoridad de reglas sin cambios).
 
 ## Alcance y autoridad
 
@@ -22,7 +22,9 @@ Leer este contrato y el [índice de rehidratación](docs/continuity/REHYDRATION_
 6. `TODO.md` y `docs/continuity/FRESHNESS_POLICY.md`.
 7. `docs/continuity/SOURCE_REGISTRY.md` si la tarea depende de una fuente.
 
-Contrastar HEAD, commits posteriores, PRs y archivos vivos. El PR #5 está integrado; [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) identifica el merge y el siguiente gate de revisión humana posterior. Una cápsula o checkpoint no representa el HEAD actual ni concede autorización a otra tarea. Para la evidencia Windows previa al merge leer además [Windows PR #5](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md) y su [JSON](docs/continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json), distinguiendo el commit del código probado del nuevo commit documental.
+Contrastar HEAD, commits posteriores, PRs y archivos vivos. Los PR #8 (C2-L7) y #9 (Punto 5) están integrados; [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) identifica sus merges históricos. Leer además los [contratos del Punto 5](docs/punto5/INTEGRACION_EQUIPO.md), su [manifiesto](docs/punto5/ASSETS_REGISTRO_SHA256.csv) y [derechos pendientes](docs/punto5/USO_IA_Y_LICENCIAS.md). Una cápsula o checkpoint no representa HEAD ni concede autorización. La QA Windows previa a PR #5 se consulta sólo para historia/procedencia, no como ruta principal del software actual.
+
+La implementación se localiza en `src/main/java` y `src/desktop/java`; [README](README.md) y [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contienen comandos actuales. C2 sólo acepta las siete combinaciones existentes y rechaza atributos/especiales; el siguiente dominio TXT/niveles es representación de atributos individuales, con sintaxis/rangos/errores aún por especificar. No inferir mecánicas del nombre de un sprite o de un callback de `UiCommands`.
 
 
 ## Gate de rehidratación verificable
