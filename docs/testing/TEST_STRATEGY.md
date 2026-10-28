@@ -231,3 +231,34 @@ R3 sólo corrige documentación. La evidencia de esa exportación se conserva pa
 - GUI observada realmente por agente con capturas: movimiento, empujes, bloqueo, contadores, carga de TXT externo Unicode válido, error por inválido y conservación del nivel previo; cierre exit 0. No inferir interacción de pintura headless.
 - Dos worktrees históricos y contenido del clone reportados intactos; GitHub sin cambio de HEAD. Logs/capturas originales permanecen fuera de Git; esta rama contiene resumen/trazabilidad, no una nueva reejecución.
 - `NOT_RUN`: GUI Linux/macOS, macOS nativo y aceptación del producto completo. Al corte de aquella QA, PR #5 estaba Draft; su merge posterior está en [CURRENT_STATE](../continuity/CURRENT_STATE.md). Siguen pendientes ratificación académica, Java/build definitivos, `.mdj` StarUML y OQ-01…OQ-11.
+
+## Prototipo experimental de atributos individuales
+
+Sobre la rama spike basada en c6eb755388da142b6c8424d2d46aec2dc03ce622, Windows y Temurin 21.0.12.1, compilación UTF-8 --release 17 --limit-modules java.base -Xlint:all -Werror: ExperimentalFragileParserTest 22/22 PASS, exit 0. Compilación independiente en temporal nuevo; LevelLoadingTest 40, MovementTest 31, C2LevelLoadingTest 32, DesktopIntegrationTest 16 y DesktopVisualAssetsTest 44 también PASS, exit 0. Las suites existentes conservan sus contadores. Desktop usa java.base,java.desktop. No se ejecutó GUI manual ni se cambió Swing.
+
+El test independiente está en src/test/java/ar/edu/uade/sokoban/level/ExperimentalFragileParserTest.java. Para reproducirlo, compilar las fuentes level/movement y sus tests en un directorio temporal con las opciones estrictas indicadas y ejecutar ar.edu.uade.sokoban.level.ExperimentalFragileParserTest. El runner core compila esta clase pero no la ejecuta automáticamente. El mismo TXT especial se rechaza por LevelLoader; la representación es experimental y no habilita mecánicas.
+
+Windows, desde la raíz y con SPIKE_JDK_HOME apuntando a un JDK completo:
+
+~~~powershell
+$owned = Join-Path ([IO.Path]::GetTempPath()) ('sokoban-fragile-' + [Guid]::NewGuid())
+New-Item -ItemType Directory -Path $owned | Out-Null
+try {
+    $sources = Get-ChildItem src/main/java,src/test/java -Recurse -Filter '*.java' | Sort-Object FullName
+    $lines = [string[]]@($sources | ForEach-Object { '"' + $_.FullName.Replace('\','/') + '"' })
+    $argfile = Join-Path $owned 'sources'
+    [IO.File]::WriteAllLines($argfile, $lines, (New-Object Text.UTF8Encoding($false)))
+    & "$env:SPIKE_JDK_HOME/bin/javac.exe" '-J-Dfile.encoding=UTF-8' --release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror -d $owned ('@' + $argfile)
+    if ($LASTEXITCODE -ne 0) { throw 'Compilación fallida' }
+    & "$env:SPIKE_JDK_HOME/bin/java.exe" --limit-modules java.base -cp $owned ar.edu.uade.sokoban.level.ExperimentalFragileParserTest
+    if ($LASTEXITCODE -ne 0) { throw 'Prueba fallida' }
+} finally {
+    Remove-Item -LiteralPath $owned -Recurse -Force
+}
+~~~
+
+## Validación de invariantes Fragile R5 — 2026-10-28
+
+Sobre el contenido actualizado del PR #11, basado en c6eb755388da142b6c8424d2d46aec2dc03ce622: Windows 11, Temurin 21.0.12.1, release 17, UTF-8, -Xlint:all -Werror. Compilación desde fuentes en temporales nuevos. Loading 40/40, Movement 31/31, C2 32/32, Fragile 31/31, Desktop 16/16, VisualAssets 44/44 y UI Smoke automatizado 17/17: PASS, exit 0. Las 22 pruebas anteriores son evidencia previa, no otro resultado de esta corrección.
+
+El agregado valida directamente nulos, ID ASCII único, posiciones únicas dentro del Board, piso/destino sin ocupante y resistencia positiva; List.copyOf y Board conservan inmutabilidad. Los nueve casos nuevos cubren construcción directa inválida y límites, incluyendo pared, jugador y caja normal. El parser y el modelo comparten la expresión del ID. El comando de la sección anterior ejecuta también estos casos. GUI manual y escucha de audio no fueron ejecutadas. No se ratifica OQ-06/OQ-08 ni se habilita Fragile jugable.

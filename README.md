@@ -4,11 +4,11 @@ Trabajo integrador de **Procesos de Desarrollo de Software, UADE**, profesor Jon
 
 ## Estado integrado
 
-Revisado el **28/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push/pull/9) integra la interfaz pixel art y [PR #8](https://github.com/smatrauade/Los-Force-Push/pull/8) integra TXT C2-L7. Ambos están MERGED. El merge de #8 es 565376452affa9b2146569e5da27dbfd1ee9d4f0; identifica ese evento, no un HEAD permanente. Consultar [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) y Git/GitHub antes de continuar.
+Revisado el **28/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push/pull/9) integra la interfaz pixel art y [PR #8](https://github.com/smatrauade/Los-Force-Push/pull/8) integra TXT C2-L7. Ambos están MERGED, al igual que el [PR #10](https://github.com/smatrauade/Los-Force-Push/pull/10) de continuidad. El merge de #8 es 565376452affa9b2146569e5da27dbfd1ee9d4f0; identifica ese evento, no un HEAD permanente. Consultar [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) y Git/GitHub antes de continuar.
 
 | Área | Implementado | Pendiente |
 |---|---|---|
-| Loading | TXT externo UTF-8 estricto, legacy de siete símbolos y C2-L7 opt-in; Board inmutable | Atributos individuales y entidades especiales; gramática final sin ratificar |
+| Loading | TXT externo UTF-8 estricto, legacy de siete símbolos, C2-L7 opt-in y prototipo aislado de atributos Fragile; Board inmutable | Entidades especiales jugables y gramática final pendientes |
 | Movement | Cuatro direcciones, una caja normal, piso/destino y bloqueos atómicos | Hielo, Fragile, KeyBox, Lock y muros dinámicos |
 | Swing / Punto 5 | Menú, juego, HUD, pausa, opciones, ayuda, zoom, flechas, sprites y SFX | Conectar Undo, Restart, persistencia, victoria/progresión y score a servicios reales |
 | Recursos | 31 PNG (29 base y dos variantes opcionales), 12 WAV versionados | Revisión de derechos/licencias del equipo |
@@ -96,6 +96,22 @@ El verificador no usa red, no escribe, no compila y no modifica Git. Valida text
 
 Leer [AGENTS](AGENTS.md) → [índice de rehidratación](docs/continuity/REHYDRATION_INDEX.md) → requisitos/preguntas → decisiones → arquitectura → pruebas/TODO. Los [contratos del Punto 5](docs/punto5/INTEGRACION_EQUIPO.md) describen los puntos de extensión reales; [ASSET_POLICY](docs/assets/ASSET_POLICY.md) conserva la deuda de licencias.
 
-El siguiente dominio TXT/niveles es **representación de atributos individuales**, especificando sintaxis, rangos y errores de la resistencia individual ya aceptada por el equipo. No habilitar entidades especiales ni resolver E04/E08 por inferencia.
+El próximo paso TXT/niveles es revisar el contrato experimental con el equipo y especificar su integración futura con el modelo jugable, sin cerrar sintaxis ni rangos por inferencia. No habilitar entidades especiales ni resolver E04/E08 por inferencia.
 
 [DECISION_LOG](docs/decisions/DECISION_LOG.md) registra los acuerdos TEAM; [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md) conserva los detalles abiertos. Los votos no ratifican el código, patrones ni UML. Seguir [CONTRIBUTING](CONTRIBUTING.md), trabajar en ramas acotadas y declarar/revisar el apoyo de IA. Cápsulas, checkpoints y experimentos fechados son historia, no instrucciones actuales.
+
+## Prototipo experimental de atributos individuales
+
+ExperimentalFragileParser produce ExperimentalFragileLevel: un Board plantilla con celdas frágiles vacías y una lista inmutable de ID, posición y resistencia inicial. No es un Level jugable. Se conserva piso o destino y no se convierte Fragile en caja normal.
+
+~~~text
+!sokoban-txt 2
+[grid]
+# # # # #
+# @ {floor|fragile:f1} . #
+# # # # #
+[attributes]
+fragile f1 resistance=3
+~~~
+
+También se admite {goal|fragile:f1}. IDs experimentales: ASCII [a-z][a-z0-9_]{0,31}; cada referencia y declaración aparece exactamente una vez. Resistencia decimal positiva entre 1 y 2147483647; texto de hasta 65536 caracteres. Son límites técnicos del prototipo, no decisiones del equipo. No se presupone un máximo de 3. El orden de declaraciones no afecta el resultado. El parser existente valida grilla, tokens y dimensiones. LevelParser.parse y LevelLoader.load siguen rechazando Fragile. El agregado valida IDs y posiciones únicos, coordenadas dentro del tablero y celdas vacías de piso o destino; rechaza nulos y resistencias no positivas. Copia la colección y conserva el Board inmutable. OQ-06 y OQ-08 siguen abiertas en sus detalles. [Pruebas y ejecución](docs/testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).
