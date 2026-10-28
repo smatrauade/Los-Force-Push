@@ -15,7 +15,7 @@ Revisado 28/10/2026. PR #8 (TXT C2-L7) y #9 (Swing pixel art) están integrados;
 
 ## Próximo dominio TXT/niveles
 
-**Representación de atributos individuales.** Especificar sobre la base que ya contiene #8/#9; no reinstalar ni duplicar incrementos.
+**Contrato experimental de atributos individuales.** Revisar el prototipo inmutable y especificar su integración futura sin habilitar gameplay ni ratificar límites por inferencia.
 
 - [ ] Definir sintaxis, rangos, errores y ejemplos de resistencia individual aceptada en E02, preservando la disposición E01.
 - [ ] Definir IDs, cardinalidad, ocupación al cerrar y restauración Lock↔Walls (OQ-07).
@@ -51,7 +51,7 @@ Los acuerdos cerrados y conflictos están sólo en [DECISION_LOG](docs/decisions
 
 Actualizar [fuentes vivas](docs/continuity/FRESHNESS_POLICY.md), pruebas y trazabilidad junto a los cambios; preservar cápsulas/checkpoints. El verificador y su regresión se ejecutan según [README](README.md). Este backlog no autoriza implementar ni publicar por sí mismo.
 
-## Spike de atributos individuales en esta rama
+## Spike experimental de atributos individuales
 
-- [x] Probar representación inmutable experimental para Fragile sin habilitar gameplay; consultar Git para su estado de integración.
+- [x] Probar representación inmutable experimental para Fragile sin habilitar gameplay.
 - [ ] Revisar con el equipo sintaxis, rango y errores del contrato final OQ-06/OQ-08; los límites del spike no son reglas aceptadas.

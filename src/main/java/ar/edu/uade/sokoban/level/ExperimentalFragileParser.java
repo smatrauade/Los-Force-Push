@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /** Isolated C2 experiment. Its output cannot be passed off as a playable Level. */
 public final class ExperimentalFragileParser {
     public static final int MAX_TEXT_CHARS = 65_536;
-    private static final String ID = "[a-z][a-z0-9_]{0,31}";
+    private static final String ID = ExperimentalFragileLevel.ID_REGEX;
     private static final Pattern CELL = Pattern.compile("\\{(floor|goal)\\|fragile:(" + ID + ")\\}");
     private static final Pattern ATTRIBUTE = Pattern.compile("fragile (" + ID + ") resistance=([1-9][0-9]*)");
 

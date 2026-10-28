@@ -1,6 +1,6 @@
 # Índice de rehidratación
 
-AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7) y #9 (Punto 5) están integrados.
+AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5) y #10 (continuidad) están integrados.
 
 ## Ruta principal
 
@@ -10,13 +10,13 @@ AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ru
 | 2 | ¿Qué exige la consigna y qué sigue abierto? | [REQUIREMENTS](../requirements/REQUIREMENTS.md), [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) |
 | 3 | ¿Qué decidió el equipo? | [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); único registro E01–E11 |
 | 4 | ¿Qué está implementado frente a propuesto? | [ARCHITECTURE](../architecture/ARCHITECTURE.md), [RESPONSIBILITIES](../architecture/RESPONSIBILITIES.md), [STARUML_STATUS](../architecture/uml/STARUML_STATUS.md) |
-| 5 | ¿Dónde están código y recursos? | [Loading/C2](../../src/main/java/ar/edu/uade/sokoban/level), [Movement](../../src/main/java/ar/edu/uade/sokoban/movement), [Swing](../../src/desktop/java/ar/edu/uade/sokoban/desktop), [recursos desktop](../../src/desktop/resources) |
+| 5 | ¿Dónde están código y recursos? | [Loading/C2 y prototipo Fragile](../../src/main/java/ar/edu/uade/sokoban/level), [Movement](../../src/main/java/ar/edu/uade/sokoban/movement), [Swing](../../src/desktop/java/ar/edu/uade/sokoban/desktop), [recursos desktop](../../src/desktop/resources) |
 | 6 | ¿Cómo se integran los módulos? | [INTEGRACION_EQUIPO](../punto5/INTEGRACION_EQUIPO.md), [guía desde clon](../punto5/GUIA_INSTALACION_GITHUB_DESKTOP.md) |
 | 7 | ¿Dónde están pruebas y evidencia? | [TEST_STRATEGY](../testing/TEST_STRATEGY.md), [tests core](../../src/test/java), [tests desktop](../../src/desktop-test/java), [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md) |
 | 8 | ¿Qué recursos existen y qué derechos faltan? | [Manifiesto de 43 recursos](../punto5/ASSETS_REGISTRO_SHA256.csv), [ASSET_POLICY](../assets/ASSET_POLICY.md), [IA/licencias](../punto5/USO_IA_Y_LICENCIAS.md) |
 | 9 | ¿Qué sigue y cómo mantener la información? | [TODO](../../TODO.md), [FRESHNESS_POLICY](FRESHNESS_POLICY.md), [SOURCE_REGISTRY](SOURCE_REGISTRY.md) |
 
-Siguiente dominio TXT/niveles: representación de atributos individuales. C2 acepta sólo las siete combinaciones actuales; atributos/especiales aún se rechazan. E01/E02 no fijan sintaxis ni rangos. E04/E08 requieren revisión normativa. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
+El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente dominio TXT/niveles requiere revisar el contrato y su integración futura con el equipo. E01/E02 no fijan sintaxis ni rangos. E04/E08 requieren revisión normativa. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
 
 ## Procedencia y evidencia histórica
 

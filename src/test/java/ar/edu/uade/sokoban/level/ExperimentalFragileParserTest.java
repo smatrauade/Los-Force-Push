@@ -96,6 +96,62 @@ public final class ExperimentalFragileParserTest {
             PARSER.parse(level("@ {floor|fragile:f1}", "fragile f1 resistance=2").replace("\n", "\r\n"));
             reject(level("@", "[extra]"));
         });
+        check("direct model rejects malformed ids", () -> {
+            for (String id : List.of("", "F1", "ñ", "a".repeat(33))) {
+                rejectConstruction(() -> new ExperimentalFragileLevel.FragileBox(id, new Position(0, 1), 1));
+            }
+        });
+        check("direct model rejects duplicate ids", () -> {
+            Board board = PARSER.parse(level("@ _ .", "")).spatialTemplate();
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 2),
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 2), 3))));
+        });
+        check("direct model rejects duplicate positions", () -> {
+            Board board = PARSER.parse(level("@ _", "")).spatialTemplate();
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 2),
+                    new ExperimentalFragileLevel.FragileBox("f2", new Position(0, 1), 3))));
+        });
+        check("direct model rejects out-of-bounds positions", () -> {
+            Board board = PARSER.parse(level("@ _", "")).spatialTemplate();
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 2), 1))));
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(1, 1), 1))));
+        });
+        check("direct model rejects fragile on walls", () -> {
+            Board board = PARSER.parse(level("@ #", "")).spatialTemplate();
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 1))));
+        });
+        check("direct model rejects fragile on player", () -> {
+            Board board = PARSER.parse(level("@ _", "")).spatialTemplate();
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 0), 1))));
+        });
+        check("direct model rejects fragile on normal box", () -> {
+            Board board = PARSER.parse(level("@ $", "")).spatialTemplate();
+            rejectConstruction(() -> new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 1))));
+        });
+        check("direct model accepts independent floor and goal", () -> {
+            Board board = PARSER.parse(level("@ _ .", "")).spatialTemplate();
+            var model = new ExperimentalFragileLevel(board, List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 1),
+                    new ExperimentalFragileLevel.FragileBox("f2", new Position(0, 2), Integer.MAX_VALUE)));
+            assertTrue(model.fragileBoxes().size() == 2);
+        });
+        check("direct model rejects null inputs and nonpositive resistance", () -> {
+            Board board = PARSER.parse(level("@ _", "")).spatialTemplate();
+            expectNull(() -> new ExperimentalFragileLevel.FragileBox(null, new Position(0, 1), 1));
+            expectNull(() -> new ExperimentalFragileLevel.FragileBox("f1", null, 1));
+            expectNull(() -> new ExperimentalFragileLevel(null, List.of()));
+            expectNull(() -> new ExperimentalFragileLevel(board, null));
+            expectNull(() -> new ExperimentalFragileLevel(board, java.util.Arrays.asList((ExperimentalFragileLevel.FragileBox) null)));
+            rejectConstruction(() -> new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 0));
+            rejectConstruction(() -> new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), -1));
+        });
         System.out.println("FRAGILE RESULT: " + passed + " PASS, " + failed + " FAIL");
         if (failed != 0) { System.exit(1); }
     }
@@ -106,6 +162,14 @@ public final class ExperimentalFragileParserTest {
     private static void reject(String text) {
         try { PARSER.parse(text); } catch (LevelFormatException expected) { return; }
         throw new AssertionError("invalid input accepted");
+    }
+    private static void expectNull(Runnable operation) {
+        try { operation.run(); } catch (NullPointerException expected) { return; }
+        throw new AssertionError("null accepted");
+    }
+    private static void rejectConstruction(Runnable operation) {
+        try { operation.run(); } catch (IllegalArgumentException expected) { return; }
+        throw new AssertionError("invalid direct model construction accepted");
     }
     private static void expectUnsupported(Runnable operation) {
         try { operation.run(); } catch (UnsupportedOperationException expected) { return; }

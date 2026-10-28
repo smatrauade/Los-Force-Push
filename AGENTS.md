@@ -24,7 +24,7 @@ Leer este contrato y el [índice de rehidratación](docs/continuity/REHYDRATION_
 
 Contrastar HEAD, commits posteriores, PRs y archivos vivos. Los PR #8 (C2-L7) y #9 (Punto 5) están integrados; [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) identifica sus merges históricos. Leer además los [contratos del Punto 5](docs/punto5/INTEGRACION_EQUIPO.md), su [manifiesto](docs/punto5/ASSETS_REGISTRO_SHA256.csv) y [derechos pendientes](docs/punto5/USO_IA_Y_LICENCIAS.md). Una cápsula o checkpoint no representa HEAD ni concede autorización. La QA Windows previa a PR #5 se consulta sólo para historia/procedencia, no como ruta principal del software actual.
 
-La implementación se localiza en `src/main/java` y `src/desktop/java`; [README](README.md) y [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contienen comandos actuales. C2 sólo acepta las siete combinaciones existentes y rechaza atributos/especiales; el siguiente dominio TXT/niveles es representación de atributos individuales, con sintaxis/rangos/errores aún por especificar. No inferir mecánicas del nombre de un sprite o de un callback de `UiCommands`.
+La implementación se localiza en `src/main/java` y `src/desktop/java`; [README](README.md) y [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contienen comandos actuales. El parser jugable C2 acepta sólo las siete combinaciones existentes y rechaza atributos/especiales. El prototipo ExperimentalFragileParser produce una definición inmutable separada, no jugable; el siguiente trabajo TXT/niveles requiere revisión del contrato e integración futura, con sintaxis/rangos/errores aún sin ratificar. No inferir mecánicas del nombre de un sprite o de un callback de `UiCommands`.
 
 
 ## Gate de rehidratación verificable

@@ -256,3 +256,9 @@ try {
     Remove-Item -LiteralPath $owned -Recurse -Force
 }
 ~~~
+
+## Validación de invariantes Fragile R5 — 2026-10-28
+
+Sobre el contenido actualizado del PR #11, basado en c6eb755388da142b6c8424d2d46aec2dc03ce622: Windows 11, Temurin 21.0.12.1, release 17, UTF-8, -Xlint:all -Werror. Compilación desde fuentes en temporales nuevos. Loading 40/40, Movement 31/31, C2 32/32, Fragile 31/31, Desktop 16/16, VisualAssets 44/44 y UI Smoke automatizado 17/17: PASS, exit 0. Las 22 pruebas anteriores son evidencia previa, no otro resultado de esta corrección.
+
+El agregado valida directamente nulos, ID ASCII único, posiciones únicas dentro del Board, piso/destino sin ocupante y resistencia positiva; List.copyOf y Board conservan inmutabilidad. Los nueve casos nuevos cubren construcción directa inválida y límites, incluyendo pared, jugador y caja normal. El parser y el modelo comparten la expresión del ID. El comando de la sección anterior ejecuta también estos casos. GUI manual y escucha de audio no fueron ejecutadas. No se ratifica OQ-06/OQ-08 ni se habilita Fragile jugable.

@@ -37,6 +37,7 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | Level | Producto inicial válido que contiene Board |
 | LevelBuilder | Acumulación interna por carga y publicación única; sin interfaz Builder/Director extra |
 | LevelParser / C2LevelParser | Selección legacy/C2 e interpretación; C2 interno valida envelope/tokens y rechaza atributos/especiales |
+| ExperimentalFragileParser / ExperimentalFragileLevel | Prototipo aislado: definición inmutable con identidad, posición y resistencia; no es Level jugable |
 | LevelLoader / LevelFormatException | E/S externa limitada, UTF-8 estricto y errores explícitos; sin caché |
 | Direction / MovementEngine / MoveResult | Transición normal MOVED/PUSHED/BLOCKED; motor sin estado ni contadores |
 | GameController | Carga atómica, delegación de movimiento, GamePresentation y eventos onMove; sin reglas/parser/pintura |
