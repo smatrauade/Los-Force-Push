@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-/** Stateless interpreter of the explicitly experimental seven-symbol grammar. */
+/** Legacy interpreter with opt-in C2-L7 support: EXPERIMENTAL_NOT_RATIFIED. */
 public final class LevelParser {
     public Level parse(String text) {
         Objects.requireNonNull(text, "text");
+        if (text.startsWith(C2LevelParser.PREFIX)) {
+            return C2LevelParser.parse(text);
+        }
         if (text.isEmpty()) {
             throw new LevelFormatException("Level text is empty");
         }
