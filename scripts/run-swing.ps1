@@ -2,7 +2,8 @@
 [CmdletBinding()]
 param(
     [string]$LevelPath,
-    [switch]$Test
+    [switch]$Test,
+    [switch]$UiTest
 )
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
@@ -41,7 +42,7 @@ try {
     $classes = Join-Path $runDirectory 'classes'
     New-Item -ItemType Directory -Path $classes | Out-Null
     $sourceRoots = @('src/main/java', 'src/desktop/java')
-    if ($Test) { $sourceRoots += 'src/desktop-test/java' }
+    if ($Test -or $UiTest) { $sourceRoots += 'src/desktop-test/java' }
     $sources = @($sourceRoots | ForEach-Object {
         Get-ChildItem -LiteralPath (Join-Path $root $_) -Recurse -File -Filter '*.java'
     }) | Sort-Object FullName
@@ -52,22 +53,35 @@ try {
     [IO.File]::WriteAllLines($sourceList, $sourceLines, (New-Object Text.UTF8Encoding($false)))
     & $compiler '-J-Dfile.encoding=UTF-8' --release 17 --limit-modules java.base,java.desktop -encoding UTF-8 -Xlint:all -Werror -d $classes ('@' + $sourceList)
     if ($LASTEXITCODE -ne 0) { throw 'Swing compilation failed.' }
-    if ([string]::IsNullOrEmpty($LevelPath)) {
-        $LevelPath = Join-Path $root 'src/desktop/resources/levels/demo.txt'
+    $explicitLevel = -not [string]::IsNullOrEmpty($LevelPath)
+    if ($explicitLevel) {
+        # Resolve relative input against the caller's CWD, not the script directory.
+        $LevelPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($LevelPath)
     }
-    # Resolve relative input against the caller's CWD, not the script directory.
-    $LevelPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($LevelPath)
-    $javaArgs = @('--limit-modules', 'java.base,java.desktop',
-        ('-Djava.io.tmpdir=' + $runDirectory), '-cp', $classes)
+    # Java resources stay on the classpath (sprites + WAVs); no copies in source tree.
+    $resources = Join-Path $root 'src/desktop/resources'
+    $classPath = $classes + [IO.Path]::PathSeparator + $resources
+    $javaArgs = @('-Dfile.encoding=UTF-8', '--limit-modules', 'java.base,java.desktop',
+        ('-Djava.io.tmpdir=' + $runDirectory), ('-Dforcepush.repo.root=' + $root), '-cp', $classPath)
     if ($Test) {
         $javaArgs += @('-Djava.awt.headless=true', 'ar.edu.uade.sokoban.desktop.DesktopIntegrationTest')
         # Tests always verify the versioned demonstration file.
         $LevelPath = Join-Path $root 'src/desktop/resources/levels/demo.txt'
+    } elseif ($UiTest) {
+        $javaArgs += 'ar.edu.uade.sokoban.desktop.DesktopUiSmokeTest'
     } else {
         $javaArgs += 'ar.edu.uade.sokoban.desktop.SwingApplication'
     }
-    & $runtime @javaArgs $LevelPath
+    if ($Test -or ($explicitLevel -and -not $UiTest)) {
+        & $runtime @javaArgs $LevelPath
+    } else {
+        & $runtime @javaArgs
+    }
     if ($LASTEXITCODE -ne 0) { throw 'Swing application/tests failed.' }
+    if ($Test) {
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.DesktopVisualAssetsTest' $LevelPath
+        if ($LASTEXITCODE -ne 0) { throw 'UI asset tests failed.' }
+    }
     $exitCode = 0
 } catch {
     Write-Error -Message $_.Exception.Message -ErrorAction Continue
