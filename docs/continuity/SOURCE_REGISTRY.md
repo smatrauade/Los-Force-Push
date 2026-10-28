@@ -1,5 +1,13 @@
 # Registro de fuentes y disponibilidad
 
+## Disponibilidad integrada — 2026-10-28
+
+PR #9 y #8 están fusionados según Git/GitHub; [CURRENT_STATE](CURRENT_STATE.md) registra los commits de merge. El clon contiene las fuentes Java, tests, runners, 31 PNG y 12 WAV del Punto 5. El [manifiesto canónico](../punto5/ASSETS_REGISTRO_SHA256.csv) identifica sus 43 rutas/hashes/orígenes; no duplicar su tabla. Hay 29 sprites base y dos variantes opcionales. La [declaración de IA/derechos](../punto5/USO_IA_Y_LICENCIAS.md) mantiene la validación CC0/titularidad pendiente del equipo.
+
+La auditoría SOKOBAN_POST_PR9_INTEGRATION_R1 del 28/10 ejecutó QA combinado sobre el árbol 1796932307df319e3636daee942cf49920b4eb05 antes del merge real de #8. Fuente: ejecucion de auditoria por Codex del 28/10, registrada en la entrega R1; comandos/resultados y limites se normalizan en [TEST_STRATEGY](../testing/TEST_STRATEGY.md). No se incorporan logs/capturas externos ni se presenta esa QA como una nueva ejecución funcional del mantenimiento R2. La integridad de los archivos presentes puede volver a comprobarse desde el clon.
+
+Las tablas y secciones fechadas que siguen conservan disponibilidad/procedencia histórica; «assets no disponibles» se refiere al bootstrap, no al árbol integrado actual. Los originales académicos/privados ausentes siguen ausentes. No se modifica la autoridad de las encuestas ni se inventan licencias.
+
 Revisado 2026-10-23 para anexar la procedencia de encuestas. La tabla conserva la disponibilidad al bootstrap del 08/10. Prioridad: consigna → aclaraciones posteriores → oral → cátedra → equipo → bibliografía → GitHub → inferencia. No mezclar rango de autoridad con disponibilidad de bytes.
 
 | Fuente | Disponibilidad actual | Uso / limitación |
@@ -26,7 +34,7 @@ Revisado 2026-10-23 para anexar la procedencia de encuestas. La tabla conserva l
 
 Hash **histórico reportado**, no comprobado hoy, del PDF oficial: `2222cf4ca087946f74a55ea786ca7773a91f42fb5e40c2900cf55b3b51688a49`. Los otros hashes de originales ausentes en la cápsula también son históricos, no integridad comprobada actualmente.
 
-La fecha de la cápsula y sus declaraciones de no autorización reflejan la tarea anterior. En esta integración prevalece la solicitud actual de bootstrap. Las conclusiones nuevas se etiquetan como análisis, no citas inventadas del profesor. No hay libros/PDFs/ZIPs de spikes incorporados.
+La fecha de la cápsula y sus declaraciones de no autorización reflejan la tarea anterior. En la integración histórica del 08/10 prevalecía la solicitud de bootstrap de esa fecha. Las conclusiones nuevas se etiquetan como análisis, no citas inventadas del profesor. No hay libros/PDFs/ZIPs de spikes incorporados.
 
 La cápsula histórica contiene dos saltos duros Markdown con espacios finales intencionales. `.gitattributes` admite esos espacios exclusivamente para ese archivo, para preservar su hash sin desactivar los controles de whitespace del resto.
 
@@ -48,6 +56,6 @@ RAW_SCREENSHOTS = EXTERNAL_PRIVATE
 RAW_VERIFICATION = NOT_PERFORMED_BY_THIS_AGENT
 ```
 
-El solicitante aportó una transcripción revisada de once capturas de detalles de encuesta del 23/10 y confirmó el método de mayoría absoluta del equipo. Esta ejecución leyó esa transcripción, **no** las capturas originales ni el ZIP de WhatsApp. La exportación mencionada contiene preguntas/discusiones pero no votos; no atribuirle los recuentos ni afirmar verificación independiente de imágenes no disponibles.
+El solicitante aportó una transcripción revisada de once capturas de detalles de encuesta del 23/10 y confirmó el método de mayoría absoluta del equipo. La misión documental del 23/10 leyó esa transcripción, **no** las capturas originales ni el ZIP de WhatsApp. La exportación mencionada contiene preguntas/discusiones pero no votos; no atribuirle los recuentos ni afirmar verificación independiente de imágenes no disponibles.
 
 Sólo los agregados anónimos se incorporan a [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el alcance y los pendientes. Las anomalías de selección E04/E05 y la selección múltiple E11 se conservan allí. No se publican originales, datos personales ni hashes de capturas cuyos bytes no se tienen. La fuente TEAM no sustituye el enunciado ni las aclaraciones documentadas de cátedra; no es una prueba del juego, del diseño ni del código. El PDF original no se releyó en esta misión.

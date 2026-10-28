@@ -1,71 +1,53 @@
-# Arquitectura candidata
+# Arquitectura: implementación y candidato
 
-`STATUS = CANDIDATE`, `LAST_REVIEWED = 2026-10-21` (recuperación del subconjunto Swing; sin ratificación). Ninguna clase de este modelo se implementa en el bootstrap. Los roles y firmas están sujetos a ratificación; [DECISION_LOG](../decisions/DECISION_LOG.md) describe alternativas.
+Revisado 28/10/2026 tras PR #8 y #9. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
 
-## Flujo y fronteras
+## Flujo implementado
 
-```text
-Swing View → GameController → GameSession
-                               ├─ MovementEngine
-                               ├─ RestorableLevelState → Board → Cell
-                               ├─ UndoManager / GameMemento
-                               ├─ SessionMetrics (TEAM-PROPOSAL)
-                               └─ ScoreStrategy
-GameController → LevelLoader → LevelRepository + LevelParser
-                                            LevelParser → LevelBuilder → Level
-GameController → LevelCatalog (progresión) / AudioService
-```
+~~~text
+SwingApplication / GameWindow (EDT, GameView)
+  -> GameController -> LevelLoader -> LevelParser
+                                      -> legacy / C2LevelParser -> LevelBuilder -> Level / Board
+                    -> MovementEngine(Board, Direction) -> MoveResult
+  <- GamePresentation(Board inmutable, nombre, moves, pushes)
+  -> BoardPanel -> PixelAssets -> /assets/sprites/*.png
+  -> SoundManager -> /assets/sfx/*.wav
+~~~
 
-Model concentra reglas y estado; View representa y captura entradas; Controller coordina operaciones y resultados. El motor no tiene otra copia del tablero. View consume datos de presentación y no decide reglas inspeccionando subclases. `HudData` contiene nivel, movimientos y empujes; `LevelStats`/`LevelResult` sirven al resumen y cálculo.
+El core no importa Swing ni audio. GameController coordina y conserva una proyección del Board vigente; la vista comparte ese valor inmutable sin duplicar una grilla mutable. No hay GameSession ni loop/polling.
 
-La firma histórica `GameView.render(RestorableLevelState)` es candidata: **no autoriza entregar estado mutable a la UI**. Al implementarla deberá garantizarse lectura segura o sustituirse por proyección/DTO. No se crea otro modelo divergente en View.
+## Loading y C2-L7
 
-## Espacio y cajas
+[LevelLoader](../../src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java) limita lectura a 65.536 bytes y decodifica UTF-8 estricto. [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) selecciona legacy o el helper interno sin estado [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java) mediante el prefijo reservado. Las firmas públicas LevelLoader.load(Path), LevelParser.parse(String) y Level(Board) no cambian.
 
-`Cell = Terrain + Occupant[0..1]` separa suelo de ocupación, evitando `BoxOnGoal` o `PlayerOnIce`. Terrain contempla Floor, Wall, Goal, Ice, LockTile y OpenableWall. Occupant contempla Player y Box, con NormalBox, FragileBox y KeyBox como jerarquía ilustrativa.
+C2 valida header/secciones, tokens ASCII (máximo experimental 128 caracteres), dimensiones lógicas hasta 100×100 y [attributes] vacía. Sólo ofrece las siete combinaciones existentes; rechaza atributos/especiales. parse(String) no impone el techo de bytes de Loader. No hay caché compartida, fallback ante header inválido ni Level parcial.
 
-Polimorfismo es preferido; **herencia frente a composición sigue abierta**. La resistencia es exclusiva de Fragile; no forzar operaciones que rompan LSP en las otras cajas. El resultado de un empuje puede comunicar rotura sin `instanceof` distribuido. Las posiciones, resistencia y estado de muros forman parte del estado restaurable.
+LevelBuilder es concreto, interno y por carga; Board protege también la construcción directa. Builder/directa y Terrain/Occupant son elecciones experimentales/PREFERRED, sin interfaces o Director adicional. [UML implementado](uml/level-loading-spike-v1.puml).
 
-## Carga
+## Movimiento
 
-LevelLoader coordina obtener texto y parsearlo; Repository lee archivos; Parser interpreta sintaxis y puede dirigir pasos; LevelBuilder/SokobanLevelBuilder ensamblan Level. Builder es `PREFERRED`, no `ACCEPTED`: comparar con construcción directa en un spike. Director separado es opcional.
+MovementEngine es un servicio sin estado: Board + Direction → MoveResult. MOVED/PUSHED crean un Board validado nuevo; BLOCKED conserva la misma instancia. Mantiene terreno/cajas/jugador e inmutabilidad de estados anteriores. Sólo piso, destino, pared, límites y caja normal. Copiar/validar cuesta O(alto×ancho) por éxito; no es Memento ni una decisión definitiva sobre el modelo futuro. [UML](uml/movement-core-spike-v1.puml).
 
-No confundir helper que encapsula `new` con Factory Method GoF. Abstract Factory sólo se justifica con familias coherentes de productos; Prototype no tiene problema demostrado de clonación costosa para el loader. El formato TXT sigue abierto; las operaciones Builder del UML son provisionales.
+## Swing y recursos — Punto 5
 
-## Movimiento, Undo, score y progreso
+[GameView](../../src/desktop/java/ar/edu/uade/sokoban/desktop/GameView.java) permite sondas sin JFrame. Conserva render/showLoadError y ofrece métodos default onMove, showVictory, configureUiCommands y playEffect. GameController publica onMove para MOVED/PUSHED/BLOCKED; los bloqueos no cambian proyección ni contadores.
 
-MovementEngine coordina transiciones atómicas con Board y cajas. Los escenarios son movimiento libre, push, hielo, fragile y llave/Observer. No mutar parcialmente ante fallos. Las hipótesis de spikes en escenarios ambiguos no definen reglas oficiales.
+GameWindow representa MENU/GAME/PAUSE/OPTIONS/HELP/FINISH. ArrowBindings entrega Direction; sólo GAME permite mover. BoardPanel representa Board y escala 1x/2x/3x con nearest-neighbor. PixelAssets carga/cacha PNG desde classpath; SoundManager posee clips por ventana, mute y degradación ante dispositivo ausente. No es Singleton ni servicio global del core.
 
-Memento preferido: GameSession es Originator, GameMemento conserva snapshot opaco, UndoManager es Caretaker que almacena Mementos sin manipular estado crudo. Evitar alias mutable entre estado inicial, actual y snapshots. Historial 15, Undo 5 y tres usos consecutivos provienen de requisitos; bordes pendientes OQ-04/OQ-05.
+UiCommands contiene callbacks opcionales de Undo/Restart/Save/Load/Next: null mantiene controles deshabilitados. LevelResult sólo transporta datos finales; showVictory muestra esa información sin calcular score ni detectar victoria. Los nombres futuros contemplados por el renderer son pistas de adaptación, no especificaciones del dominio.
 
-`RestorableLevelState` contiene Board y contadores moves/pushes. `SessionMetrics` con undoUsesTotal/consecutiveUndoUses fuera del snapshot es **TEAM-PROPOSAL**; no obligación ratificada. ScoreStrategy calcula desde LevelStats; fórmula pendiente. GameSession evalúa victoria y genera resumen; Controller coordina el próximo Level mediante LevelCatalog. La interfaz de catálogo debe justificar frontera/variación o simplificarse.
+[INTEGRACION_EQUIPO](../punto5/INTEGRACION_EQUIPO.md) es el contrato entre módulos; [UML desktop implementado](uml/swing-playable-spike-v1.puml). Los [43 recursos](../punto5/ASSETS_REGISTRO_SHA256.csv) están versionados y el runner agrega src/desktop/resources al classpath; licencias pendientes según [ASSET_POLICY](../assets/ASSET_POLICY.md).
 
-## Observer y audio
+La UI opera en EDT. La carga local acotada es síncrona y puede demorar ante E/S lenta; evaluar cancelación/SwingWorker sólo cuando ese escenario se autorice. Runners core limitados a java.base; desktop usa java.base,java.desktop. Release 17 es provisional, OQ-11 sigue OPEN.
 
-LockTile es Subject; LockObserver contrato; OpenableWall observador. La llave sobre cerrojo notifica a muros asociados. Cardinalidad, IDs y permanencia/cierre están `OPEN`; reconstruir suscripciones/estado coherentemente al restaurar, sin notificaciones que alteren el snapshot restaurado.
+## Diseño integral propuesto, sin implementación
 
-Controller depende de AudioService; core independiente de audio global y Swing. SoundManager Singleton aparece en UML como `PROPOSED` y requiere justificar coste de estado global. Adapter no está justificado sin interfaz incompatible. Decorator puede servir a extras combinables sólo tras elegir esas funcionalidades. No hay clases definitivas para extras.
+El candidato incluye GameSession, RestorableLevelState, GameMemento/UndoManager, SessionMetrics, cajas especiales, LockObserver/OpenableWall, ScoreStrategy, LevelCatalog, Repository y AudioService. Esos nombres no implican clases presentes; el SoundManager y LevelResult del desktop son implementaciones de presentación con alcance propio.
 
-## UML y evolución
+- Memento, Observer, Strategy, Builder y fronteras candidatas mantienen sus estados de [DECISION_LOG](../decisions/DECISION_LOG.md); no adoptar interfaces ceremoniales.
+- SessionMetrics fuera del snapshot es TEAM-PROPOSAL; E09/E10 aceptan comportamientos parciales, no esa clase ni una fórmula.
+- La individualidad de resistencia (E02), disposición (E01), cierre (E06) y umbral Undo (E07) ya tienen alcance votado; los detalles permanecen en [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md).
+- E04/E08 requieren compatibilidad normativa. No inferir rotura, consecutividad, ocupación de muros o criterios de victoria desde el UML.
+- El candidato propone polimorfismo de cajas; herencia/composición sigue abierta. No exigir resistencia a todas las cajas ni distribuir instanceof/getClass por la vista.
 
-Se reportó v0.2 → auditoría v0.3 → interacciones v0.4 → candidato v0.5 con Builder. La revisión conceptual corrigió Caretaker acoplado a estado crudo, HUD sin DTO, Controller acoplado a SoundManager, operaciones de Fragile en Box, progresión ausente y agrupación por patrones en lugar de responsabilidades.
-
-El [PlantUML candidato](uml/sokoban-candidate.puml) **estaba disponible en el ZIP**: se preservó byte a byte, no se reconstruyó ni se declara nuevo. Las secuencias revisadas históricamente fueron carga, movimiento, push, hielo, fragile, cerrojo/Observer, Undo, victoria/progresión y Restart. Su validación histórica no equivale a ejecución actual. Ver [STARUML_STATUS](uml/STARUML_STATUS.md).
-
-Java target y build siguen abiertos. El siguiente desarrollo requiere decisiones pertinentes, pruebas del core sin Swing y sincronización de UML/trazabilidad.
-
-## Implementación experimental local R1
-
-Separada del UML integral histórico: [informe y límites](../experiments/LEVEL_LOADING_R1.md), [UML del spike](uml/level-loading-spike-v1.puml). LevelLoader lee bytes UTF-8, LevelParser decodifica, LevelBuilder concreto interno acumula filas por carga y publica Level con Board validado e inmutable. Terrain/Occupant son enums del subconjunto, no la jerarquía definitiva de gameplay. No hay Repository/Director/interfaces adicionales sin variación demostrada. El modelo completo de arriba sigue CANDIDATE; D-011/OQ-08/OQ-11 no están ratificados.
-
-## Movimiento básico experimental R1 — 2026-10-14
-
-[Comparación funcional/runtime y alcance](../experiments/MOVEMENT_R1.md), [UML acotado](uml/movement-core-spike-v1.puml). Movimiento sobre Board inmutable, con Direction y MoveResult; MovementEngine no conserva estado. Cada éxito reconstruye un Board validado y cada bloqueo devuelve la misma instancia. Level conserva su Board cargado inicial. No se duplican posiciones/ocupantes ni se introduce GameState que sólo lo envuelva. El coste O(alto × ancho) y la alternativa runtime encapsulada quedan explícitos para revisar cuando existan otras entidades. Se preserva sin cambios el agregado de Level Loading.
-
-Esta implementación acotada no es el motor integral candidato de arriba: no hay sesión, estado restaurable de estadísticas/cajas especiales, Undo, Observer, score ni Swing. La elección funcional es EXPERIMENTAL por autorización del usuario; no reemplaza decisiones PREFERRED ni ratifica arquitectura. No se implementa Memento por conservar valores previos.
-
-## Integración Swing experimental V1 — 2026-10-15
-
-La [guía del incremento](../experiments/SWING_VERTICAL_SLICE_V1.md) y su [UML acotado](uml/swing-playable-spike-v1.puml) describen las clases reales, separadas del candidato integral. SwingApplication/GameWindow y BoardPanel representan; ArrowBindings captura flechas; GameController coordina LevelLoader y MovementEngine sin replicar reglas. GamePresentation mantiene el Board inmutable del core y contadores demostrativos. GameView se justifica como frontera de presentación probada sin JFrame; no se añade una sesión que duplique Board.
-
-Recuperación R2 sobre main con PR #3/#4 integrados: fuentes desktop separadas y runners core heredados con selección por paquetes, manteniendo java.base en core/tests existentes. No se altera Java ni se adopta un nuevo diseño. UI y callbacks en EDT, sin loop ni polling. Lectura TXT acotada síncrona: un origen lento puede bloquear temporalmente la ventana; evaluar SwingWorker sólo si ese escenario entra en alcance. Los gráficos son placeholders propios. Candidatos/PREFERRED, OQ-08/OQ-11 y aceptación grupal permanecen sin ratificación.
+Siguiente dominio TXT/niveles: representación de atributos individuales con sintaxis/rangos/errores y ejemplos. No ampliar mecánicas en mantenimiento documental. [STARUML_STATUS](uml/STARUML_STATUS.md) separa los diagramas implementados, el candidato preservado y el .mdj pendiente. Los informes de [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) son antecedentes fechados.

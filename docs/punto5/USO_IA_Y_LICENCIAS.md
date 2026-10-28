@@ -13,7 +13,7 @@ Los **12 WAV** son los efectos originales del Punto 5 (PCM 16 bits / 22050 Hz).
 `docs/punto5/generar_assets.py` ahora **solo regenera efectos de sonido**;
 no pisa los PNG finales. El runtime Java no requiere Python ni Pillow.
 
-Las imagenes de `PREVIAS` son muestras visuales, no archivos necesarios
+Las imagenes de `PREVIAS` pertenecen a los ZIP historicos externos, no al clon; son muestras visuales, no archivos necesarios
 para ejecutar el juego. `PANTALLA_JUEGO.png` y `PANTALLA_MENU.png` son vistas
 actualizadas sobre las capturas de la interfaz original; no son evidencia
 de una nueva ejecucion fisica de Swing.

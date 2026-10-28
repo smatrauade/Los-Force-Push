@@ -1,6 +1,13 @@
 # QA del Punto 5 - registro y comprobaciones pendientes
 
-## Evidencia ejecutada sobre copia aislada (no Windows del usuario)
+Revisado 28/10/2026. PR #9 y #8 ya estan integrados. Se ejecuta desde el
+[clon](GUIA_INSTALACION_GITHUB_DESKTOP.md), sin reinstalar ZIP. El
+[QA combinado anterior](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28)
+probo Windows automatizado sobre el arbol integrado: no sustituye este checklist manual.
+El manifiesto actual tiene 43 recursos: 29 sprites base, dos variantes opcionales y 12 WAV.
+Los 44 casos de VisualAssets cubren 29 sprites, 12 WAV y tres controles de panel/escala.
+
+## Evidencia historica de preparacion sobre copia aislada (antes del PR #9)
 
 - JDK observado: OpenJDK 21.0.12.1; compilacion `--release 17`,
   `--limit-modules java.base,java.desktop`, `-Xlint:all -Werror`.
@@ -9,15 +16,15 @@
 - DesktopIntegrationTest: **16 PASS / 0 FAIL**.
 - DesktopVisualAssetsTest: **44 PASS / 0 FAIL** (29 PNG, 12 WAV,
   3 verificaciones de panel/escala).
-- Regeneracion determinista: **41/41 recursos** identicos byte a byte por SHA-256.
+- La preparacion original reporto **41/41 recursos** regenerados; es evidencia historica. El generador actual solo recrea WAV y preserva los PNG finales; no equivale al manifiesto actual de 43.
 - DesktopUiSmokeTest con Xvfb: **17 verificaciones** de menu, navegacion, HUD,
   flechas, pausa, callbacks, controles deshabilitados y victoria demostrativa.
 - Sesion grafica virtual Xvfb: la ventana principal y menu abren y se dibujan;
   capturas disponibles en `PREVIAS` del ZIP.
 - Entorno Linux/UTF-8. Windows fisico, altavoces y accesibilidad manual:
-  **NO PROBADOS**. Deben verificarse antes del PR.
+  **NO PROBADOS** manualmente en esa preparacion. Sigue pendiente la QA manual actual.
 
-## Manual Windows (marcar antes de subir PR)
+## Manual Windows actual (marcar solo despues de ejecutarlo)
 
 - [ ] `run-swing.ps1` abre el menu; `NUEVA PARTIDA / DEMO` carga `demo.txt`.
 - [ ] El tablero usa sprites en lugar de formas Swing.
@@ -43,7 +50,7 @@
 
 ## Regresion y colaboracion
 
-No alterar `src/main/java` del motor en este PR. Los ultimos acuerdos de reglas
+No alterar `src/main/java` del motor en una tarea exclusiva de presentacion. Los ultimos acuerdos de reglas
 pueden quedar abiertos; este incremento no debe crear nuevos contratos normativos.
 Si hubo cambios concurrentes en los 5 archivos reemplazados, reconciliar el diff
 manualmente y volver a ejecutar las suites. No declarar que el juego ya cumple

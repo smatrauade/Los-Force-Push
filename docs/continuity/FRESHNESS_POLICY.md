@@ -1,6 +1,6 @@
 # Política anti-desactualización
 
-`LAST_REVIEWED = 2026-10-23` (trazabilidad de mayoría por alcance; política original 08/10). CURRENT_STATE, DECISION_LOG, TODO, arquitectura y UML son documentos **vivos**. CAPSULES son snapshots **históricos inmutables**. El repositorio debe permitir continuar sin chats anteriores.
+`LAST_REVIEWED = 2026-10-28` (trazabilidad de mayoría por alcance; política original 08/10). CURRENT_STATE, DECISION_LOG, TODO, arquitectura y UML son documentos **vivos**. CAPSULES son snapshots **históricos inmutables**. El repositorio debe permitir continuar sin chats anteriores.
 
 ## Matriz de mantenimiento
 
@@ -14,6 +14,7 @@
 | Nuevo material de cátedra | BIBLIOGRAPHY, SOURCE_REGISTRY, DECISION_LOG si impacta |
 | Nueva referencia GitHub utilizada | GITHUB_REFERENCES y SOURCE_REGISTRY; revalidar licencia si se reutiliza |
 | Nuevo asset | ASSET_POLICY y registro individual de licencias, junto al archivo |
+| Integración TXT/Swing o cambio del manifiesto | CURRENT_STATE, README, índices, contratos Punto 5 y pruebas; validar rutas/formato/hashes con el verificador sin convertir integridad en aprobación de derechos |
 | Cambio de toolchain | README, CURRENT_STATE, configuración y TEST_STRATEGY |
 | Nuevo hito | Actualizar vivos, validar y crear nueva cápsula si aporta valor; preservar anteriores |
 

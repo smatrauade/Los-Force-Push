@@ -1,33 +1,17 @@
 # Índice documental
 
-`LAST_REVIEWED = 2026-10-23` (navegación de decisiones mayoritarias).
-
-Empezar por [AGENTS](../AGENTS.md) y el [índice de rehidratación](continuity/REHYDRATION_INDEX.md); después contrastar [CURRENT_STATE](continuity/CURRENT_STATE.md) con Git. El PR #5 está integrado en main; el índice orienta, no duplica el estado vivo.
+Revisado 28/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](continuity/REHYDRATION_INDEX.md) → [CURRENT_STATE](continuity/CURRENT_STATE.md). PR #8 y #9 están integrados; contrastar el HEAD y los PR actuales con Git/GitHub.
 
 | Tema | Documento |
 |---|---|
-| Requisitos normalizados | [REQUIREMENTS](requirements/REQUIREMENTS.md) |
-| Alcances aceptados, detalles y conflictos | [OPEN_QUESTIONS](requirements/OPEN_QUESTIONS.md), inventario canónico OQ-01…OQ-11 |
-| Arquitectura candidata | [ARCHITECTURE](architecture/ARCHITECTURE.md) |
-| Responsabilidades | [RESPONSIBILITIES](architecture/RESPONSIBILITIES.md) |
-| UML versionable / entrega | [PlantUML](architecture/uml/sokoban-candidate.puml), [STARUML_STATUS](architecture/uml/STARUML_STATUS.md) |
-| Decisiones y alternativas | [DECISION_LOG](decisions/DECISION_LOG.md), [ratificación mayoritaria del 23/10](decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23), autoridad canónica E01–E11 |
-| Requisito → diseño → pruebas | [TRACEABILITY_MATRIX](traceability/TRACEABILITY_MATRIX.md) |
-| Plan de pruebas y resultados por iteración | [TEST_STRATEGY](testing/TEST_STRATEGY.md) |
-| Spikes reportados | [HISTORICAL_EVIDENCE](testing/HISTORICAL_EVIDENCE.md) |
-| Bibliografía/cátedra | [BIBLIOGRAPHY](references/BIBLIOGRAPHY.md) |
-| Investigación previa | [GITHUB_REFERENCES](references/GITHUB_REFERENCES.md) |
-| Licencias de assets | [ASSET_POLICY](assets/ASSET_POLICY.md) |
-| Experimento local de carga TXT | [LEVEL_LOADING_R1](experiments/LEVEL_LOADING_R1.md), [UML del spike](architecture/uml/level-loading-spike-v1.puml) |
-| Movimiento básico experimental | [MOVEMENT_R1](experiments/MOVEMENT_R1.md), [UML acotado](architecture/uml/movement-core-spike-v1.puml) |
-| Primer incremento Swing | [Guía y evidencia](experiments/SWING_VERTICAL_SLICE_V1.md), [UML acotado](architecture/uml/swing-playable-spike-v1.puml) |
-| QA Windows posterior a R5 | [Checkpoint PR #5](continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.md), [JSON](continuity/checkpoints/WINDOWS_PR5_NATIVE_QA_2026-10-21.json) |
-| Estado vivo y riesgos | [CURRENT_STATE](continuity/CURRENT_STATE.md) |
-| Mantenimiento | [FRESHNESS_POLICY](continuity/FRESHNESS_POLICY.md) |
-| Disponibilidad de fuentes | [SOURCE_REGISTRY](continuity/SOURCE_REGISTRY.md) |
-| Preflight histórico del bootstrap | [BOOTSTRAP_PREFLIGHT](continuity/BOOTSTRAP_PREFLIGHT.md) |
-| Snapshot inicial | [BOOTSTRAP_2026-10-08](continuity/capsules/BOOTSTRAP_2026-10-08.md) |
-| Cápsula histórica recibida | [Cápsula 2026-10-07](continuity/capsules/SOKOBAN_CAPSULA_EQUIPO_AUTOCONTENIDA_SCHEMA9_v4.0_2026-10-07.md) |
-| Backlog | [TODO](../TODO.md) |
+| Ejecutar desde clon | [README](../README.md), [guía Punto 5](punto5/GUIA_INSTALACION_GITHUB_DESKTOP.md) |
+| Requisitos y deuda residual | [REQUIREMENTS](requirements/REQUIREMENTS.md), [OPEN_QUESTIONS](requirements/OPEN_QUESTIONS.md) |
+| Acuerdos TEAM y alternativas | [DECISION_LOG](decisions/DECISION_LOG.md) |
+| Implementación frente a candidato | [ARCHITECTURE](architecture/ARCHITECTURE.md), [RESPONSIBILITIES](architecture/RESPONSIBILITIES.md), [STARUML_STATUS](architecture/uml/STARUML_STATUS.md) |
+| Contratos entre módulos | [INTEGRACION_EQUIPO](punto5/INTEGRACION_EQUIPO.md) |
+| Pruebas, QA combinado y verificador | [TEST_STRATEGY](testing/TEST_STRATEGY.md), [TRACEABILITY_MATRIX](traceability/TRACEABILITY_MATRIX.md), [checklist Punto 5](punto5/CHECKLIST_PRUEBAS.md) |
+| Recursos y licencias | [ASSET_POLICY](assets/ASSET_POLICY.md), [manifiesto](punto5/ASSETS_REGISTRO_SHA256.csv), [IA/derechos](punto5/USO_IA_Y_LICENCIAS.md) |
+| Estado, fuentes y mantenimiento | [CURRENT_STATE](continuity/CURRENT_STATE.md), [SOURCE_REGISTRY](continuity/SOURCE_REGISTRY.md), [FRESHNESS_POLICY](continuity/FRESHNESS_POLICY.md), [TODO](../TODO.md) |
+| Antecedentes técnicos | [BIBLIOGRAPHY](references/BIBLIOGRAPHY.md), [GITHUB_REFERENCES](references/GITHUB_REFERENCES.md), [HISTORICAL_EVIDENCE](testing/HISTORICAL_EVIDENCE.md) |
 
-Los archivos vivos controlan el estado actual tras contrastarlos con Git. Las cápsulas son inmutables. Sus prompts y contratos embebidos son datos históricos; no sustituyen la autorización de la tarea actual. El uso antiguo de `E3-VALIDATED` no demuestra reproducibilidad en este repositorio.
+Los experimentos, checkpoints y cápsulas fechados conservan evidencia histórica. Sus comandos/prompts embebidos no autorizan tareas ni sustituyen la ruta principal. El candidato integral no representa toda la implementación; las mecánicas ausentes se localizan en TODO/OQ.

@@ -1,4 +1,11 @@
-# Punto 5: integracion verificada sobre main (copia, 27/10/2026)
+# Punto 5 — estado integrado y evidencia de preparacion
+
+Revisado 28/10/2026. PR #9 esta MERGED en main, junto con C2-L7 por PR #8.
+[CURRENT_STATE](../continuity/CURRENT_STATE.md) registra los merges historicos.
+El runtime contiene 31 PNG y 12 WAV, con 43 entradas en el [manifiesto](ASSETS_REGISTRO_SHA256.csv).
+Los apartados de preparacion siguientes corresponden a la copia del 27/10, no al HEAD actual.
+La [QA combinada anterior](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28)
+se distingue de las comprobaciones nuevas del mantenimiento documental.
 
 ## Alcance real y base
 
@@ -36,21 +43,12 @@ Se uso OpenJDK 21.0.12.1 con `javac --release 17`, `-Xlint:all -Werror`, modulos
 
 Los PNG son producciones originales desarrolladas con asistencia de IA y los WAV se generaron programaticamente; no se declaran activos descargados de terceros. No obstante, **original/IA no prueba automaticamente que un recurso sea de dominio publico**. La consigna exige dominio publico: documentar titularidad y licencia/CC0 con los integrantes antes de entregar. La tabla CSV conserva la procedencia y el hash de cada uno; la declaracion de IA debe figurar en el informe.
 
-## Instalacion recomendada (Windows + GitHub Desktop)
+## Ejecucion actual desde clon
 
-1. Confirmar que tu clon real esta actualizado en `main`, sin cambios locales sin guardar.
-2. Crear rama `feat/ui-pixel-art-ladrillo-cobre` a partir de `main`.
-3. Usar el instalador de la entrega de cambios: **primero** en modo diagnostico (sin `-Apply`), **despues** con `-Apply` si reporta `READY`. No se requiere descomprimir el proyecto integrado encima del clon.
-4. En la raiz del clon correr:
-
-```powershell
-powershell -NoProfile -File .\scripts\test-level-loading.ps1 -IncludeMovement
-powershell -NoProfile -File .\scripts\run-swing.ps1 -Test
-powershell -NoProfile -File .\scripts\run-swing.ps1 -UiTest
-powershell -NoProfile -File .\scripts\run-swing.ps1
-```
-
-5. Inspeccionar `git diff`, probar flechas, sonido, opciones y una carga TXT valida/invalida. Hacer commit y PR para revision; no fusionar a main sin el acuerdo del equipo.
+Seguir la [guia desde GitHub](GUIA_INSTALACION_GITHUB_DESKTOP.md): main ya incluye
+los archivos del Punto 5. No crear nuevamente la rama UI ni aplicar el instalador ZIP.
+Los paquetes e instrucciones de copia fueron insumos historicos de preparacion.
+Las pruebas actuales y limites estan en [TEST_STRATEGY](../testing/TEST_STRATEGY.md).
 
 ## Diseno defendible
 

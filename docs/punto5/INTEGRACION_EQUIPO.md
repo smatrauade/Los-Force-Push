@@ -3,7 +3,9 @@
 Esta entrega toca exclusivamente presentacion, eventos UI y audio; no introduce
 reglas de cajas, score, guardado, Undo ni progresion. Los archivos base afectados
 son los del Swing experimental; hay que reconciliarlos si otra rama tambien los
-modifico. Estado de referencia: ZIP recibido del proyecto al 26/10/2026.
+modifico. Revisado 28/10/2026: Punto 5 esta integrado por PR #9 y TXT C2-L7 por PR #8.
+El estado y los commits historicos se consultan en [CURRENT_STATE](../continuity/CURRENT_STATE.md);
+la ejecucion parte de un [clon actualizado](GUIA_INSTALACION_GITHUB_DESKTOP.md), sin reinstalar ZIP.
 
 ## Clases y limites
 
@@ -18,6 +20,14 @@ modifico. Estado de referencia: ZIP recibido del proyecto al 26/10/2026.
 | `SwingApplication` | Cards MENU/GAME/PAUSE/OPTIONS/HELP/FINISH | Solo captura acciones y representa proyecciones. |
 | `GameController` | Avisa de `MoveResult.Kind` a la vista tras movimiento | No agrega regla de gameplay. |
 | `UiCommands` | Callbacks optativos para Undo, Restart, Save, Load y Next | Todos null por defecto; la UI nunca implementa el comando. |
+
+## Contrato TXT actual
+
+LevelLoader/LevelParser ya aceptan legacy y C2-L7 opt-in mediante C2LevelParser,
+sin cambiar Level/Board. C2 ofrece siete aliases y sus formas largas, con
+[attributes] obligatoria vacia: atributos individuales y especiales se rechazan.
+El siguiente dominio TXT/niveles es su representacion individual; especificar
+sintaxis/rangos/errores antes de extender el modelo. No deducirlos desde Swing.
 
 ## Para agregar tipos futuros
 
@@ -109,7 +119,7 @@ view.configureUiCommands(new UiCommands(
 ```
 
 **El fragmento es pseudocodigo de integracion**, NO son clases ni metodos actuales
-(`session`, `persistence` y `levelFlow` todavia no existen en el ZIP).
+(`session`, `persistence` y `levelFlow` no existen en la implementacion actual).
 Un parametro `null` significa que el boton queda deshabilitado. Para actualizar
 la disponibilidad tras cambios de sesion, llamar otra vez a `configureUiCommands`.
 `R` y `Z` invocan el mismo callback que los botones. La UI no agrega logica de

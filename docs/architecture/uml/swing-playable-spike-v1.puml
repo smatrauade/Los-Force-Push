@@ -1,21 +1,29 @@
 @startuml
-title Swing playable slice V1 - experimental, not team-ratified
-package "existing core (unchanged)" {
+title Swing pixel art integrado - experimental, revision 2026-10-28
+package "core (sin cambios por Punto 5)" {
   class Board <<immutable>>
   class LevelLoader
   class MovementEngine
   enum Direction
   class MoveResult
 }
-package "desktop integration" {
+package "desktop implementado" {
   class SwingApplication
   class "SwingApplication.GameWindow" as GameWindow {
     render(GamePresentation)
     showLoadError(String)
+    onMove(MoveResult.Kind)
+    showVictory(LevelResult)
+    configureUiCommands(UiCommands)
+    playEffect(SoundManager.Effect)
   }
   interface GameView {
     render(GamePresentation)
     showLoadError(String)
+    onMove(MoveResult.Kind) <<default>>
+    showVictory(LevelResult) <<default>>
+    configureUiCommands(UiCommands) <<default>>
+    playEffect(SoundManager.Effect) <<default>>
   }
   class GameController {
     load(Path)
@@ -29,26 +37,75 @@ package "desktop integration" {
   }
   class BoardPanel {
     showBoard(Board)
+    setScale(int)
+    setFacing(Direction)
   }
   class ArrowBindings {
     {static} install(JComponent, Consumer<Direction>)
   }
+  class PixelAssets {
+    image(String) : BufferedImage
+  }
+  class PixelTheme {
+    {static} install()
+  }
+  class SoundManager {
+    play(Effect)
+    setEnabled(boolean)
+    close()
+  }
+  enum "SoundManager.Effect" as Effect
+  class UiCommands <<record>> {
+    Runnable undo
+    Runnable restart
+    Runnable save
+    Runnable loadSaved
+    Runnable nextLevel
+    {static} EMPTY
+  }
+  class LevelResult <<record>> {
+    String levelName
+    long moves
+    long pushes
+    int undoUses
+    long score
+  }
 }
 SwingApplication ..> GameWindow : creates on EDT
+SwingApplication ..> PixelTheme
 GameWindow ..|> GameView
 GameWindow *-- BoardPanel
 GameWindow *-- GameController
-GameWindow ..> ArrowBindings : installs callbacks
-ArrowBindings ..> Direction : input translation
-GameController --> GameView
+GameWindow *-- SoundManager
+GameWindow --> UiCommands : injected callbacks
+GameWindow ..> LevelResult : display only
+GameWindow ..> ArrowBindings
+GameWindow ..> PixelAssets : menu art
+ArrowBindings ..> Direction
+GameController --> GameView : render / error / onMove
 GameController --> LevelLoader
 GameController --> MovementEngine
 GameController --> GamePresentation : current value
 GamePresentation --> Board : same immutable reference
 BoardPanel --> Board : read only
+BoardPanel --> PixelAssets
+SoundManager ..> Effect
+GameView ..> UiCommands
+GameView ..> LevelResult
+GameView ..> Effect
 MovementEngine ..> MoveResult
+note bottom of GameWindow
+MENU / GAME / PAUSE / OPTIONS / HELP / FINISH.
+Null callbacks keep companion controls disabled.
+No Undo, restart, persistence, score or victory rules.
+end note
+note bottom of PixelAssets
+Classpath /assets/sprites/*.png: 29 base + 2 optional.
+SoundManager uses /assets/sfx/*.wav (12 effects).
+Audio is optional, window-owned; no global core service.
+end note
 note bottom of GameController
 No parser, rendering or collision rules.
-Blocked: no publication or counter change.
+Blocked: no publication or counter change; emits onMove.
 end note
 @enduml

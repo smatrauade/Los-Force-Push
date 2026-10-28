@@ -1,137 +1,55 @@
-# Punto 5 - Guia de instalacion en Los-Force-Push (GitHub Desktop / Windows)
+# Punto 5 — Ejecutar desde GitHub (Windows / GitHub Desktop)
 
-**Alcance:** interfaz Swing, sprites pixel art 32x32, audio WAV original, controles,
-menu, pausa, opciones, ayudas y vista de victoria preparada. No incluye implementacion
-de hielo, cajas especiales, Undo, puntaje, guardado real ni progresion, que son tareas
-separadas del equipo.
+Revisado 28/10/2026. **Punto 5 ya está integrado por PR #9; C2-L7, por PR #8. No se reinstala desde ZIP ni se recrea la antigua rama UI.**
 
-## 0. Antes de instalar
+## Obtener un clon
 
-- Tener el repositorio **Los-Force-Push** abierto en GitHub Desktop y el JDK 17+
-  disponible en Windows. El ZIP no requiere Maven, Gradle ni librerias Java extras.
-- **No copies el ZIP de proyecto antiguo entero sobre tu clon de GitHub.** Este paquete
-  trae unicamente los archivos del Punto 5 que se agregan o modifican.
-- **NO copies .git** de otro lado. El ZIP de Punto 5 no contiene esa carpeta.
-- Guardar/cerrar cambios propios sin commit o consultarlo con el equipo antes de
-  actualizar el repositorio. Esta instalacion no debe pisar trabajo de otros.
-- Pedir al equipo la rama base actualizada. El paquete fue preparado contra el ZIP
-  aportado, no contra un checkout actualizado automaticamente de GitHub.
+En GitHub Desktop seleccionar Clone repository, URL https://github.com/smatrauade/Los-Force-Push, y una carpeta nueva. Abrir main. Si se usa un clon existente, inspeccionar primero sus cambios y worktrees; no sobrescribirlos ni actualizar automáticamente un checkout con trabajo pendiente.
 
-## 1. Crear la rama (GitHub Desktop)
+También se puede clonar por terminal:
 
-1. Abrir **GitHub Desktop** y seleccionar el repositorio `Los-Force-Push`.
-2. `Fetch origin` y luego `Pull origin` si hay actualizaciones y la carpeta esta limpia.
-3. Desde `Current branch`, crear una nueva rama basada en la rama acordada:
-   `feat/ui-pixel-art-ladrillo-cobre`.
-4. En `Repository > Show in Explorer`, identificar la carpeta del clon. Ejemplo:
-   `C:\Users\TU_USUARIO\Documents\GitHub\Los-Force-Push`.
-5. Descomprimir `Los_Force_Push_Punto_5_Ladrillo_Cobre.zip` en una **carpeta distinta**
-   del repositorio, por ejemplo `Descargas\Punto5`.
+~~~bash
+git clone https://github.com/smatrauade/Los-Force-Push.git
+cd Los-Force-Push
+git rev-parse HEAD
+~~~
 
-## 2. Instalar (modo recomendado, seguro)
+Comparar el HEAD y los PR actuales con [CURRENT_STATE](../continuity/CURRENT_STATE.md). Los commits documentados son eventos históricos, no un HEAD permanente. Se requiere un JDK completo 17+, no sólo JRE; Maven/Gradle y Java definitivos siguen sin ratificar.
 
-Abrir PowerShell **dentro de la carpeta descomprimida**, donde se encuentra
-`INSTALAR_EN_REPO.ps1`, no en el interior de `PARA_COPIAR_EN_TU_REPO`.
+## Compilar, ejecutar y probar
 
-**Primero SIMULAR, no copia ningun archivo:**
+PowerShell 5.1 o 7, desde la raíz:
 
-```powershell
-powershell -NoProfile -File .\INSTALAR_EN_REPO.ps1 -RepoPath "C:\Users\TU_USUARIO\Documents\GitHub\Los-Force-Push"
-```
+~~~powershell
+$env:SPIKE_JDK_HOME = '<directorio-del-JDK-completo>'
+powershell -NoProfile -File ./scripts/run-swing.ps1
+powershell -NoProfile -File ./scripts/run-swing.ps1 -LevelPath 'C:/niveles/mi nivel.txt'
+powershell -NoProfile -File ./scripts/test-level-loading.ps1 -IncludeMovement
+powershell -NoProfile -File ./scripts/run-swing.ps1 -Test
+powershell -NoProfile -File ./scripts/run-swing.ps1 -UiTest
+~~~
 
-Si el resultado dice `READY`, instalar:
+Puede usarse pwsh. El runner compila en un temporal propio con release 17 y UTF-8, agrega src/desktop/resources al classpath y limpia al terminar. C2 tiene suite independiente: [TEST_STRATEGY](../testing/TEST_STRATEGY.md). -Test ejecuta Desktop y VisualAssets; -UiTest necesita escritorio y es automatizado, no QA manual.
 
-```powershell
-powershell -NoProfile -File .\INSTALAR_EN_REPO.ps1 -RepoPath "C:\Users\TU_USUARIO\Documents\GitHub\Los-Force-Push" -Apply
-```
+El menú permite cargar demo.txt o un TXT externo legacy/C2 compatible. Flechas para caminar/empujar, ESC pausa, M audio, +/- zoom. Undo, Restart, guardar/cargar y siguiente nivel siguen deshabilitados sin callbacks reales. La pantalla final está preparada para LevelResult; el core no infiere victoria ni score.
 
-**El instalador no hace commits, push, merge, cambios de rama ni cambios remotos.**
-Comprueba integridad, existencia de `.git`, nombre del remoto, rama y colisiones
-antes de copiar. Para archivos que reemplaza, exige que su contenido normalizado
-corresponda a la base que enviaste; si otro companero los cambio, se detiene sin
-sobrescribirlos. Si muestra `BLOCKED`/`COLLISION`, **no borres archivos ni fuerces**:
-comparar las versiones nuevas en GitHub Desktop y reconciliar el codigo con el equipo.
+Los 31 PNG y 12 WAV ya están en Git: no descargar ZIP, copiar .git ni regenerar imágenes. Los 29 sprites base y dos variantes opcionales se describen en el [manifiesto](ASSETS_REGISTRO_SHA256.csv). Sus derechos siguen pendientes según [IA/licencias](USO_IA_Y_LICENCIAS.md).
 
-**Alternativa manual:** copiar el contenido de `PARA_COPIAR_EN_TU_REPO` dentro de la
-carpeta `Los-Force-Push` respetando sus subcarpetas `src`, `scripts`, `docs`. Solo si
-no hay cambios concurrentes en `BoardPanel`, `GameController`, `GameView`,
-`SwingApplication` y `scripts/run-swing.ps1`. No reemplazar a ciegas.
+## Integrar módulos y colaborar
 
-## 3. Probar desde el clon (Windows)
+[INTEGRACION_EQUIPO](INTEGRACION_EQUIPO.md) localiza UiCommands, GameView, LevelResult y los puntos de adaptación visual. El módulo de lógica entrega resultados y disponibilidad; Swing sólo representa/invoca. C2-L7 aún rechaza atributos y entidades especiales.
 
-Abrir PowerShell **en la raiz de Los-Force-Push**:
+Para mantenimiento nuevo crear una rama desde la base acordada, con el checkout limpio y PR acotado según [CONTRIBUTING](../../CONTRIBUTING.md). No volver a publicar los archivos del Punto 5 como un incremento nuevo.
 
-```powershell
-java -version
-javac -version
-powershell -NoProfile -File .\scripts\test-level-loading.ps1 -IncludeMovement
-powershell -NoProfile -File .\scripts\run-swing.ps1 -Test
-powershell -NoProfile -File .\scripts\run-swing.ps1 -UiTest
-powershell -NoProfile -File .\scripts\run-swing.ps1
-```
+## Problemas frecuentes
 
-Si el JDK no esta en PATH, usar la variable admitida por los runners:
+- Sprites ausentes: lanzar con el runner o marcar src/desktop/resources como resource root del IDE, sin moverlo.
+- javac ausente: seleccionar un JDK completo mediante SPIKE_JDK_HOME; no basta java de un JRE.
+- Audio inaudible: comprobar M/opciones y el dispositivo; el fallo de audio no debe abortar el juego.
+- Botones pendientes: no exigir operaciones que todavía no tienen servicio.
+- Scripts bloqueados: seguir la política local para scripts confiables; no cambiar ExecutionPolicy global.
+- Linux/macOS: consultar los comandos y límites del runner Bash en [README](../../README.md).
 
-```powershell
-$env:SPIKE_JDK_HOME = "C:\Program Files\Java\jdk-17"
-powershell -NoProfile -File .\scripts\run-swing.ps1 -Test
-```
+## Antecedente ZIP
 
-Con `run-swing.ps1` sin argumento abre el **menu principal**. Desde ahi,
-`NUEVA PARTIDA / DEMO` carga el `demo.txt` oficial. Para abrir directamente otro
-nivel:
-
-```powershell
-powershell -NoProfile -File .\scripts\run-swing.ps1 -LevelPath "C:\ruta\nivel.txt"
-```
-
-Comprobar movimiento con flechas, caja sobre destino, cambio de escala, abrir TXT,
-menu, pausa, audio y controles de reinicio preparados (inactivos hasta integrar Punto 4). **No exigir funcionalidad en botones
-marcados pendientes**: Undo/Restart/guardar/cargar/progresion estan deshabilitados hasta
-que se implementen sus modulos. La pantalla de victoria existe, pero aun no puede
-ser invocada por un motor que no detecta victoria.
-
-**Resultados de referencia en la copia de preparacion** (Linux, JDK 21 compilando a Java 17):
-`40 PASS` carga, `31 PASS` movimiento, `16 PASS` escritorio,
-`44 PASS` assets y `17 PASS` prueba de ventana real en Xvfb.
-**No se ejecutaron estas pruebas en tu Windows**: repetilas en tu computadora.
-
-## 4. Subir desde GitHub Desktop
-
-1. Verificar `Changes`: nuevos `.png`, `.wav`, Java, documentacion y runners.
-2. Revisar cada diferencia de **archivos existentes**; no subir archivos
-   compilados, temporales, credenciales ni copias de `.git`.
-3. Crear commit: `feat(ui): interfaz pixel art ladrillo y cobre con SFX`.
-4. `Publish branch` o `Push origin` desde GitHub Desktop.
-5. `Create Pull Request` hacia la rama acordada; pedir revision a otro integrante.
-6. **No hacer merge directo a main** sin resolver antes colisiones e integraciones.
-
-## 5. Lo que el equipo debe conectar despues
-
-- Punto 1: ampliar el TXT para terreno especial y cajas especiales.
-- Punto 2: exponer tipos de caja y durabilidad; adaptar el `SpriteResolver` de
-  `BoardPanel` para representar el estado que entregue el modelo.
-- Punto 3: llamar a `GameView.showVictory(LevelResult)` al finalizar, y conectar
-  `SIGUIENTE NIVEL` a progresion; informar cerrojos y muros a la vista.
-- Punto 4: conectar `Z  DESHACER` al Undo real de 5 pasos, hasta 3 usos, y revisar
-  reinicio con la politica de sesion y metricas.
-- Funcionalidad adicional: conectar `GUARDAR/CARGAR PARTIDA` al servicio elegido.
-
-Ver `INTEGRACION_EQUIPO.md` para nombres, puntos de extension y limites reales.
-
-## 6. Solucion de problemas
-
-- **Faltan sprites / `getResourceAsStream` null:** usar el runner incluido, que agrega
-  `src/desktop/resources` al classpath. En IntelliJ/Eclipse marcar esta carpeta como
-  resource root (sin moverla) si lanzas la clase manualmente.
-- **`javac` no encontrado:** instalar o configurar un JDK completo, no un JRE.
-- **No se oye audio:** verificar `M`, las opciones de sonido y el dispositivo.
-  El juego sigue funcionando cuando el audio no esta disponible.
-- **Se ven pixeles borrosos:** el tablero usa nearest-neighbor; evitar zoom de
-  Windows o escala fraccionaria fuera de la aplicacion, probar 1x/2x/3x.
-- **La ventana no muestra demo:** usar `Abrir nivel TXT` y seleccionar
-  `src\desktop\resources\levels\demo.txt`.
-- **El instalador detecta colision:** tu rama avanzo desde el ZIP base;
-  integrar manualmente tras comparar, nunca reemplazar trabajo de otro.
-- **Windows bloquea scripts PowerShell:** seguir la politica de ejecucion de tu
-  equipo o utilizar la copia manual; el paquete no cambia ExecutionPolicy global.
+Los paquetes del 26/27 de octubre y su instalador se usaron antes del PR #9. Son antecedentes externos de preparación; no forman parte del procedimiento actual ni son necesarios para reproducir el clon. No aplicar sus archivos sobre una base que ya incluye el incremento.
