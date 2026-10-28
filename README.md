@@ -99,3 +99,19 @@ Leer [AGENTS](AGENTS.md) → [índice de rehidratación](docs/continuity/REHYDRA
 El siguiente dominio TXT/niveles es **representación de atributos individuales**, especificando sintaxis, rangos y errores de la resistencia individual ya aceptada por el equipo. No habilitar entidades especiales ni resolver E04/E08 por inferencia.
 
 [DECISION_LOG](docs/decisions/DECISION_LOG.md) registra los acuerdos TEAM; [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md) conserva los detalles abiertos. Los votos no ratifican el código, patrones ni UML. Seguir [CONTRIBUTING](CONTRIBUTING.md), trabajar en ramas acotadas y declarar/revisar el apoyo de IA. Cápsulas, checkpoints y experimentos fechados son historia, no instrucciones actuales.
+
+## Prototipo experimental de atributos individuales
+
+En esta rama, ExperimentalFragileParser produce ExperimentalFragileLevel: un Board plantilla con celdas frágiles vacías y una lista inmutable de ID, posición y resistencia inicial. No es un Level jugable. Se conserva piso o destino y no se convierte Fragile en caja normal.
+
+~~~text
+!sokoban-txt 2
+[grid]
+# # # # #
+# @ {floor|fragile:f1} . #
+# # # # #
+[attributes]
+fragile f1 resistance=3
+~~~
+
+También se admite {goal|fragile:f1}. IDs experimentales: ASCII [a-z][a-z0-9_]{0,31}; cada referencia y declaración aparece exactamente una vez. Resistencia decimal positiva entre 1 y 2147483647; texto de hasta 65536 caracteres. Son límites técnicos del prototipo, no decisiones del equipo. No se presupone un máximo de 3. El orden de declaraciones no afecta el resultado. El parser existente valida grilla, tokens y dimensiones. LevelParser.parse y LevelLoader.load siguen rechazando Fragile. OQ-06 y OQ-08 siguen abiertas en sus detalles. [Pruebas y ejecución](docs/testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).

@@ -50,3 +50,8 @@ Los acuerdos cerrados y conflictos están sólo en [DECISION_LOG](docs/decisions
 ## Mantenimiento
 
 Actualizar [fuentes vivas](docs/continuity/FRESHNESS_POLICY.md), pruebas y trazabilidad junto a los cambios; preservar cápsulas/checkpoints. El verificador y su regresión se ejecutan según [README](README.md). Este backlog no autoriza implementar ni publicar por sí mismo.
+
+## Spike de atributos individuales en esta rama
+
+- [x] Probar representación inmutable experimental para Fragile sin habilitar gameplay; consultar Git para su estado de integración.
+- [ ] Revisar con el equipo sintaxis, rango y errores del contrato final OQ-06/OQ-08; los límites del spike no son reglas aceptadas.

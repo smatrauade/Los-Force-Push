@@ -103,3 +103,7 @@ Fuente normativa TEAM única: [Ratificación por mayoría](../decisions/DECISION
 | RF-12 | [E11 / D-022](../decisions/DECISION_LOG.md#e11) | OQ-10 | Guardar/recuperar estado validado con Undo/errores y GoF justificado después del contrato; segunda adicional aún pendiente |
 
 Pistas no cuenta como adicional aprobada; consultar E11 para el resultado y el umbral. Ningún caso ratifica D-011/D-012/D-016 ni el UML. La aceptación del código sigue NOT_RECORDED y OQ-11 continúa como decisión técnica sin encuesta.
+
+## Spike experimental de atributos individuales
+
+RF-02/RF-05 PARTIAL: ExperimentalFragileParser reconoce referencias individuales en piso o destino y ExperimentalFragileLevel conserva ID, posición y resistencia como definición inmutable. La plantilla no contiene una caja normal por cada frágil. El loader jugable sigue rechazando Fragile. Los 22 casos del spike están separados de los 32 C2 y no implementan resistencia en gameplay ni cierran OQ-06/OQ-08. Ver [contrato](../../README.md#prototipo-experimental-de-atributos-individuales) y [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).

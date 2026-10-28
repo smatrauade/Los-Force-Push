@@ -55,3 +55,7 @@ Próximo dominio TXT/niveles: **representación de atributos individuales** (sin
 ## Historia y fuentes
 
 Los informes [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) conservan evidencias fechadas. [HISTORICAL_EVIDENCE](../testing/HISTORICAL_EVIDENCE.md) describe A/B sin fuentes recuperadas, no mecánicas disponibles hoy. Cápsulas y checkpoints permanecen inmutables. [SOURCE_REGISTRY](SOURCE_REGISTRY.md) distingue bytes presentes, fuentes externas y transcripciones TEAM; no atribuir lectura directa de originales académicos ausentes.
+
+## Prototipo de atributos individuales en esta rama
+
+ExperimentalFragileParser y ExperimentalFragileLevel son un spike no ratificado en la rama de atributos; consultar Git/PR para saber si está integrado. La plantilla espacial deja vacías las celdas frágiles y la lista inmutable conserva ID, posición y resistencia, sin crear un Level jugable con una caja normal sustituta. Loader/Parser públicos siguen rechazando el mismo TXT. [Contrato y límites](../../README.md#prototipo-experimental-de-atributos-individuales); [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06/OQ-08 no se cierran.
