@@ -41,10 +41,12 @@ public final class GameController {
         }
         MoveResult result = movement.move(current.board(), direction);
         if (result.kind() == MoveResult.Kind.BLOCKED) {
+            view.onMove(result.kind());
             return;
         }
         long pushes = current.pushes() + (result.kind() == MoveResult.Kind.PUSHED ? 1 : 0);
         current = new GamePresentation(result.board(), current.levelName(), current.moves() + 1, pushes);
         view.render(current);
+        view.onMove(result.kind());
     }
 }

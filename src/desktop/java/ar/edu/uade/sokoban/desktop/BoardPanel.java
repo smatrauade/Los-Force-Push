@@ -4,48 +4,96 @@ import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.level.Cell;
 import ar.edu.uade.sokoban.level.Occupant;
 import ar.edu.uade.sokoban.level.Terrain;
-import java.awt.BasicStroke;
+import ar.edu.uade.sokoban.movement.Direction;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.Objects;
 import javax.swing.JPanel;
 
-/** Development placeholders drawn from the core cells, with no rules or mutable grid. */
+/** Read-only view of the core Board. No movement, collision or victory rules. */
 public final class BoardPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final int TILE = 56;
-    private static final int MARGIN = 20;
+    private static final int MARGIN = 24;
+    private final transient PixelAssets sprites;
     private transient Board board;
+    private int scale = 2;
+    private Direction facing = Direction.DOWN;
+    private long appearanceTick;
 
     public BoardPanel() {
-        setBackground(new Color(22, 31, 42));
-        setPreferredSize(new Dimension(600, 300));
-        setFocusable(false);
+        this(new PixelAssets());
     }
 
-    public void showBoard(Board value) {
-        board = value;
-        setPreferredSize(new Dimension(value.width() * TILE + 2 * MARGIN,
-                value.height() * TILE + 2 * MARGIN));
-        revalidate();
+    BoardPanel(PixelAssets assets) {
+        sprites = Objects.requireNonNull(assets, "assets");
+        setBackground(new Color(42, 33, 36));
+        setPreferredSize(new Dimension(560, 380));
+        setFocusable(false);
+        setOpaque(true);
+    }
+
+    public void showBoard(Board next) {
+        board = Objects.requireNonNull(next, "board");
+        updateSize();
         repaint();
+    }
+
+    public void setScale(int next) {
+        if (next < 1 || next > 3) {
+            throw new IllegalArgumentException("Escala permitida: 1, 2 o 3");
+        }
+        scale = next;
+        updateSize();
+        repaint();
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    public void setFacing(Direction next) {
+        facing = Objects.requireNonNull(next, "direction");
+        appearanceTick++;
+        repaint();
+    }
+
+    private void updateSize() {
+        if (board != null) {
+            int tile = PixelAssets.NATIVE_SIZE * scale;
+            setPreferredSize(new Dimension(board.width() * tile + MARGIN * 2,
+                    board.height() * tile + MARGIN * 2));
+            revalidate();
+        }
     }
 
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        if (board == null) {
-            return;
-        }
         Graphics2D g = (Graphics2D) graphics.create();
         try {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
+            if (board == null) {
+                return;
+            }
+            int tile = PixelAssets.NATIVE_SIZE * scale;
+            g.setColor(new Color(104, 75, 64));
+            g.fillRect(MARGIN - 5, MARGIN - 5,
+                    board.width() * tile + 10, board.height() * tile + 10);
+            g.setColor(new Color(228, 168, 111));
+            g.fillRect(MARGIN - 3, MARGIN - 3,
+                    board.width() * tile + 6, board.height() * tile + 6);
             for (int row = 0; row < board.height(); row++) {
                 for (int col = 0; col < board.width(); col++) {
-                    paintCell(g, board.rows().get(row).get(col),
-                            MARGIN + col * TILE, MARGIN + row * TILE);
+                    Cell cell = board.rows().get(row).get(col);
+                    drawCell(g, cell, MARGIN + col * tile, MARGIN + row * tile,
+                            tile, row, col);
                 }
             }
         } finally {
@@ -53,41 +101,55 @@ public final class BoardPanel extends JPanel {
         }
     }
 
-    private static void paintCell(Graphics2D g, Cell cell, int x, int y) {
-        g.setStroke(new BasicStroke(1));
-        if (cell.terrain() == Terrain.WALL) {
-            g.setColor(new Color(76, 96, 116));
-            g.fillRoundRect(x + 2, y + 2, TILE - 4, TILE - 4, 9, 9);
-            g.setColor(new Color(108, 127, 145));
-            g.drawLine(x + 9, y + 10, x + TILE - 10, y + 10);
+    private void drawCell(Graphics2D g, Cell cell, int x, int y,
+                          int tile, int row, int col) {
+        String terrain = spriteForTerrain(cell.terrain(), row, col);
+        if (terrain.startsWith("wall_")) {
+            draw(g, terrain, x, y, tile);
             return;
         }
-        g.setColor(new Color(226, 221, 205));
-        g.fillRect(x, y, TILE, TILE);
-        g.setColor(new Color(204, 199, 182));
-        g.drawRect(x, y, TILE, TILE);
-        if (cell.terrain() == Terrain.GOAL) {
-            g.setColor(new Color(36, 132, 96));
-            g.setStroke(new BasicStroke(3));
-            g.drawOval(x + 10, y + 10, TILE - 20, TILE - 20);
-            g.fillOval(x + 23, y + 23, 10, 10);
+        draw(g, "floor_" + Math.floorMod(row * 11 + col * 7, 3), x, y, tile);
+        if (!terrain.equals("floor")) {
+            draw(g, terrain, x, y, tile);
         }
-        if (cell.occupant() == Occupant.BOX) {
-            g.setColor(cell.terrain() == Terrain.GOAL
-                    ? new Color(54, 153, 109) : new Color(201, 135, 54));
-            g.fillRoundRect(x + 8, y + 8, TILE - 16, TILE - 16, 7, 7);
-            g.setColor(new Color(103, 73, 37));
-            g.setStroke(new BasicStroke(2));
-            g.drawRoundRect(x + 8, y + 8, TILE - 16, TILE - 16, 7, 7);
-            g.drawLine(x + 16, y + 16, x + TILE - 16, y + TILE - 16);
-            g.drawLine(x + TILE - 16, y + 16, x + 16, y + TILE - 16);
-        } else if (cell.occupant() == Occupant.PLAYER) {
-            g.setColor(new Color(16, 105, 141));
-            g.fillOval(x + 9, y + 9, TILE - 18, TILE - 18);
-            g.setColor(Color.WHITE);
-            g.fillOval(x + 19, y + 21, 5, 5);
-            g.fillOval(x + 32, y + 21, 5, 5);
-            g.drawArc(x + 19, y + 27, 18, 12, 190, 160);
+        String occupant = spriteForOccupant(cell.occupant(), cell.terrain());
+        if (occupant != null) {
+            draw(g, occupant, x, y, tile);
         }
+    }
+
+    /** Adapter point for future Terrain values: the domain keeps its own rules. */
+    static String spriteForTerrain(Terrain terrain, int row, int col) {
+        return switch (terrain.name()) {
+            case "WALL" -> "wall_" + Math.floorMod(row * 3 + col, 3);
+            case "GOAL", "DESTINATION" -> "goal";
+            case "ICE", "SLIPPERY", "SLIPPERY_FLOOR" -> "ice";
+            case "LOCK", "LOCK_CLOSED", "LOCK_TILE" -> "lock";
+            case "LOCK_OPEN", "LOCK_ACTIVE" -> "lock_active";
+            case "CLOSED_WALL", "GATE_CLOSED", "WALL_CLOSED" -> "gate_closed";
+            case "OPEN_WALL", "GATE_OPEN", "WALL_OPEN" -> "gate_open";
+            default -> "floor";
+        };
+    }
+
+    /** Future names are presentation hints, not definitions of future gameplay rules. */
+    static String spriteForOccupant(Occupant occupant, Terrain terrain) {
+        return switch (occupant.name()) {
+            case "PLAYER" -> "player_down";
+            case "BOX" -> (terrain.name().equals("GOAL")
+                    || terrain.name().equals("DESTINATION")) ? "box_goal" : "box";
+            case "KEY_BOX", "BOX_KEY" -> "box_key";
+            case "FRAGILE_BOX", "BOX_FRAGILE" -> "box_fragile_3";
+            default -> null;
+        };
+    }
+
+    private void draw(Graphics2D g, String name, int x, int y, int tile) {
+        if (name.equals("player_down")) {
+            String direction = facing.name().toLowerCase(java.util.Locale.ROOT);
+            name = "player_" + direction + ((appearanceTick % 2L == 1L) ? "_step" : "");
+        }
+        BufferedImage image = sprites.image(name);
+        g.drawImage(image, x, y, tile, tile, null);
     }
 }
