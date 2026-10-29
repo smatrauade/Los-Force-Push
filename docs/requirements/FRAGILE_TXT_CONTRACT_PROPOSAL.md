@@ -7,6 +7,8 @@
 
 > **No es una gramática aprobada ni una habilitación de gameplay.** Este documento consolida el comportamiento del prototipo integrado por [PR #11](https://github.com/smatrauade/Los-Force-Push/pull/11), propone un contrato verificable para decidir los detalles pendientes y delimita la futura integración. La autoridad canónica de acuerdos continúa en [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); las preguntas abiertas, en [OPEN_QUESTIONS](OPEN_QUESTIONS.md). Ningún valor técnico del spike se convierte en decisión del equipo por figurar aquí.
 
+Para integrar desde otro módulo: [matriz de interfaces, ejemplos y preguntas pendientes](#traspaso-txt-a-modelmovement--29102026). Describe las APIs existentes; no prescribe una interfaz runtime nueva.
+
 ## 1. Autoridad, estado y alcance
 
 - **E01 (TEAM, ACCEPTED_SCOPE):** una capa espacial con símbolos combinados. No define el alfabeto final ni la sección de metadatos.
@@ -103,3 +105,91 @@ Esta propuesta sirve como **material de decisión técnica** para el equipo y pa
 `loadExperimentalFragile(Path) → ExperimentalFragileLevel` exige un archivo C2 según la gramática provisional anterior; sin Fragile devuelve lista vacía. No acepta legacy ni elimina BOM. Comparte techo de 65.536 bytes y UTF-8 estricto con `load`, sin caché. Fallos: `IOException` para E/S/UTF-8 inválido, `LevelFormatException` para tamaño/sintaxis y `NullPointerException` para Path nulo. No modifica una definición publicada; el consumidor sólo reemplaza su referencia después del retorno exitoso. No se promete snapshot del filesystem frente a escrituras concurrentes: editar, guardar completamente y luego recargar.
 
 [Fixture versionado](../../src/test/resources/levels/experimental-fragile.txt): dos Fragile con resistencia 3/12, una en Goal, declaraciones invertidas y una caja normal en Goal. Es oráculo de **definición**, no puzzle con solución certificada. `ExperimentalFragileParserTest` conserva 31 casos y agrega 32–41 de archivo, recarga/editado, atomicidad y fronteras; [resultados](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). El futuro consumidor necesita preservar la asociación `(id, posición, resistencia, terreno)` y diferenciar plantilla de estado completo. No pasar la plantilla sola al motor; no hay adaptación runtime, regla de decremento ni contrato de snapshots ratificados. OQ-03/06/07/08/11 continúan abiertas en su alcance previo.
+
+## Traspaso TXT a Model/Movement — 29/10/2026
+
+Base técnica revisada: `5ac2bba9a1d495a5da9e1ad998857fbe00613840`. **AS_IMPLEMENTED** describe el código de esta rama; no significa contrato ratificado ni integrado en main. **TEAM-PROPOSAL** identifica una alternativa para acordar. **OPEN_PENDING_TEAM** requiere respuesta antes de implementar esa porción. La [coordinación aportada](../continuity/SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026) informa trabajo paralelo en Fragile/hielo y un nivel de prueba ofrecido; no certifica sus bytes, estado de avance ni compatibilidad.
+
+### Matriz de interfaces y compatibilidad
+
+| Dimensión | AS_IMPLEMENTED / evidencia existente | Propuesto o ausente / confirmación necesaria | Consumidor y responsable de acuerdo |
+|---|---|---|---|
+| Terreno y ocupación | `Cell.terrain()` = WALL/FLOOR/GOAL; `occupant()` = EMPTY/PLAYER/BOX normal. En plantilla, las posiciones Fragile son EMPTY con FLOOR o GOAL. Fragile 32; C2 2–5 | La entidad runtime se integra con los datos de `fragileBoxes()`, sin reinterpretar EMPTY como ausencia de la caja especial. Forma del estado runtime OPEN_PENDING_TEAM | Model/Movement consume ambos componentes; TXT mantiene definición |
+| Identidad especial | `FragileBox.id()` único dentro de cada definición; ASCII provisional. Referencia y atributo se asocian por ID; el parser recorre grid por filas. Fragile 1/2/6/24/32 | No hay identidad global, ID de nivel ni IDs de cajas normales. No usar índice de lista/coordenada como identidad persistente por inferencia. Preservación de ID al mover/romper OPEN_PENDING_TEAM | Fragile/Model, luego sesión; TXT acuerda alcance de IDs OQ-06/08 |
+| Resistencia inicial | `initialResistance()` int positivo individual, límite técnico 2147483647; sin default. Fragile 8–11/31/32 | No es resistencia actual, cantidad de sprites ni valor global. Rango final y tratamiento runtime pendientes OQ-06; rotura/hielo OQ-03 no resuelta | TXT + responsable Fragile; reglas con precedencia académica |
+| Posiciones y dimensiones | `Position.row()/column()` desde cero; `height()/width()` entre 1 y 100. C2 cuenta tokens, no caracteres. Fragile ocupa coordenadas únicas dentro del Board, en piso/destino vacío. Fragile 17/25/26/32; C2 6/16/17 | Convención del consumidor y conversión única si usa x/y u otra representación: confirmar antes de adaptar, sin alterar las coordenadas del TXT | TXT proporciona; Model/Movement confirma mapeo |
+| Goal | `Terrain.GOAL`, incluso bajo jugador/caja normal/Fragile. `goalCount()` cuenta terreno; `boxCount()` cuenta sólo BOX normales de la plantilla. Fragile 3/32; C2 5 | Ningún conteo demuestra victoria ni incluye Fragile como BOX. Victory/progresión pertenece a su responsable, OQ-01 | Model preserva terreno; victoria consume estado completo |
+| Hielo | No hay Terrain ICE ni token aceptado por las rutas actuales; C2 20 rechaza especiales; parser experimental sólo reconoce Fragile en FLOOR/GOAL | Elegir representación de terreno/propiedad y combinaciones válidas, después sintaxis/versionado OQ-08. OPEN_PENDING_TEAM; no asumir que Goal+hielo o Fragile+hielo sean representables hoy | Responsable hielo/Model + TXT; OQ-02/03 para comportamiento |
+| Entidades y asociaciones futuras | KeyBox, Lock y muros dinámicos carecen de representación aceptada; no se ignoran silenciosamente | IDs explícitos o referencias por coordenadas son alternativas conceptuales, sin tokens definidos. Acordar namespace, cardinalidad, destino de referencias y estado inicial OQ-07/08 | TXT + responsable de cerrojos/muros; no asignarlo al desarrollador de hielo |
+| Metadata | Sólo atributos Fragile implementados; no ID/título/dificultad de nivel, catálogo ni enlaces Lock–Walls. Declaraciones inversas conservan asociación. Fragile 2/32/33 | Campos adicionales y su versión requieren OQ-08. Path/nombre de archivo no son ID semántico suministrado por el agregado | TXT con catálogo/integración; sesión decide identificación del nivel |
+| Validación estructural y semántica | Header/secciones/separadores, cuotas, un jugador, rectangularidad y referencias/atributos coherentes. Agregado verifica unicidad, límites, terreno vacío y resistencia positiva. Fragile 4–17/23–31 | Validez de definición no prueba solución de puzzle, resistencia suficiente, reglas de colisión, hielo ni cierres seguros | TXT valida entrada; autores de niveles + QA/Model verifican puzzles y reglas |
+| Errores y publicación | Loader retorna sólo tras lectura/decodificación/parseo completo. IOException por E/S/UTF-8 inválido; LevelFormatException por tamaño/formato; Path nulo es error del llamador. Fragile 34–40 | Mensajes no son códigos estables ni todos incluyen posición. Adaptador runtime aún ausente: preservar sesión si su propia construcción falla es TEAM-PROPOSAL a validar, no garantía implementada por Loader | Integración/controlador maneja error; TXT conserva categorías actuales |
+| Legacy/C2 | `load(Path)` devuelve Level ordinario; `loadExperimentalFragile(Path)` devuelve definición C2 experimental. Ambas comparten UTF-8 estricto/65536 bytes. Loading 40/C2 32; Fragile 32/41 | Sin autodetección de gameplay especial ni migración automática entre productos. Detalle de rutas en tabla siguiente | Integración elige explícitamente ruta conforme al consumidor disponible |
+| Reconstrucción | Plantilla inmutable + lista inmutable entregan datos iniciales del subconjunto soportado. Llamadas independientes; sin caché. Fragile 18/19/32–34 | No hay posiciones actuales, resistencia remanente, bajas de cajas, historial, métricas ni estado de muros. Esquema de snapshots/Restart OPEN_PENDING_TEAM; la definición inicial no es un snapshot de partida | Model inicializa; sesión/Undo/Restart gestionan estado, sin implementación en TXT |
+
+Las pruebas citadas son las del incremento anterior: [SHA, comandos y límites](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). La revisión documental actual no las presenta como nuevas ejecuciones.
+
+| Entrada de archivo | `load(Path) → Level` | `loadExperimentalFragile(Path) → ExperimentalFragileLevel` |
+|---|---|---|
+| Legacy con siete símbolos | Acepta | Rechaza por exigir envoltura C2 |
+| C2-L7 ordinario, attributes vacía | Acepta | Acepta, lista Fragile vacía |
+| C2 con referencias/atributos Fragile válidos | Rechaza | Acepta definición, sin gameplay |
+| Hielo/KeyBox/Lock/muros dinámicos u otros atributos | Rechaza | Rechaza; ninguna ruta los implementa |
+
+### Ejemplo de definición especial y resultado esperado
+
+Copia exacta del fixture automático [experimental-fragile.txt](../../src/test/resources/levels/experimental-fragile.txt), cubierto por Fragile 32. **No es un nivel oficial de demo ni una solución certificada.**
+
+```text
+!sokoban-txt 2
+[grid]
+# # # # # #
+# @ {floor|fragile:f1} {goal|fragile:f2} * #
+# # # # # #
+[attributes]
+fragile f2 resistance=12
+fragile f1 resistance=3
+```
+
+Salida de `new LevelLoader(new LevelParser()).loadExperimentalFragile(path)`, usando accessors reales, sin fabricar clases consumidoras:
+
+| Dato | Valor esperado |
+|---|---|
+| `spatialTemplate().height()` / `width()` | 3 / 6 |
+| `spatialTemplate().playerPosition()` | Position(1, 1), FLOOR/PLAYER |
+| `fragileBoxes()` | f1 en Position(1, 2), initialResistance=3; f2 en Position(1, 3), initialResistance=12 |
+| Celda de plantilla en (1, 2) / (1, 3) | FLOOR/EMPTY / GOAL/EMPTY |
+| Celda en (1, 4) | GOAL/BOX normal |
+| `spatialTemplate().boxCount()` / `goalCount()` | 1 / 2; las dos Fragile permanecen en la lista separada |
+
+Los valores se asocian por ID aunque attributes declare primero f2. El orden de lista observado sigue el recorrido espacial del parser; no se propone convertir ese orden en una identidad de dominio. La plantilla sola dejaría desaparecer dos cajas: no publicarla como nivel especial completo ni enviarla al motor normal como sustituto de la definición.
+
+### Ejemplo ordinario compatible
+
+```text
+!sokoban-txt 2
+[grid]
+@ *
+[attributes]
+```
+
+`load` produce Board de alto 1/ancho 2, jugador (0, 0) en FLOOR, BOX normal en GOAL (0, 1), `boxCount=1`, `goalCount=1`. La ruta experimental conserva el mismo Board y devuelve `fragileBoxes().isEmpty() == true`. El legacy `@*` produce ese mismo Board con `load`; la ruta experimental rechaza legacy. Son ejemplos de sintaxis existente (C2 2–5 y Fragile 41), no propuestas de hielo ni puzzles de demo.
+
+### Acuerdos necesarios para el traspaso
+
+Las siguientes preguntas están **OPEN_PENDING_TEAM**. Son preparación para una conversación autorizada; no se enviaron mensajes ni se decidió por el compañero.
+
+| Pregunta concreta y alternativas sin seleccionar | Quién debe responder / dependencia |
+|---|---|
+| ¿Qué constructor o método real de inicialización ofrece el módulo Fragile/hielo y en qué commit? ¿Puede recibir la definición actual o necesita una conversión local documentada? No crear una interfaz común antes de revisar esa firma | Responsable Fragile/hielo + integración/TXT |
+| ¿Cómo conserva el modelo la identidad f1/f2 al cambiar posición, actualizar resistencia o dejar de existir? ¿Distingue resistencia inicial de remanente? ¿Requiere IDs de cajas normales? | Model/Fragile + sesión; OQ-06/08 para datos de archivo |
+| ¿Qué rango inicial necesita el modelo y qué debe pasar con valores fuera del rango acordado? El int positivo del spike no ratifica el rango del producto | TXT + Fragile; OQ-06 |
+| ¿Hielo es un terreno excluyente o una propiedad combinable? ¿Qué combinaciones con Goal y ocupantes admite el modelo? Después de acordarlo, ¿se amplía C2 o se versiona el formato? Aquí no se proponen tokens nuevos | Hielo/Model + TXT; OQ-08, sin cerrar OQ-02/03 |
+| ¿Qué ejemplos antes/después y fuente académica resuelven rotura al cero al entrar en hielo? La preferencia E04 queda conservada, sin escoger su implementación | Equipo de reglas/Fragile/hielo; OQ-03, docente si persiste conflicto |
+| Para Lock–Walls, ¿referencias explícitas por ID o por coordenadas? ¿Cuál es su alcance, cardinalidad, estado inicial y validación de asociaciones? El cierre ya votado no resuelve ocupación/seguridad | Responsable cerrojos/muros + TXT; OQ-07/08 |
+| ¿Restart usa la definición originalmente cargada o vuelve a leer un archivo que pudo cambiar? ¿Qué datos runtime consume la restauración de sesión? La definición inicial no contiene historia ni resistencia remanente | Sesión/Restart + Model/integración; alcance de Undo fuera de TXT |
+| Cuando esté disponible el nivel ofrecido, ¿cuál es el archivo/commit y qué mecánicas usa? Si exige hielo hoy, documentar la incompatibilidad antes de adaptar. ¿Quién valida la secuencia solución y resistencias? | Autor del nivel + QA/Model/TXT; ofrecimiento no equivale a entrega |
+
+**TEAM-PROPOSAL de integración por etapas:** revisar primero una definición del subconjunto ya soportado y su correspondencia campo a campo con el constructor real del consumidor. Una vez acordada, la conversión debe conservar terreno/ID/resistencia inicial y publicar el estado sólo tras construcción completa; las pruebas de movimiento y restauración las aporta su dominio. Para hielo y demás entidades, cerrar primero datos/combinaciones/errores y documentar la sintaxis elegida; recién entonces extender TXT en un incremento autorizado. No se elige patrón, nueva API ni esquema de snapshots desde este documento.
+
+La cantidad/dificultad de niveles de demo sigue siendo propuesta. No se crea ni modifica el nivel ofrecido por el compañero. Los fixtures de parser permanecen separados de la selección académica de niveles.

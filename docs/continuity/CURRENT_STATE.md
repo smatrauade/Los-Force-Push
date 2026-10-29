@@ -10,6 +10,10 @@ G2 y un incremento G3 terminados en `feat/txt-levels-release-2026-10-29`; no imp
 
 El baseline G0–G1 sobre `8b71712cec673651b8dffe792bdc4ee7c779c1cf` fue **ejecutado localmente por el usuario**, reportado y contrastado con logs/script, no reejecutado por rutina. Los apartados fechados posteriores conservan la historia de cada misión; sus «R7 no ejecutada» describen aquellas reconciliaciones. Siguiente paso: revisar con el equipo OQ-06/OQ-08 y el contrato con Model/Movement, sin ampliar gameplay por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED.
 
+## Contrato para trabajo paralelo — 29/10/2026
+
+La [matriz de traspaso TXT→Model/Movement](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026) describe datos/errores existentes, ejemplos y preguntas pendientes sobre identidad runtime, hielo, asociaciones y reconstrucción. La [coordinación aportada](SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026) informa actividad paralela y un nivel ofrecido; no acredita terminación ni cantidad definitiva de niveles de demo. Este hito es documental: código/tests/fixtures/runners conservan los bytes de 5ac2bba; no hay gameplay nuevo ni interfaz pública impuesta. TEAM_ACCEPTANCE = NOT_RECORDED. [Siguiente integración y responsables por dominio](../../TODO.md#integración-paralela-txt-con-fragilehielo--29102026).
+
 ## Integraciones verificadas
 
 Esta tabla selecciona hitos con impacto en producto, decisiones o gobernanza. No pretende enumerar todos los commits de mantenimiento documental; para el historial exhaustivo y el HEAD vigente consultar Git/GitHub. Un nuevo merge solo documental no hace obsoleta por sí misma esta lista.

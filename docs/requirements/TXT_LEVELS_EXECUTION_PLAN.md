@@ -132,3 +132,33 @@ La etiqueta inicial de planificación procede de `8b71712`; las afirmaciones de 
 | Assets/manifiesto/derechos, checkpoints/cápsulas históricas | NOT_APPLICABLE a edición | Sin recursos ni historia alterados; integridad de assets controlada por verificador |
 
 Autocontención: consigna/docente/procedencia en REQUIREMENTS/SOURCE_REGISTRY; TEAM en DECISION_LOG; implementación y límites en README/CURRENT_STATE/arquitectura; deuda en OQ/TODO; principios/patrones en arquitectura y bibliografía; ejecución/QA en README/TEST_STRATEGY; siguiente tarea arriba. No se requiere recuperar chats ni ejecutar el script privado del baseline para continuar. La limpieza Git es operación administrativa independiente, sin commits de producto; su estado operativo se informa en la entrega y se vuelve a consultar en remoto.
+
+## Contrato de integración con trabajo paralelo — 29/10/2026
+
+`MISSION = TXT_LEVELS_TEAM_INTEGRATION_CONTRACT`; dominio TXT/niveles sin cambios de gameplay. Gate A: rehidratación, inventario, diff de 5ac2bba, limpieza y remoto contrastados; base `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, rama TXT `5ac2bba9a1d495a5da9e1ad998857fbe00613840`, dos commits por delante, sin PR abierto al preflight. Estos SHA son referencias de entrada, no HEAD permanentes. Los worktrees históricos se preservan sin intervención.
+
+Gates B/C: [matriz de compatibilidad, entradas/salidas y preguntas concretas](FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026). Fuente nueva: [coordinación entre dominios](../continuity/SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026), sin votos ni confirmación de implementación terminada. Contrato TXT del Punto 5 enlazado al traspaso, sin modificar sus otras secciones.
+
+Gate D: `CODE_CHANGE=NOT_JUSTIFIED`. La lectura acotada, preservación de datos y validación existentes cubren el subconjunto implementado por el spike; no apareció un fallo nuevo independiente. Faltan datos del consumidor, representación del hielo y acuerdos OQ, no otra entidad/parser/fábrica. Se descartan por ahora un adaptador con firma inventada, tokens nuevos, IDs runtime generados por TXT y niveles finales de demo: invadirían acuerdos o trabajo paralelo. La opción técnica independiente es describir los accessors existentes y sus límites, con ejemplos enlazados a tests reales.
+
+Gate E y frescura por impacto:
+
+| Documentos | Estado | Motivo |
+|---|---|---|
+| FRAGILE_TXT_CONTRACT_PROPOSAL; TXT_LEVELS_EXECUTION_PLAN | UPDATED | Traspaso completo, alternativas/preguntas pendientes y límites del incremento |
+| SOURCE_REGISTRY; TODO; CURRENT_STATE | UPDATED | Coordinación anónima, responsables por dominio, estado reportado y siguiente integración |
+| INTEGRACION_EQUIPO, sólo Contrato TXT; docs/README | UPDATED | Entrada experimental ya existente y navegación al traspaso; sin alterar otros módulos |
+| TEST_STRATEGY | UPDATED | Identificación precisa del HEAD probado anteriormente; reutilización de evidencia, sin pruebas nuevas |
+| README; REHYDRATION_INDEX; AGENTS; CONTRIBUTING; FRESHNESS_POLICY | UNCHANGED_VERIFIED | APIs, build, política y rutas principales vigentes; el contrato continúa en el documento ya enlazado |
+| REQUIREMENTS; OPEN_QUESTIONS; DECISION_LOG | UNCHANGED_VERIFIED | Sin norma/voto nuevo; OQ-03/06/07/08 abiertas y E01/E02 preservadas |
+| ARCHITECTURE; RESPONSIBILITIES; UML; TRACEABILITY_MATRIX | UNCHANGED_VERIFIED | Sin estructura, firmas, aceptación funcional ni cobertura nueva; la matriz de traspaso se mantiene en el contrato, sin duplicarla |
+| BIBLIOGRAPHY; GITHUB_REFERENCES; fuentes de assets | UNCHANGED_VERIFIED | Sin bibliografía/código ajeno/recursos nuevos ni cambio de derechos |
+| Cápsulas/checkpoints históricos | NOT_APPLICABLE a edición | Evidencia fechada preservada |
+
+Se consultó la procedencia de dos afirmaciones operativas antes de actualizarlas: la representación individual futura del contrato Punto 5 se introdujo en `cbc1be7`; la frase R7 preparada del índice documental, en `2dad014`. El estado disponible de 5ac2bba las precisa; no cambió la autoridad académica ni se editan snapshots históricos.
+
+Validación de este hito: revisión campo a campo de ejemplos contra parser/agregado y oráculos existentes; `git diff --check`, verificador documental y prueba de identidad de src/scripts frente a 5ac2bba. JAVA_QA nueva NOT_RUN_DOCS_ONLY; [evidencia previa verificada](../testing/TEST_STRATEGY.md#revisión-del-contrato-para-trabajo-paralelo--29102026). Asistencia de IA declarada, TEAM_ACCEPTANCE=NOT_RECORDED. Un único commit documental coherente en la misma rama; sin PR, merge, mensajes a integrantes ni cambios de otros dominios.
+
+Siguiente acción segura: obtener, mediante coordinación humana autorizada, firma/commit del consumidor y archivo del nivel ofrecido; contrastarlos con la matriz antes de definir conversión o ampliar sintaxis. Hielo y runtime Fragile permanecen OPEN_PENDING_TEAM. La cantidad de niveles de demo no se fija por esta misión.
+
+Controles documentales del hito: `git diff --check`, `bash scripts/verify-repo-readonly.sh` y `git diff --exit-code 5ac2bba -- src scripts`, exit 0. Verificador: 137 archivos, 415 enlaces relativos, 43 assets íntegros; ocho Markdown afectados. El ejemplo especial coincide byte a byte con el fixture y las secciones no TXT del contrato Punto 5 permanecen idénticas. No hubo compilación ni ejecución Java nuevas.

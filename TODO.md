@@ -44,6 +44,20 @@ R6 está completa por PR #12. **R7 iniciada en esta rama:** terminada la carga e
 
 Pendiente: ratificar detalles OQ-06/OQ-08 y acordar con Model/Movement la identidad y resistencia runtime, snapshots y casos antes/después. La [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) delimita la salida disponible. Siguiente tarea segura: revisión del contrato y ejemplos con el equipo, sin activar especiales en `Level`, sin reimplementar este loader y sin contar el fixture de definición como puzzle jugable resuelto. La promoción única sigue pendiente de autorización de PR/revisión; no se ha modificado `main`.
 
+## Integración paralela TXT con Fragile/hielo — 29/10/2026
+
+[Procedencia anónima](docs/continuity/SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026). Un integrante reporta trabajo en esas mecánicas y ofreció un nivel de prueba; no se ha verificado una entrega ni su implementación. Cantidad/estructura de niveles de demo siguen propuestas. TXT no sustituye ese nivel ni implementa su motor.
+
+| Estado / tarea | Responsable por dominio | Bloqueo y siguiente evidencia |
+|---|---|---|
+| DOCUMENTED: entrada/salida actual y limitaciones | TXT/niveles | [Matriz de interfaces y ejemplos](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026); código base 5ac2bba |
+| OPEN_PENDING_TEAM: compatibilidad con consumidor | Fragile/hielo + TXT/integración | Recibir firma real y commit del consumidor; contrastar ID, coordenadas, terreno y resistencia inicial sin imponer API |
+| OPEN_PENDING_TEAM: representación hielo y reglas conflictivas | Hielo/Model + TXT; equipo de reglas | Datos/combinaciones y sintaxis OQ-08; conservar OQ-03 para rotura/hielo y OQ-06 para rango |
+| OFFERED_NOT_VERIFIED: nivel de prueba | Integrante que lo ofreció + QA/TXT/Model | Esperar archivo/commit y mecánicas utilizadas; acordar contrato antes de cargar entidades no soportadas; solución y resistencia por validar |
+| PENDING: futuras asociaciones y restauración | Cerrojos/muros y sesión con TXT | OQ-07 y contrato runtime; no atribuir estas tareas al desarrollador de hielo por inferencia |
+
+Siguiente integración segura: revisar el constructor real del consumidor y el nivel cuando se aporten, usando las preguntas del contrato. Este hito no justifica cambio Java independiente (`CODE_CHANGE=NOT_JUSTIFIED`): las brechas restantes son de acuerdo entre módulos, no un fallo nuevo demostrado del parser. No enviar mensajes ni editar otras ramas sin autorización.
+
 ## Decisiones y mantenimiento
 
 E01–E11 se conservan únicamente en [DECISION_LOG](docs/decisions/DECISION_LOG.md); pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). No reabrir acuerdos por defecto. E04/E08 siguen CONFLICT_REVIEW_REQUIRED; Java/build OPEN. Revisar patrones por intención, roles reales y alternativa; SoundManager no es Singleton, callbacks no acreditan Command y el DTO LevelResult no calcula score.
