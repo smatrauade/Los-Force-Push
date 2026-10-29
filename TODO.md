@@ -1,6 +1,6 @@
 # TODO — backlog vivo
 
-Revisado 29/10/2026. [Estado y merges hasta PR #12](docs/continuity/CURRENT_STATE.md). TEAM_ACCEPTANCE = NOT_RECORDED. Las prioridades son planificación propuesta por módulo, no nuevas decisiones de reglas ni asignaciones personales.
+Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CURRENT_STATE.md). TEAM_ACCEPTANCE = NOT_RECORDED. Las prioridades son planificación propuesta por módulo, no nuevas decisiones de reglas ni asignaciones personales.
 
 ## Base disponible
 

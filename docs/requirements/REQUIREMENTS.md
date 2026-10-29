@@ -1,6 +1,6 @@
 # Requisitos normalizados
 
-`LAST_REVIEWED = 2026-10-23` (refinamientos TEAM separados; baseline oficial normalizado del 08/10 preservado). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no está disponible y su hash histórico no se ha recalculado. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
+`LAST_REVIEWED = 2026-10-29` (refinamientos TEAM separados; baseline oficial normalizado del 08/10 preservado y aclaración de procedencia documental). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no forma parte del clon ni se redistribuye; fue recibido y su SHA-256 verificado en una revisión externa del 21/10/2026, como consta en SOURCE_REGISTRY. Un agente nuevo con solo el repositorio tiene la normalización y la procedencia, no el PDF original. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
 
 ## Baseline oficial
 

@@ -1,6 +1,6 @@
 # Bibliografía y materiales
 
-Revisado 2026-10-08. El uso descrito es el reportado en prompt/cápsula y la aplicación conceptual al candidato, no una afirmación de lectura nueva de libros/PDFs. No se redistribuyen obras ni materiales completos.
+Revisado 2026-10-29. Las referencias bibliográficas y sus aplicaciones inicialmente se registraron el 08/10 a partir del prompt/cápsula; mantener su carácter reportado, sin atribuir lectura directa de libros o clases no verificada. No se redistribuyen obras ni materiales completos.
 
 | Autor | Obra | Aplicación concreta reportada |
 |---|---|---|
@@ -13,9 +13,9 @@ Revisado 2026-10-08. El uso descrito es el reportado en prompt/cápsula y la apl
 
 ## Cátedra y aclaraciones
 
-La consigna `PDS - TI - Prof Pepe.pdf` es autoridad principal; su descripción normalizada está en REQUIREMENTS. Original no disponible en esta iteración. El hash histórico reportado se conserva en SOURCE_REGISTRY y no prueba una lectura nueva.
+La consigna `PDS - TI - Prof Pepe.pdf` es autoridad principal; su descripción normalizada está en REQUIREMENTS. El PDF original no se distribuye con el repositorio: se recibió y verificó su SHA-256 en una revisión externa del 21/10, registrada en SOURCE_REGISTRY. La normalización autónoma para un nuevo agente está en REQUIREMENTS; no atribuir al clon acceso a los bytes originales.
 
-Se registran materiales de **Clases 1–6 y 8–10**, introducción UML, práctica DIP y ejercicio **Resort de lujo**, usados históricamente. No hay material Clase 7 aportado ni se infiere su contenido.
+Históricamente se registraron materiales de **Clases 1–6 y 8–10**, introducción UML, práctica DIP y **Resort de lujo**. En el material externo recibido el 29/10 figuran también Clases 11–13 dentro del corpus aportado y siete transcripciones ASR fechadas; esos originales no están en el clon ni su mera disponibilidad demuestra lectura y aplicación al producto. La procedencia completa se conserva en SOURCE_REGISTRY; no se atribuye contenido a Clase 7 ausente.
 
 Enseñanzas normalizadas:
 

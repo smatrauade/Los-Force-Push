@@ -8,7 +8,7 @@ Trabajo integrador de **Procesos de Desarrollo de Software, UADE**, profesor Jon
 
 ## Estado integrado
 
-Revisado el **29/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push/pull/9) integra la interfaz pixel art y [PR #8](https://github.com/smatrauade/Los-Force-Push/pull/8) integra TXT C2-L7. También están MERGED el [PR #10](https://github.com/smatrauade/Los-Force-Push/pull/10) de continuidad, #11 de definición Fragile experimental y [#12](https://github.com/smatrauade/Los-Force-Push/pull/12) del contrato candidato. Fragile continúa sin gameplay y el contrato no está ratificado. El merge de #8 es 565376452affa9b2146569e5da27dbfd1ee9d4f0; identifica ese evento, no un HEAD permanente. Consultar [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) y Git/GitHub antes de continuar.
+Revisado el **29/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push/pull/9) integra la interfaz pixel art y [PR #8](https://github.com/smatrauade/Los-Force-Push/pull/8) integra TXT C2-L7. También están MERGED el [PR #10](https://github.com/smatrauade/Los-Force-Push/pull/10) de continuidad, #11 de definición Fragile experimental y [#12](https://github.com/smatrauade/Los-Force-Push/pull/12) del contrato candidato y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) de reconciliación académica y continuidad autocontenida. Fragile continúa sin gameplay y el contrato no está ratificado. El merge de #8 es 565376452affa9b2146569e5da27dbfd1ee9d4f0; identifica ese evento, no un HEAD permanente. Consultar [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) y Git/GitHub antes de continuar.
 
 | Área | Implementado | Pendiente |
 |---|---|---|
