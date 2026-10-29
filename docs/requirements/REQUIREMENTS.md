@@ -31,7 +31,7 @@ En el ejemplo de hielo, la caja atraviesa la franja y llega al primer espacio no
 
 No hace falta medir tiempo ni implementar animaciones. Kenney y Pixabay fueron recomendados como fuentes posibles, sin garantía automática de dominio público para cada recurso.
 
-Builder fue mencionado como alternativa válida para construir el nivel leyendo TXT; Observer fue sugerido para Lock→Walls. Esto respalda candidatos, no ratifica decisiones del equipo.
+Builder fue mencionado como alternativa válida y opcional para construir el nivel leyendo TXT. La nueva evidencia ASR del 21/10 indica incorporar Observer en alguna parte del TPO, con Lock→Walls como ejemplo. Registrar esa fuerza docente no ratifica arquitectura TEAM ni demuestra implementación; ver [procedencia](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026).
 
 La cápsula histórica reporta además guía sobre interacción por eventos sin game loop continuo, Memento para recuperar estados y Strategy como política de cálculo. Su procedencia es indirecta; no se agregan requisitos oficiales por esas menciones.
 
@@ -56,3 +56,13 @@ Este apartado es un mapa hacia la autoridad canónica, no otra definición norma
 | RF-12 | Primera adicional: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md): segunda sin mayoría, contratos y GoF pendientes |
 
 La revisión del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`. OQ-11 no tuvo encuesta: los comandos actuales y release 17 no ratifican Java/build final. Los estados técnicos de arquitectura/UML y patrones se conservan.
+
+## Entrega y aceptación docente — 29/10/2026
+
+**TEACHER-EXPLICIT / USER_SUPPLIED_TEAMS_TEXT:** el miércoles **18 de noviembre de 2026** se presenta y entrega el TI. Demo en vivo de **15–20 minutos**, mostrando lo implementado y explicando detalladamente los patrones aplicados. No se exige mostrar código ni diagramas en la exposición; **no se elimina StarUML de RT-02**.
+
+Un integrante envía a **jpepe@uade.edu.ar**, con copia a los demás, nombre del equipo, apellido y nombre de cada desarrollador, todos los entregables y enlace al repositorio público. Checklist RT-02: repositorio público, README reproducible, video, archivo StarUML e informe técnico con decisiones y justificaciones. RT-04 exige declarar IA y comprensión/defensa individual; no afirmar revisión grupal inexistente.
+
+**Indicación oral resumida / AUDIO_NOT_VERIFIED:** para RF-02 el docente puede crear un TXT compatible o editar válidamente uno del equipo, por ejemplo cambiar pared por caja. Aceptación: archivo externo → Loader/Parser → Board → interfaz debe reflejar el cambio, sin hardcode. Una entrada inválida debe producir error y conservar el nivel previo; no se promete aceptar cualquier edición. Para RF-01/02/05 los niveles elaborados por el equipo deben ser resolubles y su resistencia Fragile coherente con el puzzle; no se prescribe solver automático ni máximo numérico oficial. [Fuentes y timestamps](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026).
+
+Estos criterios son objetivos de aceptación, no resultados nuevos. Fragile jugable y las demás entidades especiales siguen pendientes; la definición experimental no satisface por sí sola RF-05. OQ-03/OQ-04 conservan sus conflictos normativos.

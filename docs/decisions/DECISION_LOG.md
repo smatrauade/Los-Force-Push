@@ -13,7 +13,7 @@
 | D-007 | Revertir estado complejo | Memento `PREFERRED`; operaciones inversas como alternativa | Diseño de snapshots sin ratificar; [E07](#e07) acepta sólo el umbral de disponibilidad Undo, no Memento |
 | D-008 | No borrar coste de Undo | Comportamiento de métricas [E09](#e09) `ACCEPTED_SCOPE`; SessionMetrics fuera del snapshot sigue `TEAM-PROPOSAL` | [E08](#e08) requiere revisión semántica; efectos de Restart en métricas pendientes; [OQ-04/OQ-09](../requirements/OPEN_QUESTIONS.md) |
 | D-009 | Puntaje | ScoreStrategy `PREFERRED`; métricas penalizadas [E10](#e10) `ACCEPTED_SCOPE`; fórmula `OPEN` | [E09](#e09) aporta la distinción de contadores; base, coeficientes y normalización pendientes en [OQ-09](../requirements/OPEN_QUESTIONS.md) |
-| D-010 | Lock notifica muros | Observer `PREFERRED`, sugerencia docente; conducta de cierre [E06](#e06) `ACCEPTED_SCOPE` | IDs, cardinalidad, ocupación al cerrar y restauración siguen pendientes en [OQ-07](../requirements/OPEN_QUESTIONS.md); no ratifica Observer |
+| D-010 | Lock notifica muros | Observer `PREFERRED`, con indicación oral de incorporación según ASR del 21/10; conducta de cierre [E06](#e06) `ACCEPTED_SCOPE` | IDs, cardinalidad, ocupación al cerrar y restauración siguen pendientes en [OQ-07](../requirements/OPEN_QUESTIONS.md); no ratifica Observer |
 | D-011 | Armar nivel de TXT | Builder `PREFERRED`, construcción directa alternativa pendiente | Sugerido como válido por profesor; separar sintaxis/ensamblado sólo si spike aporta claridad |
 | D-012 | Coordinar construcción | Parser como Director opcional `PREFERRED` | Puede dirigir pasos sin clase extra; operaciones dependen de TXT ratificado |
 | D-013 | Loader con clones | Prototype `REJECTED-FOR-NOW` | No hay creación costosa/clonación demostrada; reconsiderar si cambia el problema |
@@ -108,3 +108,13 @@ E01–E10 alcanzan el umbral de al menos 3/5 en la alternativa mayoritaria; E04 
 Sin encuesta: OQ-11 Java/build permanece OPEN; `--release 17` y los comandos actuales son experimentales. D-011/D-012, D-016 y demás patrones, herencia/composición, UML y código mantienen sus estados técnicos. No hay nueva prueba ejecutada ni aceptación académica global. [REQUIREMENTS](../requirements/REQUIREMENTS.md) conserva el texto normativo normalizado y separa los refinamientos TEAM; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) es el único inventario canónico de deuda.
 
 Siguiente gate: revisión humana del Draft documental y, en otra misión, `SOKOBAN_TXT_GRAMMAR_SPECIFICATION` con compatibilidad de reglas especiales en dominios acotados. No otra ronda general para volver a votar aspectos ya mayoritarios; sin permiso de merge ni implementación por este registro.
+
+## Evidencia docente adicional — 29/10/2026
+
+[Procedencia y timestamps](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026): USER_SUPPLIED_TRANSCRIPT_SUMMARY / AUDIO_NOT_VERIFIED. Esta revisión agrega evidencia; conserva íntegros los recuentos E01–E11 y sus estados. TEAM_ACCEPTANCE = NOT_RECORDED.
+
+- D-010: según ASR del 21/10, Observer debe incorporarse en alguna parte del TPO. Lock→Walls es el ejemplo docente concreto, pendiente de OQ-07 e implementación. Es una indicación docente más fuerte que la sugerencia registrada antes; no es ratificación TEAM del diseño ni código existente.
+- D-011/D-012: Builder es opcional con alternativa justificada; el LevelBuilder concreto ensaya ensamblado incremental. Defender intención, alternativa y consecuencias antes de atribuir Builder GoF completo. Considerar creación/factorías no impone Factory Method ni Abstract Factory; D-014/D-015 no cambian.
+- D-007: comparar Command (acciones) y Memento (estados) para Undo; no exigir ambos ni presentar Board inmutable como Memento implementado.
+- D-009: Strategy es candidato para score; E10 no fija fórmula. D-018: Decorator/power-up sigue ejemplo posible, sin aprobar segunda adicional.
+- D-013/D-016: no hay justificación actual de Prototype; audio no obliga Singleton. MVC se defiende por reglas del Model, coordinación del Controller y presentación Swing, según el código; no se reconstruyen frases docentes ausentes.

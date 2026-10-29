@@ -1,6 +1,6 @@
 # Índice de rehidratación
 
-AS_OF = 2026-10-28. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental) están integrados.
+AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado), están integrados.
 
 ## Ruta principal
 
@@ -35,3 +35,7 @@ Las cápsulas y checkpoints se consultan sólo para historia y procedencia; no f
 Consultar git status, git rev-parse HEAD, historial, HEAD remoto y PRs antes de actuar. Los commits citados identifican integraciones/pruebas históricas. Las ramas remotas fusionadas pueden desaparecer sin perder esos commits. El verificador documental requiere un checkout Git; no ejecutarlo desde una exportación sin .git.
 
 Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectados, ejecución nueva frente a histórica y siguiente gate. No crear otra cápsula ni reabrir acuerdos por defecto. StarUML final, licencias, mecánicas restantes y aceptación del equipo siguen pendientes.
+
+## Entrega y siguiente gate
+
+Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; R7 preparada, NO ejecutada. Antes de R7 revisar alcance contra el prototipo y contrato ya integrados, dependencias OQ y autorización específica; este índice no es una orden de implementación.

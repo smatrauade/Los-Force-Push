@@ -59,3 +59,21 @@ RAW_VERIFICATION = NOT_PERFORMED_BY_THIS_AGENT
 El solicitante aportó una transcripción revisada de once capturas de detalles de encuesta del 23/10 y confirmó el método de mayoría absoluta del equipo. La misión documental del 23/10 leyó esa transcripción, **no** las capturas originales ni el ZIP de WhatsApp. La exportación mencionada contiene preguntas/discusiones pero no votos; no atribuirle los recuentos ni afirmar verificación independiente de imágenes no disponibles.
 
 Sólo los agregados anónimos se incorporan a [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el alcance y los pendientes. Las anomalías de selección E04/E05 y la selección múltiple E11 se conservan allí. No se publican originales, datos personales ni hashes de capturas cuyos bytes no se tienen. La fuente TEAM no sustituye el enunciado ni las aclaraciones documentadas de cátedra; no es una prueba del juego, del diseño ni del código. El PDF original no se releyó en esta misión.
+
+## Fuentes académicas aportadas — 29/10/2026
+
+Reconciliación basada en la solicitud del usuario y su resumen de misión, leídos en esta ejecución. No hubo acceso directo a Teams, PDF oficial, corpus de cátedra, transcripciones completas ni audio. No se redistribuyen esos originales. Los hashes reportados en fuentes externas no se han recalculado aquí. La autoridad de la consigna sigue OFFICIAL según su normalización; no se convierte ASR en texto oficial.
+
+| Fuente y ubicación temporal | Autoridad / fidelidad | Afirmación e impacto documental |
+|---|---|---|
+| Teams, texto aportado el 29/10 | TEACHER-EXPLICIT / USER_SUPPLIED_TEAMS_TEXT; mensaje original externo | 18/11, demo 15–20 min, entrega por correo; REQUIREMENTS y TODO |
+| 23/09 03:00:50–03:02:09; 30/09 01:07:56–01:08:51 | Indicación oral / USER_SUPPLIED_TRANSCRIPT_SUMMARY / AUDIO_NOT_VERIFIED | Alfabeto del equipo; TXT propio o editado por docente, carga real; RF-02 y TEST_STRATEGY |
+| 30/09 00:34:18–00:35:47; 07/10 00:31:47–00:32:04 | Misma procedencia ASR | Builder como ejemplo opcional, alternativa justificada; D-011/D-012 |
+| 23/09 03:05:27–03:05:53 | Misma procedencia ASR | Niveles del equipo resolubles y resistencia coherente con puzzle; aceptación, sin máximo oficial |
+| 23/09 03:07:10–03:07:23; 21/10 00:15:01–00:16:24 y 00:04:17–00:04:21 | Misma procedencia ASR; indicación más fuerte que recomendación | Observer en alguna parte del TPO; ejemplo Lock notifica sólo a muros suscriptos; D-010, pendiente de implementación |
+| 23/09 03:07:31–03:08:23; 21/10 02:42–03:04 | Misma procedencia ASR; timestamp corto conservado sin completar | Command para acciones frente a Memento para estados; alternativas de Undo, no exigir ambos |
+| 23/09 03:08:39–03:09:08 | Misma procedencia ASR | Strategy candidato para cálculo de score; fórmula pendiente |
+| 14/10 03:25–03:27 | Misma procedencia ASR; sin completar precisión | Factory/State/Strategy y posible power-up Decorator; no selección TEAM de segunda adicional |
+| Resumen docente aportado, sin timestamp adicional verificado | Misma procedencia ASR | Prototype sin justificación actual; Singleton/audio no obligatorio; MVC separa reglas, coordinación y vista |
+
+La investigación externa de solver/deadlocks/generación no es requisito docente ni se revisó en esta ejecución: NOT_APPLICABLE a la ruta crítica. E01–E11 permanecen únicamente en DECISION_LOG; esta tabla registra fuentes, no votos ni nuevas decisiones.

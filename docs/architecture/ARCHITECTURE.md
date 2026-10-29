@@ -51,3 +51,18 @@ El candidato incluye GameSession, RestorableLevelState, GameMemento/UndoManager,
 - El candidato propone polimorfismo de cajas; herencia/composición sigue abierta. No exigir resistencia a todas las cajas ni distribuir instanceof/getClass por la vista.
 
 ExperimentalFragileParser y ExperimentalFragileLevel representan atributos individuales sin producir un Level jugable. El agregado valida IDs y posiciones únicos, límites, piso/destino vacío y resistencia positiva. Siguiente dominio TXT/niveles: revisar el contrato y especificar su integración futura; sintaxis/rangos/errores siguen sin ratificar. No ampliar mecánicas en mantenimiento documental. [STARUML_STATUS](uml/STARUML_STATUS.md) separa los diagramas implementados, el candidato preservado y el .mdj pendiente. Los informes de [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) son antecedentes fechados.
+
+## Patrones y brechas de defensa — 29/10/2026
+
+Revisión documental contra el código integrado por PR #11/#12; [evidencia docente](../decisions/DECISION_LOG.md#evidencia-docente-adicional--29102026). AS_IMPLEMENTED no implica aceptación TEAM.
+
+| Problema | Implementación real | Candidato / brecha de defensa |
+|---|---|---|
+| Ensamblar filas y publicar nivel válido | LevelBuilder concreto interno, addRow/build por carga | Justificar Builder simplificado frente a construcción directa; sin familia de productos ni jerarquía Creator GoF |
+| Separar UI de reglas | GameController delega a Loader/MovementEngine y publica GamePresentation; GameView permite sondas | MVC verificable por dependencias; no transferir reglas al renderer |
+| Identidad/resistencia inicial Fragile | ExperimentalFragileLevel separado del Level jugable | Integración runtime pendiente; no duplicar este agregado en R7 |
+| Notificar cambios de Lock a muros asociados | No implementado | Observer indicado por docente según ASR; candidato Lock→Walls depende de OQ-07 |
+| Deshacer y calcular score | No implementado; UiCommands son callbacks y LevelResult es DTO | Command/Memento a comparar; Strategy depende de fórmula OQ-09 y Undo de OQ-04/05 |
+| Audio y adicionales | SoundManager por ventana; sin persistencia operativa | No Singleton GoF; State/Factory/Decorator no están acreditados por ejemplos o nombres |
+
+Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. R7 permanece preparada y no ejecutada en esta reconciliación.

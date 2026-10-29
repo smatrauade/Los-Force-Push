@@ -23,3 +23,7 @@ Builder frente a construcción directa, Terrain/Occupant, herencia/composición,
 Para cerrar **un detalle restante**, registrar fuente/autoridad, quién decide, fecha, alcance, alternativa, consecuencias y ejemplos de aceptación; actualizar DECISION_LOG y trazabilidad. No reabrir por defecto el aspecto ya aprobado por mayoría ni implementar reglas en esta misión.
 
 Para OQ-06 y la porción Fragile de OQ-08, usar la [propuesta de contrato TXT Fragile](FRAGILE_TXT_CONTRACT_PROPOSAL.md) como insumo técnico `TEAM-PROPOSAL`, no como decisión aceptada. Los estados `PENDING_DETAILS` no cambian sin ratificación explícita.
+
+## Implicaciones académicas — revisión 29/10/2026
+
+Los estados de la tabla permanecen sin cambios. La [evidencia docente aportada](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026) exige preparar casos de TXT externo y puzzles resolubles al especificar OQ-06/OQ-08; no fija su gramática/rango. OQ-07 debe permitir justificar el candidato Observer Lock→Walls y aislamiento de asociaciones antes de implementar. OQ-09 conserva fórmula abierta aunque Strategy sea candidato. OQ-10 no adopta Decorator/power-up por un ejemplo de clase. OQ-11 sigue OPEN: release 17 no es una decisión definitiva. Priorizar OQ-03/OQ-04 por incompatibilidad normativa antes de implementar esas reglas, sin reinterpretar votos.
