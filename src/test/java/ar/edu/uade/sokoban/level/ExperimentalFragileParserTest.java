@@ -1,8 +1,10 @@
 package ar.edu.uade.sokoban.level;
 
+import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,9 +154,132 @@ public final class ExperimentalFragileParserTest {
             rejectConstruction(() -> new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), 0));
             rejectConstruction(() -> new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 1), -1));
         });
+        filesystemChecks(args.length == 0 ? Path.of("src/test/resources/levels") : Path.of(args[0]));
         System.out.println("FRAGILE RESULT: " + passed + " PASS, " + failed + " FAIL");
         if (failed != 0) { System.exit(1); }
     }
+
+    private static void filesystemChecks(Path fixtures) {
+        LevelLoader loader = new LevelLoader(new LevelParser());
+        check("32 external definition preserves both identities resistance and terrain", () -> {
+            var value = loader.loadExperimentalFragile(fixtures.resolve("experimental-fragile.txt"));
+            assertTrue(value.fragileBoxes().equals(List.of(
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(1, 2), 3),
+                    new ExperimentalFragileLevel.FragileBox("f2", new Position(1, 3), 12))));
+            assertTrue(value.spatialTemplate().equals(new LevelParser().parse("######\n#@ .*#\n######").board()));
+            expectUnsupported(() -> value.fragileBoxes().clear());
+            expectUnsupported(() -> value.spatialTemplate().rows().get(1).clear());
+            expect(LevelFormatException.class, () -> loader.load(fixtures.resolve("experimental-fragile.txt")));
+        });
+        check("33 edit external Unicode path and reload without changing old definition", () -> withFile(file -> {
+            String original = level("@ {floor|fragile:f1} {goal|fragile:f2} #",
+                    "fragile f1 resistance=3\nfragile f2 resistance=12");
+            Files.writeString(file, original, StandardCharsets.UTF_8);
+            var first = loader.loadExperimentalFragile(file);
+            String edited = level("@ {goal|fragile:f2} {floor|fragile:f1} $",
+                    "fragile f2 resistance=8\nfragile f1 resistance=5");
+            Files.writeString(file, edited.replace("\n", "\r\n") + "\r\n", StandardCharsets.UTF_8);
+            var second = loader.loadExperimentalFragile(file);
+            assertTrue(second.fragileBoxes().equals(List.of(
+                    new ExperimentalFragileLevel.FragileBox("f2", new Position(0, 1), 8),
+                    new ExperimentalFragileLevel.FragileBox("f1", new Position(0, 2), 5))));
+            assertTrue(second.spatialTemplate().cellAt(new Position(0, 1)).terrain() == Terrain.GOAL);
+            assertTrue(second.spatialTemplate().cellAt(new Position(0, 3)).occupant() == Occupant.BOX);
+            assertTrue(first.fragileBoxes().get(0).initialResistance() == 3
+                    && first.fragileBoxes().get(0).position().equals(new Position(0, 1))
+                    && first.spatialTemplate().cellAt(new Position(0, 3)).terrain() == Terrain.WALL);
+            // Declaration order is independent of spatial order, including mixed line endings.
+            Files.writeString(file, level("@ {goal|fragile:f2} {floor|fragile:f1} $",
+                    "fragile f1 resistance=5\r\nfragile f2 resistance=8"), StandardCharsets.UTF_8);
+            var third = loader.loadExperimentalFragile(file);
+            assertTrue(third.equals(second) && third != second && third.spatialTemplate() != second.spatialTemplate());
+        }));
+        check("34 late file error preserves published definition and reload recovers", () -> withFile(file -> {
+            String valid = level("@ {goal|fragile:f1}", "fragile f1 resistance=7");
+            Files.writeString(file, valid, StandardCharsets.UTF_8);
+            var first = loader.loadExperimentalFragile(file);
+            var holder = new ExperimentalFragileLevel[] {first};
+            Files.writeString(file, valid + "\ninvalid", StandardCharsets.UTF_8);
+            var error = expect(LevelFormatException.class, () -> holder[0] = loader.loadExperimentalFragile(file));
+            assertTrue(error.getMessage().equals("Invalid fragile attribute at line 6") && holder[0] == first);
+            Files.write(file, new byte[] {(byte) 0xC3});
+            expect(MalformedInputException.class, () -> holder[0] = loader.loadExperimentalFragile(file));
+            assertTrue(holder[0] == first && first.fragileBoxes().get(0).initialResistance() == 7);
+            Files.writeString(file, valid, StandardCharsets.UTF_8);
+            assertTrue(loader.loadExperimentalFragile(file).equals(first));
+        }));
+        check("35 malformed and truncated UTF-8 reject before syntax", () -> withFile(file -> {
+            for (byte[] bytes : List.of(new byte[] {(byte) 0xC3, (byte) 0x28},
+                    new byte[] {(byte) 0xE2, (byte) 0x82})) {
+                Files.write(file, bytes);
+                expect(MalformedInputException.class, () -> loader.loadExperimentalFragile(file));
+            }
+        }));
+        check("36 oversized file rejects by bytes before decoding", () -> withFile(file -> {
+            byte[] bytes = new byte[LevelLoader.MAX_FILE_BYTES + 1];
+            java.util.Arrays.fill(bytes, (byte) 'x');
+            bytes[0] = (byte) 0xFF;
+            Files.write(file, bytes);
+            var error = expect(LevelFormatException.class, () -> loader.loadExperimentalFragile(file));
+            assertTrue(error.getMessage().equals("File exceeds 65536 bytes"));
+        }));
+        check("37 exact byte ceiling reaches experimental structural validation", () -> withFile(file -> {
+            String prefix = "!sokoban-txt 2\n[grid]\n";
+            String text = prefix + "x".repeat(LevelLoader.MAX_FILE_BYTES - prefix.length());
+            Files.writeString(file, text, StandardCharsets.UTF_8);
+            assertTrue(Files.size(file) == LevelLoader.MAX_FILE_BYTES);
+            var error = expect(LevelFormatException.class, () -> loader.loadExperimentalFragile(file));
+            assertTrue(error.getMessage().equals("Missing [attributes]"));
+        }));
+        check("38 experimental filesystem ceiling counts UTF-8 bytes not Java chars", () -> withFile(file -> {
+            String text = "@" + "ñ".repeat(32_768);
+            assertTrue(text.length() < ExperimentalFragileParser.MAX_TEXT_CHARS);
+            Files.writeString(file, text, StandardCharsets.UTF_8);
+            assertTrue(Files.size(file) == LevelLoader.MAX_FILE_BYTES + 1);
+            var error = expect(LevelFormatException.class, () -> loader.loadExperimentalFragile(file));
+            assertTrue(error.getMessage().equals("File exceeds 65536 bytes"));
+        }));
+        check("39 experimental file missing and null remain explicit failures", () -> withFile(file -> {
+            expect(NullPointerException.class, () -> loader.loadExperimentalFragile(null));
+            Files.delete(file);
+            expect(NoSuchFileException.class, () -> loader.loadExperimentalFragile(file));
+        }));
+        check("40 experimental file does not normalize BOM empty or legacy input", () -> withFile(file -> {
+            for (String text : List.of("", "@", "\uFEFF" + level("@", ""))) {
+                Files.writeString(file, text, StandardCharsets.UTF_8);
+                var error = expect(LevelFormatException.class, () -> loader.loadExperimentalFragile(file));
+                assertTrue(error.getMessage().equals("Experimental C2 header or grid section invalid"));
+            }
+        }));
+        check("41 ordinary C2 works in both APIs without sharing cached state", () -> withFile(file -> {
+            Files.writeString(file, level("@ $ .", ""), StandardCharsets.UTF_8);
+            Level playable = loader.load(file);
+            var definition = loader.loadExperimentalFragile(file);
+            assertTrue(definition.fragileBoxes().isEmpty() && definition.spatialTemplate().equals(playable.board()));
+            Files.writeString(file, "@$.", StandardCharsets.UTF_8);
+            expect(LevelFormatException.class, () -> loader.loadExperimentalFragile(file));
+            assertTrue(loader.load(file).board().boxCount() == 1);
+        }));
+    }
+
+    private static void withFile(FileCheck action) throws Exception {
+        Path directory = Files.createTempDirectory("fragile-loading-");
+        Path file = directory.resolve("nivel Fragile ñ con espacios.txt");
+        Files.createFile(file);
+        try { action.run(file); }
+        finally { Files.deleteIfExists(file); Files.delete(directory); }
+    }
+
+    private static <T extends Exception> T expect(Class<T> type, Checked action) throws Exception {
+        try { action.run(); }
+        catch (Exception error) {
+            if (type.isInstance(error)) { return type.cast(error); }
+            throw new AssertionError("Expected " + type.getName() + ", got " + error, error);
+        }
+        throw new AssertionError("Expected " + type.getName());
+    }
+
+    @FunctionalInterface private interface FileCheck { void run(Path file) throws Exception; }
 
     private static String level(String grid, String attributes) {
         return "!sokoban-txt 2\n[grid]\n" + grid + "\n[attributes]" + (attributes.isEmpty() ? "" : "\n" + attributes);

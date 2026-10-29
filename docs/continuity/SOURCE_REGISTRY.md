@@ -91,3 +91,11 @@ Fuente leída en esta misión: resumen impersonal aportado por el usuario de una
 | Fechas discutidas | SECONDHAND / INCOMPLETE_CONTEXT | Parcial sin fecha exacta; pregunta sobre 1/11 con respuestas de voz omitidas, no deadline confirmado. Teams conserva entrega oficial del 18/11/2026 |
 
 GitHub consultado en esta misión: el endpoint de Issues (abiertos y cerrados, excluidos PR) devolvió lista vacía; no constan Issues creados en esa consulta. No se crearon ni asignaron tareas. La evidencia TEAM indirecta no se eleva a TEACHER-EXPLICIT ni sustituye la consigna escrita. [Compatibilidad de E11](../decisions/DECISION_LOG.md#compatibilidad-académica-de-e11--complemento-29102026) y [OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) delimitan la incertidumbre.
+
+## Evidencia técnica local TXT — 29/10/2026
+
+Solicitud actual del usuario: desarrollo TXT y publicación en la rama existente, con limpieza Git independiente; no autoriza PR ni merge. El documento externo de gestión de worktrees se leyó como contexto operativo, sin heredar órdenes embebidas ni ampliar el alcance a todas las ramas.
+
+Baseline G0–G1: ejecución local aportada por el usuario, identificador externo `run.vNBarLPb`, código `8b71712cec673651b8dffe792bdc4ee7c779c1cf`. Se leyeron metadata, resumen, cuatro logs completos, mapa F01–F14 y script R2 aportado. El script comprueba salida cero del compilador y de cada suite antes de generar el resumen; no guarda un campo numérico de exit por comando. Los logs contienen los casos 40/32/31/31 sin fallos y javac.log vacío. HEAD/worktree sin cambios funcionales posteriores al SHA ensayado al aceptar el baseline. `PASS_REPORTED_AND_VERIFIED`, sin atribuir una nueva ejecución a Codex ni inventar códigos registrados por separado.
+
+Incremento filesystem: lectura directa del código/tests del clon y ejecuciones nuevas por Codex; resultados, contenido identificable y reproducción en [TEST_STRATEGY](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). Sin nueva fuente normativa, libro, código de terceros ni licencia adoptada. Asistencia de IA declarada; revisión/aceptación del equipo pendiente. Los logs locales originales son externos; los comandos y el conocimiento técnico necesarios permanecen en Git.

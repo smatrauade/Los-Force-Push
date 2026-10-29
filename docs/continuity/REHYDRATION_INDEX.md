@@ -19,6 +19,8 @@ AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ru
 
 Plan de rama de trabajo de TXT/niveles (sin implementar gameplay ni abrir PR): [TXT_LEVELS_EXECUTION_PLAN](../requirements/TXT_LEVELS_EXECUTION_PLAN.md). Define gates controlables, una sola promoción y revisión de frescura previa al merge. No ratifica sintaxis ni reemplaza decisiones del equipo.
 
+El incremento de esta rama añade `LevelLoader.loadExperimentalFragile(Path)` para leer la definición con UTF-8 estricto y límite de bytes compartidos. Leer el [diseño G2 y estado G3](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026) y la [evidencia del incremento](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). No atribuir su publicación o integración a una fecha: comprobar Git/PR.
+
 El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente dominio TXT/niveles requiere revisar el contrato y su integración futura con el equipo. E01/E02 no fijan sintaxis ni rangos. E04/E08 requieren revisión normativa. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
 
 ## Procedencia y evidencia histórica
@@ -40,4 +42,4 @@ Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectad
 
 ## Entrega y siguiente gate
 
-Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; R7 preparada, NO ejecutada. Antes de R7 revisar alcance contra el prototipo y contrato ya integrados, dependencias OQ y autorización específica; este índice no es una orden de implementación.
+Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; R7 iniciada con carga de definición experimental en esta rama, no con gameplay. Antes de integración runtime revisar contrato, dependencias OQ y autorización específica; este índice no es una orden de implementación.

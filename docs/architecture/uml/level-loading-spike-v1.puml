@@ -1,5 +1,5 @@
 @startuml
-title Loading / C2-L7 integrado — experimental, revision 2026-10-28
+title Loading / C2-L7 / definicion Fragile — experimental, revision 2026-10-29
 hide empty members
 package ar.edu.uade.sokoban.level {
   class Position <<record>> {
@@ -56,12 +56,38 @@ package ar.edu.uade.sokoban.level {
     -parser : LevelParser
     +LevelLoader(parser : LevelParser)
     +load(path : Path) : Level
+    +loadExperimentalFragile(path : Path) : ExperimentalFragileLevel
+    -readText(path : Path) : String
+  }
+  class ExperimentalFragileParser {
+    {static} +MAX_TEXT_CHARS : int = 65536
+    +parse(text : String) : ExperimentalFragileLevel
+  }
+  class ExperimentalFragileLevel <<record>> {
+    -spatialTemplate : Board
+    -fragileBoxes : List<FragileBox>
+    +spatialTemplate() : Board
+    +fragileBoxes() : List<FragileBox>
+  }
+  class "ExperimentalFragileLevel.FragileBox" as FragileBox <<record>> {
+    -id : String
+    -position : Position
+    -initialResistance : int
+    +id() : String
+    +position() : Position
+    +initialResistance() : int
   }
   class LevelFormatException
 }
 class "IllegalArgumentException (JDK)" as IllegalArgumentException
 IllegalArgumentException <|-- LevelFormatException
 LevelLoader --> LevelParser
+LevelLoader ..> ExperimentalFragileParser : explicit definition entry
+ExperimentalFragileParser ..> LevelParser : validates spatial template
+ExperimentalFragileParser ..> ExperimentalFragileLevel : assembles after validation
+ExperimentalFragileLevel --> "1" Board : empty fragile cells; immutable
+ExperimentalFragileLevel --> "0..*" FragileBox : immutable definitions
+FragileBox --> Position
 LevelParser ..> LevelBuilder : legacy per load
 LevelParser ..> C2LevelParser : reserved prefix
 C2LevelParser ..> LevelBuilder : per C2 load
@@ -79,6 +105,15 @@ LevelParser ..> LevelFormatException
 LevelBuilder ..> LevelFormatException
 LevelLoader ..> LevelFormatException
 Board ..> LevelFormatException
+note bottom of ExperimentalFragileLevel
+Not a playable Level; preserve ID, initial resistance and terrain.
+Do not pass the template alone to Movement as a complete level.
+OQ-06/OQ-08 pending; no runtime special entities or gameplay.
+end note
+note bottom of LevelLoader
+Both entry points share byte ceiling and strict UTF-8 via readText.
+load still rejects special entities. No cached text or partial result.
+end note
 note bottom of LevelBuilder
 Concrete/internal; no Builder interface or alternate builders.
 D-011 remains PREFERRED. Direct construction stays an alternative.

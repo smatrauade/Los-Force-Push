@@ -134,3 +134,16 @@ La fila RF-12 de casos futuros del 23/10 conserva su contexto histórico; no cer
 | Organización en cinco áreas e Issues | Propuesta grupal 24/10 resumida | Sin asignación nominal completa; consulta GitHub sin Issues | Acordar responsables y tareas sin inventar asignaciones |
 
 [Procedencia](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026). Java, GUI y gameplay: NOT_RUN_DOCS_ONLY en este complemento; evidencia histórica intacta. La entrega sigue el 18/11/2026; no hay fecha confirmada de parcial ni deadline 1/11.
+
+## Incremento filesystem de definición Fragile — 29/10/2026
+
+Contenido disponible en esta rama, sin afirmar merge en main. [Matriz de brechas y alternativas G2](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026); [comandos y contenido probado](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
+
+| Requisito / alcance | Implementación | Casos reales / evidencia del incremento | Brecha restante |
+|---|---|---|---|
+| RF-02, carga externa real | `LevelLoader.loadExperimentalFragile` y `readText` privado compartido | Fragile 32 fixture externo; 33 edición/recarga Unicode, LF/CRLF/mixtos y declaraciones reordenadas | Flujo especial hacia UI no implementado |
+| RF-01/02/05, E01/E02 definición inicial | `ExperimentalFragileParser`/`ExperimentalFragileLevel` reutilizados sin cambios | Fragile 32/33: ID, posición, valores 3/12, piso/Goal, normal Box en Goal e inmutabilidad | Resistencia runtime, rotura/hielo y snapshots pendientes; no RF-05 DONE |
+| RF-02, errores sin publicación parcial | Lectura→decodificación→parseo completo→retorno | Fragile 34 tardío/UTF-8 conserva referencia y recupera; 35 UTF-8; 36–38 bytes/frontera; 39 nulos/faltante; 40 BOM/vacío/legacy | Mensajes son técnicos provisionales, sin API de códigos estable |
+| RF-02/03/04, compatibilidad | `load`/parsers normales y Movement conservados | Loading 40, C2 32, Movement 31 y Desktop headless 16 PASS; Fragile 41 verifica ambas entradas e intercalado | GUI manual y mecánicas especiales NOT_RUN |
+
+F01–F13 conservan sus referencias de las suites previas; F14 ahora tiene pruebas **directas de la entrada experimental de archivo** (35–38). No se suman como gameplay. TEAM_ACCEPTANCE = NOT_RECORDED y OQ-06/OQ-08 no se cierran.

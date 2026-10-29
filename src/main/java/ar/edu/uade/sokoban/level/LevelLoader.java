@@ -20,6 +20,19 @@ public final class LevelLoader {
     }
 
     public Level load(Path path) throws IOException {
+        return parser.parse(readText(path));
+    }
+
+    /**
+     * Loads an experimental initial definition, never a playable Level.
+     * Uses the same byte ceiling and strict UTF-8 policy as {@link #load(Path)}.
+     * The existing experimental grammar and resistance range are not ratified.
+     */
+    public ExperimentalFragileLevel loadExperimentalFragile(Path path) throws IOException {
+        return new ExperimentalFragileParser().parse(readText(path));
+    }
+
+    private String readText(Path path) throws IOException {
         byte[] bytes;
         try (InputStream input = Files.newInputStream(path)) {
             bytes = input.readNBytes(MAX_FILE_BYTES + 1);
@@ -27,10 +40,9 @@ public final class LevelLoader {
         if (bytes.length > MAX_FILE_BYTES) {
             throw new LevelFormatException("File exceeds " + MAX_FILE_BYTES + " bytes");
         }
-        String text = StandardCharsets.UTF_8.newDecoder()
+        return StandardCharsets.UTF_8.newDecoder()
                 .onMalformedInput(CodingErrorAction.REPORT)
                 .onUnmappableCharacter(CodingErrorAction.REPORT)
                 .decode(ByteBuffer.wrap(bytes)).toString();
-        return parser.parse(text);
     }
 }

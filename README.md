@@ -20,6 +20,10 @@ Revisado el **29/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push
 
 Los botones pendientes permanecen deshabilitados hasta recibir callbacks operativos. La pantalla final recibe LevelResult; no detecta victoria ni calcula puntaje. Los recursos y sonidos de entidades futuras no implementan sus mecánicas.
 
+## Incremento TXT disponible en esta rama
+
+`LevelLoader.loadExperimentalFragile(Path)` carga una **definición inicial experimental** desde un TXT externo con la misma lectura de hasta 65.536 bytes y UTF-8 estricto de `load(Path)`. Preserva ID, posición, resistencia y piso/destino mediante `ExperimentalFragileLevel`; no habilita gameplay. Esta capacidad pertenece al contenido de esta rama: consultar Git/PR antes de atribuirla a `main`. [Diseño y alternativas](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026); [QA reproducible](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
+
 ## Empezar y compilar desde un clon
 
 ~~~bash
@@ -75,7 +79,7 @@ Legacy: # pared, espacio piso, . destino, @ jugador, $ caja, + jugador en destin
 
 C2 admite los siete aliases y sus formas largas terrain|occupant entre llaves. La sección attributes debe estar vacía: atributos y entidades especiales se rechazan explícitamente. Loader limita archivos a 65.536 bytes; grillas hasta 100×100, sin BOM. Es EXPERIMENTAL_NOT_RATIFIED: no cierra OQ-06/07/08/11.
 
-Resultados esperados: Loading 40, Movement 31, C2 32, Desktop 16, VisualAssets 44 y UI Smoke 17. **C2 es una suite independiente**: el runner core la compila, pero no la ejecuta. [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contiene su comando separado, la regresión del verificador y la procedencia de cada ejecución.
+Resultados esperados: Loading 40, Movement 31, C2 32, Fragile 41 (31 previos + 10 de filesystem), Desktop 16, VisualAssets 44 y UI Smoke 17. **C2 y Fragile son suites independientes**: el runner core las compila, pero no las ejecuta. [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contiene su comando separado, la regresión del verificador y la procedencia de cada ejecución.
 
 ## Verificar el repositorio
 
@@ -120,4 +124,4 @@ ExperimentalFragileParser produce ExperimentalFragileLevel: un Board plantilla c
 fragile f1 resistance=3
 ~~~
 
-También se admite {goal|fragile:f1}. IDs experimentales: ASCII [a-z][a-z0-9_]{0,31}; cada referencia y declaración aparece exactamente una vez. Resistencia decimal positiva entre 1 y 2147483647; texto de hasta 65536 caracteres. Son límites técnicos del prototipo, no decisiones del equipo. No se presupone un máximo de 3. El orden de declaraciones no afecta el resultado. El parser existente valida grilla, tokens y dimensiones. LevelParser.parse y LevelLoader.load siguen rechazando Fragile. El agregado valida IDs y posiciones únicos, coordenadas dentro del tablero y celdas vacías de piso o destino; rechaza nulos y resistencias no positivas. Copia la colección y conserva el Board inmutable. OQ-06 y OQ-08 siguen abiertas en sus detalles. [Pruebas y ejecución](docs/testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).
+También se admite {goal|fragile:f1}. IDs experimentales: ASCII [a-z][a-z0-9_]{0,31}; cada referencia y declaración aparece exactamente una vez. Resistencia decimal positiva entre 1 y 2147483647; texto de hasta 65536 caracteres. Son límites técnicos del prototipo, no decisiones del equipo. No se presupone un máximo de 3. El orden de declaraciones no afecta el resultado. El parser existente valida grilla, tokens y dimensiones. LevelParser.parse y LevelLoader.load siguen rechazando Fragile. Para cargar la definición experimental usar explícitamente `new LevelLoader(new LevelParser()).loadExperimentalFragile(Path.of("nivel.txt"))`; no enviar su plantilla espacial a Movement como si fuera un nivel completo. La nueva entrada acepta C2 ordinario con lista Fragile vacía y exige envoltura C2: no tiene fallback legacy. Archivo ausente o UTF-8 inválido producen IOException; tamaño/formato inválido, LevelFormatException; Path nulo, NullPointerException. No hay caché ni resultado parcial. El agregado valida IDs y posiciones únicos, coordenadas dentro del tablero y celdas vacías de piso o destino; rechaza nulos y resistencias no positivas. Copia la colección y conserva el Board inmutable. OQ-06 y OQ-08 siguen abiertas en sus detalles. [Pruebas y ejecución](docs/testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).

@@ -18,7 +18,7 @@ El core no importa Swing ni audio. GameController coordina y conserva una proyec
 
 ## Loading y C2-L7
 
-[LevelLoader](../../src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java) limita lectura a 65.536 bytes y decodifica UTF-8 estricto. [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) selecciona legacy o el helper interno sin estado [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java) mediante el prefijo reservado. Las firmas públicas LevelLoader.load(Path), LevelParser.parse(String) y Level(Board) no cambian.
+[LevelLoader](../../src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java) limita lectura a 65.536 bytes y decodifica UTF-8 estricto. [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) selecciona legacy o el helper interno sin estado [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java) mediante el prefijo reservado. Las firmas públicas LevelLoader.load(Path), LevelParser.parse(String) y Level(Board) no cambian. Esta rama añade `LevelLoader.loadExperimentalFragile(Path) → ExperimentalFragileLevel`: un método privado `readText` centraliza la política de bytes/UTF-8 de ambas entradas; el parser experimental interpreta y el agregado existente valida la definición. No se agrega clase, interfaz, estado compartido ni patrón GoF. [Comparación con alternativas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026).
 
 C2 valida header/secciones, tokens ASCII (máximo experimental 128 caracteres), dimensiones lógicas hasta 100×100 y [attributes] vacía. Sólo ofrece las siete combinaciones existentes; rechaza atributos/especiales. parse(String) no impone el techo de bytes de Loader. No hay caché compartida, fallback ante header inválido ni Level parcial.
 
@@ -65,4 +65,4 @@ Revisión documental contra el código integrado por PR #11/#12; [evidencia doce
 | Deshacer y calcular score | No implementado; UiCommands son callbacks y LevelResult es DTO | Command/Memento a comparar; Strategy depende de fórmula OQ-09 y Undo de OQ-04/05 |
 | Audio y adicionales | SoundManager por ventana; sin persistencia operativa | No Singleton GoF; State/Factory/Decorator no están acreditados por ejemplos o nombres |
 
-Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. R7 permanece preparada y no ejecutada en esta reconciliación.
+Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. Esa reconciliación no ejecutó R7. El incremento posterior de esta rama implementa la entrada filesystem de definición experimental; gameplay e integración runtime siguen pendientes.

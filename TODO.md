@@ -38,9 +38,11 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 
 ## Próximo dominio TXT/niveles
 
-[Plan de ejecución TXT/niveles, una rama y un PR final](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md). Gates graduales y documentación alineada con el estado que se aprobaría; **este checkpoint únicamente añade planificación, no código ni PR**.
+[Plan de ejecución TXT/niveles, una rama y un PR final](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md). Gates graduales y documentación alineada con el estado que se aprobaría; el plan conserva su origen documental y ahora registra el incremento implementado, sin PR abierto.
 
-R6 está completa por PR #12. **R7 está preparada, NO ejecutada**. Su gate previo es revisar alcance autorizado contra ExperimentalFragileParser/ExperimentalFragileLevel ya existentes y la [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), sin duplicar modelos ni presentar hipótesis como decisiones. Acordar dependencias e interfaz con Model/Movement antes de carga jugable; no habilitar especiales hasta preservar identidad/resistencia. Esta misión documental no ejecuta ni autoriza R7.
+R6 está completa por PR #12. **R7 iniciada en esta rama:** terminada la carga externa de definición experimental `LevelLoader.loadExperimentalFragile(Path)`, compartiendo lectura UTF-8/límite de bytes. QA del incremento: Loading 40, C2 32, Fragile 41 y Movement 31; Desktop headless 16, sin cambios Swing. [Identificación del contenido y comandos](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
+
+Pendiente: ratificar detalles OQ-06/OQ-08 y acordar con Model/Movement la identidad y resistencia runtime, snapshots y casos antes/después. La [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) delimita la salida disponible. Siguiente tarea segura: revisión del contrato y ejemplos con el equipo, sin activar especiales en `Level`, sin reimplementar este loader y sin contar el fixture de definición como puzzle jugable resuelto. La promoción única sigue pendiente de autorización de PR/revisión; no se ha modificado `main`.
 
 ## Decisiones y mantenimiento
 
@@ -57,4 +59,4 @@ Mantener [arquitectura](docs/architecture/ARCHITECTURE.md), UML implementado y c
 - **Persistencia:** conservar como propuesta histórica del equipo con contrato pendiente, sin transformarla en obligación docente ni equipararla a snapshots Memento para Undo. Cualquier implementación requiere alcance propio.
 - **Patrones:** sugerencias de Factory Method/Abstract Factory del 29/10 no son decisiones ratificadas ni autorizan refactors. La segunda funcionalidad y el cómputo final de ambas siguen pendientes.
 
-El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece de contexto de voces omitidas: no es deadline. Continúa **18/11/2026** como entrega oficial; las fechas internas de la tabla anterior son sólo propuestas. R7 no se ejecuta.
+El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece de contexto de voces omitidas: no es deadline. Continúa **18/11/2026** como entrega oficial; las fechas internas de la tabla anterior son sólo propuestas. El estado actual de R7 se describe en «Próximo dominio TXT/niveles»; este complemento conserva su contexto documental anterior.

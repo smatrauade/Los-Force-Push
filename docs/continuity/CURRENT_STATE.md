@@ -2,6 +2,14 @@
 
 AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
 
+## Incremento TXT en la rama de trabajo — 29/10/2026
+
+`LevelLoader.loadExperimentalFragile(Path)` devuelve `ExperimentalFragileLevel` desde filesystem. Comparte un método privado de lectura acotada/UTF-8 estricto con la carga jugable; reutiliza el parser y el agregado existentes. Conserva ID, posición, resistencia y terreno sin convertir cajas frágiles en normales. `load(Path)` y `LevelParser.parse(String)` mantienen su contrato y rechazo de especiales.
+
+G2 y un incremento G3 terminados en `feat/txt-levels-release-2026-10-29`; no implica integración en `main`, PR ni ratificación TEAM. [Diseño y matriz de brechas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026). [QA y procedencia](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026): Loading 40, C2 32, Fragile 41, Movement 31 y Desktop headless 16 PASS. Diez casos nuevos de filesystem; las otras suites conservan sus casos. GUI/manual/audio, Windows/macOS y gameplay Fragile no ensayados en este incremento.
+
+El baseline G0–G1 sobre `8b71712cec673651b8dffe792bdc4ee7c779c1cf` fue **ejecutado localmente por el usuario**, reportado y contrastado con logs/script, no reejecutado por rutina. Los apartados fechados posteriores conservan la historia de cada misión; sus «R7 no ejecutada» describen aquellas reconciliaciones. Siguiente paso: revisar con el equipo OQ-06/OQ-08 y el contrato con Model/Movement, sin ampliar gameplay por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED.
+
 ## Integraciones verificadas
 
 Esta tabla selecciona hitos con impacto en producto, decisiones o gobernanza. No pretende enumerar todos los commits de mantenimiento documental; para el historial exhaustivo y el HEAD vigente consultar Git/GitHub. Un nuevo merge solo documental no hace obsoleta por sí misma esta lista.
@@ -66,7 +74,7 @@ Los informes [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experi
 
 Integrado mediante PR #11; conserva sólo la definición inicial, no gameplay. [Propuesta técnica de contrato TXT para Fragile](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) (`TEAM-PROPOSAL`; OQ-06/OQ-08 siguen abiertas).
 
-ExperimentalFragileParser y ExperimentalFragileLevel son un spike no ratificado en el código de este snapshot; consultar Git/PR para el estado de integración. La plantilla espacial deja vacías las celdas frágiles y la lista inmutable conserva ID, posición y resistencia, sin crear un Level jugable con una caja normal sustituta. El agregado valida IDs y posiciones únicos, límites del tablero, piso/destino vacío, no nulos y resistencia positiva; preserva Board y lista inmutables. Loader/Parser públicos siguen rechazando el mismo TXT. [Contrato y límites](../../README.md#prototipo-experimental-de-atributos-individuales); [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06/OQ-08 no se cierran.
+ExperimentalFragileParser y ExperimentalFragileLevel son un spike no ratificado en el código de este snapshot; consultar Git/PR para el estado de integración. La plantilla espacial deja vacías las celdas frágiles y la lista inmutable conserva ID, posición y resistencia, sin crear un Level jugable con una caja normal sustituta. El agregado valida IDs y posiciones únicos, límites del tablero, piso/destino vacío, no nulos y resistencia positiva; preserva Board y lista inmutables. Los métodos jugables `LevelLoader.load` / `LevelParser.parse` siguen rechazando el mismo TXT; la entrada explícita experimental de esta rama se describe al comienzo. [Contrato y límites](../../README.md#prototipo-experimental-de-atributos-individuales); [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06/OQ-08 no se cierran.
 
 ## Preparación de entrega — 29/10/2026
 

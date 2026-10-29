@@ -1,6 +1,6 @@
 # Los Force Push — Plan de ejecución TXT/niveles y promoción única
 
-**Estado:** `PLAN_ONLY / CODE_NOT_STARTED / NO_PR_OPENED`. Este plan se destina a una rama de trabajo, no a una incorporación funcional a `main` ni a una ratificación de gramática. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
+**Estado actual de rama:** `G2_PASS / G3_FILESYSTEM_DEFINITION_IMPLEMENTED / NO_PR_OPENED`. El plan inicial y sus referencias históricas se conservan; el apartado G2 posterior registra el incremento terminado. No implica incorporación funcional a `main` ni ratificación de gramática. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
 
 **Referencia inicial:** repositorio público `smatrauade/Los-Force-Push`, `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, consultado el 29/10/2026. Revalidar HEAD, PR y worktrees antes de cada operación. **Rama propuesta:** `feat/txt-levels-release-2026-10-29`. **Política:** varios hitos comprobables en la misma rama; **un solo PR cuando código, pruebas y documentación estén completos**; promoción preferida mediante **squash merge**, de modo que `main` reciba un único commit temático. No se ejecuta merge por el mero hecho de que un test sea PASS.
 
@@ -75,3 +75,60 @@ La política vigente [`FRESHNESS_POLICY`](../continuity/FRESHNESS_POLICY.md) ya 
 ## 7. Cierre de la planificación
 
 `PLAN_CREATED_ON_FEATURE_BRANCH` solo cuando la rama haya recibido este archivo y sus enlaces. `JAVA_TESTS_THIS_STEP=NOT_RUN`; `GAMEPLAY_MODIFIED=false`; `PR_OPENED=false`; `MAIN_MODIFIED=false`. Ningún agente debe interpretar este texto como autorización de code merge o como evidencia de contrato aprobado.
+
+## G2 — decisión técnica del incremento 29/10/2026
+
+**Problema verificable:** `ExperimentalFragileParser.parse(String)` ya preserva datos e invariantes, pero el HEAD inicial `8b71712cec673651b8dffe792bdc4ee7c779c1cf` no ofrece carga de su definición desde filesystem. `LevelLoader.load(Path)` centraliza el límite de bytes y UTF-8 estricto, pero devuelve sólo `Level` normal. `Files.readString` seguido de parseo permite evaluar sintaxis, sin reutilizar el techo de lectura. La diferencia bytes/caracteres está documentada en la propuesta; no es un defecto del contrato de String.
+
+Autoridad: RF-02 exige TXT externos y la aclaración oral normalizada contempla archivos editados por el docente; E01/E02 requieren disposición y resistencia individual. No exige esta firma ni ratifica C2. G2 selecciona una mejora técnica independiente de sintaxis/rango definitivos, sin resolver mecánicas abiertas. Se revisaron íntegros código/tests/contratos, inventario `git ls-files` y fuentes vivas antes de editar. G0–G1 aportado fue verificado sin reejecución rutinaria; [procedencia](../continuity/SOURCE_REGISTRY.md#evidencia-técnica-local-txt--29102026).
+
+La etiqueta inicial de planificación procede de `8b71712`; las afirmaciones de R7 preparada de la reconciliación docente proceden de `2dad014`. Se consultó su historial antes de superseder ese estado operativo; no se modifica una decisión académica ni una cápsula histórica.
+
+### Matriz de brechas al comenzar G2
+
+| Requisito | Implementación inicial | Prueba existente | Brecha real | Propuesta | Prioridad |
+|---|---|---|---|---|---|
+| RF-02, archivo Fragile externo | Loader sólo devuelve Level; Fragile recibe String | Fragile «normal loader rejects same file»; Loading 16/25/38 | No existe entrada experimental con lectura acotada compartida | Añadir método explícito en Loader | P1, seleccionada |
+| RF-01/02/05, E02 datos individuales | ExperimentalFragileLevel conserva ID/posición/resistencia | Fragile 1–3 y construcción directa 23–31 | Ninguna pérdida demostrada en el agregado | Reutilizarlo; probar extremo filesystem | P1, incluida |
+| RF-02, política de E/S | load lee N+1, UTF-8 REPORT | Loading 16/25/31/38; C2 15/18 | Cobertura no atravesaba ruta experimental | Compartir readText privado; pruebas directas bytes/UTF-8 | P1, incluida |
+| RF-02, edición externa | Recarga normal y C2 sin caché | Loading 3/39, C2 24, Movement 25 | No hay oráculo experimental de archivo editado | Fixture dos valores 3/12, Goal, editar posiciones/atributos/normal Box | P1, incluida |
+| RF-02, errores atómicos | Parsers y Board validan antes del retorno | Fragile «late failure cannot publish»; C2 22 | Falta prueba de error tardío y E/S por nueva entrada | Rechazar sin devolver agregado; recuperación posterior | P1, incluida |
+| RF-02/03, compatibilidad | Legacy/C2 siete estados y Movement normal | Loading 40, C2 32, Movement 31, Desktop 16 | Riesgo al extraer lectura compartida | Mantener firmas/diagnósticos y regresión pertinente | P1, incluida |
+| RF-05, futura integración | Board/Occupant sólo conocen BOX normal | Fragile verifica plantilla vacía y rechazo jugable | Runtime no preserva entidad/resistencia propia | Acordar contrato con Model/Movement antes de adaptación | P0 posterior, bloqueada por contrato/reglas |
+| RF-06 y RF-07 | Especiales, Observer/Undo no implementados | No hay prueba productiva | Fuera del dominio | Conservar OQ y límites | Fuera de este incremento |
+
+### Alternativas y elección
+
+| Alternativa | Beneficio | Coste/riesgo | Resultado |
+|---|---|---|---|
+| Caller usa Files.readString + parse | Una línea, sin API nueva | Omite la lectura acotada; obliga a duplicarla en cada consumidor | Descartada para la entrada de archivo |
+| Método `LevelLoader.loadExperimentalFragile(Path)` + `readText` privado | Política única, salida tipada explícita, reutiliza parser/modelo; sin clase nueva | Loader conoce dos salidas, un método público adicional | Seleccionada e implementada |
+| Nuevo ExperimentalFragileLoader y lector compartido | Frontera independiente por tipo de producto | Dos clases adicionales o acoplamiento entre loaders para una sola política idéntica | Diferida hasta una variación o consumidor que la justifique |
+| Hacer que `load` entregue especiales como Level | Una entrada jugable | Board no representa metadata, riesgo de degradación a BOX o plantilla incompleta | Excluida por contrato y alcance |
+
+**SRP/GRASP:** Loader sigue siendo frontera de filesystem, parser experto en sintaxis y agregado experto en invariantes. Un método privado comparte el conocimiento de bytes/UTF-8; no se duplica validación espacial ni se crea una segunda fuente mutable de estado. El nombre y tipo separan explícitamente la definición experimental de Level. No se introduce jerarquía, interfaz, genéricos ni patrón GoF: no hay variación que lo exija. LevelBuilder permanece intacto; su alternativa directa sigue siendo válida.
+
+**Contrato implementado:** `Path → ExperimentalFragileLevel`, techo de 65.536 bytes antes de decodificar UTF-8 REPORT y después parseo experimental existente. C2 ordinario produce lista vacía; legacy/BOM no activan fallback. Error de E/S/UTF-8: IOException; tamaño o sintaxis: LevelFormatException; Path nulo: NullPointerException. Ningún resultado parcial ni caché. Se mantienen 65.536 caracteres Java del parser e int positivo como límites técnicos previos; no se decide el rango del producto.
+
+**Coste y riesgos:** 12 líneas netas en Loader, diez casos nuevos y un fixture, más documentación/UML afectados. El método crea un parser experimental por llamada, sin estado compartido. Los mensajes existentes no son códigos públicos estables. La lectura no garantiza un snapshot frente a escritura concurrente del mismo archivo; guardar completamente antes de recargar. La plantilla por sí sola no representa el nivel especial completo. No se certifica solución de puzzles ni aceptación del equipo.
+
+**G3/G4:** implementación mínima terminada, sin cambios Movement/Swing/modelos/parser experimental. Compilación estricta y pruebas pertinentes PASS: Loading 40, C2 32, Fragile 41 (31 previos + 10 filesystem), Movement 31 y Desktop headless 16. [Contenido ensayado, comandos y límites](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). No se abrieron PR ni se modificó main.
+
+**OQ preservadas:** OQ-06/OQ-08 sintaxis/rango/errores, OQ-07 asociaciones, OQ-03/E04 hielo/rotura, OQ-04/E08 Undo y OQ-11 build. No se edita DECISION_LOG: ésta es una elección técnica experimental autorizada, no un acuerdo TEAM ratificado. Próxima tarea segura: revisar ejemplos y frontera runtime con equipo/Model; un nuevo cambio requiere su propia justificación y regresión.
+
+### Frescura y autocontención de este incremento
+
+| Documento | Clasificación | Motivo |
+|---|---|---|
+| README; TODO; CURRENT_STATE; REHYDRATION_INDEX | UPDATED | API, progreso en esta rama, pruebas y próximo gate |
+| TXT_LEVELS_EXECUTION_PLAN; FRAGILE_TXT_CONTRACT_PROPOSAL | UPDATED | Brecha/diseño y contrato filesystem implementado, sin ratificación |
+| ARCHITECTURE; RESPONSIBILITIES; level-loading-spike-v1.puml; STARUML_STATUS | UPDATED | Dos entradas y colaboración con tipos experimentales reales |
+| TRACEABILITY_MATRIX; TEST_STRATEGY | UPDATED | RF→ruta→casos, comandos, entorno y contenido ensayado |
+| SOURCE_REGISTRY | UPDATED | Procedencia local aportada frente a nueva ejecución Codex |
+| docs/README; FRESHNESS_POLICY; AGENTS; CONTRIBUTING | UNCHANGED_VERIFIED | Navegación y política ya cubren el incremento; sin política nueva |
+| REQUIREMENTS; OPEN_QUESTIONS; DECISION_LOG | UNCHANGED_VERIFIED | Ninguna autoridad, regla ni voto cambió; OQ y elegibilidad RF-12 conservadas |
+| BIBLIOGRAPHY; GITHUB_REFERENCES | UNCHANGED_VERIFIED | Diseño basado en código y principios ya normalizados; sin obra externa consultada o reutilizada |
+| UML Movement/Swing/candidato; contratos Punto 5 | UNCHANGED_VERIFIED | API jugable y responsabilidades de esos módulos intactas |
+| Assets/manifiesto/derechos, checkpoints/cápsulas históricas | NOT_APPLICABLE a edición | Sin recursos ni historia alterados; integridad de assets controlada por verificador |
+
+Autocontención: consigna/docente/procedencia en REQUIREMENTS/SOURCE_REGISTRY; TEAM en DECISION_LOG; implementación y límites en README/CURRENT_STATE/arquitectura; deuda en OQ/TODO; principios/patrones en arquitectura y bibliografía; ejecución/QA en README/TEST_STRATEGY; siguiente tarea arriba. No se requiere recuperar chats ni ejecutar el script privado del baseline para continuar. La limpieza Git es operación administrativa independiente, sin commits de producto; su estado operativo se informa en la entrega y se vuelve a consultar en remoto.
