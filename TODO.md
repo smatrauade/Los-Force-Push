@@ -38,11 +38,11 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 
 ## Próximo dominio TXT/niveles
 
-[Plan de ejecución TXT/niveles, una rama y un PR final](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md). Gates graduales y documentación alineada con el estado que se aprobaría; el plan conserva su origen documental y ahora registra el incremento implementado, sin PR abierto.
+[Plan de ejecución TXT/niveles, una rama y un PR final](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md). Gates graduales y documentación alineada con el estado que se aprobaría; el plan conserva su origen documental y registra el alcance autónomo implementado; Git/GitHub determina el estado del PR y su integración.
 
-R6 está completa por PR #12. **R7 iniciada en esta rama:** terminada la carga externa de definición experimental `LevelLoader.loadExperimentalFragile(Path)`, compartiendo lectura UTF-8/límite de bytes. QA del incremento: Loading 40, C2 32, Fragile 41 y Movement 31; Desktop headless 16, sin cambios Swing. [Identificación del contenido y comandos](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
+R6 está completa por PR #12. **Alcance autónomo TXT terminado:** carga externa de definición experimental `LevelLoader.loadExperimentalFragile(Path)`, compartiendo lectura UTF-8/límite de bytes. QA del incremento: Loading 40, C2 32, Fragile 41 y Movement 31; Desktop headless 16, sin cambios Swing. [Identificación del contenido y comandos](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
 
-Pendiente: ratificar detalles OQ-06/OQ-08 y acordar con Model/Movement la identidad y resistencia runtime, snapshots y casos antes/después. La [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) delimita la salida disponible. Siguiente tarea segura: revisión del contrato y ejemplos con el equipo, sin activar especiales en `Level`, sin reimplementar este loader y sin contar el fixture de definición como puzzle jugable resuelto. La promoción única sigue pendiente de autorización de PR/revisión; no se ha modificado `main`.
+Pendiente: ratificar detalles OQ-06/OQ-08 y acordar con Model/Movement la identidad y resistencia runtime, snapshots y casos antes/después. La [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) delimita la salida disponible. Siguiente tarea segura: revisión del contrato y ejemplos con el equipo, sin activar especiales en `Level`, sin reimplementar este loader y sin contar el fixture de definición como puzzle jugable resuelto. La promoción única exige revisión humana del código/contrato y gate técnico; consultar el PR y Git para saber si se completó. La autorización de publicación no sustituye esa revisión.
 
 ## Integración paralela TXT con Fragile/hielo — 29/10/2026
 

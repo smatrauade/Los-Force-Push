@@ -20,9 +20,9 @@ Revisado el **29/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push
 
 Los botones pendientes permanecen deshabilitados hasta recibir callbacks operativos. La pantalla final recibe LevelResult; no detecta victoria ni calcula puntaje. Los recursos y sonidos de entidades futuras no implementan sus mecánicas.
 
-## Incremento TXT disponible en esta rama
+## Carga experimental de definiciones TXT
 
-`LevelLoader.loadExperimentalFragile(Path)` carga una **definición inicial experimental** desde un TXT externo con la misma lectura de hasta 65.536 bytes y UTF-8 estricto de `load(Path)`. Preserva ID, posición, resistencia y piso/destino mediante `ExperimentalFragileLevel`; no habilita gameplay. Esta capacidad pertenece al contenido de esta rama: consultar Git/PR antes de atribuirla a `main`. [Diseño y alternativas](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026); [QA reproducible](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
+`LevelLoader.loadExperimentalFragile(Path)` carga una **definición inicial experimental** desde un TXT externo con la misma lectura de hasta 65.536 bytes y UTF-8 estricto de `load(Path)`. Preserva ID, posición, resistencia y piso/destino mediante `ExperimentalFragileLevel`; no habilita gameplay. Esta capacidad describe el árbol de código presente. El estado de publicación e integración se consulta en Git/GitHub. [Diseño y alternativas](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026); [QA reproducible](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
 
 ## Empezar y compilar desde un clon
 

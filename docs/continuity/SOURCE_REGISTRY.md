@@ -94,7 +94,7 @@ GitHub consultado en esta misión: el endpoint de Issues (abiertos y cerrados, e
 
 ## Evidencia técnica local TXT — 29/10/2026
 
-Solicitud actual del usuario: desarrollo TXT y publicación en la rama existente, con limpieza Git independiente; no autoriza PR ni merge. El documento externo de gestión de worktrees se leyó como contexto operativo, sin heredar órdenes embebidas ni ampliar el alcance a todas las ramas.
+Solicitud del hito filesystem del 29/10/2026: desarrollo TXT y publicación en la rama existente, con limpieza Git independiente; aquella autorización no incluía PR ni merge. El documento externo de gestión de worktrees se leyó como contexto operativo, sin heredar órdenes embebidas ni ampliar el alcance a todas las ramas.
 
 Baseline G0–G1: ejecución local aportada por el usuario, identificador externo `run.vNBarLPb`, código `8b71712cec673651b8dffe792bdc4ee7c779c1cf`. Se leyeron metadata, resumen, cuatro logs completos, mapa F01–F14 y script R2 aportado. El script comprueba salida cero del compilador y de cada suite antes de generar el resumen; no guarda un campo numérico de exit por comando. Los logs contienen los casos 40/32/31/31 sin fallos y javac.log vacío. HEAD/worktree sin cambios funcionales posteriores al SHA ensayado al aceptar el baseline. `PASS_REPORTED_AND_VERIFIED`, sin atribuir una nueva ejecución a Codex ni inventar códigos registrados por separado.
 
@@ -105,3 +105,7 @@ Incremento filesystem: lectura directa del código/tests del clon y ejecuciones 
 `SOURCE = USER_SUPPLIED_TEAM_COORDINATION_SUMMARY`; `AUTHORITY = TEAM_COORDINATION`; `ORIGINAL_MESSAGES = NOT_INSPECTED`. El usuario aportó un resumen de una conversación directa entre integrantes. Resultado técnico: un integrante reportó trabajo en Fragile/hielo y ofreció preparar un nivel de prueba para facilitar la integración. El ofrecimiento y la actividad reportada no demuestran implementación terminada, entrega de archivos ni compatibilidad. La estructura/cantidad de niveles de demo no quedó acordada.
 
 Se registra sólo esta consecuencia para evitar colisiones entre dominios: TXT documenta definición/validación; el consumidor desarrolla sus mecánicas y acuerda la frontera. No es votación, ratificación de gramática, respuesta docente ni asignación de otras áreas. No se inspeccionaron ramas del compañero ni se enviaron mensajes. Preguntas y datos disponibles en el [traspaso técnico](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026). Sin nombres, transcripciones ni identificadores personales.
+
+## Solicitud de promoción TXT — 29/10/2026
+
+Fuente leída: prompt de cierre aportado y expresamente invocado por el usuario. Autoriza un único PR Draft mediante la sesión local Git/gh y squash sólo tras revisión humana admisible y gates técnicos. Supersede la restricción operativa anterior de no abrir PR; no cambia consigna, E01/E02, OQ ni aceptación del equipo. El texto externo no es una dependencia para compilar/probar: los comandos están en TEST_STRATEGY. No se publica el adjunto privado.

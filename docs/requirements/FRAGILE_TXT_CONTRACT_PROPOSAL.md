@@ -43,7 +43,7 @@ Los IDs implementados siguen `[a-z][a-z0-9_]{0,31}`. La resistencia implementada
 
 La salida es un `ExperimentalFragileLevel` inmutable: `spatialTemplate` conserva **piso o destino vacío** en cada posición frágil, mientras `fragileBoxes` conserva **ID, posición y resistencia inicial** sin degradarlos a `Occupant.BOX`. El modelo comprueba IDs/posiciones únicos, límites, terreno válido, celda sin ocupante, no nulos y resistencia positiva; la lista se copia y `Board` es inmutable.
 
-**Diferencia de límites que debe conservarse visible:** `LevelLoader.load(Path)` limita a **65.536 bytes UTF-8** y decodifica estrictamente antes de delegar; `ExperimentalFragileParser.parse(String)` recibe texto ya decodificado y limita a **65.536 caracteres Java**, sin constituir por sí mismo un cargador de archivos. En esta rama, `LevelLoader.loadExperimentalFragile(Path)` conecta explícitamente esa definición al filesystem mediante el mismo método privado de lectura que `load(Path)`; no altera el límite de `parse(String)`. Son contratos de entrada distintos. La lectura limita bytes antes de decodificar; después se aplica el parser experimental existente.
+**Diferencia de límites que debe conservarse visible:** `LevelLoader.load(Path)` limita a **65.536 bytes UTF-8** y decodifica estrictamente antes de delegar; `ExperimentalFragileParser.parse(String)` recibe texto ya decodificado y limita a **65.536 caracteres Java**, sin constituir por sí mismo un cargador de archivos. `LevelLoader.loadExperimentalFragile(Path)` conecta explícitamente esa definición al filesystem mediante el mismo método privado de lectura que `load(Path)`; no altera el límite de `parse(String)`. Son contratos de entrada distintos. La lectura limita bytes antes de decodificar; después se aplica el parser experimental existente.
 
 Las dimensiones del tablero siguen sujetas a `Board.MAX_DIMENSION = 100` y al contrato espacial existente. Los errores de formato se expresan mediante `LevelFormatException`; los de construcción directa inválida del agregado usan `IllegalArgumentException`/`NullPointerException` según el caso. El mensaje exacto no constituye aún una API de errores ratificada.
 
@@ -58,7 +58,7 @@ Las dimensiones del tablero siguen sujetas a `Board.MAX_DIMENSION = 100` y al co
 | Identificadores duplicados | Rechazo / sobrescritura | Rechazo determinista, sin publicación parcial | `TEAM-PROPOSAL` |
 | Error de formato | Mensaje libre / código estructurado y posición | Conservar `LevelFormatException`; evaluar códigos estables para CLI/UI sólo con consumidor real | `OPEN` |
 | Evolución de entidades | Extender C2 v2 / nueva versión | No activar `ice`, `key`, `lock`, walls dinámicos ni otros atributos hasta especificar sus contratos | `OPEN` |
-| Fuente de carga | Cambiar `load` / método explícito / nuevo loader | Implementado técnicamente en esta rama: `loadExperimentalFragile(Path)` separado por nombre y tipo de retorno; gramática y futura integración jugable no ratificadas | `EXPERIMENTAL_NOT_RATIFIED` |
+| Fuente de carga | Cambiar `load` / método explícito / nuevo loader | AS_IMPLEMENTED en el código presente: `loadExperimentalFragile(Path)` separado por nombre y tipo de retorno; gramática y futura integración jugable no ratificadas | `EXPERIMENTAL_NOT_RATIFIED` |
 
 **Para aprobar una opción:** contrastar primero la consigna oficial y aclaraciones aplicables; registrar acuerdo del equipo, fecha, alcance, consecuencia y casos de aceptación en DECISION_LOG, y actualizar las filas OQ-06/OQ-08 y la trazabilidad. No reabrir E01/E02, ya aceptadas en sus dimensiones.
 
@@ -100,7 +100,7 @@ Antes de ampliar la carga pública, exigir: diseño de identidad al mover cajas,
 
 Esta propuesta sirve como **material de decisión técnica** para el equipo y para un nuevo agente. No hereda permisos de prompts o PR anteriores, no atribuye revisión académica inexistente y no convierte en implementadas las funcionalidades pendientes.
 
-## Incremento filesystem — contrato técnico disponible en esta rama
+## Incremento filesystem — contrato técnico implementado
 
 `loadExperimentalFragile(Path) → ExperimentalFragileLevel` exige un archivo C2 según la gramática provisional anterior; sin Fragile devuelve lista vacía. No acepta legacy ni elimina BOM. Comparte techo de 65.536 bytes y UTF-8 estricto con `load`, sin caché. Fallos: `IOException` para E/S/UTF-8 inválido, `LevelFormatException` para tamaño/sintaxis y `NullPointerException` para Path nulo. No modifica una definición publicada; el consumidor sólo reemplaza su referencia después del retorno exitoso. No se promete snapshot del filesystem frente a escrituras concurrentes: editar, guardar completamente y luego recargar.
 
@@ -108,7 +108,7 @@ Esta propuesta sirve como **material de decisión técnica** para el equipo y pa
 
 ## Traspaso TXT a Model/Movement — 29/10/2026
 
-Base técnica revisada: `5ac2bba9a1d495a5da9e1ad998857fbe00613840`. **AS_IMPLEMENTED** describe el código de esta rama; no significa contrato ratificado ni integrado en main. **TEAM-PROPOSAL** identifica una alternativa para acordar. **OPEN_PENDING_TEAM** requiere respuesta antes de implementar esa porción. La [coordinación aportada](../continuity/SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026) informa trabajo paralelo en Fragile/hielo y un nivel de prueba ofrecido; no certifica sus bytes, estado de avance ni compatibilidad.
+Base técnica revisada: `5ac2bba9a1d495a5da9e1ad998857fbe00613840`. **AS_IMPLEMENTED** describe capacidades del código presente; no significa contrato ratificado. Consultar Git/GitHub para publicación e integración. **TEAM-PROPOSAL** identifica una alternativa para acordar. **OPEN_PENDING_TEAM** requiere respuesta antes de implementar esa porción. La [coordinación aportada](../continuity/SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026) informa trabajo paralelo en Fragile/hielo y un nivel de prueba ofrecido; no certifica sus bytes, estado de avance ni compatibilidad.
 
 ### Matriz de interfaces y compatibilidad
 

@@ -25,7 +25,7 @@ la ejecucion parte de un [clon actualizado](GUIA_INSTALACION_GITHUB_DESKTOP.md),
 
 La ruta jugable `LevelLoader.load(Path)` / `LevelParser.parse(String)` acepta
 legacy y C2-L7 ordinario, con [attributes] vacia; sigue rechazando especiales.
-En la rama TXT, `loadExperimentalFragile(Path)` devuelve `ExperimentalFragileLevel`:
+`LevelLoader.loadExperimentalFragile(Path)` devuelve `ExperimentalFragileLevel`:
 plantilla Board mas lista inmutable de ID/posicion/resistencia inicial, sin Level
 jugable ni conexion Swing. Las dos entradas de filesystem comparten UTF-8 estricto y limite de bytes.
 La plantilla deja vacias las celdas Fragile: no enviarla sola al motor/renderer

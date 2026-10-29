@@ -1,6 +1,6 @@
 # Los Force Push — Plan de ejecución TXT/niveles y promoción única
 
-**Estado actual de rama:** `G2_PASS / G3_FILESYSTEM_DEFINITION_IMPLEMENTED / NO_PR_OPENED`. El plan inicial y sus referencias históricas se conservan; el apartado G2 posterior registra el incremento terminado. No implica incorporación funcional a `main` ni ratificación de gramática. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
+**Estado técnico:** `AUTONOMOUS_SCOPE_COMPLETE / EXPERIMENTAL_DEFINITION / RUNTIME_PENDING_TEAM`. La fase autónoma de definición TXT, validación y contrato está terminada. El plan inicial y sus checkpoints históricos se conservan. Git/GitHub determina publicación, revisión humana e integración; este texto no ratifica gramática ni anticipa un merge. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
 
 **Referencia inicial:** repositorio público `smatrauade/Los-Force-Push`, `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, consultado el 29/10/2026. Revalidar HEAD, PR y worktrees antes de cada operación. **Rama propuesta:** `feat/txt-levels-release-2026-10-29`. **Política:** varios hitos comprobables en la misma rama; **un solo PR cuando código, pruebas y documentación estén completos**; promoción preferida mediante **squash merge**, de modo que `main` reciba un único commit temático. No se ejecuta merge por el mero hecho de que un test sea PASS.
 
@@ -44,13 +44,13 @@ Construir el máximo avance justificable **dentro del módulo TXT/niveles** ante
 
 Mantener legacy y C2-L7 para todos los niveles previamente aceptados; no reinterpretar símbolos. Verificar ancho/alto, exactamente un jugador, sobreposiciones, límites de bytes/Unicode, separadores, rechazo explícito de entidades no soportadas y fallos tardíos sin publicación. Para Fragile: IDs únicos, atributos exactamente una vez, resistencia positiva provisional, posicionamiento sobre FLOOR/GOAL, listas profundamente inmutables y reversión del orden de declaraciones. No decidir el máximo real de resistencia por los 3 sprites de estado.
 
-**Contrato docente externo:** el juego usa la ruta del archivo realmente elegido, no el nombre del fixture hardcodeado; editar un archivo válido debe cambiar el tablero al recargarlo. **No prometer** que toda edición es válida: una edición inválida debe fallar sin reemplazar el estado publicado. La prueba completa TXT→Swing se realizará con quien integre la UI; esta rama puede suministrar fixture y oráculo sin tocar Swing.
+**Contrato docente externo:** el juego usa la ruta del archivo realmente elegido, no el nombre del fixture hardcodeado; editar un archivo válido debe cambiar el tablero al recargarlo. **No prometer** que toda edición es válida: una edición inválida debe fallar sin reemplazar el estado publicado. La prueba completa TXT→Swing se realizará con quien integre la UI; el módulo TXT suministra fixture y oráculo sin tocar Swing.
 
 No sumar contadores de suites distintas como evidencia de casos únicos sin explicación. Registrar versión exacta de Java/SO, commit ensayado, comandos, salida, exit codes y límites de cualquier prueba no ejecutada. El checker de enlaces/UTF-8/PNG/WAV no equivale a ejecutar Java. No inventar aprobación de licencias por comparar hashes.
 
 ## 5. Política de Git, PR y texto
 
-**Baseline de `main` estable:** los desarrollos en curso **no se reflejan como hechos implementados en `main`** hasta su promoción. La verdad del trabajo no integrado reside en esta rama; el documento vivo de `main` solo declara el último producto fusionado. Esta diferencia es esperada y no equivale a documentación vencida. Un chat nuevo debe rehidratar ambas refs y evaluar su relación.
+**Baseline de `main` estable:** los desarrollos en curso **no se reflejan como hechos implementados en `main`** hasta su promoción. Comparar las refs de trabajo y `main` para distinguir contenido preparado de producto fusionado; cada documento describe las capacidades del árbol al que pertenece. Esta diferencia es esperada y no equivale a documentación vencida. Un chat nuevo debe rehidratar ambas refs y evaluar su relación.
 
 - No `force-push`, `reset --hard`, `git clean -fd`, `worktree prune`, `branch -D`, cambios de permisos ni eliminación de ramas históricas. Si falla una postcondición tras un push, **inspeccionar remotos antes de reintentar**: el push puede haberse completado.
 - Mantener un solo PR de este dominio. No abrir uno para cada gate ni otro después solo para narrar el merge. Preferir squash con resumen de autoría y cambios en el commit final, conservando los commits de desarrollo y la discusión del PR en GitHub.
@@ -72,7 +72,7 @@ No sumar contadores de suites distintas como evidencia de casos únicos sin expl
 
 La política vigente [`FRESHNESS_POLICY`](../continuity/FRESHNESS_POLICY.md) ya requiere revisión **en cada hito** y revisión **semanal mientras haya actividad**. No hace falta crear una automatización ni cambiar fechas sin modificar significado.
 
-## 7. Cierre de la planificación
+## 7. Checkpoint histórico de planificación — 29/10/2026, 8b71712
 
 `PLAN_CREATED_ON_FEATURE_BRANCH` solo cuando la rama haya recibido este archivo y sus enlaces. `JAVA_TESTS_THIS_STEP=NOT_RUN`; `GAMEPLAY_MODIFIED=false`; `PR_OPENED=false`; `MAIN_MODIFIED=false`. Ningún agente debe interpretar este texto como autorización de code merge o como evidencia de contrato aprobado.
 
@@ -112,7 +112,7 @@ La etiqueta inicial de planificación procede de `8b71712`; las afirmaciones de 
 
 **Coste y riesgos:** 12 líneas netas en Loader, diez casos nuevos y un fixture, más documentación/UML afectados. El método crea un parser experimental por llamada, sin estado compartido. Los mensajes existentes no son códigos públicos estables. La lectura no garantiza un snapshot frente a escritura concurrente del mismo archivo; guardar completamente antes de recargar. La plantilla por sí sola no representa el nivel especial completo. No se certifica solución de puzzles ni aceptación del equipo.
 
-**G3/G4:** implementación mínima terminada, sin cambios Movement/Swing/modelos/parser experimental. Compilación estricta y pruebas pertinentes PASS: Loading 40, C2 32, Fragile 41 (31 previos + 10 filesystem), Movement 31 y Desktop headless 16. [Contenido ensayado, comandos y límites](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). No se abrieron PR ni se modificó main.
+**G3/G4:** implementación mínima terminada, sin cambios Movement/Swing/modelos/parser experimental. Compilación estricta y pruebas pertinentes PASS: Loading 40, C2 32, Fragile 41 (31 previos + 10 filesystem), Movement 31 y Desktop headless 16. [Contenido ensayado, comandos y límites](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). Al cierre del incremento 5ac2bba del 29/10/2026 todavía no se había abierto PR ni modificado main; es un dato histórico, no un estado Git permanente.
 
 **OQ preservadas:** OQ-06/OQ-08 sintaxis/rango/errores, OQ-07 asociaciones, OQ-03/E04 hielo/rotura, OQ-04/E08 Undo y OQ-11 build. No se edita DECISION_LOG: ésta es una elección técnica experimental autorizada, no un acuerdo TEAM ratificado. Próxima tarea segura: revisar ejemplos y frontera runtime con equipo/Model; un nuevo cambio requiere su propia justificación y regresión.
 
@@ -120,7 +120,7 @@ La etiqueta inicial de planificación procede de `8b71712`; las afirmaciones de 
 
 | Documento | Clasificación | Motivo |
 |---|---|---|
-| README; TODO; CURRENT_STATE; REHYDRATION_INDEX | UPDATED | API, progreso en esta rama, pruebas y próximo gate |
+| README; TODO; CURRENT_STATE; REHYDRATION_INDEX | UPDATED | API, progreso técnico, pruebas y próximo gate |
 | TXT_LEVELS_EXECUTION_PLAN; FRAGILE_TXT_CONTRACT_PROPOSAL | UPDATED | Brecha/diseño y contrato filesystem implementado, sin ratificación |
 | ARCHITECTURE; RESPONSIBILITIES; level-loading-spike-v1.puml; STARUML_STATUS | UPDATED | Dos entradas y colaboración con tipos experimentales reales |
 | TRACEABILITY_MATRIX; TEST_STRATEGY | UPDATED | RF→ruta→casos, comandos, entorno y contenido ensayado |
@@ -135,7 +135,7 @@ Autocontención: consigna/docente/procedencia en REQUIREMENTS/SOURCE_REGISTRY; T
 
 ## Contrato de integración con trabajo paralelo — 29/10/2026
 
-`MISSION = TXT_LEVELS_TEAM_INTEGRATION_CONTRACT`; dominio TXT/niveles sin cambios de gameplay. Gate A: rehidratación, inventario, diff de 5ac2bba, limpieza y remoto contrastados; base `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, rama TXT `5ac2bba9a1d495a5da9e1ad998857fbe00613840`, dos commits por delante, sin PR abierto al preflight. Estos SHA son referencias de entrada, no HEAD permanentes. Los worktrees históricos se preservan sin intervención.
+Checkpoint histórico 529f38d del 29/10/2026: `MISSION = TXT_LEVELS_TEAM_INTEGRATION_CONTRACT`; dominio TXT/niveles sin cambios de gameplay. Gate A: rehidratación, inventario, diff de 5ac2bba, limpieza y remoto contrastados; base `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, rama TXT `5ac2bba9a1d495a5da9e1ad998857fbe00613840`, dos commits por delante, sin PR abierto al preflight. Estos SHA son referencias de entrada, no HEAD permanentes. Los worktrees históricos se preservan sin intervención.
 
 Gates B/C: [matriz de compatibilidad, entradas/salidas y preguntas concretas](FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026). Fuente nueva: [coordinación entre dominios](../continuity/SOURCE_REGISTRY.md#coordinación-txt-y-fragilehielo--29102026), sin votos ni confirmación de implementación terminada. Contrato TXT del Punto 5 enlazado al traspaso, sin modificar sus otras secciones.
 
@@ -157,8 +157,18 @@ Gate E y frescura por impacto:
 
 Se consultó la procedencia de dos afirmaciones operativas antes de actualizarlas: la representación individual futura del contrato Punto 5 se introdujo en `cbc1be7`; la frase R7 preparada del índice documental, en `2dad014`. El estado disponible de 5ac2bba las precisa; no cambió la autoridad académica ni se editan snapshots históricos.
 
-Validación de este hito: revisión campo a campo de ejemplos contra parser/agregado y oráculos existentes; `git diff --check`, verificador documental y prueba de identidad de src/scripts frente a 5ac2bba. JAVA_QA nueva NOT_RUN_DOCS_ONLY; [evidencia previa verificada](../testing/TEST_STRATEGY.md#revisión-del-contrato-para-trabajo-paralelo--29102026). Asistencia de IA declarada, TEAM_ACCEPTANCE=NOT_RECORDED. Un único commit documental coherente en la misma rama; sin PR, merge, mensajes a integrantes ni cambios de otros dominios.
+Validación de este hito: revisión campo a campo de ejemplos contra parser/agregado y oráculos existentes; `git diff --check`, verificador documental y prueba de identidad de src/scripts frente a 5ac2bba. JAVA_QA nueva NOT_RUN_DOCS_ONLY; [evidencia previa verificada](../testing/TEST_STRATEGY.md#revisión-del-contrato-para-trabajo-paralelo--29102026). Asistencia de IA declarada, TEAM_ACCEPTANCE=NOT_RECORDED. En ese checkpoint se creó un único commit documental en la rama TXT, sin PR, merge, mensajes a integrantes ni cambios de otros dominios.
 
 Siguiente acción segura: obtener, mediante coordinación humana autorizada, firma/commit del consumidor y archivo del nivel ofrecido; contrastarlos con la matriz antes de definir conversión o ampliar sintaxis. Hielo y runtime Fragile permanecen OPEN_PENDING_TEAM. La cantidad de niveles de demo no se fija por esta misión.
 
 Controles documentales del hito: `git diff --check`, `bash scripts/verify-repo-readonly.sh` y `git diff --exit-code 5ac2bba -- src scripts`, exit 0. Verificador: 137 archivos, 415 enlaces relativos, 43 assets íntegros; ocho Markdown afectados. El ejemplo especial coincide byte a byte con el fixture y las secciones no TXT del contrato Punto 5 permanecen idénticas. No hubo compilación ni ejecución Java nuevas.
+
+## Cierre del alcance autónomo y promoción única — 29/10/2026
+
+`AUTONOMOUS_SCOPE=FROZEN_TXT_LEVEL_DEFINITION`: quedan completos la carga experimental desde Path, la validación, diez casos nuevos, fixture y contrato de traspaso de doce dimensiones/ocho preguntas. La integración de mecánicas especiales corresponde a otro gate con los responsables de Model/Movement; no bloquea la publicación del incremento aislado ni habilita resolver OQ por inferencia.
+
+La solicitud de cierre autoriza abrir un único PR Draft de la rama TXT y, sólo después de revisión humana apropiada y SHA/QA verificados, un squash. Consultar Git/GitHub para número/estado/reviews y commit integrado; no hay un SHA de squash predicho en estos documentos. Si falta revisión, mantener Draft y no integrar. TEAM_ACCEPTANCE permanece NOT_RECORDED mientras no exista evidencia explícita; un PASS ni una revisión de IA la sustituyen. No eliminar ramas/worktrees como efecto del merge.
+
+Frescura de promoción: README, TODO, CURRENT_STATE, REHYDRATION_INDEX, este plan, propuesta Fragile, contrato TXT Punto 5, índice documental, arquitectura, trazabilidad y procedencia se ajustaron únicamente para separar capacidades de estados Git transitorios. Los checkpoints de 8b71712/5ac2bba/529f38d conservan sus hechos fechados. AGENTS/CONTRIBUTING/FRESHNESS_POLICY, requisitos/OQ/votos, responsabilidades/UML, pruebas, bibliografía y assets se verificaron sin cambios: no hay nueva regla, API, estructura ni recurso. Fuentes/tests/fixtures/scripts siguen idénticos a 5ac2bba.
+
+Gate de publicación: compilar y ejecutar sobre el HEAD final el bloque filesystem de TEST_STRATEGY (Loading 40, C2 32, Fragile 41, Movement 31, Desktop headless 16), verificador con --require-clean y diff --check. El PR registra SHA, comandos, exit y resultados reales de esa ejecución; las pruebas anteriores conservan su procedencia histórica. La reproducción requiere sólo el clon y un JDK completo, sin logs privados. El alcance público se revisa completo, incluidas licencias pendientes y declaración de IA; no se afirma CI, GUI manual ni gameplay Fragile.

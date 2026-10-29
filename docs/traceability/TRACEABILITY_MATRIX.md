@@ -137,7 +137,7 @@ La fila RF-12 de casos futuros del 23/10 conserva su contexto histórico; no cer
 
 ## Incremento filesystem de definición Fragile — 29/10/2026
 
-Contenido disponible en esta rama, sin afirmar merge en main. [Matriz de brechas y alternativas G2](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026); [comandos y contenido probado](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
+Capacidad implementada en el árbol presente; publicación e integración se verifican en Git/GitHub. [Matriz de brechas y alternativas G2](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026); [comandos y contenido probado](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
 
 | Requisito / alcance | Implementación | Casos reales / evidencia del incremento | Brecha restante |
 |---|---|---|---|
