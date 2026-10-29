@@ -53,7 +53,7 @@ Este apartado es un mapa hacia la autoridad canónica, no otra definición norma
 | RF-06 / RF-08 | Objetivo KeyBox y cierre: [E05 / D-019](../decisions/DECISION_LOG.md#e05), [E06 / D-010](../decisions/DECISION_LOG.md#e06) | [OQ-01/OQ-07](OPEN_QUESTIONS.md): ocupación, IDs y puzzles pendientes |
 | RF-07 / RF-10 | Umbral y reinicio de límite: [E07 / D-007](../decisions/DECISION_LOG.md#e07), [E08 / D-008](../decisions/DECISION_LOG.md#e08) | [OQ-05/OQ-04](OPEN_QUESTIONS.md): umbral aceptado, compatibilidad de consecutividad pendiente |
 | RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y resets pendientes |
-| RF-12 | Primera adicional: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md): segunda sin mayoría, contratos y GoF pendientes |
+| RF-12 | Preferencia TEAM histórica: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026): elegibilidad de guardar cuestionada por reporte indirecto; cómputo de dos adicionales, contratos y GoF pendientes |
 
 La revisión del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`. OQ-11 no tuvo encuesta: los comandos actuales y release 17 no ratifican Java/build final. Los estados técnicos de arquitectura/UML y patrones se conservan.
 
@@ -66,3 +66,9 @@ Un integrante envía a **jpepe@uade.edu.ar**, con copia a los demás, nombre del
 **Indicación oral resumida / AUDIO_NOT_VERIFIED:** para RF-02 el docente puede crear un TXT compatible o editar válidamente uno del equipo, por ejemplo cambiar pared por caja. Aceptación: archivo externo → Loader/Parser → Board → interfaz debe reflejar el cambio, sin hardcode. Una entrada inválida debe producir error y conservar el nivel previo; no se promete aceptar cualquier edición. Para RF-01/02/05 los niveles elaborados por el equipo deben ser resolubles y su resistencia Fragile coherente con el puzzle; no se prescribe solver automático ni máximo numérico oficial. [Fuentes y timestamps](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026).
 
 Estos criterios son objetivos de aceptación, no resultados nuevos. Fragile jugable y las demás entidades especiales siguen pendientes; la definición experimental no satisface por sí sola RF-05. OQ-03/OQ-04 conservan sus conflictos normativos.
+
+## Alcance de RF-07 y RF-12 — complemento 29/10/2026
+
+RF-07 exige Undo con historial 15, bloques 5 y hasta 3 usos consecutivos; la consigna escrita no exige textualmente persistencia en disco. Memento representa estado para restaurar, sin implicar guardar archivos o sobrevivir al cierre del juego. No resolver por esa asociación la ambigüedad del [reporte grupal](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026).
+
+RF-12 sigue exigiendo **dos adicionales académicamente válidas con patrones vistos en clase**. Guardar/recuperar no se computa automáticamente: su exclusión y la elegibilidad del selector fueron atribuidas al docente por un tercero, sin respuesta original verificada. El selector permanece candidato y requiere evidencia de comportamiento y patrón justificado; el cómputo final y la segunda selección siguen pendientes en OQ-10. No se alteran E11 ni la entrega oficial del 18/11/2026.

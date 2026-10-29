@@ -121,3 +121,16 @@ Matriz afirmación→fuente→autoridad/decisión→código→evidencia→destin
 | RT-02/03/04: entrega y defensa | Teams aportado / TEACHER-EXPLICIT | Software parcial y suites históricas; entrega no realizada | REQUIREMENTS/TODO: 18/11, demo 15–20 min, correo, video/StarUML/informe/README e IA |
 
 PR #12 integra documentación candidata, no RF-05 completo ni aprobación de gramática. R6 completa; R7 preparada, no ejecutada. La revisión humana del Draft documental es el siguiente gate; la implementación posterior requiere autorización propia.
+
+## Elegibilidad RF-12 y evidencia grupal — complemento 29/10/2026
+
+La fila RF-12 de casos futuros del 23/10 conserva su contexto histórico; no certifica hoy guardar/recuperar como adicional válida. [E11 preservada y nota de compatibilidad](../decisions/DECISION_LOG.md#compatibilidad-académica-de-e11--complemento-29102026); [OQ-10 actualizado](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026).
+
+| Afirmación | Fuente / autoridad | Implementación / evidencia | Gate pendiente |
+|---|---|---|---|
+| Guardar podría no computar como adicional | Mensaje TEAM que atribuye criterio docente, SECONDHAND; original no verificado | UiCommands expone callbacks, no servicio de persistencia; ninguna prueba nueva | Confirmar elegibilidad antes de cómputo RF-12; no alterar voto E11 |
+| Selector visual candidato | TEAM_PROPOSAL / TEACHER_REPORTED_ELIGIBILITY / IMPLEMENTATION_NOT_VERIFIED | No se certifica implementación ni patrón desde la encuesta o sprites | Confirmar alcance, selección y patrón real; luego prueba funcional autorizada |
+| Undo no implica disco | RF-07 OFFICIAL normalizado; distinción técnica de responsabilidades | Memento candidato, sin obligación textual de persistencia | Especificar separadamente snapshots y eventual guardado |
+| Organización en cinco áreas e Issues | Propuesta grupal 24/10 resumida | Sin asignación nominal completa; consulta GitHub sin Issues | Acordar responsables y tareas sin inventar asignaciones |
+
+[Procedencia](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026). Java, GUI y gameplay: NOT_RUN_DOCS_ONLY en este complemento; evidencia histórica intacta. La entrega sigue el 18/11/2026; no hay fecha confirmada de parcial ni deadline 1/11.

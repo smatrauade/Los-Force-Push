@@ -26,7 +26,7 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 | P0 / 06/11 | NOT_IMPLEMENTED: Observer con candidato Lock→Walls | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración probados |
 | P0 / 09/11 | NOT_IMPLEMENTED: Undo/Restart y métricas | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5; justificar Command o Memento |
 | P0 / 09/11 | NOT_IMPLEMENTED: victoria/progresión y score | Sesión/niveles/score | OQ-01/09, fórmula del equipo | Goal/KeyBox y progresión probados; LevelResult recibe score real; Strategy justificada |
-| P0 / 10/11 | TEAM_DECISION_REQUIRED / NOT_IMPLEMENTED: guardar/recuperar y segunda adicional | Persistencia y equipo de producto | OQ-10; contrato de sesión/Undo | Guardar/recuperar cuenta como una; segunda seleccionada explícitamente; casos y GoF real. Pistas/Decorator no aprobados |
+| P0 / 10/11 | TEAM_DECISION_REQUIRED: confirmar dos adicionales elegibles y su selección | Equipo de producto/arquitectura e interfaz | OQ-10; reporte docente indirecto y E11 histórica | No computar guardar automáticamente; selector candidato con elegibilidad reportada, sin mayoría ni implementación verificadas. Confirmar dos extras y demostrar patrón real, sin imponer Strategy/Abstract Factory |
 | P1 / 12/11 | PARTIAL: conectar servicios a UiCommands/renderer | Swing e integración | Servicios operativos y DTO acordado | Disponibilidad real de botones; render de especiales, sin reglas ni resistencia inferida desde sprites |
 | P1 / 13/11 | NOT_IMPLEMENTED: aceptación integral de niveles propios | TXT/QA/Movement | Contrato y mecánicas integrados | TXT externo editado→Board→UI; error conserva estado; cada puzzle tiene secuencia solución y resistencia coherente |
 | P0 / 13/11 | DELIVERY_REQUIRED: revisión de derechos de assets | Recursos/equipo | Titularidad y política de dominio público | Registro individual verificable; no inferir CC0 de hash u origen IA |
@@ -45,3 +45,14 @@ R6 está completa por PR #12. **R7 está preparada, NO ejecutada**. Su gate prev
 E01–E11 se conservan únicamente en [DECISION_LOG](docs/decisions/DECISION_LOG.md); pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). No reabrir acuerdos por defecto. E04/E08 siguen CONFLICT_REVIEW_REQUIRED; Java/build OPEN. Revisar patrones por intención, roles reales y alternativa; SoundManager no es Singleton, callbacks no acreditan Command y el DTO LevelResult no calcula score.
 
 Mantener [arquitectura](docs/architecture/ARCHITECTURE.md), UML implementado y candidato separados; actualizar diagramas en misión autorizada, sin convertirlos en evidencia de clases ausentes. [Derechos y assets](docs/assets/ASSET_POLICY.md), [contratos Punto 5](docs/punto5/INTEGRACION_EQUIPO.md) y [FRESHNESS_POLICY](docs/continuity/FRESHNESS_POLICY.md) siguen vigentes. Revisar humanos/código, pruebas y documentos en cada incremento; conservar cápsulas y checkpoints históricos. Este backlog no concede permiso de implementación o publicación.
+
+## Contexto grupal y tareas de adicionales — complemento 29/10/2026
+
+[Fuente y límites](docs/continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026). Las cinco áreas del 24/10 fueron una propuesta organizativa, con un ofrecimiento para Undo/Restart/puntaje; no hay asignación nominal completa. Los responsables por módulo de la tabla son planificación, no atribuciones personales. La consulta actual a GitHub no encontró Issues; su uso fue propuesto, no ejecutado.
+
+- **P0 / sin nueva fecha interna:** confirmar en OQ-10 la elegibilidad académica de las dos adicionales. E11 queda preservada; guardar/recuperar deja de descontarse automáticamente del requisito de dos extras.
+- **Candidato pendiente:** selector de temas/sprites, TEAM_PROPOSAL / TEACHER_REPORTED_ELIGIBILITY / IMPLEMENTATION_NOT_VERIFIED. Definir aceptación y patrón real tras confirmar el alcance; no tratar conformidad individual ni encuesta incompleta como mayoría.
+- **Persistencia:** conservar como propuesta histórica del equipo con contrato pendiente, sin transformarla en obligación docente ni equipararla a snapshots Memento para Undo. Cualquier implementación requiere alcance propio.
+- **Patrones:** sugerencias de Factory Method/Abstract Factory del 29/10 no son decisiones ratificadas ni autorizan refactors. La segunda funcionalidad y el cómputo final de ambas siguen pendientes.
+
+El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece de contexto de voces omitidas: no es deadline. Continúa **18/11/2026** como entrega oficial; las fechas internas de la tabla anterior son sólo propuestas. R7 no se ejecuta.

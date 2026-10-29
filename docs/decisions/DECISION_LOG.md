@@ -25,7 +25,7 @@
 | D-019 | Progreso de niveles | LevelCatalog `PREFERRED`; simplificar interfaz como alternativa | El aspecto de victoria [E05](#e05) es `ACCEPTED_SCOPE`; validación de puzzle y combinación con E06 pendientes en [OQ-01](../requirements/OPEN_QUESTIONS.md) |
 | D-020 | Contrato TXT externo | Carga externa `TEACHER-EXPLICIT`; alcances [E01](#e01)/[E02](#e02) `ACCEPTED_SCOPE`; gramática `OPEN` | [OQ-06/OQ-08](../requirements/OPEN_QUESTIONS.md): disposición y resistencia individual no fijan alfabeto, metadatos ni parámetros; D-011/D-012 siguen PREFERRED |
 | D-021 | Licencias | Dominio público `OFFICIAL`; Kenney/Pixabay fuentes sugeridas | Verificar recurso individual; recomendación del sitio no prueba licencia |
-| D-022 | Adicionales | Dos exigidas `OFFICIAL`; primera opción [E11](#e11) `ACCEPTED_SCOPE`; segunda `OPEN` | Pistas 2/5 `NOT_APPROVED`; patrón y criterios de persistencia pendientes en [OQ-10](../requirements/OPEN_QUESTIONS.md); guardar/recuperar cuenta como una funcionalidad |
+| D-022 | Adicionales | Dos exigidas `OFFICIAL`; preferencia histórica [E11](#e11) `ACCEPTED_SCOPE`; elegibilidad cuestionada, ver [nota de compatibilidad](#compatibilidad-académica-de-e11--complemento-29102026); cómputo final `OPEN` | Pistas 2/5 `NOT_APPROVED`; patrón y criterios de persistencia pendientes en [OQ-10](../requirements/OPEN_QUESTIONS.md); guardar/recuperar es una sola propuesta; no acredita cómputo RF-12 |
 | D-023 | Diseño antes de código | Revisión UML/responsabilidades `PREFERRED`, criterio docente | Evita primer output IA sin revisión; UML candidato no basta como evidencia de ejecución |
 | D-024 | Abstracciones y datos | Fuente única de estado y variación real `PREFERRED`, criterio COURSE | Evitar interfaces ceremoniales, redundancia, Controller monolítico y violaciones LSP |
 | D-025 | Historial documental | Archivos vivos + cápsulas inmutables | Contrato de bootstrap; esta integración corrige vivos y conserva bytes históricos |
@@ -118,3 +118,15 @@ Siguiente gate: revisión humana del Draft documental y, en otra misión, `SOKOB
 - D-007: comparar Command (acciones) y Memento (estados) para Undo; no exigir ambos ni presentar Board inmutable como Memento implementado.
 - D-009: Strategy es candidato para score; E10 no fija fórmula. D-018: Decorator/power-up sigue ejemplo posible, sin aprobar segunda adicional.
 - D-013/D-016: no hay justificación actual de Prototype; audio no obliga Singleton. MVC se defiende por reglas del Model, coordinación del Controller y presentación Swing, según el código; no se reconstruyen frases docentes ausentes.
+
+## Compatibilidad académica de E11 — complemento 29/10/2026
+
+La tabla E01–E11, sus recuentos y el estado original de E11 permanecen intactos como registro histórico de la preferencia del equipo. Esta nota califica su elegibilidad académica, sin anular ni repetir la votación.
+
+- **Preferencia TEAM:** E11 escogió guardar/recuperar; el voto no garantiza que pueda computarse para RF-12.
+- **OFFICIAL escrito:** RF-12 exige dos adicionales con patrones; RF-07 exige Undo 15/5/3. El texto normalizado no exige persistencia en disco. Un snapshot Memento para Undo no equivale a guardar y reabrir una partida tras cerrar el juego.
+- **Reporte posterior:** el [mensaje grupal del 28/10](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026) atribuye al docente la exclusión de guardar como adicional y la elegibilidad del selector. TEAM_MESSAGE_REPORTING_TEACHER / SECONDHAND / ORIGINAL_TEACHER_RESPONSE_NOT_VERIFIED; no respuesta docente verificada.
+- **Cómputo pendiente:** no contar automáticamente guardar/recuperar como una de las dos adicionales; confirmar la aclaración y registrar cuáles dos son académicamente válidas. El selector es TEAM_PROPOSAL / TEACHER_REPORTED_ELIGIBILITY / IMPLEMENTATION_NOT_VERIFIED, sin nueva mayoría acreditada ni segunda adicional ratificada.
+- **Diseño pendiente:** Strategy o Abstract Factory son alternativas para el selector sólo si su intención y estructura reales se justifican. Las sugerencias del 29/10 de Factory Method/Abstract Factory para entidades/niveles tampoco ratifican arquitectura ni cambian D-014/D-015.
+
+[OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) mantiene el inventario residual. No se transforma persistencia en obligación académica por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED; la defensa sigue exigiendo explicar patrones efectivamente aplicados.

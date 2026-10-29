@@ -77,3 +77,17 @@ Reconciliación basada en la solicitud del usuario y su resumen de misión, leí
 | Resumen docente aportado, sin timestamp adicional verificado | Misma procedencia ASR | Prototype sin justificación actual; Singleton/audio no obligatorio; MVC separa reglas, coordinación y vista |
 
 La investigación externa de solver/deadlocks/generación no es requisito docente ni se revisó en esta ejecución: NOT_APPLICABLE a la ruta crítica. E01–E11 permanecen únicamente en DECISION_LOG; esta tabla registra fuentes, no votos ni nuevas decisiones.
+
+## Contexto grupal privado — complemento 29/10/2026
+
+Fuente leída en esta misión: resumen impersonal aportado por el usuario de una exportación de WhatsApp generada el 29/10/2026 a las 11:52, con mensajes del 30/09 al 29/10. No se leyeron aquí los bytes de la exportación ni respuestas docentes originales. Hay voces, multimedia y resultados de encuestas omitidos: no reconstruirlos ni publicar mensajes completos, nombres, teléfonos, identificadores o capturas.
+
+| Fecha / alcance reportado | Clasificación | Uso y límite |
+|---|---|---|
+| 28/10, aproximadamente 17:19–17:22 | TEAM_MESSAGE_REPORTING_TEACHER / SECONDHAND / ORIGINAL_TEACHER_RESPONSE_NOT_VERIFIED | Un mensaje atribuye al profesor que guardar no cuenta como adicional, lo relaciona con Undo/Memento y reporta elegibilidad del selector de estilos; otro expresa conformidad. No constituye respuesta docente directa ni ratificación por mayoría |
+| 27/10 encuesta/propuesta visual; 28/10 reporte posterior | TEAM_PROPOSAL / TEACHER_REPORTED_ELIGIBILITY / IMPLEMENTATION_NOT_VERIFIED | Selector de estilos/sprites candidato; resultados completos no disponibles, patrón e implementación por demostrar |
+| 24/10 organización | TEAM_PROPOSAL | Cinco áreas propuestas: TXT/niveles, movimiento/cajas especiales, cerrojos/victoria, Undo/Restart/puntaje e interfaz/recursos. Hubo ofrecimiento para la cuarta y propuesta de Issues; no asignación nominal completa |
+| 29/10 patrones | TEAM_PROPOSAL | Factory Method y Abstract Factory sugeridos para entidades/niveles; no acuerdos ratificados |
+| Fechas discutidas | SECONDHAND / INCOMPLETE_CONTEXT | Parcial sin fecha exacta; pregunta sobre 1/11 con respuestas de voz omitidas, no deadline confirmado. Teams conserva entrega oficial del 18/11/2026 |
+
+GitHub consultado en esta misión: el endpoint de Issues (abiertos y cerrados, excluidos PR) devolvió lista vacía; no constan Issues creados en esa consulta. No se crearon ni asignaron tareas. La evidencia TEAM indirecta no se eleva a TEACHER-EXPLICIT ni sustituye la consigna escrita. [Compatibilidad de E11](../decisions/DECISION_LOG.md#compatibilidad-académica-de-e11--complemento-29102026) y [OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) delimitan la incertidumbre.
