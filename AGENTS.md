@@ -1,6 +1,6 @@
 # Contrato operativo para personas y agentes
 
-`LAST_REVIEWED = 2026-10-28` (continuidad tras integrar TXT C2-L7 y Swing pixel art; autoridad de reglas sin cambios).
+`LAST_REVIEWED = 2026-10-29` (política de integración documental y rehidratación autónoma; reglas del juego sin cambios).
 
 ## Alcance y autoridad
 
@@ -59,12 +59,20 @@ Detener mutaciones afectadas si falta acceso, hay repo incorrecto, cambios inesp
 
 - Trabajar desde HEAD actualizado en rama de alcance único; nunca escribir directamente en `main`.
 - Prohibidos force-push, GitHub Actions y servicios/APIs pagos en este alcance.
-- No ejecutar automáticamente `git reset --hard`, `git clean -fd` o `git merge`.
+- No ejecutar automáticamente `git reset --hard`, `git clean -fd` ni merges que puedan producir conflictos. **Excepción acotada:** luego de comprobar un merge documental remoto autorizado, está permitido sincronizar el worktree local limpio de `main` mediante `git merge --ff-only` con SHA remoto verificado; nunca resolver conflictos automáticamente.
 - No cambiar permisos, visibilidad, credenciales ni configuración global Git.
 - No sobrescribir trabajo de compañeros; reconciliar primero.
 - No introducir refactors ajenos ni dependencias sin problema, alternativa simple, coste y justificación.
 - Revisar diff, `git diff --check`, verificaciones relevantes y documentos afectados antes del PR.
-- Publicar/abrir PR sólo dentro de la autorización vigente. Otra persona lo revisa; no autoaprobar ni hacer merge automático.
+- Publicar/abrir PR o integrar cambios sólo cuando la instrucción vigente autorice esa operación y todos los gates aplicables sean PASS. No autoaprobar cambios funcionales ni eludir políticas de GitHub.
+- **Documentación exclusivamente:** la revisión por otro integrante NO es un gate obligatorio. Si el usuario autoriza mantenimiento/integración documental, no hay cambios ejecutables ni decisiones TEAM nuevas, el diff es acotado y las verificaciones de contenido/enlaces/seguridad pasan, se puede integrar con comprobación de SHA sin pedir una aprobación humana ceremonial. Si GitHub exige revisiones por protección de rama, no eludirlas.
+- **Código, assets, contratos funcionales o decisiones controvertidas:** mantener revisión apropiada y aprobación explícita de cambios normativos. Una edición Markdown que introduce una regla nueva o altera E01-E11 NO es automáticamente mantenimiento documental de bajo riesgo.
+
+## Continuidad autónoma desde el repositorio
+
+Un agente nuevo debe poder comenzar **solo con el clon**: leer `AGENTS.md` → `docs/continuity/REHYDRATION_INDEX.md` → documentos vivos indicados. Git/GitHub y el HEAD actual prevalecen sobre cápsulas históricas; los originales académicos externos se referencian mediante `SOURCE_REGISTRY.md` sin inventar su disponibilidad. Registrar hechos comprobados, fuentes y límites, estado implementado frente a propuesto, pruebas actuales frente a históricas, OQ abiertas y próximo gate; no exigir memoria de chats anteriores.
+
+Mantener actualizados en el mismo incremento los documentos vivos **afectados por impacto**, sin duplicar el registro de votos E01-E11 ni crear resúmenes rivales. `FRESHNESS_POLICY.md` define el cierre; no exigir reescrituras cosméticas ni revisión humana externa para cambios solo documentales autorizados.
 
 ## Diseño y desarrollo posteriores
 

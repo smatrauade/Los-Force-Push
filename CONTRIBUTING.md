@@ -12,10 +12,10 @@ git switch -c <rama-de-alcance-unico> origin/main
 
 No ejecutar este ejemplo ciegamente si hay trabajo pendiente o una rama equivalente. Usar commits pequeños y explicables (`docs:`, `feat:`, `test:`, `fix:`). No force-push, acciones CI nuevas, pagos ni cambios globales de Git.
 
-Cada PR explica problema, comportamiento resultante, alcance, decisiones, alternativas, pruebas ejecutadas, documentos afectados y riesgos. Solicitar revisión de otro integrante. La IA debe declararse y su resultado debe ser comprendido; no autoaprobar ni hacer merge automático.
+Cada PR explica problema, comportamiento resultante, alcance, decisiones, alternativas, pruebas ejecutadas, documentos afectados y riesgos. Para **solo documentación** y sin alteraciones normativas, no exigir revisión externa si hay autorización vigente, gates y validación reproducible; puede integrarse sin una aprobación ceremonial, respetando las reglas de rama GitHub. Para **código, recursos, contratos funcionales o nuevas decisiones TEAM**, exigir la revisión/ratificación pertinente; no autoaprobar cambios de riesgo. La IA debe declararse y su resultado debe comprenderse.
 
 Antes del PR, revisar `git diff --check`, diff completo y verificaciones pertinentes. Para documentación ejecutar `bash scripts/verify-repo-readonly.sh`; para código, las pruebas definidas cuando exista toolchain. Las reglas del core se probarán sin Swing. Un resultado histórico no cuenta como ejecución actual.
 
 Actualizar [política de frescura](docs/continuity/FRESHNESS_POLICY.md), decisiones, arquitectura/UML y trazabilidad cuando corresponda. No editar cápsulas antiguas. No agregar una dependencia sin justificar problema, alternativa estándar, coste y decisión. No implementar una regla abierta sin registrar su cierre.
 
-La aprobación y el merge pertenecen al equipo y requieren autorización separada. El repositorio es público según la verificación API del 2026-10-21; cambiar visibilidad o permisos requiere autorización específica y no forma parte de esta revisión.
+El merge requiere una autorización vigente específica para el alcance de la misión y un gate de SHA/estado, no necesariamente una revisión ajena en mantenimiento documental. Cambiar visibilidad o permisos requiere autorización específica; nunca inferirla de este texto.
