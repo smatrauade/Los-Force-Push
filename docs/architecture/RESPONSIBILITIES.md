@@ -53,3 +53,13 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados, sólo para presentación |
 
 GameSession, UndoManager/Memento, ScoreStrategy, Observer de locks, LevelCatalog, persistencia y cajas especiales siguen ausentes. Las interfaces y la jerarquía integral no se adoptan por existir hooks visuales. Requisitos/decisiones y evidencia de ejecución se consultan por separado.
+
+## Responsables de cierre por módulo — 29/10/2026
+
+Son roles de planificación, no asignaciones personales ni arquitectura ratificada. [Prioridades y aceptación](../../TODO.md#ruta-crítica-hacia-el-1811).
+
+- TXT/niveles: contrato externo, errores atómicos, definición inicial e invariantes; preservar identidad/resistencia antes de integración runtime.
+- Model/Movement: reglas, estado de cajas y asociaciones; candidato Observer para Lock→Walls pendiente de OQ-07. No delegar esos efectos a Swing.
+- Sesión/score/persistencia: Undo/Restart, métricas, victoria/progresión y guardado; justificar Command/Memento/Strategy cuando exista contrato.
+- Swing: representar DTO/Board y conectar servicios realmente disponibles. Los callbacks UiCommands no son el patrón Command demostrado.
+- Integración/entrega: coordinar compatibilidad, pruebas, licencias, StarUML, informe, video y defensa. Evaluar LevelBuilder por intención y consecuencias, no por nombre.

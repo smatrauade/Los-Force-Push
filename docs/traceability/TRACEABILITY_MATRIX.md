@@ -107,3 +107,30 @@ Pistas no cuenta como adicional aprobada; consultar E11 para el resultado y el u
 ## Spike experimental de atributos individuales
 
 RF-02/RF-05 PARTIAL: ExperimentalFragileParser reconoce referencias individuales en piso o destino y ExperimentalFragileLevel conserva ID, posición y resistencia como definición inmutable. La plantilla no contiene una caja normal por cada frágil. El loader jugable sigue rechazando Fragile. Los 31 casos actuales del spike están separados de los 32 C2 y no implementan resistencia en gameplay ni cierran OQ-06/OQ-08. Ver [contrato](../../README.md#prototipo-experimental-de-atributos-individuales) y [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).
+
+## Reconciliación académica — 29/10/2026
+
+Matriz afirmación→fuente→autoridad/decisión→código→evidencia→destino. Fuentes externas y fidelidad en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026); no duplica votos. Verificación del código en solo lectura; ejecución funcional nueva NOT_RUN.
+
+| RF/RT y afirmación | Fuente / autoridad / decisión | Implementación y evidencia | Documento afectado / siguiente aceptación |
+|---|---|---|---|
+| RF-02: TXT propio/editado debe llegar a UI | 23/09 y 30/09 ASR oral; OQ-08 parcial | LevelLoader→LevelParser→Board→GameController; Loading 40 y Desktop 16 históricos | REQUIREMENTS/TEST_STRATEGY: ensayo externo válido, recarga y error atómico PLAN |
+| RF-02/05: resistencia individual, puzzle resoluble | E01/E02 TEAM; 23/09 ASR; OQ-06/08 pendientes | ExperimentalFragileParser/Level; Fragile 31 histórico, no jugable | TODO: contrato candidato #12 y solución de puzzle futura |
+| RF-06 / RT-03: Observer | 21/10 ASR oral indica incorporarlo; D-010 PREFERRED | Lock/Observer/muros dinámicos ausentes | DECISION_LOG/ARCHITECTURE: OQ-07 y aislamiento de asociaciones antes de prueba |
+| RF-07/09: Undo y cálculo | ASR Command/Memento/Strategy; E08 en conflicto, fórmula OQ-09 abierta | UiCommands/LevelResult son presentación; servicios ausentes | RESPONSIBILITIES/TODO: contratos y luego pruebas de sesión/score |
+| RT-02/03/04: entrega y defensa | Teams aportado / TEACHER-EXPLICIT | Software parcial y suites históricas; entrega no realizada | REQUIREMENTS/TODO: 18/11, demo 15–20 min, correo, video/StarUML/informe/README e IA |
+
+PR #12 integra documentación candidata, no RF-05 completo ni aprobación de gramática. R6 completa; R7 preparada, no ejecutada. La revisión humana del Draft documental es el siguiente gate; la implementación posterior requiere autorización propia.
+
+## Elegibilidad RF-12 y evidencia grupal — complemento 29/10/2026
+
+La fila RF-12 de casos futuros del 23/10 conserva su contexto histórico; no certifica hoy guardar/recuperar como adicional válida. [E11 preservada y nota de compatibilidad](../decisions/DECISION_LOG.md#compatibilidad-académica-de-e11--complemento-29102026); [OQ-10 actualizado](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026).
+
+| Afirmación | Fuente / autoridad | Implementación / evidencia | Gate pendiente |
+|---|---|---|---|
+| Guardar podría no computar como adicional | Mensaje TEAM que atribuye criterio docente, SECONDHAND; original no verificado | UiCommands expone callbacks, no servicio de persistencia; ninguna prueba nueva | Confirmar elegibilidad antes de cómputo RF-12; no alterar voto E11 |
+| Selector visual candidato | TEAM_PROPOSAL / TEACHER_REPORTED_ELIGIBILITY / IMPLEMENTATION_NOT_VERIFIED | No se certifica implementación ni patrón desde la encuesta o sprites | Confirmar alcance, selección y patrón real; luego prueba funcional autorizada |
+| Undo no implica disco | RF-07 OFFICIAL normalizado; distinción técnica de responsabilidades | Memento candidato, sin obligación textual de persistencia | Especificar separadamente snapshots y eventual guardado |
+| Organización en cinco áreas e Issues | Propuesta grupal 24/10 resumida | Sin asignación nominal completa; consulta GitHub sin Issues | Acordar responsables y tareas sin inventar asignaciones |
+
+[Procedencia](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026). Java, GUI y gameplay: NOT_RUN_DOCS_ONLY en este complemento; evidencia histórica intacta. La entrega sigue el 18/11/2026; no hay fecha confirmada de parcial ni deadline 1/11.

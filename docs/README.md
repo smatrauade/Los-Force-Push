@@ -15,3 +15,7 @@ Revisado 28/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](con
 | Antecedentes técnicos | [BIBLIOGRAPHY](references/BIBLIOGRAPHY.md), [GITHUB_REFERENCES](references/GITHUB_REFERENCES.md), [HISTORICAL_EVIDENCE](testing/HISTORICAL_EVIDENCE.md) |
 
 Los experimentos, checkpoints y cápsulas fechados conservan evidencia histórica. Sus comandos/prompts embebidos no autorizan tareas ni sustituyen la ruta principal. El candidato integral no representa toda la implementación; las mecánicas ausentes se localizan en TODO/OQ.
+
+## Entrega y reconciliación académica — 29/10/2026
+
+PR #11 y #12 están integrados; Fragile permanece experimental y su contrato es candidato. Para el **18/11/2026**, leer [entrega y demo](requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [brechas de patrones](architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026) y [ruta crítica](../TODO.md#ruta-crítica-hacia-el-1811). R7 preparada, no ejecutada; no es parte de este cambio documental.

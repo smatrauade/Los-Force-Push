@@ -40,3 +40,7 @@ La revisión Swing R3 del 21/10 contrastó los tres diagramas AS_IMPLEMENTED con
 Los cuatro `.puml` pasaron comprobación sintáctica y render PNG mediante PlantUML 1.2020.02 y Graphviz 14.1.2 ya instalados, con `java.awt.headless=true` sólo en el proceso. La JVM de esa herramienta fue Java 25.0.4.1; las pruebas del proyecto usaron JDK 17.0.20.1/release 17. Renderizar no demuestra semántica del dominio ni apertura en StarUML. Los outputs y logs de auditoría son externos al repositorio.
 
 Siguiente gate académico: revisión grupal de responsabilidades/relaciones/firmas, cierre de decisiones afectadas y creación del `.mdj`. Cuando exista, declarar fuente de diseño canónica y mantener ambos artefactos sincronizados o documentar explícitamente supersesión. La falta del `.mdj` no impide revisar un Draft PR de este subconjunto experimental.
+
+## Impacto de la entrega — 29/10/2026
+
+Según [Teams aportado](../../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), no hace falta mostrar código/diagramas en la demo de 15–20 minutos del 18/11; **el archivo StarUML sigue requerido**. No se editaron ni compilaron diagramas en esta misión documental. Queda pendiente reflejar el agregado experimental Fragile y los futuros roles reales al mantener el UML de implementación; el candidato conserva su carácter propuesto. La indicación ASR de Observer es deuda de implementación/defensa, no evidencia de clases existentes. Coordinar la actualización de diagramas y .mdj en un incremento autorizado.

@@ -262,3 +262,15 @@ try {
 Sobre el contenido actualizado del PR #11, basado en c6eb755388da142b6c8424d2d46aec2dc03ce622: Windows 11, Temurin 21.0.12.1, release 17, UTF-8, -Xlint:all -Werror. Compilación desde fuentes en temporales nuevos. Loading 40/40, Movement 31/31, C2 32/32, Fragile 31/31, Desktop 16/16, VisualAssets 44/44 y UI Smoke automatizado 17/17: PASS, exit 0. Las 22 pruebas anteriores son evidencia previa, no otro resultado de esta corrección.
 
 El agregado valida directamente nulos, ID ASCII único, posiciones únicas dentro del Board, piso/destino sin ocupante y resistencia positiva; List.copyOf y Board conservan inmutabilidad. Los nueve casos nuevos cubren construcción directa inválida y límites, incluyendo pared, jugador y caja normal. El parser y el modelo comparten la expresión del ID. El comando de la sección anterior ejecuta también estos casos. GUI manual y escucha de audio no fueron ejecutadas. No se ratifica OQ-06/OQ-08 ni se habilita Fragile jugable.
+
+## Aceptación para demo y TXT docente — plan 29/10/2026
+
+[Autoridad y límites](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026). Todos los casos siguientes están PLAN / NOT_RUN en esta misión; las suites históricas conservan fecha, baseline y conteos anteriores.
+
+1. Crear TXT externo con la convención documentada y cargar por LevelPath/selector. Comparar el Board y la representación Swing con el archivo.
+2. Cambiar válidamente una pared por caja, conservar dimensiones/jugador y recargar el mismo archivo; comprobar posición y representación nuevas, sin recompilar ni hardcode. LevelLoadingTest y DesktopIntegrationTest contienen antecedentes de recarga; el ensayo docente/manual completo debe registrarse sobre la versión final.
+3. Introducir símbolo inválido o archivo ausente: diagnóstico legible y proyección previa intacta. No aceptar Fragile jugable por pasar su parser experimental.
+4. Para niveles propios finales, registrar secuencia solución y empujes/resistencia; probar puzzles especiales sólo tras reglas e integración. No se requiere solver.
+5. Ensayar demo de 15–20 minutos: funcionalidades efectivas, explicación detallada de roles/patrones y alternativa justificada; QA visual y audible real. Revisar los entregables por separado, incluido StarUML.
+
+Regresión funcional futura según cambios: Loading 40, Movement 31, C2 32, Fragile 31, Desktop 16, VisualAssets 44, UI Smoke 17 y CLI 18 son conteos históricos separados, no ejecuciones de esta reconciliación. JAVA_REGRESSION = NOT_RUN_DOCS_ONLY; UML y GUI = NOT_RUN. Las validaciones documentales actuales se registran en el PR con comando, exit code y commit final, evitando un SHA autorreferencial.
