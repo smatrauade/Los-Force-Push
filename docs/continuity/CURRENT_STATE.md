@@ -4,6 +4,8 @@ AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este do
 
 ## Integraciones verificadas
 
+Esta tabla selecciona hitos con impacto en producto, decisiones o gobernanza. No pretende enumerar todos los commits de mantenimiento documental; para el historial exhaustivo y el HEAD vigente consultar Git/GitHub. Un nuevo merge solo documental no hace obsoleta por sí misma esta lista.
+
 | PR | Alcance | Commit de merge histórico |
 |---|---|---|
 | [#1](https://github.com/smatrauade/Los-Force-Push/pull/1) | Bootstrap | ff6fbf170bd9782fb703e1ab4fa1e811ec0782ed |
@@ -18,8 +20,9 @@ AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este do
 | [#10](https://github.com/smatrauade/Los-Force-Push/pull/10) | Continuidad y verificador | c6eb755388da142b6c8424d2d46aec2dc03ce622 |
 | [#11](https://github.com/smatrauade/Los-Force-Push/pull/11) | Definición experimental Fragile e invariantes | 986ab548e7955752d3542035d6f9d573534b257d |
 | [#12](https://github.com/smatrauade/Los-Force-Push/pull/12) | Propuesta documental TXT Fragile, no ratificada | 90ffc4ed91d7ce48d7cecddb37d2f5494b820fc6 |
+| [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) | Reconciliación académica, TEAM indirecto y política de continuidad | 65f8ba99de05a00acef401ce4408219b0160d9f5 |
 
-Los PR #8, #9, #10, #11 y #12 están MERGED; los SHA de la tabla identifican eventos históricos, no un HEAD permanente. El merge de #8 tiene padres fafae98642cefd38e466c689b3c8a16825773738 y 289fef6eda97a2bbd5593c74f06382ae6caf433c; conserva sus dos commits y el árbol 1796932307df319e3636daee942cf49920b4eb05. Las ramas remotas de ambos incrementos se retiraron tras verificar integración y consumidores. Sus commits permanecen en main. Al corte posterior al merge de #8 no había otros PR abiertos; consultar GitHub para cambios posteriores y para el estado del mantenimiento documental.
+Los PR #8, #9, #10, #11, #12 y #13 están MERGED; los SHA de la tabla identifican eventos históricos, no un HEAD permanente. El merge de #8 tiene padres fafae98642cefd38e466c689b3c8a16825773738 y 289fef6eda97a2bbd5593c74f06382ae6caf433c; conserva sus dos commits y el árbol 1796932307df319e3636daee942cf49920b4eb05. Las ramas remotas de ambos incrementos se retiraron tras verificar integración y consumidores. Sus commits permanecen en main. Al corte posterior al merge de #8 no había otros PR abiertos; consultar GitHub para cambios posteriores y para el estado del mantenimiento documental.
 
 ## Software que existe
 
@@ -71,7 +74,7 @@ Entrega y demo: **miércoles 18/11/2026**, 15–20 minutos; [protocolo y criteri
 
 R6 completa mediante PR #12. R7 está **preparada, no ejecutada**: requiere alcance y autorización propios; el prototipo inicial ya existe y no debe duplicarse. La propuesta integrada no cierra OQ-06/OQ-08. [TODO](../../TODO.md) prioriza dependencias y responsables por módulo. Observer sigue sin implementación, con indicación oral docente de incorporarlo en alguna parte del TPO según ASR; Lock→Walls es el candidato, sujeto a OQ-07. No hay Memento/Command ni Strategy de score implementados. TEAM_ACCEPTANCE = NOT_RECORDED.
 
-Esta reconciliación revisa documentación y fuentes contra el código integrado; las suites funcionales citadas son históricas. Java/gameplay/UI: NOT_RUN en esta misión. AGENTS y FRESHNESS_POLICY: UNCHANGED_VERIFIED, sus gates siguen vigentes; Punto 5 conserva su frontera de presentación y deuda de derechos. No se ejecuta investigación de solver/generador.
+Esta reconciliación revisa documentación y fuentes contra el código integrado; las suites funcionales citadas son históricas. Java/gameplay/UI: NOT_RUN en esta misión. AGENTS y FRESHNESS_POLICY quedaron sin cambios en la primera reconciliación, pero la política de revisión documental se actualizó después dentro del PR #13; sus gates actuales siguen vigentes; Punto 5 conserva su frontera de presentación y deuda de derechos. No se ejecuta investigación de solver/generador.
 
 ## Complemento grupal del PR #13 — 29/10/2026
 

@@ -1,6 +1,6 @@
 # Índice de rehidratación
 
-AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado), están integrados.
+AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado) y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) (reconciliación académica y política de continuidad), están integrados.
 
 ## Ruta principal
 

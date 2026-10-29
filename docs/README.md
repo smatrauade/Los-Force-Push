@@ -1,6 +1,6 @@
 # Índice documental
 
-Revisado 28/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](continuity/REHYDRATION_INDEX.md) → [CURRENT_STATE](continuity/CURRENT_STATE.md). PR #8 y #9 están integrados; contrastar el HEAD y los PR actuales con Git/GitHub.
+Revisado 29/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](continuity/REHYDRATION_INDEX.md) → [CURRENT_STATE](continuity/CURRENT_STATE.md). La reconciliación del PR #13 ya está integrada; no deducir el HEAD de fechas o cápsulas, contrastarlo con Git/GitHub.
 
 | Tema | Documento |
 |---|---|
