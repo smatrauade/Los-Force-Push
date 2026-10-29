@@ -38,6 +38,8 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 
 ## Próximo dominio TXT/niveles
 
+[Plan de ejecución TXT/niveles, una rama y un PR final](docs/requirements/TXT_LEVELS_EXECUTION_PLAN.md). Gates graduales y documentación alineada con el estado que se aprobaría; **este checkpoint únicamente añade planificación, no código ni PR**.
+
 R6 está completa por PR #12. **R7 está preparada, NO ejecutada**. Su gate previo es revisar alcance autorizado contra ExperimentalFragileParser/ExperimentalFragileLevel ya existentes y la [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), sin duplicar modelos ni presentar hipótesis como decisiones. Acordar dependencias e interfaz con Model/Movement antes de carga jugable; no habilitar especiales hasta preservar identidad/resistencia. Esta misión documental no ejecuta ni autoriza R7.
 
 ## Decisiones y mantenimiento

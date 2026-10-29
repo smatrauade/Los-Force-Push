@@ -17,6 +17,8 @@ AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ru
 | 9 | ¿Qué sigue y cómo mantener la información? | [TODO](../../TODO.md), [FRESHNESS_POLICY](FRESHNESS_POLICY.md), [SOURCE_REGISTRY](SOURCE_REGISTRY.md) |
 | 10 | ¿Qué contrato TXT se propone para Fragile y qué falta ratificar? | [FRAGILE_TXT_CONTRACT_PROPOSAL](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) |
 
+Plan de rama de trabajo de TXT/niveles (sin implementar gameplay ni abrir PR): [TXT_LEVELS_EXECUTION_PLAN](../requirements/TXT_LEVELS_EXECUTION_PLAN.md). Define gates controlables, una sola promoción y revisión de frescura previa al merge. No ratifica sintaxis ni reemplaza decisiones del equipo.
+
 El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente dominio TXT/niveles requiere revisar el contrato y su integración futura con el equipo. E01/E02 no fijan sintaxis ni rangos. E04/E08 requieren revisión normativa. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
 
 ## Procedencia y evidencia histórica
