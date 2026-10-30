@@ -1,8 +1,8 @@
 # Los Force Push — Plan de ejecución TXT/niveles y promoción única
 
-**Estado técnico:** `AUTONOMOUS_SCOPE_COMPLETE / EXPERIMENTAL_DEFINITION / RUNTIME_PENDING_TEAM`. La fase autónoma de definición TXT, validación y contrato está terminada. El plan inicial y sus checkpoints históricos se conservan. Git/GitHub determina publicación, revisión humana e integración; este texto no ratifica gramática ni anticipa un merge. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
+**Estado técnico:** `AUTONOMOUS_SCOPE_COMPLETE / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET / NON_PLAYABLE_DEFINITION / RUNTIME_PENDING_TEAM`. El contrato TXT soportado se adopta expresamente en D-020; OQ-06 resuelta, OQ-08 parcialmente resuelta. El plan inicial y sus checkpoints históricos se conservan. Git/GitHub determina publicación, revisión e integración; no se anticipa un merge. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
 
-**Referencia inicial:** repositorio público `smatrauade/Los-Force-Push`, `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, consultado el 29/10/2026. Revalidar HEAD, PR y worktrees antes de cada operación. **Rama propuesta:** `feat/txt-levels-release-2026-10-29`. **Política:** varios hitos comprobables en la misma rama; **un solo PR cuando código, pruebas y documentación estén completos**; promoción preferida mediante **squash merge**, de modo que `main` reciba un único commit temático. No se ejecuta merge por el mero hecho de que un test sea PASS.
+**Referencia inicial histórica:** repositorio público `smatrauade/Los-Force-Push`, `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, consultado el 29/10/2026. La rama usada es `feat/txt-levels-release-2026-10-29`; el [PR #15](https://github.com/smatrauade/Los-Force-Push/pull/15) ya existe. Revalidar HEAD, PR y worktrees antes de cada operación. **Política:** varios hitos comprobables en la misma rama; **una sola promoción funcional**, preferentemente squash, con autorización propia y revisión. El cierre semántico sólo permite actualizar el Draft existente; no Ready ni merge. Consultar su estado real en GitHub, sin inferirlo de este checkpoint.
 
 ## 1. Objetivo, límites y autoridad
 
@@ -14,9 +14,11 @@ Construir el máximo avance justificable **dentro del módulo TXT/niveles** ante
 
 **Indicaciones docentes pertinentes:** clase del 23/09 a las 03:00:50–03:02:14 y del 30/09 a las 01:07:57–01:08:51: el equipo define el alfabeto y el profesor podrá editar o construir un TXT compatible, que debe modificar el tablero real. Clase 30/09 00:34:18–00:35:47 y 07/10 00:31:47–00:32:06: Builder es una alternativa válida, **no obligatoria**. Clase 21/10 00:04:17 y 00:15:01–00:16:24: Observer es esperado para alguna parte del TP, con cerrojos y muros asociados como ejemplo; pertenece al dominio Movement/Model posterior. Estos timestamps provienen de una transcripción ASR normalizada **sin verificación acústica independiente**. No redistribuir PDFs, audio ni WhatsApp privados.
 
-**Decisiones canónicas:** E01 acepta una única capa espacial con tokens combinados; E02 acepta resistencia inicial **individual por Fragile desde TXT**, pero NO fija ID, alfabeto, sintaxis, rango ni formato final. `OQ-06/OQ-08` siguen abiertos; `OQ-07` Lock↔Walls abierto; `OQ-03/E04` Fragile+hielo y `OQ-04/E08` Undo exigen revisión de compatibilidad; `OQ-11` Java/build no está ratificado. Preservar todos los votos en `DECISION_LOG.md`, sin duplicar tablas ni cambiar `TEAM_ACCEPTANCE=NOT_RECORDED`.
+**Decisiones canónicas:** E01 acepta una única grilla con tokens combinados; E02 acepta resistencia inicial **individual por Fragile desde TXT**. No votaron ID/sintaxis/rango: esos detalles del subconjunto implementado se adoptan por el responsable TXT en D-020. OQ-06 resuelta; OQ-08 sólo conserva extensiones no soportadas. E04/E08 tienen regla TEAM decidida e implementación/bordes en otros módulos; OQ-07 transversal y OQ-11 build global permanecen abiertas. Preservar votos y corrección de procedencia E04 sólo en DECISION_LOG, sin tabla rival ni cambiar `TEAM_ACCEPTANCE=NOT_RECORDED`.
 
 ## 2. Hechos de código contrastados el 29/10
+
+**Checkpoint de planificación inicial 8b71712**, previo a la carga filesystem. Las secciones 2–7 conservan el plan y sus gates de aquel corte; capacidades ejecutadas y decisiones posteriores están en G2/G3 y en el cierre semántico final. No ejecutar órdenes de apertura/promoción ni reabrir acuerdos desde este historial.
 
 - `LevelLoader.load(Path)`: archivo externo, máximo **65.536 bytes** UTF-8 con decodificación estricta; publica un `Level` tras parseo completo.
 - `LevelParser`: formato legacy de siete símbolos; `C2LevelParser` opt-in, siete aliases/combinaciones, `[attributes]` **vacía**, dimensiones 100×100 y longitud de token 128. Rechaza especiales todavía no modelados.
@@ -77,6 +79,8 @@ La política vigente [`FRESHNESS_POLICY`](../continuity/FRESHNESS_POLICY.md) ya 
 `PLAN_CREATED_ON_FEATURE_BRANCH` solo cuando la rama haya recibido este archivo y sus enlaces. `JAVA_TESTS_THIS_STEP=NOT_RUN`; `GAMEPLAY_MODIFIED=false`; `PR_OPENED=false`; `MAIN_MODIFIED=false`. Ningún agente debe interpretar este texto como autorización de code merge o como evidencia de contrato aprobado.
 
 ## G2 — decisión técnica del incremento 29/10/2026
+
+**Checkpoint histórico del incremento 5ac2bba**, anterior a la adopción contractual D-020. Los pendientes y límites provisionales de esta sección describen ese hito, no el inventario vigente de decisiones.
 
 **Problema verificable:** `ExperimentalFragileParser.parse(String)` ya preserva datos e invariantes, pero el HEAD inicial `8b71712cec673651b8dffe792bdc4ee7c779c1cf` no ofrece carga de su definición desde filesystem. `LevelLoader.load(Path)` centraliza el límite de bytes y UTF-8 estricto, pero devuelve sólo `Level` normal. `Files.readString` seguido de parseo permite evaluar sintaxis, sin reutilizar el techo de lectura. La diferencia bytes/caracteres está documentada en la propuesta; no es un defecto del contrato de String.
 
@@ -165,6 +169,8 @@ Controles documentales del hito: `git diff --check`, `bash scripts/verify-repo-r
 
 ## Cierre del alcance autónomo y promoción única — 29/10/2026
 
+**Checkpoint de promoción 38e5a2e**, anterior al cierre semántico siguiente. La autorización condicional de squash relatada en este apartado es histórica, no autorización operativa actual. El PR existente sólo se actualiza en Draft en esta misión.
+
 `AUTONOMOUS_SCOPE=FROZEN_TXT_LEVEL_DEFINITION`: quedan completos la carga experimental desde Path, la validación, diez casos nuevos, fixture y contrato de traspaso de doce dimensiones/ocho preguntas. La integración de mecánicas especiales corresponde a otro gate con los responsables de Model/Movement; no bloquea la publicación del incremento aislado ni habilita resolver OQ por inferencia.
 
 La solicitud de cierre autoriza abrir un único PR Draft de la rama TXT y, sólo después de revisión humana apropiada y SHA/QA verificados, un squash. Consultar Git/GitHub para número/estado/reviews y commit integrado; no hay un SHA de squash predicho en estos documentos. Si falta revisión, mantener Draft y no integrar. TEAM_ACCEPTANCE permanece NOT_RECORDED mientras no exista evidencia explícita; un PASS ni una revisión de IA la sustituyen. No eliminar ramas/worktrees como efecto del merge.
@@ -172,3 +178,33 @@ La solicitud de cierre autoriza abrir un único PR Draft de la rama TXT y, sólo
 Frescura de promoción: README, TODO, CURRENT_STATE, REHYDRATION_INDEX, este plan, propuesta Fragile, contrato TXT Punto 5, índice documental, arquitectura, trazabilidad y procedencia se ajustaron únicamente para separar capacidades de estados Git transitorios. Los checkpoints de 8b71712/5ac2bba/529f38d conservan sus hechos fechados. AGENTS/CONTRIBUTING/FRESHNESS_POLICY, requisitos/OQ/votos, responsabilidades/UML, pruebas, bibliografía y assets se verificaron sin cambios: no hay nueva regla, API, estructura ni recurso. Fuentes/tests/fixtures/scripts siguen idénticos a 5ac2bba.
 
 Gate de publicación: compilar y ejecutar sobre el HEAD final el bloque filesystem de TEST_STRATEGY (Loading 40, C2 32, Fragile 41, Movement 31, Desktop headless 16), verificador con --require-clean y diff --check. El PR registra SHA, comandos, exit y resultados reales de esa ejecución; las pruebas anteriores conservan su procedencia histórica. La reproducción requiere sólo el clon y un JDK completo, sin logs privados. El alcance público se revisa completo, incluidas licencias pendientes y declaración de IA; no se afirma CI, GUI manual ni gameplay Fragile.
+
+## Cierre semántico del contrato soportado — 29/10/2026
+
+Base inspeccionada: PR #15 OPEN/Draft, HEAD `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`, cuatro commits/18 rutas respecto de main `24bb3f0d711dd15c79a078b09ec92134a7a600b2`. Son valores del preflight, no HEAD permanentes. Sin drift ni cambios locales ajenos. Identidad de src/scripts respecto de `5ac2bba9a1d495a5da9e1ad998857fbe00613840` comprobada antes de editar. Historial consultado: `e9b2b2a` introdujo el recuento E04 y los bloqueos E04/E08; `8b3ad10` la propuesta sin ratificar; `2dad014` la preparación R7; `5ac2bba` el loader; `529f38d` el traspaso y `38e5a2e` la frescura de promoción.
+
+La [nueva fuente directa](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-corrección-e04--29102026) permite corregir E04 y adoptar detalles TXT sin votar de nuevo. [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) registra fecha, rol, autoridad, alternativas, coste, compatibilidad, consecuencias y casos verificables. No se fabrica código: `CODE_CHANGE=NOT_JUSTIFIED / DOCS_ONLY_AUTHORIZED`. Elección, implementación y dependencias quedan separadas en la trazabilidad y en la matriz de traspaso.
+
+| Documentos revisados | Clasificación | Impacto / motivo |
+|---|---|---|
+| DECISION_LOG; OPEN_QUESTIONS | UPDATED | E04 corregida con antecedente, E08 decidida; OQ-06 y subconjunto OQ-08 adoptados por MODULE_OWNER |
+| FRAGILE_TXT_CONTRACT_PROPOSAL | UPDATED | Gramática soportada, errores y límites adoptados; preguntas al consumidor sin reabrir rango ni regla E04 |
+| REQUIREMENTS | UPDATED | Referencias y aceptación coherentes con decisiones; contenido oficial normalizado preservado |
+| SOURCE_REGISTRY | UPDATED | Fuente directa anónima, disponibilidad, corrección del informante y autoridad delegada |
+| README; TODO; docs/README; CURRENT_STATE; REHYDRATION_INDEX | UPDATED | Capacidad actual, dependencias reales y navegación autocontenida |
+| TXT_LEVELS_EXECUTION_PLAN | UPDATED | Checkpoints explícitamente históricos, cierre actual y esta revisión por impacto |
+| ARCHITECTURE; STARUML_STATUS | UPDATED | Alcance contractual y anotaciones históricas distinguidos; sin estructura o UML funcional nuevos |
+| INTEGRACION_EQUIPO, sólo frontera TXT | UPDATED | Esquema inicial adoptado frente a consumidor runtime pendiente; demás secciones intactas |
+| TRACEABILITY_MATRIX; TEST_STRATEGY | UPDATED | Autoridad→estado→implementación→casos; QA previa por SHA y blobs idénticos, sin nueva ejecución Java |
+| AGENTS; CONTRIBUTING; FRESHNESS_POLICY | UNCHANGED_VERIFIED, política preservada | Lectura completa; prohibición expresa de edición. La frase de AGENTS sobre detalles TXT no ratificados es anterior y queda supersedida de forma acotada por D-020, aclarada en REHYDRATION_INDEX. No cambia la política de revisión ni se atribuye aceptación TEAM |
+| RESPONSIBILITIES | UNCHANGED_VERIFIED | Roles, tipos y separación TXT/Model/Swing no cambian |
+| BIBLIOGRAPHY; GITHUB_REFERENCES | UNCHANGED_VERIFIED | Sin nuevas obras consultadas, investigación/código ajeno ni licencias incorporadas |
+| Fuentes/tests/fixtures/runners; diagramas .puml | UNCHANGED_VERIFIED | Bytes preservados por alcance; comentarios de gramática no ratificada conservan el corte previo y se contextualizan en índice/STARUML_STATUS. No se atribuye implementación especial |
+| Manifiesto/derechos y assets | UNCHANGED_VERIFIED | Sin recursos ni derechos nuevos; la validación de integridad no prueba CC0 |
+| Cápsulas/checkpoints históricos | NOT_APPLICABLE a edición | Evidencia fechada inmutable, sin instrucciones operativas heredadas |
+
+Validación propia de este cierre: diff --check, verificador de repositorio, enlaces/anclas, allowlist de Markdown y consistencia semántica; resultados/exit en el informe y cuerpo del PR. Java no se repite: la ejecución previa sobre 38e5a2e es 160 PASS y los blobs de src/scripts son idénticos a 5ac2bba; [reproducción y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Revisión de ejemplos contra código/tests existentes, sin nuevos casos ni afirmación de CI.
+
+Autocontención comprobable desde AGENTS→índice→estado→requisitos/fuentes→decisiones/OQ→contrato→pruebas: consigna y aclaraciones con procedencia, TEAM frente a MODULE_OWNER, APIs presentes, definición no jugable, extensiones/runtime abiertos, principios y alternativas, comandos/QA por contenido y siguiente tarea. Los antecedentes 4/2 y R7 preparada no son estado vigente; no hace falta un chat privado, un script temporal ni un PR documental después del squash para reconstruir estas conclusiones. Los estados Git se vuelven a consultar; no se predice SHA de integración.
+
+Siguiente acción segura: revisión humana del diff funcional y contrato del PR #15, seguida de contraste con la firma/commit real del consumidor Fragile/hielo. Publicación de este cierre: como máximo un commit documental y push normal a la misma rama; actualizar el PR existente, conservar Draft. **Ready, aprobación propia y merge/squash no autorizados en este hito.** OQ-07 runtime y OQ-11 global abiertas; no se presume demo ni trabajo del compañero terminado.

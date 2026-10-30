@@ -1,6 +1,6 @@
 # Arquitectura: implementación y candidato
 
-Revisado 28/10/2026 tras PR #8 y #9. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
+Revisado 29/10/2026: contrato TXT soportado adoptado por su responsable; historia de PR #8/#9 preservada. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
 
 ## Flujo implementado
 
@@ -20,7 +20,7 @@ El core no importa Swing ni audio. GameController coordina y conserva una proyec
 
 [LevelLoader](../../src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java) limita lectura a 65.536 bytes y decodifica UTF-8 estricto. [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) selecciona legacy o el helper interno sin estado [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java) mediante el prefijo reservado. Las firmas públicas LevelLoader.load(Path), LevelParser.parse(String) y Level(Board) no cambian. El código expone `LevelLoader.loadExperimentalFragile(Path) → ExperimentalFragileLevel`: un método privado `readText` centraliza la política de bytes/UTF-8 de ambas entradas; el parser experimental interpreta y el agregado existente valida la definición. No se agrega clase, interfaz, estado compartido ni patrón GoF. [Comparación con alternativas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026).
 
-C2 valida header/secciones, tokens ASCII (máximo experimental 128 caracteres), dimensiones lógicas hasta 100×100 y [attributes] vacía. Sólo ofrece las siete combinaciones existentes; rechaza atributos/especiales. parse(String) no impone el techo de bytes de Loader. No hay caché compartida, fallback ante header inválido ni Level parcial.
+C2 valida header/secciones, tokens ASCII (cuota del subconjunto soportado de 128 caracteres), dimensiones lógicas hasta 100×100 y [attributes] vacía. Sólo ofrece las siete combinaciones existentes; rechaza atributos/especiales. parse(String) no impone el techo de bytes de Loader. No hay caché compartida, fallback ante header inválido ni Level parcial.
 
 LevelBuilder es concreto, interno y por carga; Board protege también la construcción directa. Builder/directa y Terrain/Occupant son elecciones experimentales/PREFERRED, sin interfaces o Director adicional. [UML implementado](uml/level-loading-spike-v1.puml).
 
@@ -47,10 +47,10 @@ El candidato incluye GameSession, RestorableLevelState, GameMemento/UndoManager,
 - Memento, Observer, Strategy, Builder y fronteras candidatas mantienen sus estados de [DECISION_LOG](../decisions/DECISION_LOG.md); no adoptar interfaces ceremoniales.
 - SessionMetrics fuera del snapshot es TEAM-PROPOSAL; E09/E10 aceptan comportamientos parciales, no esa clase ni una fórmula.
 - La individualidad de resistencia (E02), disposición (E01), cierre (E06) y umbral Undo (E07) ya tienen alcance votado; los detalles permanecen en [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md).
-- E04/E08 requieren compatibilidad normativa. No inferir rotura, consecutividad, ocupación de muros o criterios de victoria desde el UML.
+- E04/E08 tienen regla TEAM decidida; implementación y bordes pertenecen a Model/Movement y sesión. No inferir rotura, consecutividad, ocupación de muros o criterios de victoria desde el UML.
 - El candidato propone polimorfismo de cajas; herencia/composición sigue abierta. No exigir resistencia a todas las cajas ni distribuir instanceof/getClass por la vista.
 
-ExperimentalFragileParser y ExperimentalFragileLevel representan atributos individuales sin producir un Level jugable. El agregado valida IDs y posiciones únicos, límites, piso/destino vacío y resistencia positiva. Siguiente dominio TXT/niveles: revisar el contrato y especificar su integración futura; sintaxis/rangos/errores siguen sin ratificar. No ampliar mecánicas en mantenimiento documental. [STARUML_STATUS](uml/STARUML_STATUS.md) separa los diagramas implementados, el candidato preservado y el .mdj pendiente. Los informes de [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) son antecedentes fechados.
+ExperimentalFragileParser y ExperimentalFragileLevel representan atributos individuales sin producir un Level jugable. El agregado valida IDs y posiciones únicos, límites, piso/destino vacío y resistencia positiva. Siguiente trabajo TXT/niveles: contrastar el consumidor real con el contrato soportado, adoptado por MODULE_OWNER_DECISION en [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026). Sintaxis/rango/validación del lector actual resueltos; extensiones especiales e integración runtime OPEN_DEPENDENCY. No ampliar mecánicas en mantenimiento documental. [STARUML_STATUS](uml/STARUML_STATUS.md) separa los diagramas implementados, el candidato preservado y el .mdj pendiente. Los informes de [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) son antecedentes fechados.
 
 ## Patrones y brechas de defensa — 29/10/2026
 

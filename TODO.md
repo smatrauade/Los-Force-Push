@@ -9,7 +9,7 @@ Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CUR
 | IMPLEMENTED_VERIFIED / PARTIAL | UTF-8 externo, legacy/C2-L7, Board inmutable y LevelBuilder concreto | Código integrado; Loading 40/C2 32 históricos; especiales jugables rechazados |
 | IMPLEMENTED_VERIFIED / PARTIAL | Movement cardinal y caja normal | Movement 31 histórico; hielo/Fragile/KeyBox/Lock/muros dinámicos ausentes |
 | IMPLEMENTED_VERIFIED / PARTIAL | Swing pixel art, menú/HUD/pausa/opciones/zoom, sprites/SFX | Desktop 16, Assets 44, UI 17 y CLI 18 históricos; callbacks pendientes no son servicios |
-| EXPERIMENTAL_NOT_RATIFIED | Definición Fragile inmutable con identidad/resistencia; contrato candidato #12 | Fragile 31 histórico; no gameplay, OQ-06/OQ-08 pendientes |
+| IMPLEMENTED / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET | Definición Fragile inmutable desde String/Path; contrato soportado D-020 | Fragile 41, sin gameplay; OQ-06 resuelta, OQ-08 extensiones pendientes |
 | PARTIAL | 31 PNG (29 base + dos opcionales) y 12 WAV versionados | Manifiesto disponible; revisión de derechos pendiente |
 
 IMPLEMENTED_VERIFIED describe presencia contrastada en código; no una nueva ejecución funcional. [Comandos, fechas y límites de QA](docs/testing/TEST_STRATEGY.md).
@@ -20,9 +20,9 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 
 | Prioridad / objetivo interno | Estado y trabajo | Responsable por módulo | Dependencia | Criterio de aceptación / siguiente prueba |
 |---|---|---|---|---|
-| P0 / 02/11 | TEAM_DECISION_REQUIRED: completar detalles TXT y Java/build | TXT/niveles e integración | OQ-06/08/11 | Registrar alcance ratificado y ejemplos válidos/inválidos; preservar E01/E02 y legacy/C2 |
-| P0 / 02/11 | BLOCKED_BY_OQ: compatibilidad Fragile/hielo y límite Undo | Reglas/Movement y sesión | OQ-03/04, consigna y E04/E08 | Casos antes/después sin reinterpretar votos; consulta docente si persiste conflicto |
-| P0 / 06/11 | NOT_IMPLEMENTED: hielo, Fragile jugable, KeyBox/Lock y muros dinámicos | Model/Movement + TXT | OQ-01/02/06/07/08 | Preservar identidad/resistencia y terrenos; casos de bordes, cierre ocupado y rechazo atómico |
+| P0 / 02/11 | OPEN_DEPENDENCY: extensiones TXT e integración; Java/build global | TXT + consumidores/integración | OQ-08 extensiones; OQ-07/11 | Subconjunto soportado ya decidido D-020; obtener contrato consumidor, preservar E01/E02 y legacy/C2 |
+| P0 / 02/11 | TEAM_DECIDED / IMPLEMENTATION_PENDING_OTHER_MODULE: Fragile/hielo y límite Undo | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
+| P0 / 06/11 | NOT_IMPLEMENTED: hielo, Fragile jugable, KeyBox/Lock y muros dinámicos | Model/Movement + TXT | OQ-01/02/07/08; contrato TXT soportado | Preservar identidad/resistencia y terrenos; casos de bordes, cierre ocupado y rechazo atómico |
 | P0 / 06/11 | NOT_IMPLEMENTED: Observer con candidato Lock→Walls | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración probados |
 | P0 / 09/11 | NOT_IMPLEMENTED: Undo/Restart y métricas | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5; justificar Command o Memento |
 | P0 / 09/11 | NOT_IMPLEMENTED: victoria/progresión y score | Sesión/niveles/score | OQ-01/09, fórmula del equipo | Goal/KeyBox y progresión probados; LevelResult recibe score real; Strategy justificada |
@@ -42,7 +42,7 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 
 R6 está completa por PR #12. **Alcance autónomo TXT terminado:** carga externa de definición experimental `LevelLoader.loadExperimentalFragile(Path)`, compartiendo lectura UTF-8/límite de bytes. QA del incremento: Loading 40, C2 32, Fragile 41 y Movement 31; Desktop headless 16, sin cambios Swing. [Identificación del contenido y comandos](docs/testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026).
 
-Pendiente: ratificar detalles OQ-06/OQ-08 y acordar con Model/Movement la identidad y resistencia runtime, snapshots y casos antes/después. La [propuesta TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) delimita la salida disponible. Siguiente tarea segura: revisión del contrato y ejemplos con el equipo, sin activar especiales en `Level`, sin reimplementar este loader y sin contar el fixture de definición como puzzle jugable resuelto. La promoción única exige revisión humana del código/contrato y gate técnico; consultar el PR y Git para saber si se completó. La autorización de publicación no sustituye esa revisión.
+OQ-06 del lector ya resuelta por el responsable TXT; OQ-08 parcialmente resuelta para el subconjunto soportado. Pendiente: acordar con Model/Movement identidad/resistencia runtime, snapshots, casos antes/después y datos para extensiones. El [contrato TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) delimita la salida disponible. Siguiente tarea segura: contrastar el contrato y ejemplos con la firma/commit real del consumidor, sin activar especiales en `Level`, sin reimplementar este loader y sin contar el fixture de definición como puzzle jugable resuelto. La promoción única exige revisión humana del código/contrato y gate técnico; consultar el PR y Git para saber si se completó. La autorización de publicación no sustituye esa revisión.
 
 ## Integración paralela TXT con Fragile/hielo — 29/10/2026
 
@@ -52,7 +52,7 @@ Pendiente: ratificar detalles OQ-06/OQ-08 y acordar con Model/Movement la identi
 |---|---|---|
 | DOCUMENTED: entrada/salida actual y limitaciones | TXT/niveles | [Matriz de interfaces y ejemplos](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026); código base 5ac2bba |
 | OPEN_PENDING_TEAM: compatibilidad con consumidor | Fragile/hielo + TXT/integración | Recibir firma real y commit del consumidor; contrastar ID, coordenadas, terreno y resistencia inicial sin imponer API |
-| OPEN_PENDING_TEAM: representación hielo y reglas conflictivas | Hielo/Model + TXT; equipo de reglas | Datos/combinaciones y sintaxis OQ-08; conservar OQ-03 para rotura/hielo y OQ-06 para rango |
+| OPEN_DEPENDENCY: representación hielo y compatibilidad runtime | Hielo/Model + TXT | Datos/combinaciones y sintaxis futura OQ-08; E04 ya elegida, rango inicial TXT ya decidido en OQ-06 |
 | OFFERED_NOT_VERIFIED: nivel de prueba | Integrante que lo ofreció + QA/TXT/Model | Esperar archivo/commit y mecánicas utilizadas; acordar contrato antes de cargar entidades no soportadas; solución y resistencia por validar |
 | PENDING: futuras asociaciones y restauración | Cerrojos/muros y sesión con TXT | OQ-07 y contrato runtime; no atribuir estas tareas al desarrollador de hielo por inferencia |
 
@@ -60,7 +60,7 @@ Siguiente integración segura: revisar el constructor real del consumidor y el n
 
 ## Decisiones y mantenimiento
 
-E01–E11 se conservan únicamente en [DECISION_LOG](docs/decisions/DECISION_LOG.md); pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). No reabrir acuerdos por defecto. E04/E08 siguen CONFLICT_REVIEW_REQUIRED; Java/build OPEN. Revisar patrones por intención, roles reales y alternativa; SoundManager no es Singleton, callbacks no acreditan Command y el DTO LevelResult no calcula score.
+E01–E11 se conservan únicamente en [DECISION_LOG](docs/decisions/DECISION_LOG.md); pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). No reabrir acuerdos por defecto. E04/E08 son TEAM_DECIDED, sin implementación por este cierre. OQ-06 = MODULE_OWNER_DECIDED; OQ-08 = MODULE_OWNER_DECIDED parcial, extensiones abiertas. Java/build global sigue OPEN. Revisar patrones por intención, roles reales y alternativa; SoundManager no es Singleton, callbacks no acreditan Command y el DTO LevelResult no calcula score.
 
 Mantener [arquitectura](docs/architecture/ARCHITECTURE.md), UML implementado y candidato separados; actualizar diagramas en misión autorizada, sin convertirlos en evidencia de clases ausentes. [Derechos y assets](docs/assets/ASSET_POLICY.md), [contratos Punto 5](docs/punto5/INTEGRACION_EQUIPO.md) y [FRESHNESS_POLICY](docs/continuity/FRESHNESS_POLICY.md) siguen vigentes. Revisar humanos/código, pruebas y documentos en cada incremento; conservar cápsulas y checkpoints históricos. Este backlog no concede permiso de implementación o publicación.
 

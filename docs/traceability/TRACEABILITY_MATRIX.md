@@ -2,7 +2,7 @@
 
 ## Cobertura integrada tras PR 8 y PR 9 — 2026-10-28
 
-[CURRENT_STATE](../continuity/CURRENT_STATE.md) identifica los merges; [TEST_STRATEGY](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28) registra el árbol probado y la QA anterior a este mantenimiento. La tabla de plan/candidato y las evidencias fechadas que siguen no niegan las capacidades actuales.
+[CURRENT_STATE](../continuity/CURRENT_STATE.md) identifica los merges; [TEST_STRATEGY](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28) registra el árbol probado y la QA anterior a este mantenimiento. La tabla de plan/candidato y las evidencias fechadas que siguen no niegan las capacidades actuales. Sus OQ abiertas describen aquellos cortes; el cierre posterior del subconjunto soportado se registra al final, sin reatribuir QA.
 
 | Req | Implementación integrada | Evidencia / límite |
 |---|---|---|
@@ -17,7 +17,7 @@
 Las suites anteriores son evidencia R1; R2 ejecuta la regresión del verificador y controles documentales. No se suman repeticiones CLI/C2 como nuevos casos Java. Los controles de integridad no convierten RF-11 ni otros requisitos completos en DONE.
 
 
-Revisado 2026-10-23 (mapa de decisiones TEAM; evidencia ejecutada anterior preservada). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
+Checkpoint histórico 2026-10-23 (mapa de decisiones TEAM; evidencia ejecutada anterior preservada). **La aceptación productiva completa está pendiente; este snapshot contiene implementaciones y pruebas experimentales con cobertura parcial, detalladas abajo.** A/B significan sólo evidencia histórica externa no reproducida; “plan” refiere a TEST_STRATEGY, no tests ejecutados. El modelo integral es candidato; los UML acotados describen los tipos experimentales reales.
 
 | Req | Responsabilidad / UML candidato | Principio/patrón candidato | Prueba prevista / historial | Decisiones abiertas |
 |---|---|---|---|---|
@@ -106,11 +106,11 @@ Pistas no cuenta como adicional aprobada; consultar E11 para el resultado y el u
 
 ## Spike experimental de atributos individuales
 
-RF-02/RF-05 PARTIAL: ExperimentalFragileParser reconoce referencias individuales en piso o destino y ExperimentalFragileLevel conserva ID, posición y resistencia como definición inmutable. La plantilla no contiene una caja normal por cada frágil. El loader jugable sigue rechazando Fragile. Los 31 casos actuales del spike están separados de los 32 C2 y no implementan resistencia en gameplay ni cierran OQ-06/OQ-08. Ver [contrato](../../README.md#prototipo-experimental-de-atributos-individuales) y [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).
+RF-02/RF-05 PARTIAL: ExperimentalFragileParser reconoce referencias individuales en piso o destino y ExperimentalFragileLevel conserva ID, posición y resistencia como definición inmutable. La plantilla no contiene una caja normal por cada frágil. El loader jugable sigue rechazando Fragile. Los 31 casos del spike previo al incremento filesystem están separados de los 32 C2 y no implementan resistencia en gameplay ni cierran OQ-06/OQ-08. Ver [contrato](../../README.md#prototipo-experimental-de-atributos-individuales) y [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales).
 
 ## Reconciliación académica — 29/10/2026
 
-Matriz afirmación→fuente→autoridad/decisión→código→evidencia→destino. Fuentes externas y fidelidad en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026); no duplica votos. Verificación del código en solo lectura; ejecución funcional nueva NOT_RUN.
+Checkpoint histórico de la reconciliación del PR #13, anterior al incremento filesystem y a D-020 del 29/10. Matriz afirmación→fuente→autoridad/decisión→código→evidencia→destino. Fuentes externas y fidelidad en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026); no duplica votos. Verificación del código en solo lectura; ejecución funcional nueva NOT_RUN.
 
 | RF/RT y afirmación | Fuente / autoridad / decisión | Implementación y evidencia | Documento afectado / siguiente aceptación |
 |---|---|---|---|
@@ -120,7 +120,7 @@ Matriz afirmación→fuente→autoridad/decisión→código→evidencia→destin
 | RF-07/09: Undo y cálculo | ASR Command/Memento/Strategy; E08 en conflicto, fórmula OQ-09 abierta | UiCommands/LevelResult son presentación; servicios ausentes | RESPONSIBILITIES/TODO: contratos y luego pruebas de sesión/score |
 | RT-02/03/04: entrega y defensa | Teams aportado / TEACHER-EXPLICIT | Software parcial y suites históricas; entrega no realizada | REQUIREMENTS/TODO: 18/11, demo 15–20 min, correo, video/StarUML/informe/README e IA |
 
-PR #12 integra documentación candidata, no RF-05 completo ni aprobación de gramática. R6 completa; R7 preparada, no ejecutada. La revisión humana del Draft documental es el siguiente gate; la implementación posterior requiere autorización propia.
+PR #12 integra documentación candidata, no RF-05 completo ni aprobación de gramática. En ese checkpoint, R6 completa y R7 preparada, no ejecutada. El incremento filesystem ejecutado después está documentado más abajo; aquel siguiente gate no describe el estado operativo actual.
 
 ## Elegibilidad RF-12 y evidencia grupal — complemento 29/10/2026
 
@@ -146,4 +146,19 @@ Capacidad implementada en el árbol presente; publicación e integración se ver
 | RF-02, errores sin publicación parcial | Lectura→decodificación→parseo completo→retorno | Fragile 34 tardío/UTF-8 conserva referencia y recupera; 35 UTF-8; 36–38 bytes/frontera; 39 nulos/faltante; 40 BOM/vacío/legacy | Mensajes son técnicos provisionales, sin API de códigos estable |
 | RF-02/03/04, compatibilidad | `load`/parsers normales y Movement conservados | Loading 40, C2 32, Movement 31 y Desktop headless 16 PASS; Fragile 41 verifica ambas entradas e intercalado | GUI manual y mecánicas especiales NOT_RUN |
 
-F01–F13 conservan sus referencias de las suites previas; F14 ahora tiene pruebas **directas de la entrada experimental de archivo** (35–38). No se suman como gameplay. TEAM_ACCEPTANCE = NOT_RECORDED y OQ-06/OQ-08 no se cierran.
+F01–F13 conservan sus referencias de las suites previas; F14 ahora tiene pruebas **directas de la entrada experimental de archivo** (35–38). No se suman como gameplay. Ese incremento no ratificó OQ-06/OQ-08; la adopción explícita posterior por el responsable se registra debajo. TEAM_ACCEPTANCE del código sigue NOT_RECORDED.
+
+## Cierre semántico del subconjunto TXT — 29/10/2026
+
+La [fuente directa](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-corrección-e04--29102026) distingue la corrección del informante y la autoridad delegada del responsable. No hay código ni casos nuevos: se consolidan decisiones sobre el comportamiento probado.
+
+| Afirmación / requisito | Fuente y autoridad | Elección | Implementación / prueba existente | Documento afectado |
+|---|---|---|---|---|
+| RF-01/02, una grilla y subconjunto C2 | E01 TEAM; D-020 MODULE_OWNER_DECISION para detalles | TEAM_DECIDED + MODULE_OWNER_DECIDED_PARTIAL | LevelParser/C2LevelParser, C2 1–32; especiales no soportados rechazados | Contrato, OQ-08, README |
+| RF-02/05, identidad/resistencia inicial | E02 TEAM; D-020 MODULE_OWNER_DECISION | OQ-06 RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER | ExperimentalFragileParser/Level, Fragile 1–17/23–32; rango int y errores/invariantes | Contrato, OQ-06, TODO |
+| RF-02, entrada externa y compatibilidad | Consigna/ASR normalizados; D-020 contrato TXT | MODULE_OWNER_DECIDED; definición IMPLEMENTED | LevelLoader, Fragile 32–41; Loading 40/C2 32/Movement 31/Desktop 16 | Arquitectura, contrato y TEST_STRATEGY |
+| RF-05, orden de rotura en hielo | E04 TEAM; corrección directa de recuento con originales no reverificados | TEAM_DECIDED | NOT_IMPLEMENTED en este árbol; casos runtime pendientes en otro módulo | DECISION_LOG, OQ-03 y REQUIREMENTS, sin alterar texto oficial |
+| RF-07, reinicio de límite Undo | E08 TEAM preservada | TEAM_DECIDED | NOT_IMPLEMENTED; bordes de sesión fuera de TXT | OQ-04, referencias de continuidad; sin especificación Undo nueva |
+| OQ-07/08 extensiones y OQ-11 global | Dependencia real de consumidores/integración | OPEN_DEPENDENCY / OPEN | No tokens hielo/KeyBox/Lock/muros ni build global ratificado | OQ, contrato y siguiente tarea TODO |
+
+QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, src/scripts idénticos a 5ac2bba. [Entorno, comandos y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Nueva ejecución Java NOT_RUN_DOCS_ONLY. Elegir una regla o consolidar un esquema no cierra RF-05/RF-07 ni prueba puzzles de demo.

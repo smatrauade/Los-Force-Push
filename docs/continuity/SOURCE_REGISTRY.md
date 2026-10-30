@@ -58,7 +58,7 @@ RAW_VERIFICATION = NOT_PERFORMED_BY_THIS_AGENT
 
 El solicitante aportó una transcripción revisada de once capturas de detalles de encuesta del 23/10 y confirmó el método de mayoría absoluta del equipo. La misión documental del 23/10 leyó esa transcripción, **no** las capturas originales ni el ZIP de WhatsApp. La exportación mencionada contiene preguntas/discusiones pero no votos; no atribuirle los recuentos ni afirmar verificación independiente de imágenes no disponibles.
 
-Sólo los agregados anónimos se incorporan a [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el alcance y los pendientes. Las anomalías de selección E04/E05 y la selección múltiple E11 se conservan allí. No se publican originales, datos personales ni hashes de capturas cuyos bytes no se tienen. La fuente TEAM no sustituye el enunciado ni las aclaraciones documentadas de cátedra; no es una prueba del juego, del diseño ni del código. El PDF original no se releyó en esta misión.
+Sólo los agregados anónimos se incorporan a [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el alcance y los pendientes. El antecedente de transcripción E04, la anomalía E05 y la selección múltiple E11 se conservan allí. La corrección posterior de E04 se registra más abajo; su antigua deducción de doble selección no es dato vigente. No se publican originales, datos personales ni hashes de capturas cuyos bytes no se tienen. La fuente TEAM no sustituye el enunciado ni las aclaraciones documentadas de cátedra; no es una prueba del juego, del diseño ni del código. El PDF original no se releyó en esta misión.
 
 ## Fuentes académicas aportadas — 29/10/2026
 
@@ -109,3 +109,18 @@ Se registra sólo esta consecuencia para evitar colisiones entre dominios: TXT d
 ## Solicitud de promoción TXT — 29/10/2026
 
 Fuente leída: prompt de cierre aportado y expresamente invocado por el usuario. Autoriza un único PR Draft mediante la sesión local Git/gh y squash sólo tras revisión humana admisible y gates técnicos. Supersede la restricción operativa anterior de no abrir PR; no cambia consigna, E01/E02, OQ ni aceptación del equipo. El texto externo no es una dependencia para compilar/probar: los comandos están en TEST_STRATEGY. No se publica el adjunto privado.
+
+## Cierre semántico TXT y corrección E04 — 29/10/2026
+
+Fuente directa: solicitud actual del responsable TXT/niveles y prompt adjunto expresamente invocado. Se normalizan únicamente sus consecuencias técnicas; no se publica el adjunto, capturas, chats ni datos personales. Autoridad delegada `MODULE_OWNER_DECISION`, subordinada a consigna, aclaraciones docentes y decisiones TEAM; no es una votación ni revisión grupal de código.
+
+| Afirmación | Fuente / autoridad | Elección / implementación | Destino canónico |
+|---|---|---|---|
+| E04 conserva ganador y corrige recuento | `USER_DIRECT_CORRECTION_2026-10-29 / ORIGINAL_SCREENSHOTS_NOT_REVERIFIED`; testimonio directo del informante sobre encuesta TEAM | TEAM_DECIDED; implementación en otro módulo NOT_IMPLEMENTED en este árbol | DECISION_LOG E04 y OQ-03 |
+| Esquema Fragile actual adoptado | Delegación expresa al responsable TXT; `MODULE_OWNER_DECISION`, no TEAM_MAJORITY | MODULE_OWNER_DECIDED; definición IMPLEMENTED, gameplay NOT_IMPLEMENTED | D-020, contrato y OQ-06 |
+| Subconjunto C2/Fragile formalizado | Misma autoridad, respaldada por código/tests leídos | MODULE_OWNER_DECIDED parcial; extensiones OPEN_DEPENDENCY | D-020, contrato y OQ-08 |
+| E08 ya eligió reinicio del límite | Encuesta TEAM histórica preservada; solicitud directa aclara que no debe reabrirse | TEAM_DECIDED; implementación/bordes en sesión/Undo | E08 y OQ-04 |
+
+El recuento vigente E04 se atribuye a esa corrección, no a auditoría visual. El registro anterior `e9b2b2a` transcribía 4/2 y deducía seis selecciones/una doble selección; ese antecedente queda HISTORICAL / SUPERSEDED en el registro canónico. No se infieren identidades ni número exacto de personas con votos múltiples a partir del recuento corregido. La exportación histórica contiene preguntas, no votos. No se inspeccionaron capturas originales, audio ni PDF oficial de nuevo. E05/E11 y sus recuentos no se alteran.
+
+La consigna normalizada conserva rotura al cero; la secuenciación particular E04 es elección operativa TEAM, sin aprobación docente independiente atribuida. Se corrige un bloqueo inferido, no una fuente oficial. No hay nueva evidencia de gameplay, demo terminada ni aceptación del equipo. El hito autoriza un commit documental y actualización del PR #15 existente, conservándolo Draft; no merge ni Ready. No hereda autorización de squash de solicitudes anteriores.

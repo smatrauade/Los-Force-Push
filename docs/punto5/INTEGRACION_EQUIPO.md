@@ -31,7 +31,9 @@ jugable ni conexion Swing. Las dos entradas de filesystem comparten UTF-8 estric
 La plantilla deja vacias las celdas Fragile: no enviarla sola al motor/renderer
 como nivel especial completo. Hielo y otras entidades no tienen tokens aceptados.
 Consultar la [matriz y ejemplos para el consumidor](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026).
-El contrato runtime y OQ-06/OQ-08 requieren acuerdo; no se deducen desde sprites
+El esquema TXT soportado esta adoptado por MODULE_OWNER_DECISION (D-020):
+OQ-06 resuelta; OQ-08 parcialmente resuelta, solo extensiones abiertas. El contrato
+runtime requiere acuerdo con el consumidor; no se deduce desde sprites
 ni se impone una interfaz nueva a los otros modulos.
 
 ## Para agregar tipos futuros

@@ -2,13 +2,19 @@
 
 AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
 
+## Cierre semántico y contractual — 29/10/2026
+
+[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. Gameplay especial, Undo y aceptación del código continúan NOT_IMPLEMENTED / NOT_RECORDED según corresponda.
+
+Este hito sólo cambia Markdown. QA Java previa por Codex sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, con src/scripts idénticos a 5ac2bba; no reejecutada en este cierre. [Comandos, entorno y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). La [matriz de frescura](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#cierre-semántico-del-contrato-soportado--29102026) identifica los documentos revisados y las excepciones conservadas. PR/reviews/HEAD se consultan dinámicamente; no hay permiso de Ready/merge ni SHA de squash predicho.
+
 ## Capacidad TXT experimental — desarrollo del 29/10/2026
 
 `LevelLoader.loadExperimentalFragile(Path)` devuelve `ExperimentalFragileLevel` desde filesystem. Comparte un método privado de lectura acotada/UTF-8 estricto con la carga jugable; reutiliza el parser y el agregado existentes. Conserva ID, posición, resistencia y terreno sin convertir cajas frágiles en normales. `load(Path)` y `LevelParser.parse(String)` mantienen su contrato y rechazo de especiales.
 
-El alcance autónomo G2/G3 está terminado: carga de definición inicial y contrato para consumidores. Esto no ratifica gramática ni gameplay. El estado de PR, revisión humana e integración se obtiene de Git/GitHub. [Diseño y matriz de brechas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026). [QA y procedencia](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026): Loading 40, C2 32, Fragile 41, Movement 31 y Desktop headless 16 PASS. Diez casos nuevos de filesystem; las otras suites conservan sus casos. GUI/manual/audio, Windows/macOS y gameplay Fragile no ensayados en este incremento.
+El alcance autónomo G2/G3 está terminado: carga de definición inicial y contrato para consumidores. El subconjunto gramatical soportado se adopta por MODULE_OWNER_DECISION en D-020; el gameplay especial continúa ausente. El estado de PR, revisión humana e integración se obtiene de Git/GitHub. [Diseño y matriz de brechas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026). [QA y procedencia](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026): Loading 40, C2 32, Fragile 41, Movement 31 y Desktop headless 16 PASS. Diez casos nuevos de filesystem; las otras suites conservan sus casos. GUI/manual/audio, Windows/macOS y gameplay Fragile no ensayados en este incremento.
 
-El baseline G0–G1 sobre `8b71712cec673651b8dffe792bdc4ee7c779c1cf` fue **ejecutado localmente por el usuario**, reportado y contrastado con logs/script, no reejecutado por rutina. Los apartados fechados posteriores conservan la historia de cada misión; sus «R7 no ejecutada» describen aquellas reconciliaciones. Siguiente paso: revisar con el equipo OQ-06/OQ-08 y el contrato con Model/Movement, sin ampliar gameplay por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED.
+El baseline G0–G1 sobre `8b71712cec673651b8dffe792bdc4ee7c779c1cf` fue **ejecutado localmente por el usuario**, reportado y contrastado con logs/script, no reejecutado por rutina. Los apartados fechados posteriores conservan la historia de cada misión; sus «R7 no ejecutada» describen aquellas reconciliaciones. Siguiente paso: contrastar el contrato soportado con firma/commit real de Model/Movement y definir sólo las extensiones necesarias, sin ampliar gameplay por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED.
 
 ## Contrato para trabajo paralelo — 29/10/2026
 
@@ -48,7 +54,7 @@ Los PR #8, #9, #10, #11, #12 y #13 están MERGED; los SHA de la tabla identifica
 
 Ese título conserva el ancla histórica; el incremento ya está integrado por PR #8. C2LevelParser es un helper interno sin estado compartido. Header exacto !sokoban-txt 2, [grid] y [attributes] obligatoria vacía; siete aliases y siete formas largas con igual Board. No hay fallback legacy para un encabezado reservado inválido. Atributos y entidades especiales se rechazan antes de publicar Level.
 
-C2 sigue EXPERIMENTAL_NOT_RATIFIED; su integración no ratifica la gramática completa ni cierra OQ-06/07/08/11. No contiene resistencia individual ni asociaciones Lock↔Walls. [Comandos y evidencia](../testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24).
+En el corte histórico del spike C2 la gramática seguía EXPERIMENTAL_NOT_RATIFIED; su merge no la ratificó. La adopción posterior por el responsable TXT se registra en D-020 y sólo cubre el subconjunto soportado; OQ-07/11 y extensiones OQ-08 siguen abiertas. No contiene resistencia individual ni asociaciones Lock↔Walls. [Comandos y evidencia](../testing/TEST_STRATEGY.md#spike-experimental-c2-l7--2026-10-24).
 
 ## Evidencia y alcance
 
@@ -58,7 +64,7 @@ La auditoría SOKOBAN_POST_PR9_INTEGRATION_R1 del 28/10 ejecutó sobre el árbol
 
 ## Checkpoint mayoritario del equipo — 2026-10-23
 
-Autoridad canónica: [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23). Deuda residual: [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md). GAME_RULE_DECISIONS = MAJORITY_ACCEPTED_PARTIAL; TEAM_ACCEPTANCE = NOT_RECORDED para el código. E04/E08 requieren revisión de compatibilidad normativa. Patrones y UML no se ratifican mediante merges o PASS.
+Autoridad canónica: [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23). Deuda residual: [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md). GAME_RULE_DECISIONS = MAJORITY_ACCEPTED_PARTIAL; TEAM_ACCEPTANCE = NOT_RECORDED para el código. E04/E08 tienen regla TEAM decidida; la revisión del 29/10 corrige su falso estado de elección abierta sin implementar otros módulos. Patrones y UML no se ratifican mediante merges o PASS.
 
 ## Estado posterior al merge de PR #5
 
@@ -68,7 +74,7 @@ El merge de #5 y su QA previa son historia: [checkpoint Windows](checkpoints/WIN
 
 [README](../../README.md) contiene ejecución desde clon; [TEST_STRATEGY](../testing/TEST_STRATEGY.md), suites y regresión del verificador. No se requieren ZIP de instalación ni assets externos. Java/build definitivo sigue OQ-11 OPEN; los runners provisionales compilan a release 17. [Arquitectura](../architecture/ARCHITECTURE.md) y [UML](../architecture/uml/STARUML_STATUS.md) separan implementación de candidato.
 
-Próximo dominio TXT/niveles: revisión del contrato experimental de atributos individuales y especificación de su integración futura, respetando E01/E02 y la compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. Siguen pendientes hielo, Fragile/KeyBox/Lock, Undo/Restart, score, victoria/progresión, persistencia y segunda adicional. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
+Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. Siguen pendientes hielo, Fragile/KeyBox/Lock, Undo/Restart, score, victoria/progresión, persistencia y segunda adicional. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
 
 ## Historia y fuentes
 
@@ -76,9 +82,9 @@ Los informes [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experi
 
 ## Prototipo experimental de atributos individuales
 
-Integrado mediante PR #11; conserva sólo la definición inicial, no gameplay. [Propuesta técnica de contrato TXT para Fragile](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) (`TEAM-PROPOSAL`; OQ-06/OQ-08 siguen abiertas).
+Integrado mediante PR #11; conserva sólo la definición inicial, no gameplay. [Contrato TXT para Fragile](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md): subconjunto soportado MODULE_OWNER_DECIDED; propuestas de integración/extensión diferenciadas.
 
-ExperimentalFragileParser y ExperimentalFragileLevel son un spike no ratificado en el código de este snapshot; consultar Git/PR para el estado de integración. La plantilla espacial deja vacías las celdas frágiles y la lista inmutable conserva ID, posición y resistencia, sin crear un Level jugable con una caja normal sustituta. El agregado valida IDs y posiciones únicos, límites del tablero, piso/destino vacío, no nulos y resistencia positiva; preserva Board y lista inmutables. Los métodos jugables `LevelLoader.load` / `LevelParser.parse` siguen rechazando el mismo TXT; la entrada explícita experimental se describe al comienzo. [Contrato y límites](../../README.md#prototipo-experimental-de-atributos-individuales); [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06/OQ-08 no se cierran.
+ExperimentalFragileParser y ExperimentalFragileLevel conservan sus nombres experimentales y una salida no jugable; el contrato TXT soportado está adoptado por D-020; consultar Git/PR para el estado de integración. La plantilla espacial deja vacías las celdas frágiles y la lista inmutable conserva ID, posición y resistencia, sin crear un Level jugable con una caja normal sustituta. El agregado valida IDs y posiciones únicos, límites del tablero, piso/destino vacío, no nulos y resistencia positiva; preserva Board y lista inmutables. Los métodos jugables `LevelLoader.load` / `LevelParser.parse` siguen rechazando el mismo TXT; la entrada explícita experimental se describe al comienzo. [Contrato y límites](../../README.md#prototipo-experimental-de-atributos-individuales); [pruebas](../testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06 del lector queda resuelta y OQ-08 parcialmente resuelta; sólo extensiones no soportadas siguen abiertas.
 
 ## Preparación de entrega — 29/10/2026
 
