@@ -1,6 +1,6 @@
 # Estado de UML y StarUML
 
-`LAST_REVIEWED = 2026-10-28`, `STARUML_DELIVERABLE = PENDING`.
+`LAST_REVIEWED = 2026-10-29`, `STARUML_DELIVERABLE = PENDING`.
 
 La entrega exige un diagrama de clases en **StarUML**. No hay `.mdj` versionado ni se afirma haber abierto StarUML. PlantUML facilita revisión/versionado y no sustituye ese entregable.
 
@@ -22,7 +22,7 @@ en StarUML; ni un render ni el compilador de PlantUML lo sustituyen.
 
 | Diagrama | Clasificación | Alcance |
 |---|---|---|
-| [level-loading-spike-v1.puml](level-loading-spike-v1.puml) | AS_IMPLEMENTED | Contratos legacy/C2-L7, C2LevelParser interno, Board inmutable y Builder concreto |
+| [level-loading-spike-v1.puml](level-loading-spike-v1.puml) | AS_IMPLEMENTED | Legacy/C2-L7, Board/Builder y carga explícita de definición ExperimentalFragileLevel; no gameplay especial |
 | [movement-core-spike-v1.puml](movement-core-spike-v1.puml) | AS_IMPLEMENTED | Motor sin estado, Direction, MoveResult y referencias inmutables al core |
 | [swing-playable-spike-v1.puml](swing-playable-spike-v1.puml) | AS_IMPLEMENTED | MVC pixel art, hooks GameView, recursos, audio y callbacks; Board compartido |
 | [sokoban-candidate.puml](sokoban-candidate.puml) | TO_BE / CANDIDATE | Modelo integral v0.5 y decisiones pendientes; no representa toda la implementación actual |
@@ -43,4 +43,12 @@ Siguiente gate académico: revisión grupal de responsabilidades/relaciones/firm
 
 ## Impacto de la entrega — 29/10/2026
 
-Según [Teams aportado](../../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), no hace falta mostrar código/diagramas en la demo de 15–20 minutos del 18/11; **el archivo StarUML sigue requerido**. No se editaron ni compilaron diagramas en esta misión documental. Queda pendiente reflejar el agregado experimental Fragile y los futuros roles reales al mantener el UML de implementación; el candidato conserva su carácter propuesto. La indicación ASR de Observer es deuda de implementación/defensa, no evidencia de clases existentes. Coordinar la actualización de diagramas y .mdj en un incremento autorizado.
+Según [Teams aportado](../../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), no hace falta mostrar código/diagramas en la demo de 15–20 minutos del 18/11; **el archivo StarUML sigue requerido**. En la reconciliación documental anterior no se editaron ni compilaron diagramas. El código y el diagrama de Loading presentes reflejan el agregado experimental Fragile, su record anidado y las dos entradas de Loader en el UML de Loading; los futuros roles runtime siguen pendientes y el candidato conserva su carácter propuesto. La indicación ASR de Observer es deuda de implementación/defensa, no evidencia de clases existentes. Coordinar la actualización de diagramas y .mdj en un incremento autorizado.
+
+## Incremento filesystem TXT — 29/10/2026
+
+El diagrama de Loading fue contrastado con firmas y relaciones reales: `readText` privado compartido, método explícito experimental, parser existente y agregado/FragileBox inmutables. No hay nueva clase Java ni cambio de Movement/Swing/candidato. La comprobación de sintaxis PlantUML de este diagrama se registra en TEST_STRATEGY; no certifica StarUML ni aprobación del diseño. El `.mdj` final sigue pendiente.
+
+## Alcance semántico del contrato — 29/10/2026
+
+No se alteraron diagramas ni arquitectura funcional en este cierre. Las notas antiguas de `level-loading-spike-v1.puml` «OQ-06/OQ-08 pending» y «grammar not ratified» conservan el corte previo del spike: quedan supersedidas por [D-020](../../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) para el subconjunto soportado, adoptado por MODULE_OWNER_DECISION. OQ-06 resuelta en TXT; OQ-08 extensiones abiertas. Las firmas/relaciones del diagrama siguen describiendo el código, la definición sigue no jugable y el candidato integral no se ratifica. Los `.puml` se preservan por la restricción de no editar UML funcional de esta misión; esta aclaración evita interpretar una anotación histórica como inventario vigente de decisiones.

@@ -1,0 +1,8 @@
+!sokoban-txt 2
+[grid]
+# # # # # #
+# @ {floor|fragile:f1} {goal|fragile:f2} * #
+# # # # # #
+[attributes]
+fragile f2 resistance=12
+fragile f1 resistance=3

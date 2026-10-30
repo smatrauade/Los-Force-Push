@@ -236,7 +236,7 @@ R3 sólo corrige documentación. La evidencia de esa exportación se conserva pa
 
 Sobre la rama spike basada en c6eb755388da142b6c8424d2d46aec2dc03ce622, Windows y Temurin 21.0.12.1, compilación UTF-8 --release 17 --limit-modules java.base -Xlint:all -Werror: ExperimentalFragileParserTest 22/22 PASS, exit 0. Compilación independiente en temporal nuevo; LevelLoadingTest 40, MovementTest 31, C2LevelLoadingTest 32, DesktopIntegrationTest 16 y DesktopVisualAssetsTest 44 también PASS, exit 0. Las suites existentes conservan sus contadores. Desktop usa java.base,java.desktop. No se ejecutó GUI manual ni se cambió Swing.
 
-El test independiente está en src/test/java/ar/edu/uade/sokoban/level/ExperimentalFragileParserTest.java. Para reproducirlo, compilar las fuentes level/movement y sus tests en un directorio temporal con las opciones estrictas indicadas y ejecutar ar.edu.uade.sokoban.level.ExperimentalFragileParserTest. El runner core compila esta clase pero no la ejecuta automáticamente. El mismo TXT especial se rechaza por LevelLoader; la representación es experimental y no habilita mecánicas.
+El test independiente está en src/test/java/ar/edu/uade/sokoban/level/ExperimentalFragileParserTest.java. Para reproducirlo, compilar las fuentes level/movement y sus tests en un directorio temporal con las opciones estrictas indicadas y ejecutar ar.edu.uade.sokoban.level.ExperimentalFragileParserTest. El runner core compila esta clase pero no la ejecuta automáticamente. El mismo TXT especial se rechaza por `LevelLoader.load(Path)` jugable; `loadExperimentalFragile(Path)` permite cargar la definición no jugable desde el incremento filesystem posterior. La representación no habilita mecánicas.
 
 Windows, desde la raíz y con SPIKE_JDK_HOME apuntando a un JDK completo:
 
@@ -274,3 +274,105 @@ El agregado valida directamente nulos, ID ASCII único, posiciones únicas dentr
 5. Ensayar demo de 15–20 minutos: funcionalidades efectivas, explicación detallada de roles/patrones y alternativa justificada; QA visual y audible real. Revisar los entregables por separado, incluido StarUML.
 
 Regresión funcional futura según cambios: Loading 40, Movement 31, C2 32, Fragile 31, Desktop 16, VisualAssets 44, UI Smoke 17 y CLI 18 son conteos históricos separados, no ejecuciones de esta reconciliación. JAVA_REGRESSION = NOT_RUN_DOCS_ONLY; UML y GUI = NOT_RUN. Las validaciones documentales actuales se registran en el PR con comando, exit code y commit final, evitando un SHA autorreferencial.
+
+## Incremento filesystem Fragile — 29/10/2026
+
+**Baseline aportado, no reejecutado por rutina:** `8b71712cec673651b8dffe792bdc4ee7c779c1cf`, ejecución local del usuario `run.vNBarLPb`: compilación estricta, Loading 40, C2 32, Fragile 31 y Movement 31 PASS. Se contrastaron logs completos, metadata, mapa F01–F14, script R2 y ausencia de cambio funcional posterior al SHA. El resumen sólo se genera tras salida cero del compilador y suites; los logs no contienen campos numéricos separados de exit. [Procedencia y límites](../continuity/SOURCE_REGISTRY.md#evidencia-técnica-local-txt--29102026).
+
+**Ejecución nueva por Codex:** Ubuntu 26.04.1 LTS, Linux x86_64, OpenJDK **java y javac 17.0.20.1**, release 17; se seleccionaron ambos binarios del mismo JDK, sin utilizar el java 25 predeterminado. Compilación core con `--limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`. Pruebas realizadas sobre el contenido nuevo del worktree basado en el SHA anterior, antes de crear su commit; no atribuirlas al baseline sin sus cambios. Identificación reproducible del código: todo `src`/`scripts` conserva los blobs del baseline excepto estos tres:
+
+| Ruta | Git blob ensayado |
+|---|---|
+| src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java | 4f7c3202f1473c4ac7c8ed83c7b497ba7e437e3e |
+| src/test/java/ar/edu/uade/sokoban/level/ExperimentalFragileParserTest.java | f423ec607527d82defe4efccc12d81a50c6eccbe |
+| src/test/resources/levels/experimental-fragile.txt | b2d8929b5f1db35ae5dd70299870a00cc4a8eef9 |
+
+El commit que incorpora estos blobs se localiza con `git log -1 --format=%H -- src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java`; comprobar blobs con `git rev-parse <commit>:<ruta>`. Esta identificación evita inventar un SHA futuro/autorreferencial. El informe de entrega y los logs externos registran además el HEAD final comprobado antes de publicar; un squash posterior requiere su propio gate, no hereda ese SHA.
+
+| Comando / clase real | Resultado | Exit |
+|---|---|---|
+| javac core con las opciones estrictas anteriores | PASS, sin warnings | 0 |
+| ar.edu.uade.sokoban.level.ExperimentalFragileParserTest src/test/resources/levels | 41 PASS / 0 FAIL | 0 |
+| ar.edu.uade.sokoban.level.LevelLoadingTest src/test/resources/levels | 40 PASS / 0 FAIL | 0 |
+| ar.edu.uade.sokoban.level.C2LevelLoadingTest src/test/resources/levels | 32 PASS / 0 FAIL | 0 |
+| ar.edu.uade.sokoban.movement.MovementTest src/test/resources/levels | 31 PASS / 0 FAIL | 0 |
+| javac desktop con java.base,java.desktop, mismas opciones estrictas | PASS, sin warnings | 0 |
+| ar.edu.uade.sokoban.desktop.DesktopIntegrationTest src/desktop/resources/levels/demo.txt | 16 PASS / 0 FAIL, headless | 0 |
+
+Los **31 casos Fragile previos se conservan**, sin modificar expectativas. Los diez casos nuevos son:
+
+| Caso | Qué comprueba |
+|---|---|
+| 32 | Fixture externo dos IDs/resistencias 3/12, piso/Goal, normal Box en Goal, inmutabilidad y rechazo jugable |
+| 33 | Path Unicode/espacios, edición de posición/terreno/resistencia y pared→caja, recarga LF/CRLF/mixtos, declaraciones invertidas y resultado anterior intacto |
+| 34 | Error tardío con línea 6, UTF-8 inválido, referencia publicada intacta y recuperación |
+| 35 | UTF-8 malformado y truncado rechazado antes de interpretar |
+| 36 | 65.537 bytes con UTF-8 inválido: prevalece el diagnóstico de tamaño |
+| 37 | Exactamente 65.536 bytes llega a validación estructural, no se rechaza por tamaño |
+| 38 | Menos de 65.536 caracteres Java pero 65.537 bytes: rechazo por bytes |
+| 39 | Archivo ausente y Path nulo conservan categorías explícitas |
+| 40 | No se normaliza BOM ni se acepta vacío/legacy en la entrada experimental |
+| 41 | C2 ordinario en ambas entradas, lista especial vacía y llamadas intercaladas independientes |
+
+Reproducción desde la raíz de un clon, sin script ni logs privados. `SPIKE_JDK_HOME` debe apuntar a un JDK completo existente. Sólo se crean/eliminan temporales propios fuera del checkout:
+
+```bash
+(
+    set -euo pipefail
+    qa_dir="$(mktemp -d /tmp/sokoban-txt-qa.XXXXXXXX)"
+    trap 'find "$qa_dir" -type f -delete; find "$qa_dir" -depth -type d -empty -delete' EXIT
+    mkdir "$qa_dir/classes" "$qa_dir/desktop"
+    git rev-parse HEAD
+    "$SPIKE_JDK_HOME/bin/java" -version
+    "$SPIKE_JDK_HOME/bin/javac" -version
+    find src/main/java src/test/java -name '*.java' -type f | LC_ALL=C sort > "$qa_dir/sources"
+    "$SPIKE_JDK_HOME/bin/javac" --release 17 --limit-modules java.base \
+        -encoding UTF-8 -Xlint:all -Werror -d "$qa_dir/classes" @"$qa_dir/sources"
+    for suite in level.LevelLoadingTest level.C2LevelLoadingTest \
+                 level.ExperimentalFragileParserTest movement.MovementTest; do
+        "$SPIKE_JDK_HOME/bin/java" --limit-modules java.base -Dfile.encoding=UTF-8 \
+            -Djava.io.tmpdir="$qa_dir" -cp "$qa_dir/classes" \
+            "ar.edu.uade.sokoban.$suite" src/test/resources/levels
+    done
+    find src/main/java src/desktop/java src/desktop-test/java -name '*.java' -type f \
+        | LC_ALL=C sort > "$qa_dir/desktop-sources"
+    "$SPIKE_JDK_HOME/bin/javac" --release 17 --limit-modules java.base,java.desktop \
+        -encoding UTF-8 -Xlint:all -Werror -d "$qa_dir/desktop" @"$qa_dir/desktop-sources"
+    "$SPIKE_JDK_HOME/bin/java" --limit-modules java.base,java.desktop \
+        -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Djava.io.tmpdir="$qa_dir" \
+        -cp "$qa_dir/desktop:src/desktop/resources" \
+        ar.edu.uade.sokoban.desktop.DesktopIntegrationTest src/desktop/resources/levels/demo.txt
+)
+```
+
+Fragile acepta opcionalmente el directorio de fixtures; sin argumento usa `src/test/resources/levels` relativo al directorio de trabajo. Los runners core existentes siguen compilando pero **no ejecutando** C2/Fragile; sus comandos independientes son necesarios. Los resultados de Desktop son regresión del consumidor existente de `load`, no prueba de representación/gameplay Fragile. Las suites conservadas no suman casos nuevos por repetirlas después del commit para comprobar el HEAD publicado.
+
+`NOT_RUN` en este incremento: GUI interactiva/UI Smoke, VisualAssets Java, audio audible, Windows/macOS, tests PowerShell/CLI, gameplay Fragile, solución de puzzle y ratificación del equipo. El verificador comprueba separadamente integridad de los 43 assets, sin certificar derechos. No se ejecuta enumeración masiva adicional ni se modifica Movement. La gramática/rango siguen experimentales y OQ-06/OQ-08 no se cierran.
+
+Controles del mismo incremento: `git diff --check`, `bash scripts/verify-repo-readonly.sh` y `JAVA_TOOL_OPTIONS=-Djava.awt.headless=true plantuml -checkonly docs/architecture/uml/level-loading-spike-v1.puml`, todos exit 0. Verificador: 137 archivos, 401 enlaces relativos, 43 PNG/WAV registrados con formato/hash válidos. PlantUML sólo comprueba sintaxis; no se ejecutó render nuevo ni StarUML. La regresión del verificador no se repitió porque su implementación no cambió.
+
+## Revisión del contrato para trabajo paralelo — 29/10/2026
+
+Verificación de evidencia anterior: los logs completos y el registro de comandos del incremento filesystem identifican una reejecución posterior al commit sobre **5ac2bba9a1d495a5da9e1ad998857fbe00613840**, por Codex, Ubuntu 26.04.1/Linux x86_64, java/javac 17.0.20.1: Loading 40, C2 32, Fragile 41, Movement 31 y Desktop headless 16 PASS; compilaciones estrictas y suites con exit 0. Son 160 casos entre cinco suites, repetidos para verificar aquel HEAD; no son 160 casos nuevos de esta revisión. Los tres blobs de la tabla anterior coinciden y no hay diferencias posteriores en src/scripts.
+
+`JAVA_QA_THIS_STEP=NOT_RUN_DOCS_ONLY`. Se reutiliza esa evidencia verificada; no se vuelven a ejecutar suites por documentar el contrato. Los ejemplos de traspaso describen el fixture existente de Fragile 32 y combinaciones ordinarias cubiertas por C2/Fragile 41; sus resultados se contrastaron con código y oráculos existentes, sin atribuirles ejecución nueva. GUI manual, gameplay Fragile, Windows/macOS y aceptación del compañero no se verifican en este hito. Los comandos de reproducción siguen en la sección filesystem; continuar no requiere acceder a los logs externos originales.
+
+## Cierre semántico documental — 29/10/2026
+
+Evidencia previa verificada al preparar este cierre: ejecución por Codex sobre **38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6**, Ubuntu 26.04.1 LTS/Linux x86_64, java/javac **17.0.20.1** del mismo JDK. Se contrastaron registro de comandos, salida por caso y resumen de exit: compilación estricta core/desktop y Loading 40, C2 32, Fragile 41, Movement 31, Desktop headless 16, todos PASS/exit 0. Son **160 casos anteriores, no nuevos ni reejecutados en el cierre documental**. El bloque Bash de la sección filesystem es el procedimiento versionado ejecutado; mantiene release 17, UTF-8, -Xlint:all -Werror, java.base y desktop separado.
+
+La adopción del contrato por D-020 no cambia comportamiento: `JAVA_QA=PREVIOUS_QA_IDENTICAL_BLOBS`. Se exige comprobar desde la raíz:
+
+```bash
+git diff --check
+bash scripts/verify-repo-readonly.sh
+git diff --exit-code 5ac2bba9a1d495a5da9e1ad998857fbe00613840 -- src scripts
+# Después del commit, checkout limpio:
+bash scripts/verify-repo-readonly.sh --require-clean
+```
+
+La comparación de blobs debe terminar con exit 0; no es una ejecución Java. El informe/PR registra HEAD documental y resultados nuevos del verificador, enlaces/anclas y revisión semántica. Los logs anteriores son externos, pero el clon conserva identificación del código, casos individuales, entorno, comandos y límites para reproducir. `MODULE_TXT_QA_BASELINE=JAVA_17`; `OQ11_PROJECT_BUILD=OPEN`. GUI manual/UI Smoke, audio audible, VisualAssets Java, Windows/macOS, gameplay Fragile y código del compañero: NOT_RUN en este cierre; no se acredita CI ni aceptación humana.
+
+Las frases «no se ratifica OQ-06/OQ-08» de los apartados de pruebas anteriores describen sus hitos: el cierre posterior D-020 adopta el esquema soportado con autoridad MODULE_OWNER, sin convertir los PASS históricos en una votación o aprobación del código.
+
+Validación documental ejecutada por Codex antes del commit sobre el worktree de cierre basado en 38e5a2e: `git diff --check`, `bash scripts/verify-repo-readonly.sh` y comparación de src/scripts anterior, **exit 0** cada uno. Verificador: **137 archivos, 431 enlaces relativos y 43 assets con formato/SHA-256 válidos**. Control adicional de fragmentos locales: **156 anclas** válidas en los 16 Markdown afectados, incluidos E01–E11; IDs OQ-01…11 preservados. Contraste de filas oficiales, recuentos ajenos a la corrección, fixture contra ejemplo y secciones no TXT de INTEGRACION_EQUIPO: PASS. Son controles de documentación/integridad, sin compilar, ejecutar Java ni verificar derechos o fuentes privadas originales.

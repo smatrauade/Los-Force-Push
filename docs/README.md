@@ -6,7 +6,7 @@ Revisado 29/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](con
 |---|---|
 | Ejecutar desde clon | [README](../README.md), [guía Punto 5](punto5/GUIA_INSTALACION_GITHUB_DESKTOP.md) |
 | Requisitos y deuda residual | [REQUIREMENTS](requirements/REQUIREMENTS.md), [OPEN_QUESTIONS](requirements/OPEN_QUESTIONS.md) |
-| Acuerdos TEAM y alternativas | [DECISION_LOG](decisions/DECISION_LOG.md) |
+| Acuerdos TEAM, decisiones del responsable TXT y alternativas | [DECISION_LOG](decisions/DECISION_LOG.md) |
 | Implementación frente a candidato | [ARCHITECTURE](architecture/ARCHITECTURE.md), [RESPONSIBILITIES](architecture/RESPONSIBILITIES.md), [STARUML_STATUS](architecture/uml/STARUML_STATUS.md) |
 | Contratos entre módulos | [INTEGRACION_EQUIPO](punto5/INTEGRACION_EQUIPO.md) |
 | Pruebas, QA combinado y verificador | [TEST_STRATEGY](testing/TEST_STRATEGY.md), [TRACEABILITY_MATRIX](traceability/TRACEABILITY_MATRIX.md), [checklist Punto 5](punto5/CHECKLIST_PRUEBAS.md) |
@@ -18,4 +18,4 @@ Los experimentos, checkpoints y cápsulas fechados conservan evidencia históric
 
 ## Entrega y reconciliación académica — 29/10/2026
 
-PR #11 y #12 están integrados; Fragile permanece experimental y su contrato es candidato. Para el **18/11/2026**, leer [entrega y demo](requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [brechas de patrones](architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026) y [ruta crítica](../TODO.md#ruta-crítica-hacia-el-1811). R7 preparada, no ejecutada; no es parte de este cambio documental.
+PR #11 y #12 están integrados; Fragile permanece no jugable. El contrato soportado se adoptó posteriormente por el responsable TXT en D-020; integración runtime y extensiones siguen pendientes. Para el **18/11/2026**, leer [entrega y demo](requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [brechas de patrones](architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026) y [ruta crítica](../TODO.md#ruta-crítica-hacia-el-1811). El código ofrece carga de definición experimental y contrato TXT; la integración runtime sigue pendiente. Para trabajo paralelo, consultar el [traspaso a Model/Movement](requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026).

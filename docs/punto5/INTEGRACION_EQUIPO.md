@@ -23,11 +23,18 @@ la ejecucion parte de un [clon actualizado](GUIA_INSTALACION_GITHUB_DESKTOP.md),
 
 ## Contrato TXT actual
 
-LevelLoader/LevelParser ya aceptan legacy y C2-L7 opt-in mediante C2LevelParser,
-sin cambiar Level/Board. C2 ofrece siete aliases y sus formas largas, con
-[attributes] obligatoria vacia: atributos individuales y especiales se rechazan.
-El siguiente dominio TXT/niveles es su representacion individual; especificar
-sintaxis/rangos/errores antes de extender el modelo. No deducirlos desde Swing.
+La ruta jugable `LevelLoader.load(Path)` / `LevelParser.parse(String)` acepta
+legacy y C2-L7 ordinario, con [attributes] vacia; sigue rechazando especiales.
+`LevelLoader.loadExperimentalFragile(Path)` devuelve `ExperimentalFragileLevel`:
+plantilla Board mas lista inmutable de ID/posicion/resistencia inicial, sin Level
+jugable ni conexion Swing. Las dos entradas de filesystem comparten UTF-8 estricto y limite de bytes.
+La plantilla deja vacias las celdas Fragile: no enviarla sola al motor/renderer
+como nivel especial completo. Hielo y otras entidades no tienen tokens aceptados.
+Consultar la [matriz y ejemplos para el consumidor](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026).
+El esquema TXT soportado esta adoptado por MODULE_OWNER_DECISION (D-020):
+OQ-06 resuelta; OQ-08 parcialmente resuelta, solo extensiones abiertas. El contrato
+runtime requiere acuerdo con el consumidor; no se deduce desde sprites
+ni se impone una interfaz nueva a los otros modulos.
 
 ## Para agregar tipos futuros
 

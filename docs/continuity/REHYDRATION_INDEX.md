@@ -2,22 +2,28 @@
 
 AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado) y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) (reconciliación académica y política de continuidad), están integrados.
 
+**Supersesión acotada del 29/10:** [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) registra la delegación expresa del responsable TXT: OQ-06 resuelta y OQ-08 parcialmente resuelta para lo implementado. Las frases anteriores «sintaxis/rangos/errores aún sin ratificar» de AGENTS y los comentarios de fuentes Java/UML describen el corte previo; no son una negativa actual de autoridad ni un bloqueo del contrato soportado. Se preservan sus bytes por la restricción explícita de esta misión de no editar política ni ejecutables/diagramas. La política de trabajo continúa vigente; decisiones y pendientes actuales se consultan en los registros canónicos, sin necesidad del chat o adjunto privado.
+
 ## Ruta principal
 
 | Orden | Pregunta | Fuente |
 |---|---|---|
 | 1 | ¿Qué está integrado y cómo se ejecuta? | [CURRENT_STATE](CURRENT_STATE.md), [README](../../README.md) |
 | 2 | ¿Qué exige la consigna y qué sigue abierto? | [REQUIREMENTS](../requirements/REQUIREMENTS.md), [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) |
-| 3 | ¿Qué decidió el equipo? | [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); único registro E01–E11 |
+| 3 | ¿Qué decidió TEAM y qué adoptó el responsable TXT? | [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); único registro E01–E11 |
 | 4 | ¿Qué está implementado frente a propuesto? | [ARCHITECTURE](../architecture/ARCHITECTURE.md), [RESPONSIBILITIES](../architecture/RESPONSIBILITIES.md), [STARUML_STATUS](../architecture/uml/STARUML_STATUS.md) |
 | 5 | ¿Dónde están código y recursos? | [Loading/C2 y prototipo Fragile](../../src/main/java/ar/edu/uade/sokoban/level), [Movement](../../src/main/java/ar/edu/uade/sokoban/movement), [Swing](../../src/desktop/java/ar/edu/uade/sokoban/desktop), [recursos desktop](../../src/desktop/resources) |
 | 6 | ¿Cómo se integran los módulos? | [INTEGRACION_EQUIPO](../punto5/INTEGRACION_EQUIPO.md), [guía desde clon](../punto5/GUIA_INSTALACION_GITHUB_DESKTOP.md) |
 | 7 | ¿Dónde están pruebas y evidencia? | [TEST_STRATEGY](../testing/TEST_STRATEGY.md), [tests core](../../src/test/java), [tests desktop](../../src/desktop-test/java), [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md) |
 | 8 | ¿Qué recursos existen y qué derechos faltan? | [Manifiesto de 43 recursos](../punto5/ASSETS_REGISTRO_SHA256.csv), [ASSET_POLICY](../assets/ASSET_POLICY.md), [IA/licencias](../punto5/USO_IA_Y_LICENCIAS.md) |
 | 9 | ¿Qué sigue y cómo mantener la información? | [TODO](../../TODO.md), [FRESHNESS_POLICY](FRESHNESS_POLICY.md), [SOURCE_REGISTRY](SOURCE_REGISTRY.md) |
-| 10 | ¿Qué contrato TXT se propone para Fragile y qué falta ratificar? | [FRAGILE_TXT_CONTRACT_PROPOSAL](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) |
+| 10 | ¿Qué contrato TXT está adoptado y qué extensiones/consumidores faltan? | [FRAGILE_TXT_CONTRACT_PROPOSAL](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md), [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) |
 
-El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente dominio TXT/niveles requiere revisar el contrato y su integración futura con el equipo. E01/E02 no fijan sintaxis ni rangos. E04/E08 requieren revisión normativa. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
+Plan de TXT/niveles y promoción única, con checkpoints históricos separados del estado técnico: [TXT_LEVELS_EXECUTION_PLAN](../requirements/TXT_LEVELS_EXECUTION_PLAN.md). Define gates controlables, una sola promoción y revisión de frescura previa al merge. La autoridad del contrato soportado está en D-020 como MODULE_OWNER_DECISION; el plan no reemplaza decisiones del equipo.
+
+El código presente expone `LevelLoader.loadExperimentalFragile(Path)` para leer la definición con UTF-8 estricto y límite de bytes compartidos. Leer el [diseño G2 y estado G3](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026) y la [evidencia del incremento](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). No atribuir su publicación o integración a una fecha: comprobar Git/PR.
+
+El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente trabajo requiere contrastar el contrato con el consumidor real. E01/E02 no votaron sintaxis/rangos: fueron adoptados después por el responsable TXT en D-020. E04/E08 tienen regla TEAM decidida, con implementación/bordes ajenos pendientes. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
 
 ## Procedencia y evidencia histórica
 
@@ -38,4 +44,4 @@ Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectad
 
 ## Entrega y siguiente gate
 
-Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; R7 preparada, NO ejecutada. Antes de R7 revisar alcance contra el prototipo y contrato ya integrados, dependencias OQ y autorización específica; este índice no es una orden de implementación.
+Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; el alcance autónomo TXT de R7 ofrece carga de definición experimental y contrato, sin gameplay. Antes de integración runtime revisar contrato, dependencias OQ y autorización específica; este índice no es una orden de implementación.
