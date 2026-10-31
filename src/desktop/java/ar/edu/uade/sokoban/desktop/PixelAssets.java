@@ -12,6 +12,11 @@ public final class PixelAssets {
     public static final int NATIVE_SIZE = 32;
     private static final String ROOT = "/assets/sprites/";
     private final Map<String, BufferedImage> cache = new HashMap<>();
+    private VisualThemeFactory.SpritePresentation presentation = VisualThemes.all().get(0).sprites();
+    public void setTheme(VisualThemeFactory theme) {
+        presentation = java.util.Objects.requireNonNull(theme, "theme").sprites();
+        cache.clear();
+    }
 
     public BufferedImage image(String name) {
         BufferedImage value = cache.get(name);
@@ -27,6 +32,7 @@ public final class PixelAssets {
             if (value == null || value.getWidth() != NATIVE_SIZE || value.getHeight() != NATIVE_SIZE) {
                 throw new IllegalStateException("Sprite invalido, debe medir 32x32: " + name);
             }
+            value = presentation.apply(value);
             cache.put(name, value);
             return value;
         } catch (IOException exception) {

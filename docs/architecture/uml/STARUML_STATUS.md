@@ -82,3 +82,8 @@ El diagrama Movement incorpora evaluación pura, Strategy de score y progresión
 ## Integración Swing individual R7 — 31/10/2026
 
 El diagrama desktop refleja el controlador con `LevelProgression`, proyección `RuntimeState`, callbacks y resultado. Es AS_IMPLEMENTED para este corte, sin reemplazar el candidato histórico; `.mdj` de StarUML sigue pendiente.
+
+
+## Extras y Observer individuales R8 — 31/10/2026
+
+El diagrama desktop muestra familias visuales, Command replay y Observer de notificación; el candidato histórico no cambia. `.mdj` de StarUML sigue pendiente; elegibilidad académica de extras no confirmada.

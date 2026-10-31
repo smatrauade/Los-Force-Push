@@ -19,6 +19,10 @@ public interface GameView {
     /** Presentation callbacks supplied according to the current session state. */
     default void configureUiCommands(UiCommands commands) { }
 
+    default void onGateChanged(LockChangeSubject.Event event) { }
+    default void onReplayAvailable(boolean available) { }
+    default void onReplayUnavailable(String message) { }
+
     /** Allows future gameplay events to request sound without owning audio devices. */
     default void playEffect(SoundManager.Effect effect) { }
 }

@@ -50,12 +50,13 @@ public final class PixelTheme {
     public static JPanel surface() {
         return new JPanel() {
             private static final long serialVersionUID = 1L;
+            { setBackground(BACKGROUND); }
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.setColor(BACKGROUND);
+                g.setColor(getBackground());
                 g.fillRect(0, 0, getWidth(), getHeight());
-                g.setColor(new Color(53, 43, 47));
+                g.setColor(BACKGROUND.equals(getBackground()) ? new Color(53, 43, 47) : getBackground().brighter());
                 for (int x = 0; x < getWidth(); x += 32) {
                     g.drawLine(x, 0, x, getHeight());
                 }

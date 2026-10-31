@@ -98,3 +98,8 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Integración Swing individual R7 — 31/10/2026
 
 `GameController` coordina `LevelProgression`, publica `GamePresentation` con estado completo y métricas y adapta el resultado del core al DTO desktop. `BoardPanel` sólo representa `RuntimeState`; `GameWindow` conserva navegación/EDT y acciones. La carga elige STANDARD/EXTENDED sin fallback y publica sólo después de crear el coordinador. La campaña contiene dos copias de fixtures verificadas. El único uso de `Board` en `BoardPanel.showBoard` adapta el subconjunto ordinario para compatibilidad de render; la ruta jugable no usa `MovementEngine` anterior. Sonido por eventos, sin lógica en pintura. Guardado, Observer GoF y aceptación TEAM siguen pendientes.
+
+
+## Extras y Observer individuales R8 — 31/10/2026
+
+`VisualThemeFactory` produce paleta y presentación de sprites por familia; Swing aplica ambos sin tocar runtime. `ReplayRecorder` guarda comandos válidos acotados, `MoveCommand` ejecuta el motor y `ReplayPlayer` verifica estado completo antes de habilitar reproducción. `LockChangeSubject` notifica cambios confirmados a `GatePresentationObserver` y `LockSoundObserver`; la apertura sigue derivada de `RuntimeState`. [Participantes, alternativas y autoridad](../continuity/IMPACIENCIA_MASTERPLAN.md#extras-y-observer-individuales-r8).

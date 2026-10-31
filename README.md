@@ -91,7 +91,7 @@ En formato STANDARD, `[attributes]` debe estar vacía y se rechazan entidades es
 
 ## Capacidades y pruebas
 
-Swing utiliza `LevelProgression` y el runtime inmutable para niveles estándar y extendidos, movimiento, entidades especiales, Undo/Restart y finalización. La campaña de ejemplo usa score individual; quedan pendientes dos adicionales elegibles, Observer real, derechos de recursos y entregables.
+Swing utiliza `LevelProgression` y el runtime inmutable para niveles estándar y extendidos, movimiento, entidades especiales, Undo/Restart y finalización. La campaña de ejemplo usa score individual; incluye dos candidatos técnicos de adicionales y Observer de notificación; la elegibilidad académica de los extras, derechos de recursos y entregables siguen pendientes.
 
 Para comprobar el runner de escritorio sin abrir ventana, desde la raíz:
 
@@ -100,6 +100,12 @@ bash scripts/run-swing.sh --test
 ```
 
 En Windows: `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md) incluye comandos y suites independientes para C2 y Fragile, plataformas y límites. Una ejecución histórica reportó 160 casos PASS de Loading, C2, Fragile, Movement y Desktop headless sobre el código identificado allí; no certifica el TPO completo, gameplay especial ni aceptación grupal. Las pruebas GUI, manuales y audio requieren sus propias evidencias.
+
+## Estilos y repetición
+
+En **OPCIONES**, elegir ORIGINAL_COBRE, NOCTURNO o JADE; el tema cambia componentes y sprites sin reiniciar la partida. Tras completar un nivel, **VER REPETICION** muestra la trayectoria final: reproducir, pausar, reiniciar, avanzar un paso o volver al resultado. Undo elimina los cinco comandos deshechos y Restart limpia la grabación; un límite de 10.000 comandos deshabilita el replay completo en lugar de truncarlo. La reproducción es de sólo lectura y se verifica contra el estado final.
+
+Son dos implementaciones técnicas individuales candidatas para RF-12, no una aceptación académica ni selección grupal de replay. OQ-10 sigue abierta; los derechos de los recursos originales siguen pendientes.
 
 ## Carga TXT extendida del core
 

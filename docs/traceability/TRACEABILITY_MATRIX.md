@@ -191,3 +191,8 @@ RF-08/09: evaluador puro, Strategy individual y progresión explícita entre dos
 ## Integración Swing individual R7 — experimental
 
 RF-01–10: la interfaz consume runtime, sesión y progresión individuales, con carga STANDARD/EXTENDED y dos niveles de campaña. [Pruebas headless y smoke](../testing/TEST_STRATEGY.md#integración-swing-individual-r7--2026-10-31); QA manual, elegibilidad RF-12, derechos y aceptación TEAM permanecen pendientes. Las hipótesis individuales no cierran OQ oficiales.
+
+
+## Extras y Observer individuales R8 — experimental
+
+RF-12: selector de estilos y replay son dos candidatos técnicos con Abstract Factory y Command, respectivamente; Observer de Lock es colaboración separada, no un tercer extra. [Roles, pruebas y autoridad](../continuity/IMPACIENCIA_MASTERPLAN.md#extras-y-observer-individuales-r8) · [QA](../testing/TEST_STRATEGY.md#extras-y-observer-individuales-r8--2026-10-31). Elegibilidad académica no confirmada, selección TEAM de replay no registrada y OQ-10 abierta.

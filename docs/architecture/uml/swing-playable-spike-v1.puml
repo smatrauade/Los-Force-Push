@@ -45,4 +45,45 @@ MENU / GAME / PAUSE / OPTIONS / HELP / FINISH.
 Undo/Restart callbacks follow session availability.
 Save/load remain disabled; Observer is not implemented.
 end note
+package "R8 presentation collaborations" {
+  interface VisualThemeFactory <<AbstractFactory>>
+  class UiPalette <<product>>
+  interface SpritePresentation <<product>>
+  class VisualThemes <<registry>>
+  class CopperTheme <<concrete factory>>
+  class NightTheme <<concrete factory>>
+  class JadeTheme <<concrete factory>>
+  class MoveCommand <<Command>>
+  class ReplayTrace <<immutable>>
+  class ReplayRecorder
+  class ReplayPlayer <<Invoker>>
+  class LockChangeSubject <<Subject>>
+  interface LockChangeObserver <<Observer>>
+  class GatePresentationObserver
+  class LockSoundObserver
+}
+CopperTheme ..|> VisualThemeFactory
+NightTheme ..|> VisualThemeFactory
+JadeTheme ..|> VisualThemeFactory
+VisualThemes ..> CopperTheme
+VisualThemes ..> NightTheme
+VisualThemes ..> JadeTheme
+VisualThemeFactory ..> UiPalette
+VisualThemeFactory ..> SpritePresentation
+GameWindow ..> VisualThemeFactory
+GameController --> ReplayRecorder
+GameController --> LockChangeSubject
+GameWindow --> ReplayPlayer
+ReplayPlayer --> ReplayTrace
+ReplayTrace --> "0..*" MoveCommand
+ReplayPlayer ..> MoveCommand : executes
+LockChangeSubject o-- "0..*" LockChangeObserver
+LockChangeObserver <|.. GatePresentationObserver
+LockChangeObserver <|.. LockSoundObserver
+GatePresentationObserver --> GameView
+LockSoundObserver --> GameView
+note bottom of LockChangeSubject
+Confirmed transitions only; subject is window-scoped.
+Observers do not own or mutate wall state.
+end note
 @enduml

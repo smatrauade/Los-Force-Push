@@ -11,6 +11,7 @@ CP="$TMP/classes:$ROOT/src/desktop/resources"
 if [[ "${1:-}" == "--test" ]]; then
     java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.DesktopIntegrationTest "$ROOT/src/desktop/resources/levels/demo.txt"
     (cd "$ROOT" && java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.DesktopVisualAssetsTest)
+    java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.DesktopExtensionsTest "$ROOT"
 elif [[ "${1:-}" == "--ui-test" ]]; then
     (cd "$ROOT" && java -Dfile.encoding=UTF-8 --limit-modules java.base,java.desktop -Dforcepush.repo.root="$ROOT" -cp "$CP" ar.edu.uade.sokoban.desktop.DesktopUiSmokeTest "${@:2}")
 else

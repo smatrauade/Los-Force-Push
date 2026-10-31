@@ -73,10 +73,17 @@ public final class SwingApplication {
         private static final String OPTIONS = "OPTIONS";
         private static final String HELP = "HELP";
         private static final String FINISH = "FINISH";
+        private static final String REPLAY = "REPLAY";
 
         private final CardLayout layout = new CardLayout();
         private final JPanel cards = new JPanel(layout);
         private final BoardPanel board = new BoardPanel();
+        private final BoardPanel replayBoard = new BoardPanel();
+        private final transient PixelAssets menuArt = new PixelAssets();
+        private final transient java.util.Map<Component, java.awt.Color[]> originalColors = new java.util.IdentityHashMap<>();
+        private final transient java.util.Map<javax.swing.JComponent, javax.swing.border.Border> originalBorders = new java.util.IdentityHashMap<>();
+        private transient ReplayPlayer replayPlayer;
+        private final transient javax.swing.Timer replayTimer = new javax.swing.Timer(220, event -> replayStep());
         private final transient SoundManager audio = new SoundManager();
         private final JLabel levelText = label("SIN NIVEL", PixelTheme.BODY);
         private final JLabel movesText = label("0000", PixelTheme.TITLE);
@@ -90,6 +97,8 @@ public final class SwingApplication {
         private final JButton saveButton = PixelTheme.button("GUARDAR PARTIDA");
         private final JButton loadSaveButton = PixelTheme.button("CARGAR PARTIDA");
         private final JButton nextButton = PixelTheme.button("SIGUIENTE NIVEL");
+        private final JButton replayButton = PixelTheme.button("VER REPETICION");
+        private final JComboBox<VisualThemeFactory> themeSelector = new JComboBox<>(VisualThemes.all().toArray(VisualThemeFactory[]::new));
         private final JCheckBox soundToggle = new JCheckBox("ACTIVAR EFECTOS DE SONIDO", true);
         private final JComboBox<String> zoomSelector = new JComboBox<>(new String[]{
                 "1x  (32 px)", "2x  (64 px)", "3x  (96 px)"});
@@ -114,6 +123,7 @@ public final class SwingApplication {
             cards.add(buildOptions(), OPTIONS);
             cards.add(buildHelp(), HELP);
             cards.add(buildFinish(), FINISH);
+            cards.add(buildReplay(), REPLAY);
             add(cards);
             continueButton.setEnabled(false);
             restartButton.setEnabled(false);
@@ -122,11 +132,12 @@ public final class SwingApplication {
             pending(saveButton, "Guardar partida requiere la funcionalidad adicional");
             pending(loadSaveButton, "Cargar partida guardada requiere la funcionalidad adicional");
             pending(nextButton, "No hay siguiente nivel disponible");
+            pending(replayButton, "Completar un nivel para repetirlo");
             installKeys();
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent event) {
-                    audio.close();
+                    replayTimer.stop(); controller.close(); audio.close();
                 }
             });
             showScreen(MENU);
@@ -152,6 +163,7 @@ public final class SwingApplication {
         }
 
         private void showScreen(String name) {
+            if (REPLAY.equals(active) && !REPLAY.equals(name)) { replayTimer.stop(); }
             active = name;
             layout.show(cards, name);
             getRootPane().requestFocusInWindow();
@@ -200,7 +212,6 @@ public final class SwingApplication {
             stack.setPreferredSize(new Dimension(500, 620));
             JPanel illustration = new JPanel() {
                 private static final long serialVersionUID = 1L;
-                private final transient PixelAssets art = new PixelAssets();
                 @Override
                 protected void paintComponent(java.awt.Graphics graphics) {
                     super.paintComponent(graphics);
@@ -212,9 +223,9 @@ public final class SwingApplication {
                         int start = (getWidth() - side * 3) / 2;
                         String[] icons = {"player_down", "box", "goal"};
                         for (int i = 0; i < icons.length; i++) {
-                            g.drawImage(art.image("floor_" + i), start + i * side, 0,
+                            g.drawImage(menuArt.image("floor_" + i), start + i * side, 0,
                                     side, side, null);
-                            g.drawImage(art.image(icons[i]), start + i * side, 0,
+                            g.drawImage(menuArt.image(icons[i]), start + i * side, 0,
                                     side, side, null);
                         }
                     } finally {
@@ -368,7 +379,13 @@ public final class SwingApplication {
             zoomSelector.setFont(PixelTheme.BODY);
             zoomSelector.addActionListener(event -> board.setScale(zoomSelector.getSelectedIndex() + 1));
             stack.add(zoomSelector);
-            stack.add(Box.createVerticalStrut(28));
+            stack.add(Box.createVerticalStrut(14));
+            JLabel themeLabel = label("ESTILO VISUAL", PixelTheme.BODY);
+            themeLabel.setAlignmentX(Component.CENTER_ALIGNMENT); stack.add(themeLabel);
+            themeSelector.setMaximumSize(new Dimension(320, 35));
+            themeSelector.addActionListener(event -> applyTheme((VisualThemeFactory) themeSelector.getSelectedItem()));
+            stack.add(themeSelector);
+            stack.add(Box.createVerticalStrut(14));
             JButton back = PixelTheme.button("VOLVER");
             back.addActionListener(event -> navigate(optionsReturn));
             addStackButton(stack, back);
@@ -408,11 +425,84 @@ public final class SwingApplication {
             stack.add(Box.createVerticalStrut(20));
             nextButton.addActionListener(event -> runCommand(commands.nextLevel()));
             addStackButton(stack, nextButton);
+            replayButton.addActionListener(event -> openReplay());
+            addStackButton(stack, replayButton);
+            JButton finishOptions = PixelTheme.button("OPCIONES DE VICTORIA");
+            finishOptions.addActionListener(event -> openOptions(FINISH));
+            addStackButton(stack, finishOptions);
             JButton menu = PixelTheme.button("VOLVER AL MENU");
             menu.addActionListener(event -> navigate(MENU));
             addStackButton(stack, menu);
             stack.add(Box.createVerticalGlue());
             return card;
+        }
+
+        private JPanel buildReplay() {
+            JPanel screen = new JPanel(new BorderLayout());
+            screen.setBackground(PixelTheme.BACKGROUND);
+            screen.add(new JScrollPane(replayBoard), BorderLayout.CENTER);
+            JPanel controls = new JPanel();
+            JButton play = PixelTheme.button("REPRODUCIR");
+            JButton pause = PixelTheme.button("PAUSAR");
+            JButton reset = PixelTheme.button("REINICIAR REPETICION");
+            JButton step = PixelTheme.button("PASO SIGUIENTE");
+            JButton back = PixelTheme.button("VOLVER AL RESULTADO");
+            play.addActionListener(event -> { if (replayPlayer != null && replayPlayer.hasNext()) { replayTimer.start(); } });
+            pause.addActionListener(event -> replayTimer.stop());
+            reset.addActionListener(event -> { replayTimer.stop(); replayPlayer.reset(); replayBoard.showState(replayPlayer.currentState()); });
+            step.addActionListener(event -> { replayTimer.stop(); replayStep(); });
+            back.addActionListener(event -> showScreen(FINISH));
+            controls.add(play); controls.add(pause); controls.add(reset); controls.add(step); controls.add(back);
+            screen.add(controls, BorderLayout.SOUTH);
+            return screen;
+        }
+        private void openReplay() {
+            controller.replay().ifPresent(trace -> {
+                replayTimer.stop(); replayPlayer = new ReplayPlayer(trace);
+                replayBoard.showState(replayPlayer.currentState()); showScreen(REPLAY);
+            });
+        }
+        private void replayStep() {
+            if (replayPlayer == null || !replayPlayer.hasNext()) { replayTimer.stop(); return; }
+            replayBoard.setFacing(replayPlayer.nextDirection());
+            replayPlayer.step(); replayBoard.showState(replayPlayer.currentState());
+            if (!replayPlayer.hasNext()) { replayTimer.stop(); }
+        }
+        @Override public void onReplayAvailable(boolean available) { replayButton.setEnabled(available); }
+        @Override public void onReplayUnavailable(String message) { replayButton.setToolTipText(message); }
+        @Override public void onGateChanged(LockChangeSubject.Event event) { board.repaint(); }
+
+        private void applyTheme(VisualThemeFactory theme) {
+            if (theme == null) { return; }
+            applyPalette(cards, theme);
+            board.setTheme(theme); replayBoard.setTheme(theme); menuArt.setTheme(theme);
+            cards.repaint();
+        }
+        private void applyPalette(Component component, VisualThemeFactory theme) {
+            var saved = originalColors.computeIfAbsent(component,
+                    key -> new java.awt.Color[]{key.getBackground(), key.getForeground()});
+            var palette = theme.palette();
+            boolean original = theme.name().equals("ORIGINAL_COBRE");
+            if (original) { component.setBackground(saved[0]); component.setForeground(saved[1]); }
+            else {
+                component.setBackground(component instanceof JButton ? palette.button()
+                        : component instanceof JPanel ? palette.surface() : palette.background());
+                component.setForeground(saved[1] != null && saved[1].equals(PixelTheme.COPPER)
+                        ? palette.accent() : palette.text());
+            }
+            if (component instanceof javax.swing.JComponent widget) {
+                if (!originalBorders.containsKey(widget)) { originalBorders.put(widget, widget.getBorder()); }
+                var savedBorder = originalBorders.get(widget);
+                if (original) { widget.setBorder(savedBorder); }
+                else if (savedBorder instanceof javax.swing.border.CompoundBorder compound
+                        && compound.getOutsideBorder() instanceof javax.swing.border.LineBorder line) {
+                    widget.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(palette.accent(), line.getThickness()), compound.getInsideBorder()));
+                }
+            }
+            if (component instanceof java.awt.Container container) {
+                for (Component child : container.getComponents()) { applyPalette(child, theme); }
+            }
         }
 
         private void openOptions(String origin) {

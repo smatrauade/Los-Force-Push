@@ -32,6 +32,11 @@ public final class BoardPanel extends JPanel {
     /** Compatibility for ordinary board-only callers, rendered through the same runtime projection. */
     public void showBoard(Board board) { showState(RuntimeState.fromLevel(new Level(board))); }
     public void showState(RuntimeState next) { state = Objects.requireNonNull(next, "state"); updateSize(); repaint(); }
+    public void setTheme(VisualThemeFactory theme) {
+        sprites.setTheme(theme);
+        setBackground(theme.palette().boardBackground());
+        repaint();
+    }
     public void setScale(int next) {
         if (next < 1 || next > 3) { throw new IllegalArgumentException("Escala permitida: 1, 2 o 3"); }
         scale = next; updateSize(); repaint();
