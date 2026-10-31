@@ -181,3 +181,8 @@ RF-01/02/03/04/05/06: [contrato individual](../requirements/IMPACIENCIA_RUNTIME_
 ## Sesión individual R5 — experimental
 
 RF-07/09/10: `GameSession` implementa historial 15, Undo de cinco y presupuesto de tres, restaurando mundo/movimientos/empujes y acumulando usos; Restart restituye el estado inicial. [Hipótesis y autoridad](../continuity/IMPACIENCIA_MASTERPLAN.md) · [pruebas](../testing/TEST_STRATEGY.md#sesión-individual-r5--2026-10-31). No hay fórmula de score ni integración Swing; OQ-04/05/09 siguen abiertas oficialmente.
+
+
+## Finalización individual R6 — experimental
+
+RF-08/09: evaluador puro, Strategy individual y progresión explícita entre dos fixtures externos resueltos; E05/E09/E10 preservadas. [Hipótesis y recorridos](../continuity/IMPACIENCIA_MASTERPLAN.md) · [pruebas](../testing/TEST_STRATEGY.md#finalización-individual-r6--2026-10-31). OQ-01/09 oficiales siguen abiertas; Swing, aceptación TEAM y entrega integral pendientes.

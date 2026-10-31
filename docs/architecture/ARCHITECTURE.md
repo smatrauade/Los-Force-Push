@@ -86,3 +86,8 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Sesión individual R5 — 31/10/2026
 
 `GameSession` coordina `RuntimeMovementEngine` y crea/restaura su snapshot privado; `GameMemento` es token opaco y `UndoManager` caretaker limitado a 15, sin conocer contenido ni reglas. Mundo y movimientos/empujes son restaurables; usos Undo permanecen fuera del memento. El core no depende de Swing. [Decisión, política de Restart y límites](../continuity/IMPACIENCIA_MASTERPLAN.md).
+
+
+## Finalización individual R6 — 31/10/2026
+
+`VictoryEvaluator` consulta el estado sin mutarlo; `LevelStats` toma métricas de `GameSession`; `ScoreStrategy` permite sustituir el cálculo y `WeightedPenaltyScoreStrategy` satura sin desbordar. `LevelCatalog` conserva entradas ordenadas y formatos explícitos; `LevelProgression` coordina sesión, carga y resultados inmutables, congelando acciones después del cierre hasta avanzar. No hay dependencia Swing ni persistencia. [Hipótesis, secuencias y trade-offs](../continuity/IMPACIENCIA_MASTERPLAN.md).

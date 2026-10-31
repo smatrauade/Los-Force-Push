@@ -6,7 +6,7 @@
 
 La meta es el TPO completo con niveles externos, mecánicas, interfaz, pruebas y entregables defendibles. El baseline común es `f3f91f92829b7e8e4bd3c0c07e3af4ffb0beb142`; la rama individual parte de él. El `main` remoto observado en R2, `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, avanzó sólo en documentación frente al ancestro común. Ningún merge, rebase o incorporación es automático. Ver [estado individual](IMPACIENCIA_STATE.md) y fuentes normativas desde [AGENTS](../../AGENTS.md).
 
-AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; TO_BE: integración Swing y entregables. El runtime no vuelve jugable la definición en Swing.
+AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; R6 implementa victoria, score y progresión individuales. TO_BE: integración Swing y entregables. El runtime no vuelve jugable la definición en Swing.
 
 ## Cobertura por requisito
 
@@ -19,9 +19,9 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 | RF-05 | Fragile y E04 en runtime; aún sin integración jugable. |
 | RF-06 | KeyBox/Lock/muros en runtime individual; OQ-07 oficial y su integración pendientes. |
 | RF-07 | Sesión individual con historial 15/5/3 y Undo implementados; integración y aceptación pendientes. |
-| RF-08 | Victoria/progresión pendientes; OQ-01. |
-| RF-09 | Score y métricas pendientes; OQ-09. |
-| RF-10 | HUD parcial, servicios de Undo/Restart pendientes. |
+| RF-08 | Evaluación y progresión individual en core; OQ-01 y conexión Swing pendientes. |
+| RF-09 | Métricas y score individual en core; fórmula TEAM OQ-09 e integración pendientes. |
+| RF-10 | HUD parcial; Undo/Restart implementados en core, conexión Swing pendiente. |
 | RF-11 | Recursos presentes; integración completa, audio audible y derechos pendientes. |
 | RF-12 | Dos adicionales y patrones elegibles pendientes de OQ-10. |
 | RT-01 | Java/Swing parcial; build definitivo OQ-11. |
@@ -37,7 +37,7 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 | R3 | Núcleo individual KeyBox/Lock/muros: asociaciones, cierre atómico y regresión comprobadas; Observer permanece pendiente. |
 | R4 | Extensión TXT individual y carga a runtime implementadas; OQ-07/08 siguen abiertas oficialmente y Swing no consume la ruta. |
 | R5 | Sesión/Undo/Restart individuales implementados y probados con snapshots 15/5/3 y métricas E07–E09. |
-| R6 | Victoria/progresión/score: acordar OQ-01/09, ejemplos y tests deterministas. |
+| R6 | Victoria/progresión/score individuales implementados y probados; OQ-01/09 oficiales permanecen abiertas. |
 | R7 | Adaptar loader y Swing al runtime íntegro; preservar errores atómicos, HUD y regresión visual. |
 | R8 | Seleccionar dos adicionales elegibles con evidencia docente/equipo, patrón real y tests. |
 | R9 | QA integral por misiones separadas: niveles resolubles, plataformas, GUI/audio y licencias verificadas. |
@@ -80,3 +80,15 @@ Observer GoF **no implementado**: no hay Subject con suscripciones ni observador
 PROBLEM → Undo debe restaurar mundo y métricas de trayectoria sin borrar su costo. OPTIONS → lista interna de estados o Memento con caretaker separado. CHOICE → `GameSession` originator crea y restaura un snapshot privado; `GameMemento` es token opaco y `UndoManager` sólo almacena y limita 15 snapshots. TRADEOFF → tres responsabilidades pequeñas frente a lista interna; la encapsulación permite cambiar el contenido sin que el caretaker lo interprete. TEST → restauración exacta de cinco, límites, rotura y muros.
 
 `INDIVIDUAL_EXPERIMENTAL_DECISION`: Restart recupera el estado inicial en memoria, limpia historia y reinicia movimientos/empujes y presupuesto, conservando el total de Undo del nivel. Cambio explícito de nivel reinicia también ese total; no hay métrica global ni lectura TXT en Restart. Los intentos bloqueados no cuentan; deslizamiento, rotura y eventos de muros integran un solo empuje. No cierra OQ-04/05/09 ni atribuye ratificación de Memento. E07/E08/E09 permanecen en [DECISION_LOG](../decisions/DECISION_LOG.md).
+
+## Finalización individual R6
+
+PROBLEM → RF-08 requiere detectar victoria sin estado duplicado. OPTIONS → guardar bandera en sesión o evaluación pura. CHOICE → `VictoryEvaluator` calcula desde `RuntimeState`; undo y restart anteriores al cierre actualizan el resultado automáticamente. TRADEOFF → recorrido de celdas por consulta. TEST → Goals vacíos, cajas extra, Fragile y E05.
+
+`INDIVIDUAL_EXPERIMENTAL_DECISION`: ganar exige al menos un Goal y una caja superviviente, todos los Goals ocupados y todas las cajas en Goal. Normal, Fragile y Key cuentan sobre Goal; Key sobre Lock no cuenta. Muros abiertos no son Goal y no se exige mantener Lock activo. Una Fragile destruida no ocupa Goal; su rotura puede impedir completar un mapa. No cierra OQ-01 ni garantiza resolubilidad.
+
+PROBLEM → RF-09/E10 requieren cálculo sustituible. OPTIONS → fórmula fija o Strategy inyectada. CHOICE → `ScoreStrategy` y `WeightedPenaltyScoreStrategy`; `LevelStats` procede de `GameSession`. TRADEOFF → una interfaz para una variación demostrada por prueba de otra estrategia. `INDIVIDUAL_EXPERIMENTAL_DECISION`: `max(0, 10000 - 10*moves - 25*pushes - 100*undoUsesTotal)`, sustracción saturada sin overflow; configuración no negativa. Undo restaura movimientos/empujes y acumula usos; Restart conserva esa penalización del nivel. No cierra OQ-09 ni ratifica la fórmula por TEAM.
+
+PROBLEM → progresión no debe contaminar movimiento ni perder resultado ante un archivo inválido. CHOICE → `LevelCatalog` inmutable con IDs explícitos y formatos STANDARD/EXTENDED; `LevelProgression` carga sin fallback, conserva resultados y cambia nivel sólo tras validar carga. El cierre explícito es idempotente. Tras finalizar, move/Undo/Restart mediante el coordinador rechazan con `IllegalStateException` hasta avanzar; `GameSession` conserva su API. Al final se informa campaña completa. Sólo memoria, sin persistencia.
+
+Fixtures realmente resueltos por el motor: [A](../../src/test/resources/levels/completion-a.txt) `RIGHT` (1 movimiento, 1 empuje) y [B](../../src/test/resources/levels/completion-b.txt) `RIGHT LEFT DOWN DOWN RIGHT RIGHT UP RIGHT UP LEFT LEFT` (11 movimientos, 3 empujes). En B la Key activa Lock, abre el muro de paso y termina en Goal; se verifica E05. [Pruebas](../testing/TEST_STRATEGY.md#finalización-individual-r6--2026-10-31). Swing, Observer, elegibilidad de extras, `.mdj` y entregables pendientes.

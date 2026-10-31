@@ -140,4 +140,26 @@ note bottom of GameSession
 Snapshot contains world, moves and pushes.
 Undo uses stay outside snapshot; Swing is not connected.
 end note
+package "Completion individual R6" {
+  class VictoryEvaluator <<stateless>>
+  class LevelStats <<record>>
+  interface ScoreStrategy
+  class WeightedPenaltyScoreStrategy <<record>>
+  class LevelCatalog <<record>>
+  class LevelProgression
+  class "LevelProgression.LevelResult" as CoreLevelResult <<record>>
+}
+ScoreStrategy <|.. WeightedPenaltyScoreStrategy
+LevelProgression --> ScoreStrategy
+LevelProgression --> VictoryEvaluator
+LevelProgression --> GameSession
+LevelProgression --> LevelCatalog
+LevelProgression --> "0..*" CoreLevelResult
+CoreLevelResult --> LevelStats
+LevelStats ..> GameSession : derives metrics
+VictoryEvaluator ..> RuntimeState
+note bottom of LevelProgression
+Explicit finalization and advance; frozen after finalization.
+No Swing dependency or automatic level change.
+end note
 @enduml

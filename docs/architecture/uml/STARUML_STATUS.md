@@ -72,3 +72,8 @@ El diagrama de Loading incorpora parser y definición extendidos y la dependenci
 ## Sesión individual R5 — 31/10/2026
 
 El UML Movement muestra sesión, token opaco y caretaker, con snapshot privado del originator y métricas acumulativas fuera del memento. El candidato histórico permanece sin cambios; `.mdj` de StarUML sigue pendiente.
+
+
+## Finalización individual R6 — 31/10/2026
+
+El diagrama Movement incorpora evaluación pura, Strategy de score y progresión con catálogo explícito y resultados. El candidato histórico no cambia; `.mdj` de StarUML sigue pendiente.
