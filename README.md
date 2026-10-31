@@ -101,6 +101,10 @@ En Windows: `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. La [est
 
 La rama incorpora `LevelLoader.loadExtended(Path)` y `RuntimeState.fromExtended(...)` para definiciones individuales con hielo, Fragile, KeyBox, Lock y muros. Es una API del core, **no está conectada a Swing**. La gramática no ratifica OQ-08; ver [contrato y ejemplos](docs/requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md) y [pruebas](docs/testing/TEST_STRATEGY.md).
 
+## Sesión del core
+
+`GameSession` administra un `RuntimeState` inicial, movimiento, historial acotado, Undo de cinco y Restart. Es una API individual del core y **todavía no está conectada a Swing**. [Decisiones y pruebas](docs/continuity/IMPACIENCIA_MASTERPLAN.md).
+
 ## Prototipo experimental de atributos individuales
 
 `LevelLoader.loadExperimentalFragile(Path)` lee una definición C2 con Fragile y devuelve `ExperimentalFragileLevel`: una plantilla espacial inmutable y una lista de ID, posición y resistencia inicial. Conserva piso/destino, pero **no devuelve un nivel jugable**; no enviar la plantilla sola al motor como si incluyera las cajas. La carga jugable ordinaria sigue rechazando Fragile.

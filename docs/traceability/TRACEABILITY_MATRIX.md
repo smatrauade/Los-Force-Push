@@ -176,3 +176,8 @@ RF-01/03/04/06: KeyBox, Lock y muros dinámicos existen en runtime individual; E
 ## Carga externa individual R4 — experimental
 
 RF-01/02/03/04/05/06: [contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md) y fixture externo conectan definición a runtime y movimiento con hielo y entidades dinámicas. [Evidencia](../testing/TEST_STRATEGY.md#carga-externa-individual-r4--2026-10-31). No cierra OQ-07/08, no acredita puzzle resoluble ni integración Swing o aceptación TEAM.
+
+
+## Sesión individual R5 — experimental
+
+RF-07/09/10: `GameSession` implementa historial 15, Undo de cinco y presupuesto de tres, restaurando mundo/movimientos/empujes y acumulando usos; Restart restituye el estado inicial. [Hipótesis y autoridad](../continuity/IMPACIENCIA_MASTERPLAN.md) · [pruebas](../testing/TEST_STRATEGY.md#sesión-individual-r5--2026-10-31). No hay fórmula de score ni integración Swing; OQ-04/05/09 siguen abiertas oficialmente.

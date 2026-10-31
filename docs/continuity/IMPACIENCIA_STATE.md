@@ -10,6 +10,8 @@
 
 ## Estado y evidencia
 
+R5 agrega `GameSession` individual con Memento, Undo 15/5/3 y Restart; Swing no la consume. [Decisiones y plan](IMPACIENCIA_MASTERPLAN.md) · [pruebas](../testing/TEST_STRATEGY.md).
+
 R4 agrega carga externa C2 extendida individual hacia RuntimeState; [contrato y límites](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md). Swing sigue usando la ruta anterior y la extensión no ratifica OQ-08.
 
 R3 agrega KeyBox, Lock y muros dinámicos al runtime individual con asociaciones y cierre atómico; no añade TXT ni integración Swing. [Decisiones y plan](IMPACIENCIA_MASTERPLAN.md); [pruebas](../testing/TEST_STRATEGY.md).
@@ -18,7 +20,7 @@ R2 implementa runtime inmutable individual y movimiento normal/Fragile con hielo
 
 - Heredado: carga externa legacy y C2-L7, Board inmutable, movimiento cardinal con una caja normal y prototipo Swing con HUD, sprites y audio. La ruta jugable rechaza entidades especiales. PR #15 integra `LevelLoader.loadExperimentalFragile(Path)`: definición inicial inmutable con ID, posición, resistencia y terreno, no un nivel jugable. Su plantilla sola no representa las cajas frágiles.
 - Incrementos experimentales posteriores al baseline en R1: continuidad documental, sin capacidad de juego nueva. Para determinar incrementos posteriores, comparar `git log f3f91f9..HEAD` y `git diff f3f91f9..HEAD`, y contrastar implementación y pruebas efectivas.
-- Incompletos en el juego integrado: conexión de hielo y Fragile a Swing; integración de KeyBox, Lock y muros dinámicos; sesión, Undo/Restart; victoria, progresión y score; integración de servicios Swing; dos adicionales elegibles; QA integral y entregables. La existencia de callbacks o recursos no demuestra mecánicas. `FULL_TPO = INCOMPLETE`; `TEAM_ACCEPTANCE = NOT_RECORDED`.
+- Incompletos en el juego integrado: conexión de hielo y Fragile a Swing; integración de KeyBox, Lock y muros dinámicos; integración Swing de sesión, Undo/Restart; victoria, progresión y score; integración de servicios Swing; dos adicionales elegibles; QA integral y entregables. La existencia de callbacks o recursos no demuestra mecánicas. `FULL_TPO = INCOMPLETE`; `TEAM_ACCEPTANCE = NOT_RECORDED`.
 - QA Java de R1: `NOT_RUN`, por ser documental. QA histórica reportada sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: Loading 40, C2 32, Fragile 41, Movement 31 y Desktop headless 16, 160 PASS; no demuestra gameplay completo ni aceptación. [Entorno, comandos y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Cada incremento futuro identifica su propia evidencia y SHA.
 - Dependencias: contrato y firma real del consumidor Model/Movement, preservación de ID/resistencia/terreno, extensiones TXT y comportamiento no especificado; OQ-01/02/04/05/07/08/09/10/11 conservan detalles pendientes. Java/build global sigue abierto; derechos de recursos, StarUML, informe, video, revisión y defensa también requieren trabajo. El nivel ofrecido por un compañero no está verificado. Ver [TODO oficial](../../TODO.md) y [fuentes](SOURCE_REGISTRY.md).
 
@@ -37,7 +39,7 @@ Este orden prepara misiones independientes; no autoriza su ejecución. Cada una 
 | R2 | Evaluar contratos TXT → Model/Movement, consumidor real, preservación de datos y brechas antes de implementar. |
 | R3 | Núcleo individual de KeyBox, Lock y muros dinámicos; hipótesis y Observer pendientes de integración. |
 | R4 | Extensión TXT individual y adaptación a runtime implementadas; OQ-07/08 permanecen abiertas oficialmente. |
-| R5 | Estado de sesión, Undo y Restart; aplicar E07/E08/E09 y precisar bordes pendientes. |
+| R5 | Sesión individual, Undo 15/5/3 y Restart implementados; bordes oficiales y conexión Swing pendientes. |
 | R6 | Victoria, progresión y score; respetar OQ-01/09 y no inventar fórmula oficial. |
 | R7 | Integración Swing y HUD con servicios reales y estado completo. |
 | R8 | Dos adicionales elegibles, con selección y patrones justificados; OQ-10 requiere confirmación. |

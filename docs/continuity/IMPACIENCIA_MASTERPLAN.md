@@ -6,19 +6,19 @@
 
 La meta es el TPO completo con niveles externos, mecánicas, interfaz, pruebas y entregables defendibles. El baseline común es `f3f91f92829b7e8e4bd3c0c07e3af4ffb0beb142`; la rama individual parte de él. El `main` remoto observado en R2, `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, avanzó sólo en documentación frente al ancestro común. Ningún merge, rebase o incorporación es automático. Ver [estado individual](IMPACIENCIA_STATE.md) y fuentes normativas desde [AGENTS](../../AGENTS.md).
 
-AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. TO_BE: integración Swing, sesión y entregables. El runtime no vuelve jugable la definición en Swing ni agrega sintaxis TXT de hielo.
+AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; TO_BE: integración Swing y entregables. El runtime no vuelve jugable la definición en Swing.
 
 ## Cobertura por requisito
 
 | Requisito | Estado individual / dependencia |
 |---|---|
 | RF-01 | Parcial: normal/Fragile/KeyBox, ICE, Lock y muros en runtime; integración pendiente. |
-| RF-02 | Parcial: lector externo y adaptación Fragile; hielo/asociaciones TXT pendientes. |
+| RF-02 | Parcial: lector externo individual incluye hielo y asociaciones; integración Swing y contrato oficial pendientes. |
 | RF-03 | Movimiento y empuje atómicos en runtime; falta integración UI y entidades restantes. |
 | RF-04 | Hielo y caja normal en runtime; bordes no votados son hipótesis individuales. |
 | RF-05 | Fragile y E04 en runtime; aún sin integración jugable. |
 | RF-06 | KeyBox/Lock/muros en runtime individual; OQ-07 oficial y su integración pendientes. |
-| RF-07 | Sesión, historial 15/5/3 y Undo pendientes; E07/E08/E09 heredadas. |
+| RF-07 | Sesión individual con historial 15/5/3 y Undo implementados; integración y aceptación pendientes. |
 | RF-08 | Victoria/progresión pendientes; OQ-01. |
 | RF-09 | Score y métricas pendientes; OQ-09. |
 | RF-10 | HUD parcial, servicios de Undo/Restart pendientes. |
@@ -36,7 +36,7 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 | R2 | Runtime/Movement: adaptación sin pérdida, reglas autorizadas, tests y UML coherente; no integra Swing. |
 | R3 | Núcleo individual KeyBox/Lock/muros: asociaciones, cierre atómico y regresión comprobadas; Observer permanece pendiente. |
 | R4 | Extensión TXT individual y carga a runtime implementadas; OQ-07/08 siguen abiertas oficialmente y Swing no consume la ruta. |
-| R5 | Sesión/Undo/Restart: snapshots, 15/5/3 y métricas según E07–E09; bordes probados. |
+| R5 | Sesión/Undo/Restart individuales implementados y probados con snapshots 15/5/3 y métricas E07–E09. |
 | R6 | Victoria/progresión/score: acordar OQ-01/09, ejemplos y tests deterministas. |
 | R7 | Adaptar loader y Swing al runtime íntegro; preservar errores atómicos, HUD y regresión visual. |
 | R8 | Seleccionar dos adicionales elegibles con evidencia docente/equipo, patrón real y tests. |
@@ -51,9 +51,9 @@ PROBLEM → Board sólo representa cajas normales. OPTIONS → ampliar Board per
 
 PROBLEM → movimiento con hielo y rotura debe ser atómico. OPTIONS → mutar celdas incrementalmente o calcular transición antes de construir. CHOICE → `RuntimeMovementEngine` sin estado y `RuntimeMoveResult` con origen/destino/distancia/rotura. TRADEOFF → copia de lista y validación por transición; tests de bloqueo, deslizamiento y estado anterior.
 
-`INDIVIDUAL_EXPERIMENTAL_DECISION`: si una caja entra en hielo y la salida está ocupada o fuera de límites, termina en la última celda libre; si la primera celda está bloqueada, no hay empuje ni decremento. El hielo es terreno exclusivo, sin combinación ICE+GOAL ni sintaxis TXT nueva. Ninguna hipótesis cierra OQ-02/08. E03 contra pared y E04 completar el deslizamiento antes de romper se respetan; E01/E02 y D-020 mantienen la autoridad registrada en [DECISION_LOG](../decisions/DECISION_LOG.md). E08 no se implementa aquí.
+`INDIVIDUAL_EXPERIMENTAL_DECISION`: si una caja entra en hielo y la salida está ocupada o fuera de límites, termina en la última celda libre; si la primera celda está bloqueada, no hay empuje ni decremento. El hielo es terreno exclusivo, sin combinación ICE+GOAL; R4 añadió sintaxis TXT individual. Ninguna hipótesis cierra OQ-02/08. E03 contra pared y E04 completar el deslizamiento antes de romper se respetan; E01/E02 y D-020 mantienen la autoridad registrada en [DECISION_LOG](../decisions/DECISION_LOG.md). E08 no se implementa aquí.
 
-Candidatos Builder, Memento, Observer y Strategy sólo se acreditan con problema, roles, variación real, alternativa, consecuencias y pruebas de implementación. El estado inmutable no es por sí solo Memento; el futuro Observer depende de OQ-07. No se declara aceptación TEAM ni del docente.
+Candidatos Builder, Memento, Observer y Strategy sólo se acreditan con problema, roles, variación real, alternativa, consecuencias y pruebas de implementación. El estado inmutable no es por sí solo Memento; R5 implementa roles separados. El futuro Observer depende de OQ-07. No se declara aceptación TEAM ni del docente.
 
 ## Riesgos y protocolo
 
@@ -73,4 +73,10 @@ Observer GoF **no implementado**: no hay Subject con suscripciones ni observador
 
 ## Carga externa individual R4
 
-`LevelLoader.loadExtended(Path)` produce definición inmutable independiente del motor; `RuntimeState.fromExtended` preserva cajas, terreno, Lock y asociaciones. [Contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md); no cierra OQ-07/08 ni modifica D-020. El fixture combinado prueba transiciones, no resolución del puzzle. R5 sigue pendiente de autorización; Observer y StarUML `.mdj` siguen pendientes.
+`LevelLoader.loadExtended(Path)` produce definición inmutable independiente del motor; `RuntimeState.fromExtended` preserva cajas, terreno, Lock y asociaciones. [Contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md); no cierra OQ-07/08 ni modifica D-020. El fixture combinado prueba transiciones, no resolución del puzzle. R5 se implementa en la rama individual; Observer y StarUML `.mdj` siguen pendientes.
+
+## Sesión individual R5
+
+PROBLEM → Undo debe restaurar mundo y métricas de trayectoria sin borrar su costo. OPTIONS → lista interna de estados o Memento con caretaker separado. CHOICE → `GameSession` originator crea y restaura un snapshot privado; `GameMemento` es token opaco y `UndoManager` sólo almacena y limita 15 snapshots. TRADEOFF → tres responsabilidades pequeñas frente a lista interna; la encapsulación permite cambiar el contenido sin que el caretaker lo interprete. TEST → restauración exacta de cinco, límites, rotura y muros.
+
+`INDIVIDUAL_EXPERIMENTAL_DECISION`: Restart recupera el estado inicial en memoria, limpia historia y reinicia movimientos/empujes y presupuesto, conservando el total de Undo del nivel. Cambio explícito de nivel reinicia también ese total; no hay métrica global ni lectura TXT en Restart. Los intentos bloqueados no cuentan; deslizamiento, rotura y eventos de muros integran un solo empuje. No cierra OQ-04/05/09 ni atribuye ratificación de Memento. E07/E08/E09 permanecen en [DECISION_LOG](../decisions/DECISION_LOG.md).

@@ -67,3 +67,8 @@ El diagrama Movement refleja Lock, muros, asociaciones y eventos de transición 
 ## Carga externa individual R4 — 31/10/2026
 
 El diagrama de Loading incorpora parser y definición extendidos y la dependencia del adaptador desde movement hacia level. El candidato histórico permanece sin cambios; `.mdj` de StarUML sigue pendiente. La extensión es individual y Swing no la consume.
+
+
+## Sesión individual R5 — 31/10/2026
+
+El UML Movement muestra sesión, token opaco y caretaker, con snapshot privado del originator y métricas acumulativas fuera del memento. El candidato histórico permanece sin cambios; `.mdj` de StarUML sigue pendiente.

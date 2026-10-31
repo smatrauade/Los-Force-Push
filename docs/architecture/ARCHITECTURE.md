@@ -81,3 +81,8 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Carga externa individual R4 — 31/10/2026
 
 `LevelLoader.loadExtended` reutiliza lectura acotada y UTF-8 estricto; `ExtendedLevelParser` normaliza a la ruta Fragile existente y publica `ExtendedLevelDefinition` inmutable. `RuntimeState.fromExtended` adapta la definición y conserva asociaciones; `level` no depende de `movement`. Las rutas históricas y Swing no cambian. [Contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md); OQ-07/08 siguen abiertas.
+
+
+## Sesión individual R5 — 31/10/2026
+
+`GameSession` coordina `RuntimeMovementEngine` y crea/restaura su snapshot privado; `GameMemento` es token opaco y `UndoManager` caretaker limitado a 15, sin conocer contenido ni reglas. Mundo y movimientos/empujes son restaurables; usos Undo permanecen fuera del memento. El core no depende de Swing. [Decisión, política de Restart y límites](../continuity/IMPACIENCIA_MASTERPLAN.md).

@@ -115,4 +115,29 @@ ICE, Lock and dynamic walls are programmatic.
 Walls derive openness from associated locks.
 TXT and Swing remain unchanged; Observer is pending.
 end note
+package "Session individual R5" {
+  class GameSession <<Originator>> {
+    +move(direction : Direction) : RuntimeMoveResult
+    +undoFive() : UndoResult
+    +restart() : void
+    +changeLevel(initial : RuntimeState, context : String) : void
+    +historyAvailable() : int
+    +undoUsesRemaining() : int
+  }
+  interface GameMemento <<opaque>>
+  class "GameSession.Snapshot" as SessionSnapshot <<private record>>
+  class UndoManager <<Caretaker>>
+  class "GameSession.Metrics" as SessionMetrics <<record>>
+}
+GameMemento <|.. SessionSnapshot
+GameSession *-- UndoManager
+UndoManager o-- "0..15" GameMemento
+GameSession ..> SessionSnapshot : creates / restores
+SessionSnapshot --> RuntimeState
+GameSession --> RuntimeMovementEngine
+GameSession ..> SessionMetrics : exposes
+note bottom of GameSession
+Snapshot contains world, moves and pushes.
+Undo uses stay outside snapshot; Swing is not connected.
+end note
 @enduml
