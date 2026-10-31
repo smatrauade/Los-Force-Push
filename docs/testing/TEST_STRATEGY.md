@@ -418,3 +418,10 @@ Incremento basado en `01376e213b8f73e810336783aa89e7ac9d37127b`; Ubuntu, JDK 17.
 Sobre el incremento basado en `19d37f7ea8302e9f11eb7a5ee96101939643ce42`, Ubuntu y JDK 17.0.20.1: Loading 40/40, Movement 31/31, Runtime 26/26, DynamicWorld 36/36, Extended 51/51, Session 34/34, Completion 58/58, C2 32/32 y Fragile 41/41; Desktop headless 16/16 y VisualAssets 44/44, exit 0. Core con `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`; desktop incluye java.desktop. GUI interactiva, audio audible, Windows y macOS: NOT_RUN.
 
 `SPIKE_JDK_HOME=/ruta/al/jdk17 bash scripts/test-level-loading.sh --movement` ejecuta Completion y las suites core del runner. C2 y Fragile tienen entrypoints separados en el bloque filesystem. `PATH=/ruta/al/jdk17/bin:$PATH bash scripts/run-swing.sh --test` ejecuta Desktop/VisualAssets. El [MasterPlan](../continuity/IMPACIENCIA_MASTERPLAN.md#finalización-individual-r6) registra recorridos, score y límites de los fixtures resueltos.
+
+
+## Integración Swing individual R7 — 2026-10-31
+
+En Ubuntu con JDK 17.0.20.1, `--release 17 -encoding UTF-8 -Xlint:all -Werror`: Loading 40, Movement 31, Runtime 26, DynamicWorld 36, Extended 51, Session 34, Completion 58, C2 32 y Fragile 41 PASS, exit 0; Desktop headless 19/19 y VisualAssets 55/55 PASS, exit 0. `SPIKE_JDK_HOME=/ruta/al/jdk17 bash scripts/test-level-loading.sh --movement`; C2 y Fragile requieren sus entrypoints independientes del bloque filesystem. `PATH=/ruta/al/jdk17/bin:$PATH bash scripts/run-swing.sh --test` prueba desktop.
+
+Smoke gráfico real: `bash scripts/run-swing.sh --ui-test`, 14/14 PASS, exit 0 en servidor X11 local con permisos de acceso al display; comprueba campaña, HUD, Undo, Restart y score. Una ejecución inicial en sandbox no pudo conectar a X11. QA manual interactiva, escucha de audio, Windows y macOS: NOT_RUN; los WAV y dispatch no prueban audio audible. Las copias `campaign-a.txt` y `campaign-b.txt` coinciden con fixtures R6, comprobado por test.

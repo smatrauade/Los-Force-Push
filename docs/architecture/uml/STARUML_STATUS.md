@@ -77,3 +77,8 @@ El UML Movement muestra sesión, token opaco y caretaker, con snapshot privado d
 ## Finalización individual R6 — 31/10/2026
 
 El diagrama Movement incorpora evaluación pura, Strategy de score y progresión con catálogo explícito y resultados. El candidato histórico no cambia; `.mdj` de StarUML sigue pendiente.
+
+
+## Integración Swing individual R7 — 31/10/2026
+
+El diagrama desktop refleja el controlador con `LevelProgression`, proyección `RuntimeState`, callbacks y resultado. Es AS_IMPLEMENTED para este corte, sin reemplazar el candidato histórico; `.mdj` de StarUML sigue pendiente.

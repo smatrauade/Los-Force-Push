@@ -46,6 +46,9 @@ public final class LevelProgression {
     }
     public RuntimeState currentState() { return session.currentState(); }
     public GameSession.Metrics metrics() { return session.metrics(); }
+    public boolean canUndo() { return finalized == null && session.canUndo(); }
+    public int historyAvailable() { return session.historyAvailable(); }
+    public int undoUsesRemaining() { return session.undoUsesRemaining(); }
     public String levelId() { return session.levelContext(); }
     public List<LevelResult> results() { return List.copyOf(results); }
     public VictoryEvaluator.VictoryResult victory() { return evaluator.evaluate(session.currentState()); }
@@ -74,7 +77,7 @@ public final class LevelProgression {
         LevelCatalog.Entry next = catalog.levels().get(index + 1);
         final RuntimeState state;
         try { state = load(next); }
-        catch (IOException | IllegalArgumentException failure) {
+        catch (IOException | IllegalArgumentException | SecurityException failure) {
             return new AdvanceResult(AdvanceStatus.LOAD_FAILED, failure.getClass().getSimpleName());
         }
         session.changeLevel(state, next.id());

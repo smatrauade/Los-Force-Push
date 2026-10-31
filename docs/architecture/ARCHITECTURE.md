@@ -2,6 +2,8 @@
 
 Revisado 29/10/2026: contrato TXT soportado adoptado por su responsable; historia de PR #8/#9 preservada. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
 
+**Actualización R7:** la ruta jugable desktop usa `GameController → LevelProgression → RuntimeState`; los apartados anteriores a R7 conservan sus cortes históricos. La implementación actual está descrita al final de este archivo.
+
 ## Flujo implementado
 
 ~~~text
@@ -91,3 +93,8 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Finalización individual R6 — 31/10/2026
 
 `VictoryEvaluator` consulta el estado sin mutarlo; `LevelStats` toma métricas de `GameSession`; `ScoreStrategy` permite sustituir el cálculo y `WeightedPenaltyScoreStrategy` satura sin desbordar. `LevelCatalog` conserva entradas ordenadas y formatos explícitos; `LevelProgression` coordina sesión, carga y resultados inmutables, congelando acciones después del cierre hasta avanzar. No hay dependencia Swing ni persistencia. [Hipótesis, secuencias y trade-offs](../continuity/IMPACIENCIA_MASTERPLAN.md).
+
+
+## Integración Swing individual R7 — 31/10/2026
+
+`GameController` coordina `LevelProgression`, publica `GamePresentation` con estado completo y métricas y adapta el resultado del core al DTO desktop. `BoardPanel` sólo representa `RuntimeState`; `GameWindow` conserva navegación/EDT y acciones. La carga elige STANDARD/EXTENDED sin fallback y publica sólo después de crear el coordinador. La campaña contiene dos copias de fixtures verificadas. El único uso de `Board` en `BoardPanel.showBoard` adapta el subconjunto ordinario para compatibilidad de render; la ruta jugable no usa `MovementEngine` anterior. Sonido por eventos, sin lógica en pintura. Guardado, Observer GoF y aceptación TEAM siguen pendientes.

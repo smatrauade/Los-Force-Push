@@ -2,7 +2,7 @@
 
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
-**Estado:** se puede ejecutar una porción experimental con carga de niveles y movimiento básico; el TPO está incompleto. Hielo, cajas especiales jugables, Undo, Restart, victoria y puntaje todavía no están integrados en el juego Swing. La aceptación del código por el equipo no está registrada.
+**Estado:** la rama individual integra en Swing el runtime con hielo, cajas especiales, Undo, Restart, victoria y score experimental. El TPO sigue incompleto: faltan adicionales elegibles, revisión de derechos y entregables; la aceptación del equipo no está registrada.
 
 ## Inicio rápido
 
@@ -60,7 +60,9 @@ El runner Swing Bash no entrecomilla las rutas de fuentes en el archivo de argum
 
 ## Uso del juego
 
-En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir el [nivel incluido](src/desktop/resources/levels/demo.txt), o **ABRIR NIVEL TXT** para seleccionar un archivo externo compatible. Las flechas mueven al jugador y empujan una caja normal; `Esc` pausa, `M` controla el sonido y `+`/`-` cambian el zoom. Undo, Restart, guardar/cargar partida y siguiente nivel necesitan servicios todavía ausentes; sus controles permanecen deshabilitados sin callbacks operativos. El HUD muestra nivel y contadores demostrativos; la pantalla final no detecta victoria ni calcula score.
+En el menú, **NUEVA PARTIDA / DEMO** inicia una campaña de dos niveles: el primero es estándar; el segundo usa KeyBox, Lock y muros. Sus archivos están en [recursos desktop](src/desktop/resources/levels). **ABRIR NIVEL TXT** permite elegir explícitamente STANDARD o EXTENDED y jugar el archivo como nivel autónomo. Las flechas mueven y empujan; `Esc` pausa, `M` controla sonido y `+`/`-` cambian zoom. `Z` deshace cinco movimientos cuando hay al menos cinco en el historial y quedan usos; el historial conserva hasta 15 y el límite es tres usos hasta Restart o cambio de nivel. `R` reinicia el estado inicial sin releer el archivo; conserva el total de Undo del nivel para el score.
+
+Al ganar se muestra el resumen y score; **SIGUIENTE NIVEL** requiere una campaña con otro nivel. En el último se informa campaña completada. Guardar/cargar partida permanece deshabilitado. La fórmula y la extensión TXT son decisiones individuales; no ratifican OQ-01/09 ni aceptación TEAM.
 
 También se puede iniciar con un nivel externo como argumento, reemplazando la ruta por un archivo propio:
 
@@ -70,6 +72,8 @@ powershell -NoProfile -File ./scripts/run-swing.ps1 -LevelPath 'C:/niveles/mi ni
 
 ```bash
 bash scripts/run-swing.sh '/ruta/al/nivel.txt'
+# Para un TXT extendido:
+bash scripts/run-swing.sh --extended '/ruta/al/nivel-extendido.txt'
 ```
 
 La carga jugable acepta UTF-8 estricto, hasta 65.536 bytes, sin BOM: formato legacy con `#` pared, espacio piso, `.` destino, `@` jugador, `$` caja, `+` jugador en destino y `*` caja en destino; o C2-L7 con los mismos estados, separados por un espacio ASCII. Ejemplo C2:
@@ -83,11 +87,11 @@ La carga jugable acepta UTF-8 estricto, hasta 65.536 bytes, sin BOM: formato leg
 [attributes]
 ```
 
-La sección `[attributes]` debe estar vacía en la ruta jugable; se rechazan entidades especiales. La carga inválida informa el error y no reemplaza el nivel anterior. Los detalles de formato y límites están en el [contrato TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md).
+En formato STANDARD, `[attributes]` debe estar vacía y se rechazan entidades especiales; elegir EXTENDED para el contrato individual. La carga inválida informa el error y no reemplaza el nivel anterior. Los detalles de formato y límites están en el [contrato TXT](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md).
 
 ## Capacidades y pruebas
 
-El core implementa carga legacy/C2-L7, tablero inmutable y movimiento cardinal con empuje de una caja normal. Swing ofrece menú, pausa, opciones, ayuda, HUD, sprites y sonidos. La definición experimental Fragile descrita abajo **no** habilita cajas frágiles jugables. Quedan pendientes hielo, KeyBox, Lock y muros dinámicos, sesión y Undo/Restart, victoria/progresión, score y dos adicionales elegibles.
+Swing utiliza `LevelProgression` y el runtime inmutable para niveles estándar y extendidos, movimiento, entidades especiales, Undo/Restart y finalización. La campaña de ejemplo usa score individual; quedan pendientes dos adicionales elegibles, Observer real, derechos de recursos y entregables.
 
 Para comprobar el runner de escritorio sin abrir ventana, desde la raíz:
 
@@ -99,19 +103,19 @@ En Windows: `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. La [est
 
 ## Carga TXT extendida del core
 
-La rama incorpora `LevelLoader.loadExtended(Path)` y `RuntimeState.fromExtended(...)` para definiciones individuales con hielo, Fragile, KeyBox, Lock y muros. Es una API del core, **no está conectada a Swing**. La gramática no ratifica OQ-08; ver [contrato y ejemplos](docs/requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md) y [pruebas](docs/testing/TEST_STRATEGY.md).
+La rama incorpora `LevelLoader.loadExtended(Path)` y `RuntimeState.fromExtended(...)` para definiciones individuales con hielo, Fragile, KeyBox, Lock y muros. La interfaz la utiliza al elegir EXTENDED. La gramática no ratifica OQ-08; ver [contrato y ejemplos](docs/requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md) y [pruebas](docs/testing/TEST_STRATEGY.md).
 
 ## Sesión del core
 
-`GameSession` administra un `RuntimeState` inicial, movimiento, historial acotado, Undo de cinco y Restart. Es una API individual del core y **todavía no está conectada a Swing**. [Decisiones y pruebas](docs/continuity/IMPACIENCIA_MASTERPLAN.md).
+`GameSession` administra un `RuntimeState` inicial, movimiento, historial acotado, Undo de cinco y Restart. La interfaz la utiliza a través del coordinador de progresión. [Decisiones y pruebas](docs/continuity/IMPACIENCIA_MASTERPLAN.md).
 
 ## Finalización del core
 
-`VictoryEvaluator`, `ScoreStrategy` y `LevelProgression` ofrecen victoria, score individual y progresión explícita de niveles externos. La política es experimental y **no está conectada a Swing**; [decisiones y fixtures resueltos](docs/continuity/IMPACIENCIA_MASTERPLAN.md).
+`VictoryEvaluator`, `ScoreStrategy` y `LevelProgression` ofrecen victoria, score individual y progresión explícita de niveles externos. La política es experimental y la interfaz la utiliza; [decisiones y fixtures resueltos](docs/continuity/IMPACIENCIA_MASTERPLAN.md).
 
 ## Prototipo experimental de atributos individuales
 
-`LevelLoader.loadExperimentalFragile(Path)` lee una definición C2 con Fragile y devuelve `ExperimentalFragileLevel`: una plantilla espacial inmutable y una lista de ID, posición y resistencia inicial. Conserva piso/destino, pero **no devuelve un nivel jugable**; no enviar la plantilla sola al motor como si incluyera las cajas. La carga jugable ordinaria sigue rechazando Fragile.
+`LevelLoader.loadExperimentalFragile(Path)` lee una definición C2 con Fragile y devuelve `ExperimentalFragileLevel`: una plantilla espacial inmutable y una lista de ID, posición y resistencia inicial. Conserva piso/destino, pero **no devuelve un nivel jugable**; no enviar la plantilla sola al motor como si incluyera las cajas. La carga STANDARD sigue rechazando Fragile; seleccionar EXTENDED para jugar niveles especiales.
 
 El subconjunto TXT soportado fue adoptado por el responsable del módulo en [D-020](docs/decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026), sin voto TEAM adicional ni aprobación del código. [Sintaxis, ejemplos, límites, excepciones y traspaso a Model/Movement](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md); [pruebas y ejecución](docs/testing/TEST_STRATEGY.md#prototipo-experimental-de-atributos-individuales). OQ-06 está resuelta para el lector; OQ-08 conserva extensiones pendientes.
 

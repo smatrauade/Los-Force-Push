@@ -6,22 +6,22 @@
 
 La meta es el TPO completo con niveles externos, mecánicas, interfaz, pruebas y entregables defendibles. El baseline común es `f3f91f92829b7e8e4bd3c0c07e3af4ffb0beb142`; la rama individual parte de él. El `main` remoto observado en R2, `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, avanzó sólo en documentación frente al ancestro común. Ningún merge, rebase o incorporación es automático. Ver [estado individual](IMPACIENCIA_STATE.md) y fuentes normativas desde [AGENTS](../../AGENTS.md).
 
-AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; R6 implementa victoria, score y progresión individuales. TO_BE: integración Swing y entregables. El runtime no vuelve jugable la definición en Swing.
+AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing conectado al runtime y a la campaña individual. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; R6 implementa victoria, score y progresión individuales. TO_BE: adicionales, QA manual y entregables.
 
 ## Cobertura por requisito
 
 | Requisito | Estado individual / dependencia |
 |---|---|
-| RF-01 | Parcial: normal/Fragile/KeyBox, ICE, Lock y muros en runtime; integración pendiente. |
-| RF-02 | Parcial: lector externo individual incluye hielo y asociaciones; integración Swing y contrato oficial pendientes. |
-| RF-03 | Movimiento y empuje atómicos en runtime; falta integración UI y entidades restantes. |
+| RF-01 | Entidades representadas en Swing; QA manual y aceptación pendientes. |
+| RF-02 | Lector externo individual y Swing integrados; contrato oficial y aceptación pendientes. |
+| RF-03 | Movimiento y empuje del runtime conectados a Swing; QA manual pendiente. |
 | RF-04 | Hielo y caja normal en runtime; bordes no votados son hipótesis individuales. |
 | RF-05 | Fragile y E04 en runtime; aún sin integración jugable. |
-| RF-06 | KeyBox/Lock/muros en runtime individual; OQ-07 oficial y su integración pendientes. |
-| RF-07 | Sesión individual con historial 15/5/3 y Undo implementados; integración y aceptación pendientes. |
-| RF-08 | Evaluación y progresión individual en core; OQ-01 y conexión Swing pendientes. |
-| RF-09 | Métricas y score individual en core; fórmula TEAM OQ-09 e integración pendientes. |
-| RF-10 | HUD parcial; Undo/Restart implementados en core, conexión Swing pendiente. |
+| RF-06 | KeyBox/Lock/muros conectados a Swing; OQ-07 y aceptación oficiales pendientes. |
+| RF-07 | Sesión y controles 15/5/3 conectados; aceptación y bordes oficiales pendientes. |
+| RF-08 | Evaluación y progresión conectadas a Swing; OQ-01 pendiente. |
+| RF-09 | Score individual visible en Swing; fórmula TEAM OQ-09 pendiente. |
+| RF-10 | HUD y Undo/Restart conectados en Swing; QA manual y aceptación pendientes. |
 | RF-11 | Recursos presentes; integración completa, audio audible y derechos pendientes. |
 | RF-12 | Dos adicionales y patrones elegibles pendientes de OQ-10. |
 | RT-01 | Java/Swing parcial; build definitivo OQ-11. |
@@ -35,10 +35,10 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 |---|---|
 | R2 | Runtime/Movement: adaptación sin pérdida, reglas autorizadas, tests y UML coherente; no integra Swing. |
 | R3 | Núcleo individual KeyBox/Lock/muros: asociaciones, cierre atómico y regresión comprobadas; Observer permanece pendiente. |
-| R4 | Extensión TXT individual y carga a runtime implementadas; OQ-07/08 siguen abiertas oficialmente y Swing no consume la ruta. |
+| R4 | Extensión TXT individual implementada y conectada en R7; OQ-07/08 siguen abiertas oficialmente. |
 | R5 | Sesión/Undo/Restart individuales implementados y probados con snapshots 15/5/3 y métricas E07–E09. |
 | R6 | Victoria/progresión/score individuales implementados y probados; OQ-01/09 oficiales permanecen abiertas. |
-| R7 | Adaptar loader y Swing al runtime íntegro; preservar errores atómicos, HUD y regresión visual. |
+| R7 | Swing integrado al runtime, Undo, Restart, score y campaña; probado headless y smoke gráfico. |
 | R8 | Seleccionar dos adicionales elegibles con evidencia docente/equipo, patrón real y tests. |
 | R9 | QA integral por misiones separadas: niveles resolubles, plataformas, GUI/audio y licencias verificadas. |
 | R10 | Entregables independientes: StarUML `.mdj`, informe, video, README y ensayo de defensa. |
@@ -67,7 +67,7 @@ Regresión: compilar core con `--release 17 -encoding UTF-8 -Xlint:all -Werror` 
 
 PROBLEM → Lock debe activar muros sin guardar estado divergente ni dejar entidades encerradas. OPTIONS → listeners mutables persistentes o derivar apertura del estado final. CHOICE → `RuntimeState.Lock` y `DynamicWall` son valores inmutables asociados por ID; un muro abre si al menos un Lock asociado contiene KeyBox. `RuntimeMoveResult.lockChanges()` informa sólo activaciones que cambiaron en una transición confirmada. TRADEOFF → se recalcula ocupación; no hay listeners globales ni segundo estado de apertura. TEST → múltiples Lock/muros, cambios efectivos, repetición y cierre ocupado.
 
-`INDIVIDUAL_EXPERIMENTAL_DECISION`: IDs runtime por categoría; ID de cajas especiales único; cada celda especial tiene una definición; asociaciones no vacías; apertura OR entre cerrojos. Si desactivar un Lock deja un muro cerrado ocupado, se rechaza el empuje entero. El jugador abandona su casilla al empujar, por lo que no puede permanecer sobre un muro que se cierre en esa misma transición con las reglas actuales; se validan por separado el cierre hipotético y la construcción. ICE, LOCK y muro son terrenos excluyentes. Estas hipótesis son reversibles y no cierran OQ-07/08. Lock no es Goal; victoria sigue pendiente, preservando E05. E06 se aplica al desactivar, salvo la transición inválida rechazada por la hipótesis individual de integridad.
+`INDIVIDUAL_EXPERIMENTAL_DECISION`: IDs runtime por categoría; ID de cajas especiales único; cada celda especial tiene una definición; asociaciones no vacías; apertura OR entre cerrojos. Si desactivar un Lock deja un muro cerrado ocupado, se rechaza el empuje entero. El jugador abandona su casilla al empujar, por lo que no puede permanecer sobre un muro que se cierre en esa misma transición con las reglas actuales; se validan por separado el cierre hipotético y la construcción. ICE, LOCK y muro son terrenos excluyentes. Estas hipótesis son reversibles y no cierran OQ-07/08. Lock no es Goal; en R3 la victoria seguía pendiente, preservando E05. E06 se aplica al desactivar, salvo la transición inválida rechazada por la hipótesis individual de integridad.
 
 Observer GoF **no implementado**: no hay Subject con suscripciones ni observadores concretos; los eventos inmutables de transición son datos y no constituyen el patrón. Listeners persistentes con estado duplicarían la apertura derivada y dificultarían restauración/atomicidad. Evaluar Observer real al integrar consumidores de nivel con ciclo de vida explícito, sin declarar D-010 ratificada.
 
@@ -91,4 +91,8 @@ PROBLEM → RF-09/E10 requieren cálculo sustituible. OPTIONS → fórmula fija 
 
 PROBLEM → progresión no debe contaminar movimiento ni perder resultado ante un archivo inválido. CHOICE → `LevelCatalog` inmutable con IDs explícitos y formatos STANDARD/EXTENDED; `LevelProgression` carga sin fallback, conserva resultados y cambia nivel sólo tras validar carga. El cierre explícito es idempotente. Tras finalizar, move/Undo/Restart mediante el coordinador rechazan con `IllegalStateException` hasta avanzar; `GameSession` conserva su API. Al final se informa campaña completa. Sólo memoria, sin persistencia.
 
-Fixtures realmente resueltos por el motor: [A](../../src/test/resources/levels/completion-a.txt) `RIGHT` (1 movimiento, 1 empuje) y [B](../../src/test/resources/levels/completion-b.txt) `RIGHT LEFT DOWN DOWN RIGHT RIGHT UP RIGHT UP LEFT LEFT` (11 movimientos, 3 empujes). En B la Key activa Lock, abre el muro de paso y termina en Goal; se verifica E05. [Pruebas](../testing/TEST_STRATEGY.md#finalización-individual-r6--2026-10-31). Swing, Observer, elegibilidad de extras, `.mdj` y entregables pendientes.
+Fixtures realmente resueltos por el motor: [A](../../src/test/resources/levels/completion-a.txt) `RIGHT` (1 movimiento, 1 empuje) y [B](../../src/test/resources/levels/completion-b.txt) `RIGHT LEFT DOWN DOWN RIGHT RIGHT UP RIGHT UP LEFT LEFT` (11 movimientos, 3 empujes). En B la Key activa Lock, abre el muro de paso y termina en Goal; se verifica E05. [Pruebas](../testing/TEST_STRATEGY.md#finalización-individual-r6--2026-10-31). En R6, Swing, Observer, elegibilidad de extras, `.mdj` y entregables estaban pendientes.
+
+## Integración Swing individual R7
+
+IMPLEMENTED: `GameController` coordina `LevelProgression`; `GamePresentation` transporta `RuntimeState` inmutable y métricas, `BoardPanel` representa sus entidades y estado derivado. La selección STANDARD/EXTENDED es explícita; fallo de carga conserva partida. Dos niveles de `src/desktop/resources/levels` son copias verificadas de los fixtures resueltos de R6. Undo/Restart, victoria, score y avance provienen del core. Fragile con resistencia superior a tres usa sprite 3 sin cambiar el valor. GATE suena sólo si cambia un muro. TESTED_HEADLESS y TESTED_UI_SMOKE; PENDING_MANUAL_QA y audio audible. Observer GoF, adicionales elegibles, `.mdj` y entrega siguen pendientes. R8 requiere autorización.

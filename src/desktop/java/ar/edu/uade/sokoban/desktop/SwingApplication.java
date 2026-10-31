@@ -1,10 +1,9 @@
 package ar.edu.uade.sokoban.desktop;
 
-import ar.edu.uade.sokoban.level.LevelLoader;
-import ar.edu.uade.sokoban.level.LevelParser;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MoveResult;
-import ar.edu.uade.sokoban.movement.MovementEngine;
+import ar.edu.uade.sokoban.session.LevelCatalog;
+import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -40,26 +39,28 @@ public final class SwingApplication {
     private SwingApplication() { }
 
     public static void main(String[] args) {
-        if (args.length > 1) {
-            System.err.println("Uso: SwingApplication [nivel.txt]");
+        if (args.length > 2 || (args.length == 2 && !args[0].equals("--extended"))
+                || (args.length == 1 && args[0].equals("--extended"))) {
+            System.err.println("Uso: SwingApplication [nivel.txt | --extended nivel.txt]");
             System.exit(2);
         }
         Path requested = null;
-        if (args.length == 1) {
+        if (args.length > 0) {
             try {
-                requested = Path.of(args[0]);
+                requested = Path.of(args[args.length - 1]);
             } catch (InvalidPathException exception) {
                 System.err.println("Ruta de nivel invalida: " + exception.getReason());
                 System.exit(2);
             }
         }
         Path initial = requested;
+        boolean extended = args.length == 2;
         SwingUtilities.invokeLater(() -> {
             PixelTheme.install();
             GameWindow window = new GameWindow(initial);
             window.setVisible(true);
             if (initial != null) {
-                window.openLevel(initial);
+                window.openLevel(initial, extended ? LevelCatalog.Format.EXTENDED : LevelCatalog.Format.STANDARD);
             }
         });
     }
@@ -92,20 +93,16 @@ public final class SwingApplication {
         private final JCheckBox soundToggle = new JCheckBox("ACTIVAR EFECTOS DE SONIDO", true);
         private final JComboBox<String> zoomSelector = new JComboBox<>(new String[]{
                 "1x  (32 px)", "2x  (64 px)", "3x  (96 px)"});
-        private final transient GameController controller = new GameController(
-                new LevelLoader(new LevelParser()), new MovementEngine(), this);
-        private final transient Path defaultDemo;
+        private final transient GameController controller = new GameController(this);
         private transient Path currentLevel;
         private transient Path pendingLevel;
+        private transient boolean activeSession;
         private String active = MENU;
         private String optionsReturn = MENU;
         private transient UiCommands commands = UiCommands.EMPTY;
 
         private GameWindow(Path initial) {
             super("LOS FORCE PUSH  |  SOKOBAN");
-            defaultDemo = initial != null ? initial : Path.of(
-                    System.getProperty("forcepush.repo.root", "."),
-                    "src", "desktop", "resources", "levels", "demo.txt").toAbsolutePath();
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             setMinimumSize(new Dimension(880, 720));
             setSize(1190, 790);
@@ -121,10 +118,10 @@ public final class SwingApplication {
             continueButton.setEnabled(false);
             restartButton.setEnabled(false);
             pauseRestartButton.setEnabled(false);
-            pending(undoButton, "El Undo de 5 movimientos requiere el modulo del punto 4");
+            pending(undoButton, "Undo requiere cinco movimientos y usos disponibles");
             pending(saveButton, "Guardar partida requiere la funcionalidad adicional");
             pending(loadSaveButton, "Cargar partida guardada requiere la funcionalidad adicional");
-            pending(nextButton, "La progresion requiere el modulo del punto 3");
+            pending(nextButton, "No hay siguiente nivel disponible");
             installKeys();
             addWindowListener(new WindowAdapter() {
                 @Override
@@ -387,10 +384,10 @@ public final class SwingApplication {
                     "LAS CAJAS NO SE PUEDEN TIRAR",
                     "COLOCA CADA CAJA EN UN DESTINO",
                     "ESC: PAUSAR / CONTINUAR",
-                    "R: REINICIAR (AL INTEGRAR PUNTO 4)",
+                    "R: REINICIAR  /  Z: DESHACER 5",
                     "M: ACTIVAR O DESACTIVAR AUDIO",
                     "ZOOM: + Y -",
-                    "UNDO / CAJAS ESPECIALES: EN DESARROLLO"}) {
+                    "UNDO: HASTA 3 USOS POR NIVEL"}) {
                 JLabel row = label(text, PixelTheme.SMALL);
                 row.setAlignmentX(Component.CENTER_ALIGNMENT);
                 stack.add(row);
@@ -424,28 +421,30 @@ public final class SwingApplication {
         }
 
         private void startDemo() {
-            if (java.nio.file.Files.isRegularFile(defaultDemo)) {
-                openLevel(defaultDemo);
-            } else {
-                showLoadError("No se encontro demo.txt. Usa ABRIR NIVEL TXT para seleccionarlo.");
-            }
+            Path root = Path.of(System.getProperty("forcepush.repo.root", "."), "src", "desktop", "resources", "levels");
+            pendingLevel = root.resolve("campaign-a.txt");
+            controller.loadCatalog(new LevelCatalog(List.of(
+                    new LevelCatalog.Entry("nivel_1", root.resolve("campaign-a.txt"), LevelCatalog.Format.STANDARD),
+                    new LevelCatalog.Entry("nivel_2", root.resolve("campaign-b.txt"), LevelCatalog.Format.EXTENDED))));
+            pendingLevel = null;
         }
 
-        private void openLevel(Path path) {
+        private void openLevel(Path path, LevelCatalog.Format format) {
             pendingLevel = Objects.requireNonNull(path, "path");
-            controller.load(path);
+            controller.load(path, format);
             pendingLevel = null;
         }
 
         private void chooseLevel() {
+            Object choice = JOptionPane.showInputDialog(this, "Formato del nivel", "Abrir TXT",
+                    JOptionPane.QUESTION_MESSAGE, null, new String[]{"STANDARD", "EXTENDED"}, "STANDARD");
+            if (choice == null) { return; }
             JFileChooser chooser = new JFileChooser();
             chooser.setDialogTitle("Abrir nivel Sokoban (.txt)");
             chooser.setFileFilter(new FileNameExtensionFilter("Nivel TXT (*.txt)", "txt"));
-            if (currentLevel != null && currentLevel.getParent() != null) {
-                chooser.setCurrentDirectory(currentLevel.getParent().toFile());
-            }
+            if (currentLevel != null && currentLevel.getParent() != null) { chooser.setCurrentDirectory(currentLevel.getParent().toFile()); }
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                openLevel(chooser.getSelectedFile().toPath());
+                openLevel(chooser.getSelectedFile().toPath(), LevelCatalog.Format.valueOf(choice.toString()));
             }
         }
 
@@ -453,10 +452,10 @@ public final class SwingApplication {
         @Override
         public void configureUiCommands(UiCommands value) {
             commands = Objects.requireNonNull(value, "commands");
-            undoButton.setEnabled(currentLevel != null && value.undo() != null);
-            restartButton.setEnabled(currentLevel != null && value.restart() != null);
-            pauseRestartButton.setEnabled(currentLevel != null && value.restart() != null);
-            saveButton.setEnabled(currentLevel != null && value.save() != null);
+            undoButton.setEnabled(activeSession && value.undo() != null);
+            restartButton.setEnabled(activeSession && value.restart() != null);
+            pauseRestartButton.setEnabled(activeSession && value.restart() != null);
+            saveButton.setEnabled(activeSession && value.save() != null);
             loadSaveButton.setEnabled(value.loadSaved() != null);
             nextButton.setEnabled(value.nextLevel() != null);
         }
@@ -474,7 +473,7 @@ public final class SwingApplication {
 
         private void installKeys() {
             ArrowBindings.install(getRootPane(), direction -> {
-                if (GAME.equals(active) && currentLevel != null) {
+                if (GAME.equals(active) && activeSession) {
                     board.setFacing(direction);
                     controller.move(direction);
                 }
@@ -507,7 +506,7 @@ public final class SwingApplication {
                     if (undoButton.isEnabled()) {
                         runCommand(commands.undo());
                     } else {
-                        status.setText("UNDO: PENDIENTE DEL PUNTO 4");
+                        status.setText("UNDO: REQUIERE 5 MOVIMIENTOS Y USOS DISPONIBLES");
                     }
                 }
             });
@@ -548,13 +547,14 @@ public final class SwingApplication {
             levelText.setToolTipText(fullName);
             movesText.setText(String.format(java.util.Locale.ROOT, "%04d", presentation.moves()));
             pushesText.setText(String.format(java.util.Locale.ROOT, "%04d", presentation.pushes()));
-            board.showBoard(presentation.board());
+            board.showState(presentation.state());
+            activeSession = true;
             continueButton.setEnabled(true);
-            configureUiCommands(commands);
-            status.setText("CAJAS: " + presentation.board().boxCount()
-                    + "  /  DESTINOS: " + presentation.board().goalCount());
-            showScreen(GAME);
+            status.setText("UNDO: " + presentation.undoRemaining() + "  HISTORIAL: " + presentation.historyAvailable());
         }
+
+        @Override
+        public void onLevelStarted() { showScreen(GAME); }
 
         @Override
         public void onMove(MoveResult.Kind kind) {
@@ -579,7 +579,9 @@ public final class SwingApplication {
                     + "MOVIMIENTOS: " + result.moves() + "<br>"
                     + "EMPUJES: " + result.pushes() + "<br>"
                     + "UNDO: " + result.undoUses() + "<br><br>"
-                    + "PUNTAJE: " + result.score() + "</div></html>");
+                    + "PUNTAJE: " + result.score()
+                    + (commands.nextLevel() == null ? "<br><br>CAMPANA COMPLETADA" : "") + "</div></html>");
+            continueButton.setEnabled(false);
             audio.play(SoundManager.Effect.VICTORY);
             showScreen(FINISH);
         }

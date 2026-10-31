@@ -7,13 +7,16 @@ public interface GameView {
     void render(GamePresentation presentation);
     void showLoadError(String message);
 
+    /** A successful load or advance may navigate to the game screen. */
+    default void onLevelStarted() { }
+
     /** Optional event so SFX does not execute during paint/repaint. */
     default void onMove(MoveResult.Kind kind) { }
 
-    /** Called by future victory/session code. This UI does not infer win or score. */
+    /** Displays a result calculated by the core; the UI does not infer win or score. */
     default void showVictory(LevelResult result) { }
 
-    /** Presentation-only callbacks injected when companion modules exist. */
+    /** Presentation callbacks supplied according to the current session state. */
     default void configureUiCommands(UiCommands commands) { }
 
     /** Allows future gameplay events to request sound without owning audio devices. */

@@ -186,3 +186,8 @@ RF-07/09/10: `GameSession` implementa historial 15, Undo de cinco y presupuesto 
 ## Finalización individual R6 — experimental
 
 RF-08/09: evaluador puro, Strategy individual y progresión explícita entre dos fixtures externos resueltos; E05/E09/E10 preservadas. [Hipótesis y recorridos](../continuity/IMPACIENCIA_MASTERPLAN.md) · [pruebas](../testing/TEST_STRATEGY.md#finalización-individual-r6--2026-10-31). OQ-01/09 oficiales siguen abiertas; Swing, aceptación TEAM y entrega integral pendientes.
+
+
+## Integración Swing individual R7 — experimental
+
+RF-01–10: la interfaz consume runtime, sesión y progresión individuales, con carga STANDARD/EXTENDED y dos niveles de campaña. [Pruebas headless y smoke](../testing/TEST_STRATEGY.md#integración-swing-individual-r7--2026-10-31); QA manual, elegibilidad RF-12, derechos y aceptación TEAM permanecen pendientes. Las hipótesis individuales no cierran OQ oficiales.
