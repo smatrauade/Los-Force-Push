@@ -2,7 +2,9 @@
 
 AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado) y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) (reconciliación académica y política de continuidad), están integrados.
 
-**Supersesión acotada del 29/10:** [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) registra la delegación expresa del responsable TXT: OQ-06 resuelta y OQ-08 parcialmente resuelta para lo implementado. Las frases anteriores «sintaxis/rangos/errores aún sin ratificar» de AGENTS y los comentarios de fuentes Java/UML describen el corte previo; no son una negativa actual de autoridad ni un bloqueo del contrato soportado. Se preservan sus bytes por la restricción explícita de esta misión de no editar política ni ejecutables/diagramas. La política de trabajo continúa vigente; decisiones y pendientes actuales se consultan en los registros canónicos, sin necesidad del chat o adjunto privado.
+**Supersesión acotada del 29/10:** [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) registra la delegación expresa del responsable TXT: OQ-06 resuelta y OQ-08 parcialmente resuelta para lo implementado. La frase anterior de AGENTS «sintaxis/rangos/errores aún sin ratificar» describía el corte previo y fue corregida en R1; los comentarios históricos de fuentes Java/UML conservan ese corte y no son un bloqueo del contrato soportado. Sus bytes permanecen sin cambios. La política de trabajo continúa vigente; decisiones y pendientes actuales se consultan en los registros canónicos, sin necesidad del chat o adjunto privado.
+
+Para la rama individual `impaciencia`, seguir [IMPACIENCIA_STATE](IMPACIENCIA_STATE.md) antes de las fuentes normativas y el código/pruebas del dominio. Ese estado no reemplaza la autoridad oficial ni el registro de eventos de CURRENT_STATE.
 
 ## Ruta principal
 

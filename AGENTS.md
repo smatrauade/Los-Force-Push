@@ -24,7 +24,7 @@ Leer este contrato y el [índice de rehidratación](docs/continuity/REHYDRATION_
 
 Contrastar HEAD, commits posteriores, PRs y archivos vivos. Los PR #8 (C2-L7) y #9 (Punto 5) están integrados; [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) identifica sus merges históricos. Leer además los [contratos del Punto 5](docs/punto5/INTEGRACION_EQUIPO.md), su [manifiesto](docs/punto5/ASSETS_REGISTRO_SHA256.csv) y [derechos pendientes](docs/punto5/USO_IA_Y_LICENCIAS.md). Una cápsula o checkpoint no representa HEAD ni concede autorización. La QA Windows previa a PR #5 se consulta sólo para historia/procedencia, no como ruta principal del software actual.
 
-La implementación se localiza en `src/main/java` y `src/desktop/java`; [README](README.md) y [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contienen comandos actuales. El parser jugable C2 acepta sólo las siete combinaciones existentes y rechaza atributos/especiales. El prototipo ExperimentalFragileParser produce una definición inmutable separada, no jugable; el siguiente trabajo TXT/niveles requiere revisión del contrato e integración futura, con sintaxis/rangos/errores aún sin ratificar. No inferir mecánicas del nombre de un sprite o de un callback de `UiCommands`.
+La implementación se localiza en `src/main/java` y `src/desktop/java`; [README](README.md) y [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) contienen comandos actuales. El parser jugable C2 acepta sólo las siete combinaciones existentes y rechaza atributos/especiales. El prototipo ExperimentalFragileParser produce una definición inmutable separada, no jugable; el subconjunto TXT soportado, incluidos sintaxis, rangos y errores existentes, fue adoptado por el responsable TXT en D-020; la integración runtime y las extensiones futuras siguen pendientes. No inferir mecánicas del nombre de un sprite o de un callback de `UiCommands`.
 
 
 ## Gate de rehidratación verificable
@@ -70,7 +70,7 @@ Detener mutaciones afectadas si falta acceso, hay repo incorrecto, cambios inesp
 
 ## Continuidad autónoma desde el repositorio
 
-Un agente nuevo debe poder comenzar **solo con el clon**: leer `AGENTS.md` → `docs/continuity/REHYDRATION_INDEX.md` → documentos vivos indicados. Git/GitHub y el HEAD actual prevalecen sobre cápsulas históricas; los originales académicos externos se referencian mediante `SOURCE_REGISTRY.md` sin inventar su disponibilidad. Registrar hechos comprobados, fuentes y límites, estado implementado frente a propuesto, pruebas actuales frente a históricas, OQ abiertas y próximo gate; no exigir memoria de chats anteriores.
+Un agente nuevo debe poder comenzar **solo con el clon**: leer `AGENTS.md` → `docs/continuity/REHYDRATION_INDEX.md` → documentos vivos indicados. En la rama experimental `impaciencia`, continuar por [IMPACIENCIA_STATE](docs/continuity/IMPACIENCIA_STATE.md) antes de las fuentes normativas y del código del dominio. Git/GitHub y el HEAD actual prevalecen sobre cápsulas históricas; los originales académicos externos se referencian mediante `SOURCE_REGISTRY.md` sin inventar su disponibilidad. Registrar hechos comprobados, fuentes y límites, estado implementado frente a propuesto, pruebas actuales frente a históricas, OQ abiertas y próximo gate; no exigir memoria de chats anteriores.
 
 Mantener actualizados en el mismo incremento los documentos vivos **afectados por impacto**, sin duplicar el registro de votos E01-E11 ni crear resúmenes rivales. `FRESHNESS_POLICY.md` define el cierre; no exigir reescrituras cosméticas ni revisión humana externa para cambios solo documentales autorizados.
 

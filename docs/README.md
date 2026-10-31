@@ -11,6 +11,7 @@ Revisado 29/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](con
 | Contratos entre módulos | [INTEGRACION_EQUIPO](punto5/INTEGRACION_EQUIPO.md) |
 | Pruebas, QA combinado y verificador | [TEST_STRATEGY](testing/TEST_STRATEGY.md), [TRACEABILITY_MATRIX](traceability/TRACEABILITY_MATRIX.md), [checklist Punto 5](punto5/CHECKLIST_PRUEBAS.md) |
 | Recursos y licencias | [ASSET_POLICY](assets/ASSET_POLICY.md), [manifiesto](punto5/ASSETS_REGISTRO_SHA256.csv), [IA/derechos](punto5/USO_IA_Y_LICENCIAS.md) |
+| Continuidad individual en `impaciencia` | [IMPACIENCIA_STATE](continuity/IMPACIENCIA_STATE.md) |
 | Estado, fuentes y mantenimiento | [CURRENT_STATE](continuity/CURRENT_STATE.md), [SOURCE_REGISTRY](continuity/SOURCE_REGISTRY.md), [FRESHNESS_POLICY](continuity/FRESHNESS_POLICY.md), [TODO](../TODO.md) |
 | Antecedentes técnicos | [BIBLIOGRAPHY](references/BIBLIOGRAPHY.md), [GITHUB_REFERENCES](references/GITHUB_REFERENCES.md), [HISTORICAL_EVIDENCE](testing/HISTORICAL_EVIDENCE.md) |
 

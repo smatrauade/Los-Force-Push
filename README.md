@@ -8,7 +8,7 @@ Trabajo integrador de **Procesos de Desarrollo de Software, UADE**, profesor Jon
 
 ## Estado integrado
 
-Revisado el **29/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push/pull/9) integra la interfaz pixel art y [PR #8](https://github.com/smatrauade/Los-Force-Push/pull/8) integra TXT C2-L7. También están MERGED el [PR #10](https://github.com/smatrauade/Los-Force-Push/pull/10) de continuidad, #11 de definición Fragile experimental y [#12](https://github.com/smatrauade/Los-Force-Push/pull/12) del contrato candidato y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) de reconciliación académica y continuidad autocontenida. Fragile continúa sin gameplay. El contrato candidato de #12 fue formalizado después para el subconjunto soportado por decisión del responsable TXT, sin voto TEAM nuevo; ver D-020. El merge de #8 es 565376452affa9b2146569e5da27dbfd1ee9d4f0; identifica ese evento, no un HEAD permanente. Consultar [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) y Git/GitHub antes de continuar.
+Revisado el **29/10/2026**. [PR #9](https://github.com/smatrauade/Los-Force-Push/pull/9) integra la interfaz pixel art y [PR #8](https://github.com/smatrauade/Los-Force-Push/pull/8) integra TXT C2-L7. También están MERGED el [PR #10](https://github.com/smatrauade/Los-Force-Push/pull/10) de continuidad, #11 de definición Fragile experimental y [#12](https://github.com/smatrauade/Los-Force-Push/pull/12) del contrato candidato y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) de reconciliación académica y continuidad autocontenida; [PR #14](https://github.com/smatrauade/Los-Force-Push/pull/14) reconcilia documentación y [PR #15](https://github.com/smatrauade/Los-Force-Push/pull/15) integra la carga externa de definición Fragile y su contrato. Fragile continúa sin gameplay. El contrato candidato de #12 fue formalizado después para el subconjunto soportado por decisión del responsable TXT, sin voto TEAM nuevo; ver D-020. El merge de #8 es 565376452affa9b2146569e5da27dbfd1ee9d4f0; identifica ese evento, no un HEAD permanente. Consultar [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) y Git/GitHub antes de continuar.
 
 | Área | Implementado | Pendiente |
 |---|---|---|
@@ -102,7 +102,7 @@ El verificador no usa red, no escribe, no compila y no modifica Git. Valida text
 
 ## Continuidad y colaboración
 
-Leer [AGENTS](AGENTS.md) → [índice de rehidratación](docs/continuity/REHYDRATION_INDEX.md) → requisitos/preguntas → decisiones → arquitectura → pruebas/TODO. Los [contratos del Punto 5](docs/punto5/INTEGRACION_EQUIPO.md) describen los puntos de extensión reales; [ASSET_POLICY](docs/assets/ASSET_POLICY.md) conserva la deuda de licencias.
+Leer [AGENTS](AGENTS.md) → [índice de rehidratación](docs/continuity/REHYDRATION_INDEX.md) → requisitos/preguntas → decisiones → arquitectura → pruebas/TODO. En `impaciencia`, consultar además el [estado experimental](docs/continuity/IMPACIENCIA_STATE.md) después del índice. Los [contratos del Punto 5](docs/punto5/INTEGRACION_EQUIPO.md) describen los puntos de extensión reales; [ASSET_POLICY](docs/assets/ASSET_POLICY.md) conserva la deuda de licencias.
 
 El próximo paso TXT/niveles es contrastar el contrato soportado con la firma/commit real del consumidor Model/Movement. Sintaxis, rango y validación soportados se adoptaron por autoridad expresa del responsable TXT; E04/E08 tienen regla TEAM decidida. Su implementación y las extensiones especiales requieren otro alcance y datos del consumidor.
 
