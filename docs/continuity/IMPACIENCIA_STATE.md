@@ -10,6 +10,8 @@
 
 ## Estado y evidencia
 
+R4 agrega carga externa C2 extendida individual hacia RuntimeState; [contrato y límites](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md). Swing sigue usando la ruta anterior y la extensión no ratifica OQ-08.
+
 R3 agrega KeyBox, Lock y muros dinámicos al runtime individual con asociaciones y cierre atómico; no añade TXT ni integración Swing. [Decisiones y plan](IMPACIENCIA_MASTERPLAN.md); [pruebas](../testing/TEST_STRATEGY.md).
 
 R2 implementa runtime inmutable individual y movimiento normal/Fragile con hielo programático; no integra Swing ni amplía TXT. Diseño, hipótesis, fases y criterios en [IMPACIENCIA_MASTERPLAN](IMPACIENCIA_MASTERPLAN.md); pruebas en [TEST_STRATEGY](../testing/TEST_STRATEGY.md).
@@ -34,7 +36,7 @@ Este orden prepara misiones independientes; no autoriza su ejecución. Cada una 
 |---|---|
 | R2 | Evaluar contratos TXT → Model/Movement, consumidor real, preservación de datos y brechas antes de implementar. |
 | R3 | Núcleo individual de KeyBox, Lock y muros dinámicos; hipótesis y Observer pendientes de integración. |
-| R4 | Extensiones TXT y carga jugable de entidades; dependen de OQ-07/08. |
+| R4 | Extensión TXT individual y adaptación a runtime implementadas; OQ-07/08 permanecen abiertas oficialmente. |
 | R5 | Estado de sesión, Undo y Restart; aplicar E07/E08/E09 y precisar bordes pendientes. |
 | R6 | Victoria, progresión y score; respetar OQ-01/09 y no inventar fórmula oficial. |
 | R7 | Integración Swing y HUD con servicios reales y estado completo. |
@@ -51,4 +53,4 @@ Analizar diferencias por contratos, invariantes, comportamiento, pruebas y decis
 
 Para un agente nuevo: [AGENTS](../../AGENTS.md) → [REHYDRATION_INDEX](REHYDRATION_INDEX.md) → este estado → fuentes normativas y decisiones vinculadas → código y pruebas del dominio autorizado. Completar las once lecturas íntegras obligatorias de AGENTS, verificar Git/GitHub y aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md). Las cápsulas son historia, no autorización; no se necesita este chat ni archivos temporales para reconstruir la continuidad.
 
-R3 extiende el consumidor individual con mecánicas dinámicas, sin incorporar el trabajo de compañeros. La siguiente misión requiere autorización y comparación con main; no se inicia automáticamente.
+R3 extiende el consumidor individual con mecánicas dinámicas, sin incorporar el trabajo de compañeros. R4 integra la carga externa individual con ese runtime; la siguiente misión requiere autorización y comparación con main, y no se inicia automáticamente.

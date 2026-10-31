@@ -3,6 +3,7 @@ package ar.edu.uade.sokoban.movement;
 import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.level.Cell;
 import ar.edu.uade.sokoban.level.ExperimentalFragileLevel;
+import ar.edu.uade.sokoban.level.ExtendedLevelDefinition;
 import ar.edu.uade.sokoban.level.Level;
 import ar.edu.uade.sokoban.level.Occupant;
 import ar.edu.uade.sokoban.level.Position;
@@ -160,6 +161,21 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
         List<Box> fragile = definition.fragileBoxes().stream()
                 .map(b -> Box.fragile(b.id(), b.position(), b.initialResistance())).toList();
         return fromBoard(definition.spatialTemplate(), fragile);
+    }
+    public static RuntimeState fromExtended(ExtendedLevelDefinition definition) {
+        Objects.requireNonNull(definition, "definition");
+        RuntimeState base = fromDefinition(definition.base());
+        List<List<Ground>> terrain = new ArrayList<>();
+        for (List<Ground> row : base.terrain()) { terrain.add(new ArrayList<>(row)); }
+        definition.ice().forEach(p -> terrain.get(p.row()).set(p.column(), Ground.ICE));
+        List<Lock> locks = definition.locks().stream().map(l -> new Lock(l.id(), l.position())).toList();
+        List<DynamicWall> walls = definition.walls().stream()
+                .map(w -> new DynamicWall(w.id(), w.position(), w.lockIds())).toList();
+        locks.forEach(l -> terrain.get(l.position().row()).set(l.position().column(), Ground.LOCK));
+        walls.forEach(w -> terrain.get(w.position().row()).set(w.position().column(), Ground.DYNAMIC_WALL));
+        List<Box> boxes = new ArrayList<>(base.boxes());
+        definition.keys().forEach(k -> boxes.add(Box.key(k.id(), k.position())));
+        return new RuntimeState(terrain, base.player(), boxes, locks, walls);
     }
     private static RuntimeState fromBoard(Board board, List<Box> fragile) {
         List<List<Ground>> terrain = new ArrayList<>();

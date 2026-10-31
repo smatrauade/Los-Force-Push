@@ -6,7 +6,7 @@
 
 La meta es el TPO completo con niveles externos, mecánicas, interfaz, pruebas y entregables defendibles. El baseline común es `f3f91f92829b7e8e4bd3c0c07e3af4ffb0beb142`; la rama individual parte de él. El `main` remoto observado en R2, `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, avanzó sólo en documentación frente al ancestro común. Ningún merge, rebase o incorporación es automático. Ver [estado individual](IMPACIENCIA_STATE.md) y fuentes normativas desde [AGENTS](../../AGENTS.md).
 
-AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. TO_BE: integración TXT/runtime/UI, entidades restantes, sesión y entregables. El runtime no vuelve jugable la definición en Swing ni agrega sintaxis TXT de hielo.
+AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. TO_BE: integración Swing, sesión y entregables. El runtime no vuelve jugable la definición en Swing ni agrega sintaxis TXT de hielo.
 
 ## Cobertura por requisito
 
@@ -35,7 +35,7 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 |---|---|
 | R2 | Runtime/Movement: adaptación sin pérdida, reglas autorizadas, tests y UML coherente; no integra Swing. |
 | R3 | Núcleo individual KeyBox/Lock/muros: asociaciones, cierre atómico y regresión comprobadas; Observer permanece pendiente. |
-| R4 | Extensión TXT y carga jugable de entidades: acordar contratos y OQ-07/08, preservar compatibilidad y validar entrada. |
+| R4 | Extensión TXT individual y carga a runtime implementadas; OQ-07/08 siguen abiertas oficialmente y Swing no consume la ruta. |
 | R5 | Sesión/Undo/Restart: snapshots, 15/5/3 y métricas según E07–E09; bordes probados. |
 | R6 | Victoria/progresión/score: acordar OQ-01/09, ejemplos y tests deterministas. |
 | R7 | Adaptar loader y Swing al runtime íntegro; preservar errores atómicos, HUD y regresión visual. |
@@ -70,3 +70,7 @@ PROBLEM → Lock debe activar muros sin guardar estado divergente ni dejar entid
 `INDIVIDUAL_EXPERIMENTAL_DECISION`: IDs runtime por categoría; ID de cajas especiales único; cada celda especial tiene una definición; asociaciones no vacías; apertura OR entre cerrojos. Si desactivar un Lock deja un muro cerrado ocupado, se rechaza el empuje entero. El jugador abandona su casilla al empujar, por lo que no puede permanecer sobre un muro que se cierre en esa misma transición con las reglas actuales; se validan por separado el cierre hipotético y la construcción. ICE, LOCK y muro son terrenos excluyentes. Estas hipótesis son reversibles y no cierran OQ-07/08. Lock no es Goal; victoria sigue pendiente, preservando E05. E06 se aplica al desactivar, salvo la transición inválida rechazada por la hipótesis individual de integridad.
 
 Observer GoF **no implementado**: no hay Subject con suscripciones ni observadores concretos; los eventos inmutables de transición son datos y no constituyen el patrón. Listeners persistentes con estado duplicarían la apertura derivada y dificultarían restauración/atomicidad. Evaluar Observer real al integrar consumidores de nivel con ciclo de vida explícito, sin declarar D-010 ratificada.
+
+## Carga externa individual R4
+
+`LevelLoader.loadExtended(Path)` produce definición inmutable independiente del motor; `RuntimeState.fromExtended` preserva cajas, terreno, Lock y asociaciones. [Contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md); no cierra OQ-07/08 ni modifica D-020. El fixture combinado prueba transiciones, no resolución del puzzle. R5 sigue pendiente de autorización; Observer y StarUML `.mdj` siguen pendientes.

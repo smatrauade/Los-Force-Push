@@ -129,4 +129,27 @@ Legacy dimensions / C2 logical dimensions bound assembly work.
 C2 attributes/special entities are rejected; grammar not ratified.
 Board keeps the same final invariants for direct construction.
 end note
+package "Individual extended loading R4" {
+  class ExtendedLevelParser <<stateless>> {
+    +parse(text : String) : ExtendedLevelDefinition
+  }
+  class ExtendedLevelDefinition <<immutable record>>
+  class "ExtendedLevelDefinition.Key" as ExtendedKey <<record>>
+  class "ExtendedLevelDefinition.Lock" as ExtendedLock <<record>>
+  class "ExtendedLevelDefinition.Wall" as ExtendedWall <<record>>
+  class RuntimeState <<movement adapter>> {
+    +fromExtended(definition : ExtendedLevelDefinition) : RuntimeState
+  }
+}
+LevelLoader ..> ExtendedLevelParser : loadExtended(Path)
+ExtendedLevelParser ..> ExperimentalFragileParser : normalizes and delegates
+ExtendedLevelParser ..> ExtendedLevelDefinition
+ExtendedLevelDefinition --> "0..*" ExtendedKey
+ExtendedLevelDefinition --> "0..*" ExtendedLock
+ExtendedLevelDefinition --> "0..*" ExtendedWall
+RuntimeState ..> ExtendedLevelDefinition : adapts
+note bottom of ExtendedLevelDefinition
+Individual experimental extension; no level-to-movement dependency.
+No Swing integration or TEAM ratification.
+end note
 @enduml

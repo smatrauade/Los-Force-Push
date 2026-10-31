@@ -76,3 +76,8 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Mundo dinámico individual R3 — 31/10/2026
 
 `RuntimeState` agrega KeyBox, Lock y DynamicWall inmutables y asociaciones explícitas. La apertura se deriva de ocupación final por KeyBox; se rechaza atómicamente un cierre con ocupante. `RuntimeMoveResult.lockChanges()` informa cambios efectivos. Esta colaboración no implementa Observer GoF: no hay suscripción ni observadores; [alternativas y límites](../continuity/IMPACIENCIA_MASTERPLAN.md). El UML candidato sigue TO_BE, Swing/TXT no consumen el modelo y OQ-07/08 permanecen abiertas.
+
+
+## Carga externa individual R4 — 31/10/2026
+
+`LevelLoader.loadExtended` reutiliza lectura acotada y UTF-8 estricto; `ExtendedLevelParser` normaliza a la ruta Fragile existente y publica `ExtendedLevelDefinition` inmutable. `RuntimeState.fromExtended` adapta la definición y conserva asociaciones; `level` no depende de `movement`. Las rutas históricas y Swing no cambian. [Contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md); OQ-07/08 siguen abiertas.

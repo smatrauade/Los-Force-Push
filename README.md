@@ -2,7 +2,7 @@
 
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
-**Estado:** se puede ejecutar una porción experimental con carga de niveles y movimiento básico; el TPO está incompleto. Hielo, cajas especiales jugables, Undo, Restart, victoria y puntaje todavía no están implementados. La aceptación del código por el equipo no está registrada.
+**Estado:** se puede ejecutar una porción experimental con carga de niveles y movimiento básico; el TPO está incompleto. Hielo, cajas especiales jugables, Undo, Restart, victoria y puntaje todavía no están integrados en el juego Swing. La aceptación del código por el equipo no está registrada.
 
 ## Inicio rápido
 
@@ -96,6 +96,10 @@ bash scripts/run-swing.sh --test
 ```
 
 En Windows: `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md) incluye comandos y suites independientes para C2 y Fragile, plataformas y límites. Una ejecución histórica reportó 160 casos PASS de Loading, C2, Fragile, Movement y Desktop headless sobre el código identificado allí; no certifica el TPO completo, gameplay especial ni aceptación grupal. Las pruebas GUI, manuales y audio requieren sus propias evidencias.
+
+## Carga TXT extendida del core
+
+La rama incorpora `LevelLoader.loadExtended(Path)` y `RuntimeState.fromExtended(...)` para definiciones individuales con hielo, Fragile, KeyBox, Lock y muros. Es una API del core, **no está conectada a Swing**. La gramática no ratifica OQ-08; ver [contrato y ejemplos](docs/requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md) y [pruebas](docs/testing/TEST_STRATEGY.md).
 
 ## Prototipo experimental de atributos individuales
 

@@ -171,3 +171,8 @@ RF-01/02/03/04/05: `RuntimeState.fromDefinition` conserva terreno, jugador, norm
 ## Mundo dinámico individual R3 — experimental
 
 RF-01/03/04/06: KeyBox, Lock y muros dinámicos existen en runtime individual; E06 se aplica bajo hipótesis de integridad, E05 queda preservada sin implementar victoria. [Decisiones](../continuity/IMPACIENCIA_MASTERPLAN.md) y [evidencia](../testing/TEST_STRATEGY.md#mundo-dinámico-individual-r3--2026-10-31). No hay cierre oficial de OQ-07/08, Observer, TXT especial ni integración Swing.
+
+
+## Carga externa individual R4 — experimental
+
+RF-01/02/03/04/05/06: [contrato individual](../requirements/IMPACIENCIA_RUNTIME_TXT_CONTRACT.md) y fixture externo conectan definición a runtime y movimiento con hielo y entidades dinámicas. [Evidencia](../testing/TEST_STRATEGY.md#carga-externa-individual-r4--2026-10-31). No cierra OQ-07/08, no acredita puzzle resoluble ni integración Swing o aceptación TEAM.

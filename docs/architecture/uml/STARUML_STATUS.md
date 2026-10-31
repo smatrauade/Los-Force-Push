@@ -62,3 +62,8 @@ El diagrama Movement incorpora `RuntimeState`, cajas tipadas, resultado y motor 
 ## Mundo dinámico individual R3 — 31/10/2026
 
 El diagrama Movement refleja Lock, muros, asociaciones y eventos de transición derivados; Observer GoF permanece pendiente. El `.mdj` de StarUML sigue pendiente; el candidato v0.5 se conserva sin cambios. [Hipótesis y alternativas](../../continuity/IMPACIENCIA_MASTERPLAN.md).
+
+
+## Carga externa individual R4 — 31/10/2026
+
+El diagrama de Loading incorpora parser y definición extendidos y la dependencia del adaptador desde movement hacia level. El candidato histórico permanece sin cambios; `.mdj` de StarUML sigue pendiente. La extensión es individual y Swing no la consume.
