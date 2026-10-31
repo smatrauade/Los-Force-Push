@@ -2,6 +2,7 @@
 [CmdletBinding()]
 param(
     [string]$LevelPath,
+    [switch]$Extended,
     [switch]$Test,
     [switch]$UiTest
 )
@@ -11,7 +12,18 @@ $runDirectory = $null
 $created = $false
 $exitCode = 1
 try {
+    if ($Test -and $UiTest) { throw '-Test and -UiTest cannot be combined.' }
+    if (($Test -or $UiTest) -and ($Extended -or -not [string]::IsNullOrWhiteSpace($LevelPath))) {
+        throw 'Test modes cannot be combined with -LevelPath or -Extended.'
+    }
+    if ($Extended -and [string]::IsNullOrWhiteSpace($LevelPath)) { throw '-Extended requires -LevelPath.' }
     $root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
+    $explicitLevel = -not [string]::IsNullOrEmpty($LevelPath)
+    if ($explicitLevel) {
+        # Relative input is interpreted against the caller's working directory.
+        $LevelPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($LevelPath)
+        if (-not (Test-Path -LiteralPath $LevelPath -PathType Leaf)) { throw 'Level file does not exist.' }
+    }
     $jdkHome = $env:SPIKE_JDK_HOME
     if ([string]::IsNullOrEmpty($jdkHome)) { $jdkHome = $env:JAVA_HOME }
     if (-not [string]::IsNullOrEmpty($jdkHome)) {
@@ -53,11 +65,6 @@ try {
     [IO.File]::WriteAllLines($sourceList, $sourceLines, (New-Object Text.UTF8Encoding($false)))
     & $compiler '-J-Dfile.encoding=UTF-8' --release 17 --limit-modules java.base,java.desktop -encoding UTF-8 -Xlint:all -Werror -d $classes ('@' + $sourceList)
     if ($LASTEXITCODE -ne 0) { throw 'Swing compilation failed.' }
-    $explicitLevel = -not [string]::IsNullOrEmpty($LevelPath)
-    if ($explicitLevel) {
-        # Resolve relative input against the caller's CWD, not the script directory.
-        $LevelPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($LevelPath)
-    }
     # Java resources stay on the classpath (sprites + WAVs); no copies in source tree.
     $resources = Join-Path $root 'src/desktop/resources'
     $classPath = $classes + [IO.Path]::PathSeparator + $resources
@@ -72,6 +79,7 @@ try {
     } else {
         $javaArgs += 'ar.edu.uade.sokoban.desktop.SwingApplication'
     }
+    if ($Extended) { $javaArgs += '--extended' }
     if ($Test -or ($explicitLevel -and -not $UiTest)) {
         & $runtime @javaArgs $LevelPath
     } else {

@@ -419,6 +419,9 @@ public final class SwingApplication {
         private JPanel buildFinish() {
             JPanel card = centerStack("NIVEL COMPLETADO", "RESUMEN FINAL");
             JPanel stack = stackOf(card);
+            // The result grows at the end of the campaign. Let the stack size
+            // itself and keep every action reachable on smaller displays.
+            stack.setPreferredSize(null);
             victoryData.setHorizontalAlignment(SwingConstants.CENTER);
             victoryData.setAlignmentX(Component.CENTER_ALIGNMENT);
             stack.add(victoryData);
@@ -434,7 +437,12 @@ public final class SwingApplication {
             menu.addActionListener(event -> navigate(MENU));
             addStackButton(stack, menu);
             stack.add(Box.createVerticalGlue());
-            return card;
+            JScrollPane scroll = new JScrollPane(card);
+            scroll.setBorder(BorderFactory.createEmptyBorder());
+            scroll.getVerticalScrollBar().setUnitIncrement(24);
+            JPanel screen = new JPanel(new BorderLayout());
+            screen.add(scroll, BorderLayout.CENTER);
+            return screen;
         }
 
         private JPanel buildReplay() {

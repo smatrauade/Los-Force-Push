@@ -62,3 +62,7 @@ Analizar diferencias por contratos, invariantes, comportamiento, pruebas y decis
 Para un agente nuevo: [AGENTS](../../AGENTS.md) → [REHYDRATION_INDEX](REHYDRATION_INDEX.md) → este estado → fuentes normativas y decisiones vinculadas → código y pruebas del dominio autorizado. Completar las once lecturas íntegras obligatorias de AGENTS, verificar Git/GitHub y aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md). Las cápsulas son historia, no autorización; no se necesita este chat ni archivos temporales para reconstruir la continuidad.
 
 R3 extiende el consumidor individual con mecánicas dinámicas, sin incorporar el trabajo de compañeros. R4 integra la carga externa individual con ese runtime; la siguiente misión requiere autorización y comparación con main, y no se inicia automáticamente.
+
+## Compatibilidad Windows R9W.1
+
+La [evidencia nativa](../testing/IMPACIENCIA_WINDOWS_COMPATIBILITY.md) documenta runners PowerShell, regresión, selector TXT y el ajuste de accesibilidad de la pantalla final. La elegibilidad académica, derechos y aceptación TEAM permanecen pendientes; R10 requiere autorización separada.

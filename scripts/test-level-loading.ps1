@@ -1,6 +1,6 @@
 # Windows PowerShell 5.1 / PowerShell 7; no shell emulation or build framework.
 [CmdletBinding()]
-param([switch]$IncludeMovement)
+param([switch]$IncludeMovement, [switch]$Full)
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
@@ -48,8 +48,10 @@ try {
     $coreDirectories = @(
         'src/main/java/ar/edu/uade/sokoban/level'
         'src/main/java/ar/edu/uade/sokoban/movement'
+        'src/main/java/ar/edu/uade/sokoban/session'
         'src/test/java/ar/edu/uade/sokoban/level'
         'src/test/java/ar/edu/uade/sokoban/movement'
+        'src/test/java/ar/edu/uade/sokoban/session'
     )
     $sources = @($coreDirectories | ForEach-Object {
         Get-ChildItem -LiteralPath (Join-Path $root $_) -Recurse -File -Filter '*.java'
@@ -67,7 +69,18 @@ try {
     & $compiler @compileArgs
     if ($LASTEXITCODE -ne 0) { throw 'Java compilation failed.' }
     $testClasses = @('ar.edu.uade.sokoban.level.LevelLoadingTest')
-    if ($IncludeMovement) { $testClasses += 'ar.edu.uade.sokoban.movement.MovementTest' }
+    if ($IncludeMovement -or $Full) { $testClasses += 'ar.edu.uade.sokoban.movement.MovementTest' }
+    if ($Full) {
+        $testClasses += @(
+            'ar.edu.uade.sokoban.movement.RuntimeMovementTest'
+            'ar.edu.uade.sokoban.movement.DynamicWorldTest'
+            'ar.edu.uade.sokoban.level.ExtendedLevelTest'
+            'ar.edu.uade.sokoban.session.GameSessionTest'
+            'ar.edu.uade.sokoban.session.CompletionTest'
+            'ar.edu.uade.sokoban.level.C2LevelLoadingTest'
+            'ar.edu.uade.sokoban.level.ExperimentalFragileParserTest'
+        )
+    }
     foreach ($testClass in $testClasses) {
         $testArgs = @('--limit-modules', 'java.base', ('-Djava.io.tmpdir=' + $runDirectory),
             '-cp', $classes, $testClass, (Join-Path $root 'src/test/resources/levels'))

@@ -14,24 +14,19 @@ Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrado
 
 No se requieren Maven, Gradle ni bibliotecas Java externas. Sprites, sonidos y demo están en el repositorio; no hace falta descargar ZIP ni instalar Python/Pillow para jugar. Para el verificador documental son necesarios Git, Bash y Python 3.9 o superior; son herramientas opcionales para ejecutar el juego.
 
-Clonar y entrar al directorio (con acceso al repositorio):
-
-```bash
-git clone https://github.com/smatrauade/Los-Force-Push.git
-cd Los-Force-Push
-```
-
-El clon obtiene la rama predeterminada del remoto. `impaciencia` es una rama experimental local y no se presupone publicada.
-
 ### Windows — PowerShell
 
-Desde la raíz del proyecto, comprobar ambas herramientas y ejecutar:
+Para una carpeta de destino todavía inexistente, clonar la rama individual y ejecutarla:
 
 ```powershell
+git clone --branch impaciencia --single-branch https://github.com/smatrauade/Los-Force-Push.git
+cd Los-Force-Push
 java -version
 javac -version
-powershell -NoProfile -File ./scripts/run-swing.ps1
+powershell.exe -NoProfile -File .\scripts\run-swing.ps1
 ```
+
+Si ya existe un clon, usar su carpeta y comprobar la rama activa antes de ejecutar; no clonar encima. `impaciencia` es la implementación individual y no sustituye a `main` ni implica aceptación del equipo.
 
 En PowerShell 7 se puede usar `pwsh -NoProfile -File ./scripts/run-swing.ps1`. Si `javac` no se encuentra, instalar o seleccionar un JDK completo. El runner selecciona `SPIKE_JDK_HOME`, luego `JAVA_HOME` y finalmente el PATH; si alguna de esas variables apunta a un JDK inexistente, corregirla. Para seleccionar uno específicamente en la sesión actual:
 
@@ -68,7 +63,10 @@ También se puede iniciar con un nivel externo como argumento, reemplazando la r
 
 ```powershell
 powershell -NoProfile -File ./scripts/run-swing.ps1 -LevelPath 'C:/niveles/mi nivel.txt'
+powershell.exe -NoProfile -File .\scripts\run-swing.ps1 -LevelPath '.\src\desktop\resources\levels\campaign-c.txt' -Extended
 ```
+
+`-Extended` exige `-LevelPath` y selecciona explícitamente el formato extendido; no se infiere del contenido. Las rutas relativas se interpretan desde el directorio actual y se pueden usar rutas absolutas entre comillas. Los modos `-Test` y `-UiTest` no aceptan niveles ni `-Extended`.
 
 ```bash
 bash scripts/run-swing.sh '/ruta/al/nivel.txt'
@@ -100,6 +98,15 @@ bash scripts/run-swing.sh --test
 ```
 
 En Windows: `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. La [estrategia de pruebas](docs/testing/TEST_STRATEGY.md) incluye comandos y suites independientes para C2 y Fragile, plataformas y límites. Una ejecución histórica reportó 160 casos PASS de Loading, C2, Fragile, Movement y Desktop headless sobre el código identificado allí; no certifica el TPO completo, gameplay especial ni aceptación grupal. Las pruebas GUI, manuales y audio requieren sus propias evidencias.
+
+En Windows, además:
+
+```powershell
+powershell.exe -NoProfile -File .\scripts\test-level-loading.ps1 -Full
+powershell.exe -NoProfile -File .\scripts\run-swing.ps1 -UiTest
+```
+
+`-Full` ejecuta las nueve suites core; el smoke de UI requiere escritorio y automatiza acciones, sin sustituir una prueba humana ni verificar audio audible. [Evidencia Windows y límites](docs/testing/IMPACIENCIA_WINDOWS_COMPATIBILITY.md). Para problemas de sonido, comprobar dispositivo y que el mute no esté activado; la aplicación puede ejecutarse sin sonido.
 
 ## Estilos y repetición
 
@@ -145,7 +152,7 @@ El [índice documental](docs/README.md) incluye más guías, entre ellas instala
 
 ## Desarrollo individual y oficial
 
-Este README pertenece a `impaciencia`, rama individual de experimentación creada desde el baseline oficial de `main`. Sus cambios no reemplazan automáticamente decisiones ni trabajo del equipo. La rama puede existir sólo localmente: consultar Git y [su estado de continuidad](docs/continuity/IMPACIENCIA_STATE.md) antes de continuar o intentar obtenerla. El estado de `main` y sus integraciones se consulta en Git/GitHub y [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
+Este README pertenece a `impaciencia`, rama individual de experimentación creada desde el baseline oficial de `main`. Sus cambios no reemplazan automáticamente decisiones ni trabajo del equipo. Consultar Git y [su estado de continuidad](docs/continuity/IMPACIENCIA_STATE.md) antes de continuar. El estado de `main` y sus integraciones se consulta en Git/GitHub y [CURRENT_STATE](docs/continuity/CURRENT_STATE.md).
 
 ## Contexto académico
 

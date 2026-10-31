@@ -77,6 +77,7 @@ try {
     $cases = @(
         @{ Name = 'legacy'; Arguments = @(); Movement = $false; InvalidToken = '' },
         @{ Name = 'movement'; Arguments = @('-IncludeMovement'); Movement = $true; InvalidToken = '' },
+        @{ Name = 'full'; Arguments = @('-Full'); Movement = $true; InvalidToken = ''; Full = $true },
         @{ Name = 'case-insensitive'; Arguments = @('-includemovement'); Movement = $true; InvalidToken = '' },
         @{ Name = 'abbreviation'; Arguments = @('-IncludeMov'); Movement = $true; InvalidToken = '' },
         @{ Name = 'typo'; Arguments = @('-IncludeMovment'); Movement = $false; InvalidToken = 'IncludeMovment' },
@@ -94,7 +95,9 @@ try {
             $temp = Join-Path $owned ([string]$sequence)
             New-Item -ItemType Directory -Path $temp | Out-Null
             $result = Invoke-Runner $shell.Path $case.Arguments $temp
-            $loading = [regex]::Matches($result.Stdout, '(?m)^PASS \d{2} ').Count
+            # Other suites also emit numbered PASS lines; only count Loading's prefix.
+            $loadingOutput = ($result.Stdout -split '(?m)^RESULT: 40 PASS, 0 FAIL\r?$')[0]
+            $loading = [regex]::Matches($loadingOutput, '(?m)^PASS \d{2} ').Count
             $movement = [regex]::Matches($result.Stdout, '(?m)^MOVEMENT PASS \d{2} ').Count
             $javaStarted = ($result.Stdout + $result.Stderr) -match '(?m)^(javac |openjdk version |java version )'
             $summary = $result.Stdout -match '(?m)^(MOVEMENT )?RESULT:'
@@ -124,6 +127,14 @@ try {
                     $ok = $ok -and $result.Stdout -match '(?m)^MOVEMENT RESULT: 31 PASS, 0 FAIL\r?$'
                 } else {
                     $ok = $ok -and $result.Stdout -notmatch '(?m)^MOVEMENT '
+                }
+                if ($case.ContainsKey('Full') -and $case.Full) {
+                    foreach ($summaryLine in @('RUNTIME RESULT: 26 PASS, 0 FAIL', 'DYNAMIC RESULT: 36 PASS, 0 FAIL',
+                        'EXTENDED RESULT: 51 PASS, 0 FAIL', 'SESSION RESULT: 34 PASS, 0 FAIL',
+                        'COMPLETION RESULT: 58 PASS, 0 FAIL', 'C2 RESULT: 32 PASS, 0 FAIL',
+                        'FRAGILE RESULT: 41 PASS, 0 FAIL')) {
+                        $ok = $ok -and $result.Stdout.Contains($summaryLine)
+                    }
                 }
             }
             $status = 'FAIL'
