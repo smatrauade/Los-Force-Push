@@ -83,6 +83,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'UI asset tests failed.' }
         & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.DesktopExtensionsTest' $root
         if ($LASTEXITCODE -ne 0) { throw 'Desktop extension tests failed.' }
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.CampaignAcceptanceTest' $root
+        if ($LASTEXITCODE -ne 0) { throw 'Campaign acceptance tests failed.' }
     }
     $exitCode = 0
 } catch {

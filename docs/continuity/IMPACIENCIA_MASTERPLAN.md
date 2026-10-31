@@ -6,7 +6,7 @@
 
 La meta es el TPO completo con niveles externos, mecánicas, interfaz, pruebas y entregables defendibles. El baseline común es `f3f91f92829b7e8e4bd3c0c07e3af4ffb0beb142`; la rama individual parte de él. El `main` remoto observado en R2, `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, avanzó sólo en documentación frente al ancestro común. Ningún merge, rebase o incorporación es automático. Ver [estado individual](IMPACIENCIA_STATE.md) y fuentes normativas desde [AGENTS](../../AGENTS.md).
 
-AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing conectado al runtime y a la campaña individual. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; R6 implementa victoria, score y progresión individuales. TO_BE: adicionales, QA manual y entregables.
+AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing conectado al runtime y a la campaña individual. R4 aporta sintaxis TXT individual de hielo y asociaciones. R5 incorpora sesión, historial y Restart; R6 implementa victoria, score y progresión individuales. R8 incorpora dos candidatos técnicos adicionales. TO_BE: aceptación académica, QA manual y entregables.
 
 ## Cobertura por requisito
 
@@ -40,7 +40,7 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 | R6 | Victoria/progresión/score individuales implementados y probados; OQ-01/09 oficiales permanecen abiertas. |
 | R7 | Swing integrado al runtime, Undo, Restart, score y campaña; probado headless y smoke gráfico. |
 | R8 | Dos candidatos técnicos individuales y Observer implementados; elegibilidad académica y selección TEAM pendientes. |
-| R9 | QA integral por misiones separadas: niveles resolubles, plataformas, GUI/audio y licencias verificadas. |
+| R9 | Campaña de tres niveles con testigos y QA automatizada; plataformas, GUI/audio humanos y derechos pendientes. |
 | R10 | Entregables independientes: StarUML `.mdj`, informe, video, README y ensayo de defensa. |
 
 Cada fase requiere autorización, comparación con `main`, contratos, tests relevantes, documentación por impacto y evidencia del SHA probado. Ninguna fila habilita automáticamente la siguiente.
@@ -112,3 +112,7 @@ PROBLEM → familias visuales coherentes frente a cambios parciales. ALTERNATIVE
 PROBLEM → reconstruir la trayectoria sin tocar sesión ni reutilizar el historial Undo acotado. ALTERNATIVES → guardar estados completos o comandos. WHY_THIS_PATTERN → comandos de movimiento ejecutables con el motor real; trace conserva estado inicial/final y `ReplayPlayer` ejecuta pasos. TRADEOFF → recálculo y límite 10.000; superar el límite deshabilita la repetición hasta reiniciar, sin truncamiento silencioso. Undo elimina cinco comandos, Restart limpia, avanzar preserva el último replay completado. Verificación compara estado completo antes de habilitar; una discrepancia deshabilita replay sin cambiar victoria.
 
 PROBLEM → presentar cambios de Lock sin duplicar estado mutable. ALTERNATIVES → llamadas directas o Observer acotado por ventana. WHY_THIS_PATTERN → subject con suscripción/baja y dos observadores reales, proyección y sonido; eventos MOVE/UNDO/RESTART/LEVEL_CHANGE sólo para diferencias confirmadas. TRADEOFF → comparación de snapshots; los observadores no calculan ni mutan muros. El sonido LOCK/GATE sólo se emite para MOVE. No hay listeners globales; cierre de ventana libera suscripciones.
+
+## Aceptación individual R9
+
+La campaña agrega `campaign-c.txt`: dos movimientos RIGHT llevan una Fragile de resistencia 2 por hielo al Goal con resistencia 1. Los tres archivos, testigos, métricas, matriz de evidencia y procedimiento humano están en [aceptación R9](../testing/IMPACIENCIA_R9_ACCEPTANCE.md). Los dos primeros niveles R7 se conservan. Robot quedó bloqueado por el portal gráfico; las acciones Swing del smoke no equivalen a teclado físico. La aceptación TEAM, elegibilidad RF-12, derechos, audio audible y plataformas externas siguen pendientes.

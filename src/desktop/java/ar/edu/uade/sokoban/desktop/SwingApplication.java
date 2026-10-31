@@ -515,7 +515,8 @@ public final class SwingApplication {
             pendingLevel = root.resolve("campaign-a.txt");
             controller.loadCatalog(new LevelCatalog(List.of(
                     new LevelCatalog.Entry("nivel_1", root.resolve("campaign-a.txt"), LevelCatalog.Format.STANDARD),
-                    new LevelCatalog.Entry("nivel_2", root.resolve("campaign-b.txt"), LevelCatalog.Format.EXTENDED))));
+                    new LevelCatalog.Entry("nivel_2", root.resolve("campaign-b.txt"), LevelCatalog.Format.EXTENDED),
+                    new LevelCatalog.Entry("nivel_3", root.resolve("campaign-c.txt"), LevelCatalog.Format.EXTENDED))));
             pendingLevel = null;
         }
 

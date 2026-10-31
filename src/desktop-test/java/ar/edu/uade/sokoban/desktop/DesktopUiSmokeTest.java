@@ -72,6 +72,11 @@ public final class DesktopUiSmokeTest {
                 key(frame, "R"); check(findText(frame, "0000"), "restart counters");
                 for (String direction : List.of("RIGHT", "LEFT", "DOWN", "DOWN", "RIGHT", "RIGHT", "UP", "RIGHT", "UP", "LEFT", "LEFT")) { key(frame, direction); }
                 check(findText(frame, "PUNTAJE: 9715"), "campaign score includes undo");
+                check(button(frame, "SIGUIENTE NIVEL").isEnabled(), "third level available");
+                button(frame, "SIGUIENTE NIVEL").doClick();
+                check(findText(frame, "NIVEL_3"), "third HUD");
+                key(frame, "RIGHT"); key(frame, "RIGHT");
+                check(findText(frame, "PUNTAJE: 9955"), "fragile ice victory");
                 check(!button(frame, "SIGUIENTE NIVEL").isEnabled(), "campaign end");
             });
             System.out.println("UI SMOKE RESULT: " + passed + " PASS, 0 FAIL");

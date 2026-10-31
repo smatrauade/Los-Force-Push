@@ -196,3 +196,7 @@ RF-01–10: la interfaz consume runtime, sesión y progresión individuales, con
 ## Extras y Observer individuales R8 — experimental
 
 RF-12: selector de estilos y replay son dos candidatos técnicos con Abstract Factory y Command, respectivamente; Observer de Lock es colaboración separada, no un tercer extra. [Roles, pruebas y autoridad](../continuity/IMPACIENCIA_MASTERPLAN.md#extras-y-observer-individuales-r8) · [QA](../testing/TEST_STRATEGY.md#extras-y-observer-individuales-r8--2026-10-31). Elegibilidad académica no confirmada, selección TEAM de replay no registrada y OQ-10 abierta.
+
+## Evidencia experimental R9
+
+La [matriz de aceptación y testigos](../testing/IMPACIENCIA_R9_ACCEPTANCE.md) vincula las mecánicas de movimiento, hielo, Fragile, KeyBox/Lock/muros, sesión, victoria y extras con pruebas actuales sobre una campaña individual de tres TXT. No altera requisitos, decisiones TEAM ni OQ; QA humana y aceptación académica siguen pendientes.

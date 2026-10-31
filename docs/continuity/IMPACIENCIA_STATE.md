@@ -12,7 +12,7 @@
 
 R8 integra tres familias visuales, replay determinista y Observer de notificación. Son dos candidatos técnicos individuales, sin aceptación académica o selección TEAM de replay; OQ-10 sigue abierta. [Patrones y límites](IMPACIENCIA_MASTERPLAN.md) · [QA](../testing/TEST_STRATEGY.md).
 
-R7 integra Swing con el runtime y campaña de dos niveles; Undo/Restart, score y entidades especiales utilizan el core. [Plan y límites](IMPACIENCIA_MASTERPLAN.md) · [QA](../testing/TEST_STRATEGY.md). Los apartados R2–R6 describen sus cortes históricos anteriores a esta integración.
+R7 integró Swing con el runtime y una campaña inicial de dos niveles; R9 añade un tercer nivel resuelto con hielo y Fragile; Undo/Restart, score y entidades especiales utilizan el core. [Plan y límites](IMPACIENCIA_MASTERPLAN.md) · [QA](../testing/TEST_STRATEGY.md). Los apartados R2–R6 describen sus cortes históricos anteriores a esta integración.
 
 R6 agrega evaluación de victoria, Strategy de score y progresión de niveles externos en core individual; no integra Swing. [Política, fixtures y límites](IMPACIENCIA_MASTERPLAN.md).
 
@@ -49,7 +49,7 @@ Este orden prepara misiones independientes; no autoriza su ejecución. Cada una 
 | R6 | Victoria, progresión y score individuales implementados; OQ-01/09 oficiales siguen abiertas. |
 | R7 | Integración Swing con runtime, HUD, sesión y campaña implementada; QA manual pendiente. |
 | R8 | Dos candidatos técnicos y Observer implementados; selección y elegibilidad RF-12 requieren confirmación. |
-| R9 | QA integral y entregables en misiones independientes: pruebas y niveles; QA visual/sonora y licencias; StarUML e informe; video, README y ensayo de defensa. |
+| R9 | Campaña de tres niveles y aceptación automatizada; QA humana, audio audible, plataformas y derechos pendientes. [Evidencia y guía](../testing/IMPACIENCIA_R9_ACCEPTANCE.md). |
 
 ## Sincronización con main
 
