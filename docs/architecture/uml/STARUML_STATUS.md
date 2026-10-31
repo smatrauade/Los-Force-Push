@@ -57,3 +57,8 @@ No se alteraron diagramas ni arquitectura funcional en este cierre. Las notas an
 ## Runtime individual R2 — 31/10/2026
 
 El diagrama Movement incorpora `RuntimeState`, cajas tipadas, resultado y motor sin estado, junto al motor heredado. Este modelo inmutable sustituye para este incremento las entidades mutables ilustrativas del candidato, evitando duplicar ocupación y preservando snapshots; no ratifica el candidato ni acredita StarUML. TXT de hielo, integración Swing y `.mdj` siguen pendientes. Ver [plan y decisiones](../../continuity/IMPACIENCIA_MASTERPLAN.md).
+
+
+## Mundo dinámico individual R3 — 31/10/2026
+
+El diagrama Movement refleja Lock, muros, asociaciones y eventos de transición derivados; Observer GoF permanece pendiente. El `.mdj` de StarUML sigue pendiente; el candidato v0.5 se conserva sin cambios. [Hipótesis y alternativas](../../continuity/IMPACIENCIA_MASTERPLAN.md).

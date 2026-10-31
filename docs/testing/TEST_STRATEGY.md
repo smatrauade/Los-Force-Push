@@ -390,3 +390,10 @@ bash scripts/verify-repo-readonly.sh
 ```
 
 Para C2 y Fragile, compilar y ejecutar los entrypoints independientes usando el bloque de la sección filesystem de este documento; el runner core los compila pero no los ejecuta. Seleccionar el JDK en PATH para el runner Swing Bash. La validación del verificador no acredita licencias. La gramática externa no incluye hielo y la interfaz no consume el nuevo estado.
+
+
+## Mundo dinámico individual R3 — 2026-10-31
+
+Sobre el incremento R3 basado en `a6ec86bcc87e835d0a0e841a74fe9304b3312740`, Ubuntu y JDK 17.0.20.1: Loading 40/40, Movement 31/31, runtime R2 26/26, mundo dinámico 36/36, C2 32/32 y Fragile 41/41; Desktop headless 16/16 y VisualAssets 44/44, todos exit 0. Compilación core `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`; desktop usa además java.desktop. Son resultados de este incremento, no aceptación de juego completo. GUI interactiva, audio audible, Windows/macOS y aceptación TEAM: NOT_RUN.
+
+`SPIKE_JDK_HOME=/ruta/al/jdk17 bash scripts/test-level-loading.sh --movement` ejecuta Loading, Movement, runtime y mundo dinámico; C2 y Fragile requieren los entrypoints del bloque filesystem de esta estrategia. `PATH=/ruta/al/jdk17/bin:$PATH bash scripts/run-swing.sh --test` ejecuta Desktop/VisualAssets. Verificador: `bash scripts/verify-repo-readonly.sh`. Las asociaciones y el cierre son hipótesis individuales; Observer no está implementado.

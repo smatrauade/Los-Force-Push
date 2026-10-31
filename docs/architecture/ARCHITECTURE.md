@@ -71,3 +71,8 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Runtime individual R2 — 31/10/2026
 
 `RuntimeState` conserva terreno, jugador y cajas normales/Fragile inmutables; adapta `Level` o `ExperimentalFragileLevel` sin sustituir Fragile por BOX. `RuntimeMovementEngine` calcula transición y `RuntimeMoveResult` expone caja, destino, distancia y rotura. El motor `MovementEngine` y Swing no se modifican ni consumen este runtime. El hielo sólo se construye programáticamente. La decisión de un valor inmutable sin proyección Board evita dos ocupaciones divergentes y se aparta de relaciones mutables del UML candidato, que sigue TO_BE. [Opciones, límites e hipótesis](../continuity/IMPACIENCIA_MASTERPLAN.md).
+
+
+## Mundo dinámico individual R3 — 31/10/2026
+
+`RuntimeState` agrega KeyBox, Lock y DynamicWall inmutables y asociaciones explícitas. La apertura se deriva de ocupación final por KeyBox; se rechaza atómicamente un cierre con ocupante. `RuntimeMoveResult.lockChanges()` informa cambios efectivos. Esta colaboración no implementa Observer GoF: no hay suscripción ni observadores; [alternativas y límites](../continuity/IMPACIENCIA_MASTERPLAN.md). El UML candidato sigue TO_BE, Swing/TXT no consumen el modelo y OQ-07/08 permanecen abiertas.

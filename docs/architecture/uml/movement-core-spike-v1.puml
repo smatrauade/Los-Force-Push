@@ -71,11 +71,18 @@ package "Runtime individual R2" {
     +terrain() : List<List<Ground>>
     +player() : Position
     +boxes() : List<Box>
+    +locks() : List<Lock>
+    +walls() : List<DynamicWall>
+    +lockActive(id : String) : boolean
+    +wallOpen(position : Position) : boolean
     +fromLevel(level : Level) : RuntimeState
     +fromDefinition(definition : ExperimentalFragileLevel) : RuntimeState
     +boxAt(position : Position) : Box
   }
   class "RuntimeState.Box" as RuntimeBox <<record>>
+  class "RuntimeState.Lock" as RuntimeLock <<record>>
+  class "RuntimeState.DynamicWall" as RuntimeWall <<record>>
+  class "RuntimeMoveResult.LockChange" as LockChange <<record>>
   enum "RuntimeState.Ground" as Ground
   enum "RuntimeState.BoxKind" as BoxKind
   class RuntimeMovementEngine <<stateless>> {
@@ -87,8 +94,13 @@ package "Runtime individual R2" {
     +boxDestination() : Position
     +boxDistance() : int
     +broken() : boolean
+    +lockChanges() : List<LockChange>
   }
 }
+RuntimeState --> "0..*" RuntimeLock
+RuntimeState --> "0..*" RuntimeWall
+RuntimeWall ..> RuntimeLock : associated IDs
+RuntimeMoveResult --> "0..*" LockChange
 RuntimeState --> "0..*" RuntimeBox
 RuntimeState --> Ground
 RuntimeBox --> BoxKind
@@ -99,6 +111,8 @@ RuntimeMoveResult --> RuntimeState
 RuntimeMoveResult --> RuntimeBox
 note bottom of RuntimeState
 Independent immutable runtime, not Board projection.
-ICE is programmatic; TXT and Swing remain unchanged.
+ICE, Lock and dynamic walls are programmatic.
+Walls derive openness from associated locks.
+TXT and Swing remain unchanged; Observer is pending.
 end note
 @enduml

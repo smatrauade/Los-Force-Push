@@ -10,11 +10,13 @@
 
 ## Estado y evidencia
 
+R3 agrega KeyBox, Lock y muros dinámicos al runtime individual con asociaciones y cierre atómico; no añade TXT ni integración Swing. [Decisiones y plan](IMPACIENCIA_MASTERPLAN.md); [pruebas](../testing/TEST_STRATEGY.md).
+
 R2 implementa runtime inmutable individual y movimiento normal/Fragile con hielo programático; no integra Swing ni amplía TXT. Diseño, hipótesis, fases y criterios en [IMPACIENCIA_MASTERPLAN](IMPACIENCIA_MASTERPLAN.md); pruebas en [TEST_STRATEGY](../testing/TEST_STRATEGY.md).
 
 - Heredado: carga externa legacy y C2-L7, Board inmutable, movimiento cardinal con una caja normal y prototipo Swing con HUD, sprites y audio. La ruta jugable rechaza entidades especiales. PR #15 integra `LevelLoader.loadExperimentalFragile(Path)`: definición inicial inmutable con ID, posición, resistencia y terreno, no un nivel jugable. Su plantilla sola no representa las cajas frágiles.
 - Incrementos experimentales posteriores al baseline en R1: continuidad documental, sin capacidad de juego nueva. Para determinar incrementos posteriores, comparar `git log f3f91f9..HEAD` y `git diff f3f91f9..HEAD`, y contrastar implementación y pruebas efectivas.
-- Incompletos en el juego integrado: conexión de hielo y Fragile a Swing; KeyBox, Lock y muros dinámicos; sesión, Undo/Restart; victoria, progresión y score; integración de servicios Swing; dos adicionales elegibles; QA integral y entregables. La existencia de callbacks o recursos no demuestra mecánicas. `FULL_TPO = INCOMPLETE`; `TEAM_ACCEPTANCE = NOT_RECORDED`.
+- Incompletos en el juego integrado: conexión de hielo y Fragile a Swing; integración de KeyBox, Lock y muros dinámicos; sesión, Undo/Restart; victoria, progresión y score; integración de servicios Swing; dos adicionales elegibles; QA integral y entregables. La existencia de callbacks o recursos no demuestra mecánicas. `FULL_TPO = INCOMPLETE`; `TEAM_ACCEPTANCE = NOT_RECORDED`.
 - QA Java de R1: `NOT_RUN`, por ser documental. QA histórica reportada sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: Loading 40, C2 32, Fragile 41, Movement 31 y Desktop headless 16, 160 PASS; no demuestra gameplay completo ni aceptación. [Entorno, comandos y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Cada incremento futuro identifica su propia evidencia y SHA.
 - Dependencias: contrato y firma real del consumidor Model/Movement, preservación de ID/resistencia/terreno, extensiones TXT y comportamiento no especificado; OQ-01/02/04/05/07/08/09/10/11 conservan detalles pendientes. Java/build global sigue abierto; derechos de recursos, StarUML, informe, video, revisión y defensa también requieren trabajo. El nivel ofrecido por un compañero no está verificado. Ver [TODO oficial](../../TODO.md) y [fuentes](SOURCE_REGISTRY.md).
 
@@ -31,8 +33,8 @@ Este orden prepara misiones independientes; no autoriza su ejecución. Cada una 
 | Misión | Objetivo y dependencia principal |
 |---|---|
 | R2 | Evaluar contratos TXT → Model/Movement, consumidor real, preservación de datos y brechas antes de implementar. |
-| R3 | Movimiento especial, hielo y Fragile, sujeto a E03/E04 y detalles pendientes. |
-| R4 | KeyBox, Lock y muros; asociaciones y cierre dependen de OQ-07/08. |
+| R3 | Núcleo individual de KeyBox, Lock y muros dinámicos; hipótesis y Observer pendientes de integración. |
+| R4 | Extensiones TXT y carga jugable de entidades; dependen de OQ-07/08. |
 | R5 | Estado de sesión, Undo y Restart; aplicar E07/E08/E09 y precisar bordes pendientes. |
 | R6 | Victoria, progresión y score; respetar OQ-01/09 y no inventar fórmula oficial. |
 | R7 | Integración Swing y HUD con servicios reales y estado completo. |
@@ -49,4 +51,4 @@ Analizar diferencias por contratos, invariantes, comportamiento, pruebas y decis
 
 Para un agente nuevo: [AGENTS](../../AGENTS.md) → [REHYDRATION_INDEX](REHYDRATION_INDEX.md) → este estado → fuentes normativas y decisiones vinculadas → código y pruebas del dominio autorizado. Completar las once lecturas íntegras obligatorias de AGENTS, verificar Git/GitHub y aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md). Las cápsulas son historia, no autorización; no se necesita este chat ni archivos temporales para reconstruir la continuidad.
 
-R2 implementa un consumidor individual de la definición Fragile, sin incorporar el trabajo de compañeros. La siguiente misión requiere autorización y comparación con main; no se inicia automáticamente.
+R3 extiende el consumidor individual con mecánicas dinámicas, sin incorporar el trabajo de compañeros. La siguiente misión requiere autorización y comparación con main; no se inicia automáticamente.

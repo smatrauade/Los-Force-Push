@@ -6,18 +6,18 @@
 
 La meta es el TPO completo con niveles externos, mecánicas, interfaz, pruebas y entregables defendibles. El baseline común es `f3f91f92829b7e8e4bd3c0c07e3af4ffb0beb142`; la rama individual parte de él. El `main` remoto observado en R2, `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, avanzó sólo en documentación frente al ancestro común. Ningún merge, rebase o incorporación es automático. Ver [estado individual](IMPACIENCIA_STATE.md) y fuentes normativas desde [AGENTS](../../AGENTS.md).
 
-AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. TO_BE: integración TXT/runtime/UI, entidades restantes, sesión y entregables. El runtime no vuelve jugable la definición en Swing ni agrega sintaxis TXT de hielo.
+AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado normal; runtime inmutable individual con cajas normales/Fragile/KeyBox, Lock, muros, movimiento e hielo construidos programáticamente; Swing anterior con callbacks pendientes. TO_BE: integración TXT/runtime/UI, entidades restantes, sesión y entregables. El runtime no vuelve jugable la definición en Swing ni agrega sintaxis TXT de hielo.
 
 ## Cobertura por requisito
 
 | Requisito | Estado individual / dependencia |
 |---|---|
-| RF-01 | Parcial: normal/Fragile e ICE en runtime; KeyBox, Lock y muros pendientes. |
+| RF-01 | Parcial: normal/Fragile/KeyBox, ICE, Lock y muros en runtime; integración pendiente. |
 | RF-02 | Parcial: lector externo y adaptación Fragile; hielo/asociaciones TXT pendientes. |
 | RF-03 | Movimiento y empuje atómicos en runtime; falta integración UI y entidades restantes. |
 | RF-04 | Hielo y caja normal en runtime; bordes no votados son hipótesis individuales. |
 | RF-05 | Fragile y E04 en runtime; aún sin integración jugable. |
-| RF-06 | KeyBox/Lock/muros y asociaciones OQ-07 pendientes. |
+| RF-06 | KeyBox/Lock/muros en runtime individual; OQ-07 oficial y su integración pendientes. |
 | RF-07 | Sesión, historial 15/5/3 y Undo pendientes; E07/E08/E09 heredadas. |
 | RF-08 | Victoria/progresión pendientes; OQ-01. |
 | RF-09 | Score y métricas pendientes; OQ-09. |
@@ -34,8 +34,8 @@ AS_IMPLEMENTED: carga legacy/C2 y definición Fragile inicial; motor heredado no
 | Fase | Dependencia, resultado y gate mínimo |
 |---|---|
 | R2 | Runtime/Movement: adaptación sin pérdida, reglas autorizadas, tests y UML coherente; no integra Swing. |
-| R3 | Evaluar y cerrar bordes restantes de movimiento e integración del runtime: contratos, regresión y compatibilidad comprobadas. |
-| R4 | KeyBox/Lock/muros: acordar OQ-07/08, asociaciones y restauración; casos positivos/bloqueos. |
+| R3 | Núcleo individual KeyBox/Lock/muros: asociaciones, cierre atómico y regresión comprobadas; Observer permanece pendiente. |
+| R4 | Extensión TXT y carga jugable de entidades: acordar contratos y OQ-07/08, preservar compatibilidad y validar entrada. |
 | R5 | Sesión/Undo/Restart: snapshots, 15/5/3 y métricas según E07–E09; bordes probados. |
 | R6 | Victoria/progresión/score: acordar OQ-01/09, ejemplos y tests deterministas. |
 | R7 | Adaptar loader y Swing al runtime íntegro; preservar errores atómicos, HUD y regresión visual. |
@@ -62,3 +62,11 @@ Integración necesita consumidor real, equivalencia de identidad/terreno, repres
 Antes de cada incremento: rehidratar desde AGENTS → índice → estado individual → este plan → normas y código/pruebas del dominio; verificar branch, cambios locales, SHA remoto de `main` y rama individual. Comparar nuevos commits por contratos, comportamiento y pruebas, no sólo archivos; bloquear solapamientos no reconciliados. No incorporar avances automáticamente.
 
 Regresión: compilar core con `--release 17 -encoding UTF-8 -Xlint:all -Werror` y sólo java.base; ejecutar Loading, Movement/runtime, C2 y Fragile por sus entrypoints, desktop headless y verificador según impacto. Registrar SHA, entorno, resultados y NOT_RUN. Publicar sólo con autorización vigente y fast-forward verificado de la rama individual; no alterar `main` ni usar force. Ver [TEST_STRATEGY](../testing/TEST_STRATEGY.md) para comandos reproducibles.
+
+## Mecánicas dinámicas individuales R3
+
+PROBLEM → Lock debe activar muros sin guardar estado divergente ni dejar entidades encerradas. OPTIONS → listeners mutables persistentes o derivar apertura del estado final. CHOICE → `RuntimeState.Lock` y `DynamicWall` son valores inmutables asociados por ID; un muro abre si al menos un Lock asociado contiene KeyBox. `RuntimeMoveResult.lockChanges()` informa sólo activaciones que cambiaron en una transición confirmada. TRADEOFF → se recalcula ocupación; no hay listeners globales ni segundo estado de apertura. TEST → múltiples Lock/muros, cambios efectivos, repetición y cierre ocupado.
+
+`INDIVIDUAL_EXPERIMENTAL_DECISION`: IDs runtime por categoría; ID de cajas especiales único; cada celda especial tiene una definición; asociaciones no vacías; apertura OR entre cerrojos. Si desactivar un Lock deja un muro cerrado ocupado, se rechaza el empuje entero. El jugador abandona su casilla al empujar, por lo que no puede permanecer sobre un muro que se cierre en esa misma transición con las reglas actuales; se validan por separado el cierre hipotético y la construcción. ICE, LOCK y muro son terrenos excluyentes. Estas hipótesis son reversibles y no cierran OQ-07/08. Lock no es Goal; victoria sigue pendiente, preservando E05. E06 se aplica al desactivar, salvo la transición inválida rechazada por la hipótesis individual de integridad.
+
+Observer GoF **no implementado**: no hay Subject con suscripciones ni observadores concretos; los eventos inmutables de transición son datos y no constituyen el patrón. Listeners persistentes con estado duplicarían la apertura derivada y dificultarían restauración/atomicidad. Evaluar Observer real al integrar consumidores de nivel con ciclo de vida explícito, sin declarar D-010 ratificada.

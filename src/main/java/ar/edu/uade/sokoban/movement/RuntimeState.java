@@ -13,9 +13,30 @@ import java.util.Objects;
 import java.util.Set;
 
 /** Immutable runtime value; terrain and typed boxes have a single source of occupancy. */
-public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box> boxes) {
-    public enum Ground { WALL, FLOOR, GOAL, ICE }
-    public enum BoxKind { NORMAL, FRAGILE }
+public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box> boxes,
+        List<Lock> locks, List<DynamicWall> walls) {
+    public enum Ground { WALL, FLOOR, GOAL, ICE, LOCK, DYNAMIC_WALL }
+    public enum BoxKind { NORMAL, FRAGILE, KEY }
+
+    public record Lock(String id, Position position) {
+        public Lock { validateId(id); Objects.requireNonNull(position, "position"); }
+    }
+    public record DynamicWall(String id, Position position, Set<String> lockIds) {
+        public DynamicWall {
+            validateId(id); Objects.requireNonNull(position, "position");
+            lockIds = Set.copyOf(lockIds);
+            if (lockIds.isEmpty()) { throw new IllegalArgumentException("Wall requires a lock"); }
+            lockIds.forEach(RuntimeState::validateId);
+        }
+    }
+    private static void validateId(String id) {
+        if (id == null || !id.matches("[a-z][a-z0-9_]{0,31}")) {
+            throw new IllegalArgumentException("Invalid runtime id");
+        }
+    }
+    public RuntimeState(List<List<Ground>> terrain, Position player, List<Box> boxes) {
+        this(terrain, player, boxes, List.of(), List.of());
+    }
 
     /** Normal boxes have no identity or resistance; fragile identities are definition-local. */
     public record Box(BoxKind kind, Position position, String id, int resistance) {
@@ -26,11 +47,16 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
                 if (id != null || resistance != 0) {
                     throw new IllegalArgumentException("Normal boxes have no id or resistance");
                 }
-            } else if (id == null || !id.matches("[a-z][a-z0-9_]{0,31}") || resistance <= 0) {
-                throw new IllegalArgumentException("Invalid fragile id or resistance");
+            } else {
+                validateId(id);
+                if ((kind == BoxKind.FRAGILE && resistance <= 0)
+                        || (kind == BoxKind.KEY && resistance != 0)) {
+                    throw new IllegalArgumentException("Invalid box resistance");
+                }
             }
         }
         public static Box normal(Position position) { return new Box(BoxKind.NORMAL, position, null, 0); }
+        public static Box key(String id, Position position) { return new Box(BoxKind.KEY, position, id, 0); }
         public static Box fragile(String id, Position position, int resistance) {
             return new Box(BoxKind.FRAGILE, position, id, resistance);
         }
@@ -41,6 +67,8 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
         Objects.requireNonNull(player, "player");
         terrain = terrain.stream().map(List::copyOf).toList();
         boxes = List.copyOf(boxes);
+        locks = List.copyOf(locks);
+        walls = List.copyOf(walls);
         if (terrain.isEmpty() || terrain.size() > Board.MAX_DIMENSION || terrain.get(0).isEmpty()
                 || terrain.get(0).size() > Board.MAX_DIMENSION) {
             throw new IllegalArgumentException("Invalid terrain dimensions");
@@ -57,10 +85,59 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
             if (!validCell(terrain, box.position()) || !occupied.add(box.position())) {
                 throw new IllegalArgumentException("Invalid or overlapping box position");
             }
-            if (box.kind() == BoxKind.FRAGILE && !ids.add(box.id())) {
-                throw new IllegalArgumentException("Duplicate fragile id");
+            if (box.kind() != BoxKind.NORMAL && !ids.add(box.id())) {
+                throw new IllegalArgumentException("Duplicate box id");
             }
         }
+        Set<String> lockIds = new HashSet<>();
+        Set<String> wallIds = new HashSet<>();
+        Set<Position> specialPositions = new HashSet<>();
+        for (Lock lock : locks) {
+            if (!lockIds.add(lock.id()) || !specialPositions.add(lock.position())
+                    || !isGround(terrain, lock.position(), Ground.LOCK)) {
+                throw new IllegalArgumentException("Invalid or duplicate lock");
+            }
+        }
+        for (DynamicWall wall : walls) {
+            if (!wallIds.add(wall.id()) || !specialPositions.add(wall.position())
+                    || !isGround(terrain, wall.position(), Ground.DYNAMIC_WALL)
+                    || !lockIds.containsAll(wall.lockIds())) {
+                throw new IllegalArgumentException("Invalid wall or lock reference");
+            }
+        }
+        for (int r = 0; r < terrain.size(); r++) {
+            for (int c = 0; c < width; c++) {
+                Ground ground = terrain.get(r).get(c);
+                if ((ground == Ground.LOCK || ground == Ground.DYNAMIC_WALL)
+                        && !specialPositions.contains(new Position(r, c))) {
+                    throw new IllegalArgumentException("Special tile requires metadata");
+                }
+            }
+        }
+        if (!closuresSafe(player, boxes, locks, walls)) {
+            throw new IllegalArgumentException("Closed dynamic wall occupied");
+        }
+    }
+
+    private static boolean isGround(List<List<Ground>> terrain, Position p, Ground ground) {
+        return p.row() < terrain.size() && p.column() < terrain.get(0).size()
+                && terrain.get(p.row()).get(p.column()) == ground;
+    }
+    private static boolean active(Lock lock, List<Box> boxes) {
+        return boxes.stream().anyMatch(b -> b.kind() == BoxKind.KEY && b.position().equals(lock.position()));
+    }
+    private static boolean open(DynamicWall wall, List<Lock> locks, List<Box> boxes) {
+        return locks.stream().anyMatch(lock -> wall.lockIds().contains(lock.id()) && active(lock, boxes));
+    }
+    static boolean closuresSafe(Position player, List<Box> boxes, List<Lock> locks, List<DynamicWall> walls) {
+        return walls.stream().noneMatch(w -> !open(w, locks, boxes)
+                && (w.position().equals(player) || boxes.stream().anyMatch(b -> b.position().equals(w.position()))));
+    }
+    public boolean lockActive(String id) {
+        return locks.stream().anyMatch(lock -> lock.id().equals(id) && active(lock, boxes));
+    }
+    public boolean wallOpen(Position position) {
+        return walls.stream().anyMatch(w -> w.position().equals(position) && open(w, locks, boxes));
     }
 
     private static boolean validCell(List<List<Ground>> terrain, Position p) {
