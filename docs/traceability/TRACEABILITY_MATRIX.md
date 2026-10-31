@@ -162,3 +162,7 @@ La [fuente directa](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-cor
 | OQ-07/08 extensiones y OQ-11 global | Dependencia real de consumidores/integración | OPEN_DEPENDENCY / OPEN | No tokens hielo/KeyBox/Lock/muros ni build global ratificado | OQ, contrato y siguiente tarea TODO |
 
 QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, src/scripts idénticos a 5ac2bba. [Entorno, comandos y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Nueva ejecución Java NOT_RUN_DOCS_ONLY. Elegir una regla o consolidar un esquema no cierra RF-05/RF-07 ni prueba puzzles de demo.
+
+## Runtime individual R2 — experimental
+
+RF-01/02/03/04/05: `RuntimeState.fromDefinition` conserva terreno, jugador, normales e identidad/resistencia Fragile; `RuntimeMovementEngine` ofrece movimiento y hielo programático, con E04 al romper. [Diseño e hipótesis individuales](../continuity/IMPACIENCIA_MASTERPLAN.md); [evidencia y comandos](../testing/TEST_STRATEGY.md#runtime-individual-r2--2026-10-31). No hay hielo TXT, integración Swing, aceptación TEAM ni cierre de OQ-02/08. RF-06–12 y entregables continúan parciales o pendientes según sus fuentes.

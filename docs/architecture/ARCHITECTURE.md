@@ -66,3 +66,8 @@ Revisión documental contra el código integrado por PR #11/#12; [evidencia doce
 | Audio y adicionales | SoundManager por ventana; sin persistencia operativa | No Singleton GoF; State/Factory/Decorator no están acreditados por ejemplos o nombres |
 
 Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. Esa reconciliación no ejecutó R7. El incremento posterior 5ac2bba implementó la entrada filesystem de definición experimental; gameplay e integración runtime siguen pendientes.
+
+
+## Runtime individual R2 — 31/10/2026
+
+`RuntimeState` conserva terreno, jugador y cajas normales/Fragile inmutables; adapta `Level` o `ExperimentalFragileLevel` sin sustituir Fragile por BOX. `RuntimeMovementEngine` calcula transición y `RuntimeMoveResult` expone caja, destino, distancia y rotura. El motor `MovementEngine` y Swing no se modifican ni consumen este runtime. El hielo sólo se construye programáticamente. La decisión de un valor inmutable sin proyección Board evita dos ocupaciones divergentes y se aparta de relaciones mutables del UML candidato, que sigue TO_BE. [Opciones, límites e hipótesis](../continuity/IMPACIENCIA_MASTERPLAN.md).

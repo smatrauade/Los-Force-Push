@@ -66,4 +66,39 @@ Data only; engine establishes transition semantics.
 Records validate non-null values.
 Design remains experimental, without team ratification.
 end note
+package "Runtime individual R2" {
+  class RuntimeState <<immutable record>> {
+    +terrain() : List<List<Ground>>
+    +player() : Position
+    +boxes() : List<Box>
+    +fromLevel(level : Level) : RuntimeState
+    +fromDefinition(definition : ExperimentalFragileLevel) : RuntimeState
+    +boxAt(position : Position) : Box
+  }
+  class "RuntimeState.Box" as RuntimeBox <<record>>
+  enum "RuntimeState.Ground" as Ground
+  enum "RuntimeState.BoxKind" as BoxKind
+  class RuntimeMovementEngine <<stateless>> {
+    +move(state : RuntimeState, direction : Direction) : RuntimeMoveResult
+  }
+  class RuntimeMoveResult <<record>> {
+    +state() : RuntimeState
+    +pushedBox() : Box
+    +boxDestination() : Position
+    +boxDistance() : int
+    +broken() : boolean
+  }
+}
+RuntimeState --> "0..*" RuntimeBox
+RuntimeState --> Ground
+RuntimeBox --> BoxKind
+RuntimeMovementEngine ..> RuntimeState
+RuntimeMovementEngine ..> Direction
+RuntimeMovementEngine ..> RuntimeMoveResult
+RuntimeMoveResult --> RuntimeState
+RuntimeMoveResult --> RuntimeBox
+note bottom of RuntimeState
+Independent immutable runtime, not Board projection.
+ICE is programmatic; TXT and Swing remain unchanged.
+end note
 @enduml

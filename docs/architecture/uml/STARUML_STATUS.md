@@ -52,3 +52,8 @@ El diagrama de Loading fue contrastado con firmas y relaciones reales: `readText
 ## Alcance semántico del contrato — 29/10/2026
 
 No se alteraron diagramas ni arquitectura funcional en este cierre. Las notas antiguas de `level-loading-spike-v1.puml` «OQ-06/OQ-08 pending» y «grammar not ratified» conservan el corte previo del spike: quedan supersedidas por [D-020](../../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) para el subconjunto soportado, adoptado por MODULE_OWNER_DECISION. OQ-06 resuelta en TXT; OQ-08 extensiones abiertas. Las firmas/relaciones del diagrama siguen describiendo el código, la definición sigue no jugable y el candidato integral no se ratifica. Los `.puml` se preservan por la restricción de no editar UML funcional de esta misión; esta aclaración evita interpretar una anotación histórica como inventario vigente de decisiones.
+
+
+## Runtime individual R2 — 31/10/2026
+
+El diagrama Movement incorpora `RuntimeState`, cajas tipadas, resultado y motor sin estado, junto al motor heredado. Este modelo inmutable sustituye para este incremento las entidades mutables ilustrativas del candidato, evitando duplicar ocupación y preservando snapshots; no ratifica el candidato ni acredita StarUML. TXT de hielo, integración Swing y `.mdj` siguen pendientes. Ver [plan y decisiones](../../continuity/IMPACIENCIA_MASTERPLAN.md).

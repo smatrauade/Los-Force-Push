@@ -376,3 +376,17 @@ La comparación de blobs debe terminar con exit 0; no es una ejecución Java. El
 Las frases «no se ratifica OQ-06/OQ-08» de los apartados de pruebas anteriores describen sus hitos: el cierre posterior D-020 adopta el esquema soportado con autoridad MODULE_OWNER, sin convertir los PASS históricos en una votación o aprobación del código.
 
 Validación documental ejecutada por Codex antes del commit sobre el worktree de cierre basado en 38e5a2e: `git diff --check`, `bash scripts/verify-repo-readonly.sh` y comparación de src/scripts anterior, **exit 0** cada uno. Verificador: **137 archivos, 431 enlaces relativos y 43 assets con formato/SHA-256 válidos**. Control adicional de fragmentos locales: **156 anclas** válidas en los 16 Markdown afectados, incluidos E01–E11; IDs OQ-01…11 preservados. Contraste de filas oficiales, recuentos ajenos a la corrección, fixture contra ejemplo y secciones no TXT de INTEGRACION_EQUIPO: PASS. Son controles de documentación/integridad, sin compilar, ejecutar Java ni verificar derechos o fuentes privadas originales.
+
+## Runtime individual R2 — 2026-10-31
+
+Compilación y ejecución en Ubuntu, JDK 17.0.20.1, `--release 17`, UTF-8, `-Xlint:all -Werror`, core `java.base`. El contenido probado es el incremento R2 sobre base `6f29ebbe77d73e729fde7a05062d26b8ed198393`; obtener el commit final con Git. Resultados nuevos: Loading 40/40, Movement 31/31, runtime 26/26, C2 32/32, Fragile 41/41, Desktop headless 16/16 y VisualAssets 44/44; salida 0. No son los 160 casos históricos una segunda ejecución de gameplay integral. GUI interactiva, audio audible, Windows/macOS y aceptación TEAM: NOT_RUN.
+
+El runner versionado ejecuta runtime con Movement, sin cambiar opciones existentes:
+
+```bash
+SPIKE_JDK_HOME=/ruta/al/jdk17 bash scripts/test-level-loading.sh --movement
+bash scripts/run-swing.sh --test
+bash scripts/verify-repo-readonly.sh
+```
+
+Para C2 y Fragile, compilar y ejecutar los entrypoints independientes usando el bloque de la sección filesystem de este documento; el runner core los compila pero no los ejecuta. Seleccionar el JDK en PATH para el runner Swing Bash. La validación del verificador no acredita licencias. La gramática externa no incluye hielo y la interfaz no consume el nuevo estado.

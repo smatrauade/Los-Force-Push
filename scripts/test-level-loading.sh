@@ -53,4 +53,7 @@ if [[ "$include_movement" -eq 1 ]]; then
     "$runtime" --limit-modules java.base -Djava.io.tmpdir="$spike_run_dir" \
         -cp "$spike_run_dir/classes" ar.edu.uade.sokoban.movement.MovementTest \
         "$root/src/test/resources/levels"
+    "$runtime" --limit-modules java.base -Djava.io.tmpdir="$spike_run_dir" \
+        -cp "$spike_run_dir/classes" ar.edu.uade.sokoban.movement.RuntimeMovementTest \
+        "$root/src/test/resources/levels"
 fi
