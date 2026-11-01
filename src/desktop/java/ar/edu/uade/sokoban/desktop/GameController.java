@@ -21,6 +21,8 @@ public final class GameController {
     private final MovementEngine movement;
     private final GameView view;
 
+    private final ScoreCalculator scoreCalculator = new ScoreCalculator();
+
     private final Deque<GamePresentation> history = new ArrayDeque<>();
 
     private GamePresentation current;
@@ -51,7 +53,7 @@ public final class GameController {
 
             view.render(current);
             refreshUiCommands();
-            
+
         } catch (IOException | LevelFormatException | SecurityException exception) {
             view.showLoadError("No se pudo cargar el TXT: " + exception.getMessage());
         }
@@ -153,5 +155,25 @@ public final class GameController {
 
     int consecutiveUndoUses() {
         return consecutiveUndoUses;
+    }
+
+    /**Returns the current level statistics and calculated score.*/
+    public LevelResult getLevelResult() {
+
+        if (current == null) {
+            throw new IllegalStateException(
+                "No hay un nivel cargado"
+            );
+        }
+
+        long score = scoreCalculator.calculate(current.moves(), current.pushes(), undoUsesTotal);
+
+        return new LevelResult(
+                current.levelName(),
+                current.moves(),
+                current.pushes(),
+                undoUsesTotal,
+                score
+        );
     }
 }
