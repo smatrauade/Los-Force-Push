@@ -187,6 +187,7 @@ public final class DesktopIntegrationTest {
                     try { panel.paint(graphics); } finally { graphics.dispose(); }
                     check(panel.getWidth() > 0 && panel.getHeight() > 0, "invalid drawing extent");
                 });
+            });
             
             test("UNDO restores state from five moves ago", () -> {
                 Probe view = new Probe();
@@ -329,6 +330,88 @@ public final class DesktopIntegrationTest {
                 check(view.state.board().playerPosition().equals(new Position(2, 2)),
                         "player position not restored");
             });
+
+            test("SCORE starts at 1000 points", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(0, 0, 0) == 1000,
+                        "initial score should be 1000");
+            });
+
+            test("SCORE penalizes each move", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(10, 0, 0) == 990,
+                        "expected 990 points after ten moves");
+            });
+
+            test("SCORE applies additional penalty for pushes", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(10, 2, 0) == 986,
+                        "expected 986 points after ten moves and two pushes");
+            });
+
+            test("SCORE penalizes Undo uses", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(10, 2, 1) == 976,
+                        "expected 976 points after one Undo");
+            });
+
+            test("SCORE never goes below zero", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(2000, 0, 0) == 0,
+                        "score should not be negative");
+            });
+
+            test("SCORE rejects negative statistics", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                expectIllegalArgument(() -> calculator.calculate(-1, 0, 0));
+                expectIllegalArgument(() -> calculator.calculate(0, -1, 0));
+                expectIllegalArgument(() -> calculator.calculate(0, 0, -1));
+            });
+
+            test("GameController exposes current statistics and score", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(
+                        view, "######\n#@$  #\n#    #\n######\n");
+
+                game.move(Direction.RIGHT);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP);
+                game.move(Direction.RIGHT);
+
+                LevelResult result = game.getLevelResult();
+
+                check(result.moves() == 5, "incorrect move count");
+                check(result.pushes() == 1, "incorrect push count");
+                check(result.undoUses() == 0, "incorrect Undo count");
+                check(result.score() == 993, "incorrect score");
+
+                game.undo();
+
+                result = game.getLevelResult();
+
+                check(result.moves() == 0, "Undo did not restore moves");
+                check(result.pushes() == 0, "Undo did not restore pushes");
+                check(result.undoUses() == 1, "Undo use was not accumulated");
+                check(result.score() == 990, "Undo penalty was not applied");
+            });
+
+            test("GameController rejects result when no level is loaded", () -> {
+                Probe view = new Probe();
+                GameController game = controller(view);
+
+                try {
+                    game.getLevelResult();
+                    throw new AssertionError("expected IllegalStateException");
+                } catch (IllegalStateException expected) {
+                    check(true, "result should not exist without a loaded level");
+                }
             });
         } finally {
             try (var paths = Files.walk(directory)) {
@@ -370,6 +453,15 @@ public final class DesktopIntegrationTest {
         } catch (Exception | AssertionError failure) {
             failed++;
             System.err.println("FAIL " + name + ": " + failure);
+        }
+    }
+
+        private static void expectIllegalArgument(Runnable action) {
+        try {
+            action.run();
+            throw new AssertionError("expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            // Expected exception.
         }
     }
 }
