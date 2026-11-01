@@ -37,6 +37,20 @@ public final class MovementEngine {
             if (behindBox.terrain() == Terrain.WALL || behindBox.occupant() != Occupant.EMPTY) {
                 return blocked(state);
             }
+            while (state.cellAt(boxDestination).terrain() == Terrain.ICE) {
+                int nextRow = boxDestination.row() + direction.rowDelta();
+                int nextColumn = boxDestination.column() + direction.columnDelta();
+                if (!inside(state, nextRow, nextColumn)) {
+                    break;
+                }
+                Position next = new Position(nextRow, nextColumn);
+                Cell nextCell = state.cellAt(next);
+                if (nextCell.terrain() == Terrain.WALL
+                    || nextCell.occupant() != Occupant.EMPTY) {
+                    break;
+                }
+                boxDestination = next;
+            }
         } else if (destination.occupant() != Occupant.EMPTY) {
             return blocked(state);
         }
@@ -69,4 +83,5 @@ public final class MovementEngine {
         Cell old = row.get(position.column());
         row.set(position.column(), new Cell(old.terrain(), occupant));
     }
+
 }
