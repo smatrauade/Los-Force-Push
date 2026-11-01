@@ -187,6 +187,148 @@ public final class DesktopIntegrationTest {
                     try { panel.paint(graphics); } finally { graphics.dispose(); }
                     check(panel.getWidth() > 0 && panel.getHeight() > 0, "invalid drawing extent");
                 });
+            
+            test("UNDO restores state from five moves ago", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+
+                check(view.state.moves() == 5, "expected five moves");
+
+                game.undo();
+
+                check(view.state.moves() == 0, "moves not restored");
+                check(view.state.pushes() == 0, "pushes not restored");
+                check(view.state.board().playerPosition().equals(new Position(2, 2)),
+                        "player position not restored");
+            });
+            test("UNDO restores pushes counter", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, "######\n#@$  #\n#    #\n######\n");
+
+                game.move(Direction.RIGHT); // Empuja la caja.
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP);
+                game.move(Direction.RIGHT);
+
+                check(view.state.moves() == 5, "expected five moves");
+                check(view.state.pushes() == 1, "expected one push");
+
+                game.undo();
+
+                check(view.state.moves() == 0, "moves not restored");
+                check(view.state.pushes() == 0, "pushes not restored");
+                check(view.state.board().playerPosition().equals(new Position(1, 1)),
+                        "player position not restored");
+            });
+            test("UNDO can be used only three times", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                // Primer bloque de cinco movimientos.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.undo();
+
+                // Segundo bloque de cinco movimientos.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.undo();
+
+                // Tercer bloque de cinco movimientos.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.undo();
+
+                check(game.undoUsesTotal() == 3, "expected three undo uses");
+                check(view.state.moves() == 0, "third undo did not restore initial state");
+
+                // Hacemos otros cinco movimientos normales.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+
+                // El cuarto Undo no debería funcionar.
+                game.undo();
+
+                check(game.undoUsesTotal() == 3, "undo count should remain three");
+                check(view.state.moves() == 5, "fourth undo should not restore state");
+            });
+            test("RESTART restores initial state and resets counters", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, "######\n#@$  #\n#    #\n######\n");
+
+                Board initialBoard = view.state.board();
+
+                // Hacemos cinco movimientos, incluyendo un empuje.
+                game.move(Direction.RIGHT);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP);
+                game.move(Direction.RIGHT);
+
+                check(view.state.moves() == 5, "expected five moves");
+                check(view.state.pushes() == 1, "expected one push");
+
+                // Reiniciamos el nivel.
+                game.restart();
+
+                check(view.state.board().equals(initialBoard), "board not restored");
+                check(view.state.moves() == 0, "moves not reset");
+                check(view.state.pushes() == 0, "pushes not reset");
+                check(game.undoUsesTotal() == 0, "undo total not reset");
+                check(game.consecutiveUndoUses() == 0, "consecutive undo uses not reset");
+            });
+            test("UNDO is unavailable with fewer than five moves", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+
+                game.undo();
+
+                check(view.state.moves() == 4, "undo should not have been executed");
+                check(game.undoUsesTotal() == 0, "undo count should remain zero");
+            });
+            test("BLOCKED movement is not added to undo history", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                game.move(Direction.UP);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP); // Bloqueado contra la pared.
+                game.move(Direction.DOWN);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+
+                check(view.state.moves() == 5, "blocked movement counted as a move");
+
+                game.undo();
+
+                check(view.state.moves() == 0, "undo did not restore initial state");
+                check(view.state.board().playerPosition().equals(new Position(2, 2)),
+                        "player position not restored");
+            });
             });
         } finally {
             try (var paths = Files.walk(directory)) {
