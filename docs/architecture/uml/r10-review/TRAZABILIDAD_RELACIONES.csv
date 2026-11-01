@@ -1,0 +1,200 @@
+﻿diagram,source,relation,target,reason
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelLoader,association,ar.edu.uade.sokoban.level.LevelParser,carga STANDARD
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelLoader,dependency,ar.edu.uade.sokoban.level.ExtendedLevelParser,carga EXTENDED
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelParser,dependency,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,dependency,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,fromExtended()
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,dependency,ar.edu.uade.sokoban.movement.RuntimeState,transicion inmutable
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,dependency,ar.edu.uade.sokoban.movement.RuntimeMoveResult,produce
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,association,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,mover
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,association,ar.edu.uade.sokoban.movement.RuntimeState,estado actual
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.GameSession,coordina
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.ScoreStrategy,politica inyectada
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.VictoryEvaluator,
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.session.LevelProgression,facade del core
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.GameView,callbacks
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.GamePresentation,proyeccion
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GamePresentation,association,ar.edu.uade.sokoban.movement.RuntimeState,solo lectura
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,realization,ar.edu.uade.sokoban.desktop.GameView,
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.BoardPanel,dos tableros
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.VisualThemeFactory,tema seleccionado
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.ReplayRecorder,registra
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.ReplayPlayer,reproduce
+00_Arquitectura_General_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.LockChangeSubject,notifica
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelFormatException,generalization,java.lang.IllegalArgumentException,
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelLoader,association,ar.edu.uade.sokoban.level.LevelParser,injected field
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelLoader,dependency,ar.edu.uade.sokoban.level.LevelFormatException,rejects invalid load
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelLoader,dependency,ar.edu.uade.sokoban.level.ExperimentalFragileParser,creates in loadExperimentalFragile
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelLoader,dependency,ar.edu.uade.sokoban.level.ExtendedLevelParser,creates in loadExtended
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelParser,dependency,ar.edu.uade.sokoban.level.C2LevelParser,static C2 dispatch
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelParser,dependency,ar.edu.uade.sokoban.level.LevelBuilder,creates (legacy)
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.C2LevelParser,dependency,ar.edu.uade.sokoban.level.LevelBuilder,creates (C2)
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.LevelBuilder,dependency,ar.edu.uade.sokoban.level.Level,constructs
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.Level,association,ar.edu.uade.sokoban.level.Board,value field
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.Board,association,ar.edu.uade.sokoban.level.Cell,rows of values
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.Cell,association,ar.edu.uade.sokoban.level.Terrain,
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.Cell,association,ar.edu.uade.sokoban.level.Occupant,
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExperimentalFragileParser,dependency,ar.edu.uade.sokoban.level.LevelParser,normalizes and validates C2
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExperimentalFragileParser,dependency,ar.edu.uade.sokoban.level.ExperimentalFragileLevel,constructs
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExperimentalFragileLevel,association,ar.edu.uade.sokoban.level.Board,spatial template
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExperimentalFragileLevel,association,ar.edu.uade.sokoban.level.ExperimentalFragileLevel.FragileBox,initial data
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExperimentalFragileLevel.FragileBox,association,ar.edu.uade.sokoban.level.Position,
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelParser,dependency,ar.edu.uade.sokoban.level.ExperimentalFragileParser,normalizes and delegates
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelParser,dependency,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,constructs
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,association,ar.edu.uade.sokoban.level.ExperimentalFragileLevel,base
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,association,ar.edu.uade.sokoban.level.ExtendedLevelDefinition.Key,keys
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,association,ar.edu.uade.sokoban.level.ExtendedLevelDefinition.Lock,locks
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,association,ar.edu.uade.sokoban.level.ExtendedLevelDefinition.Wall,walls
+01_Carga_TXT_AS_IMPLEMENTED,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,dependency,ar.edu.uade.sokoban.level.Position,ice cells
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,association,ar.edu.uade.sokoban.movement.RuntimeState.Box,boxes (immutable values)
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,association,ar.edu.uade.sokoban.movement.RuntimeState.Lock,locks (immutable values)
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,association,ar.edu.uade.sokoban.movement.RuntimeState.DynamicWall,walls (immutable values)
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,association,ar.edu.uade.sokoban.movement.RuntimeState.Ground,
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,association,ar.edu.uade.sokoban.level.Position,player
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState.Box,association,ar.edu.uade.sokoban.movement.RuntimeState.BoxKind,
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState.Box,association,ar.edu.uade.sokoban.level.Position,
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState.Lock,association,ar.edu.uade.sokoban.level.Position,
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState.DynamicWall,association,ar.edu.uade.sokoban.level.Position,
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState.DynamicWall,dependency,ar.edu.uade.sokoban.movement.RuntimeState.Lock,references lock IDs (no object pointers)
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,dependency,ar.edu.uade.sokoban.level.Level,adapter
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,dependency,ar.edu.uade.sokoban.level.ExperimentalFragileLevel,adapter
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeState,dependency,ar.edu.uade.sokoban.level.ExtendedLevelDefinition,adapter
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,dependency,ar.edu.uade.sokoban.movement.RuntimeState,reads; creates next
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,dependency,ar.edu.uade.sokoban.movement.RuntimeMoveResult,returns
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,dependency,ar.edu.uade.sokoban.movement.Direction,
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMoveResult,association,ar.edu.uade.sokoban.movement.RuntimeState,resulting state
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMoveResult,association,ar.edu.uade.sokoban.movement.MoveResult.Kind,status
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMoveResult,association,ar.edu.uade.sokoban.movement.RuntimeState.Box,pushedBox
+02_Runtime_Movimiento_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMoveResult,association,ar.edu.uade.sokoban.movement.RuntimeMoveResult.LockChange,deltas
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession.Snapshot,realization,ar.edu.uade.sokoban.session.GameMemento,
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,composition,ar.edu.uade.sokoban.session.UndoManager,creates and owns
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.UndoManager,association,ar.edu.uade.sokoban.session.GameMemento,stores opaque tokens
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,dependency,ar.edu.uade.sokoban.session.GameSession.Snapshot,creates / restores
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession.Snapshot,association,ar.edu.uade.sokoban.movement.RuntimeState,immutable snapshot
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,composition,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,owns engine
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,association,ar.edu.uade.sokoban.movement.RuntimeState,initial / current
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,dependency,ar.edu.uade.sokoban.session.GameSession.Metrics,produces
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.GameSession,dependency,ar.edu.uade.sokoban.movement.RuntimeMoveResult,
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelStats,dependency,ar.edu.uade.sokoban.session.GameSession,reads metrics
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.WeightedPenaltyScoreStrategy,realization,ar.edu.uade.sokoban.session.ScoreStrategy,
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.ScoreStrategy,dependency,ar.edu.uade.sokoban.session.LevelStats,
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.LevelCatalog,supplied catalog
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelCatalog,association,ar.edu.uade.sokoban.session.LevelCatalog.Entry,immutable level entries
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.ScoreStrategy,injected scoring policy
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,composition,ar.edu.uade.sokoban.session.GameSession,constructed session
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,composition,ar.edu.uade.sokoban.level.LevelLoader,constructed loader
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,composition,ar.edu.uade.sokoban.session.VictoryEvaluator,constructed evaluator
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.LevelProgression.LevelResult,collected completed results
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression.LevelResult,association,ar.edu.uade.sokoban.session.LevelStats,
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.VictoryEvaluator,dependency,ar.edu.uade.sokoban.movement.RuntimeState,
+03_Sesion_Patrones_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.VictoryEvaluator,dependency,ar.edu.uade.sokoban.session.VictoryEvaluator.VictoryResult,returns immutable evaluation
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,generalization,javax.swing.JFrame,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.BoardPanel,generalization,javax.swing.JPanel,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SoundManager,realization,java.lang.AutoCloseable,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject,realization,java.lang.AutoCloseable,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication,dependency,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,constructs on EDT
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,dependency,ar.edu.uade.sokoban.desktop.ArrowBindings,installs window key actions
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,dependency,ar.edu.uade.sokoban.desktop.PixelTheme,builds styled controls
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,realization,ar.edu.uade.sokoban.desktop.GameView,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,composition,ar.edu.uade.sokoban.desktop.GameController,"constructed, closes"
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,composition,ar.edu.uade.sokoban.desktop.BoardPanel,main and replay boards
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,composition,ar.edu.uade.sokoban.desktop.SoundManager,local audio
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.ReplayPlayer,active playback
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.VisualThemeFactory,selected family
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.GameView,receives callbacks
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.session.LevelProgression,loaded application state
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,composition,ar.edu.uade.sokoban.desktop.LockChangeSubject,constructs / closes
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.ReplayRecorder,creates per level
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.GamePresentation,sends immutable projection
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.LevelResult,adapts core result
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.movement.RuntimeMoveResult,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GamePresentation,association,ar.edu.uade.sokoban.movement.RuntimeState,read-only state
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.BoardPanel,association,ar.edu.uade.sokoban.movement.RuntimeState,displays
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.BoardPanel,association,ar.edu.uade.sokoban.desktop.PixelAssets,sprite dependency (default ctor creates)
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.PixelAssets,association,ar.edu.uade.sokoban.desktop.VisualThemeFactory.SpritePresentation,active image transform
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SoundManager,association,ar.edu.uade.sokoban.desktop.SoundManager.Effect,sound lookup
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameView,dependency,ar.edu.uade.sokoban.desktop.UiCommands,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameView,dependency,ar.edu.uade.sokoban.desktop.LevelResult,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemeFactory,dependency,ar.edu.uade.sokoban.desktop.VisualThemeFactory.UiPalette,creates compatible palette
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemeFactory,dependency,ar.edu.uade.sokoban.desktop.VisualThemeFactory.SpritePresentation,produces sprite transform
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Family,realization,ar.edu.uade.sokoban.desktop.VisualThemeFactory,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Copper,generalization,ar.edu.uade.sokoban.desktop.VisualThemes.Family,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Night,generalization,ar.edu.uade.sokoban.desktop.VisualThemes.Family,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Jade,generalization,ar.edu.uade.sokoban.desktop.VisualThemes.Family,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes,dependency,ar.edu.uade.sokoban.desktop.VisualThemes.Copper,creates
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes,dependency,ar.edu.uade.sokoban.desktop.VisualThemes.Night,creates
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes,dependency,ar.edu.uade.sokoban.desktop.VisualThemes.Jade,creates
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayRecorder,association,ar.edu.uade.sokoban.desktop.MoveCommand,stores accepted commands
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayRecorder,dependency,ar.edu.uade.sokoban.desktop.ReplayTrace,constructs
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayRecorder,dependency,ar.edu.uade.sokoban.desktop.ReplayPlayer,verifies trace
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayTrace,association,ar.edu.uade.sokoban.desktop.MoveCommand,immutable list
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayTrace,association,ar.edu.uade.sokoban.movement.RuntimeState,initial and final values
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayPlayer,association,ar.edu.uade.sokoban.desktop.ReplayTrace,replay source
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayPlayer,composition,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,own engine
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayPlayer,dependency,ar.edu.uade.sokoban.desktop.MoveCommand,invokes execute
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject,association,ar.edu.uade.sokoban.desktop.LockChangeSubject.Observer,subscriptions
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject,dependency,ar.edu.uade.sokoban.desktop.LockChangeSubject.Event,publishes
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject.Event,association,ar.edu.uade.sokoban.desktop.LockChangeSubject.Delta,immutable changes
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject.Event,association,ar.edu.uade.sokoban.desktop.LockChangeSubject.Origin,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GatePresentationObserver,realization,ar.edu.uade.sokoban.desktop.LockChangeSubject.Observer,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockSoundObserver,realization,ar.edu.uade.sokoban.desktop.LockChangeSubject.Observer,
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GatePresentationObserver,association,ar.edu.uade.sokoban.desktop.GameView,refresh callback
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockSoundObserver,association,ar.edu.uade.sokoban.desktop.GameView,sound callback
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.GatePresentationObserver,constructs + subscribes
+04_Desktop_Extensiones_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.LockSoundObserver,constructs + subscribes
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication,dependency,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,instancia en EDT
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,realization,ar.edu.uade.sokoban.desktop.GameView,
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,composition,ar.edu.uade.sokoban.desktop.GameController,coordinador
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,composition,ar.edu.uade.sokoban.desktop.BoardPanel,tablero y replay
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,dependency,ar.edu.uade.sokoban.desktop.ArrowBindings,
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.GameView,interfaz
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.session.LevelProgression,partida
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.GamePresentation,proyeccion
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.LevelResult,adapta score
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GamePresentation,association,ar.edu.uade.sokoban.movement.RuntimeState,estado inmutable
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.BoardPanel,association,ar.edu.uade.sokoban.movement.RuntimeState,proyeccion read-only
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.BoardPanel,association,ar.edu.uade.sokoban.desktop.PixelAssets,render sprites
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameView,dependency,ar.edu.uade.sokoban.desktop.UiCommands,callbacks
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameView,dependency,ar.edu.uade.sokoban.desktop.LevelResult,muestra score
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.movement.Direction,
+05_MVC_Presentacion_AS_IMPLEMENTED,ar.edu.uade.sokoban.session.LevelProgression,association,ar.edu.uade.sokoban.session.LevelCatalog,
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemeFactory,dependency,ar.edu.uade.sokoban.desktop.VisualThemeFactory.UiPalette,palette()
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemeFactory,dependency,ar.edu.uade.sokoban.desktop.VisualThemeFactory.SpritePresentation,sprites()
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Family,realization,ar.edu.uade.sokoban.desktop.VisualThemeFactory,
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Copper,generalization,ar.edu.uade.sokoban.desktop.VisualThemes.Family,
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Night,generalization,ar.edu.uade.sokoban.desktop.VisualThemes.Family,
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes.Jade,generalization,ar.edu.uade.sokoban.desktop.VisualThemes.Family,
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes,dependency,ar.edu.uade.sokoban.desktop.VisualThemes.Copper,creates
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes,dependency,ar.edu.uade.sokoban.desktop.VisualThemes.Night,creates
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.VisualThemes,dependency,ar.edu.uade.sokoban.desktop.VisualThemes.Jade,creates
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.VisualThemeFactory,selector
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.BoardPanel,dependency,ar.edu.uade.sokoban.desktop.VisualThemeFactory,setTheme
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.PixelAssets,association,ar.edu.uade.sokoban.desktop.VisualThemeFactory.SpritePresentation,sprite transform
+06_Abstract_Factory_Temas_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.PixelAssets,dependency,ar.edu.uade.sokoban.desktop.VisualThemeFactory,setTheme
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.MoveCommand,association,ar.edu.uade.sokoban.movement.Direction,
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.MoveCommand,dependency,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,execute()
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.MoveCommand,dependency,ar.edu.uade.sokoban.movement.RuntimeState,execute()
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.MoveCommand,dependency,ar.edu.uade.sokoban.movement.RuntimeMoveResult,returns
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayRecorder,association,ar.edu.uade.sokoban.desktop.MoveCommand,accepted moves
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayRecorder,dependency,ar.edu.uade.sokoban.desktop.ReplayTrace,assembles
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayRecorder,dependency,ar.edu.uade.sokoban.desktop.ReplayPlayer,verifies
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayTrace,association,ar.edu.uade.sokoban.desktop.MoveCommand,immutable trace
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayTrace,association,ar.edu.uade.sokoban.movement.RuntimeState,initial and final
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayPlayer,composition,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,own engine
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayPlayer,association,ar.edu.uade.sokoban.desktop.ReplayTrace,
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.ReplayPlayer,dependency,ar.edu.uade.sokoban.desktop.MoveCommand,invokes
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,association,ar.edu.uade.sokoban.desktop.ReplayRecorder,manages
+07_Command_Replay_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.SwingApplication.GameWindow,association,ar.edu.uade.sokoban.desktop.ReplayPlayer,displays
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,composition,ar.edu.uade.sokoban.desktop.LockChangeSubject,owns window scoped subscriptions
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.GatePresentationObserver,subscribes
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.desktop.LockSoundObserver,subscribes
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GameController,dependency,ar.edu.uade.sokoban.movement.RuntimeState,before/after
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject,association,ar.edu.uade.sokoban.desktop.LockChangeSubject.Observer,subscribers
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject,dependency,ar.edu.uade.sokoban.desktop.LockChangeSubject.Event,publishes confirmed delta
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject.Event,association,ar.edu.uade.sokoban.desktop.LockChangeSubject.Delta,
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject.Event,association,ar.edu.uade.sokoban.desktop.LockChangeSubject.Origin,
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GatePresentationObserver,realization,ar.edu.uade.sokoban.desktop.LockChangeSubject.Observer,
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockSoundObserver,realization,ar.edu.uade.sokoban.desktop.LockChangeSubject.Observer,
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.GatePresentationObserver,association,ar.edu.uade.sokoban.desktop.GameView,requests repaint
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockSoundObserver,association,ar.edu.uade.sokoban.desktop.GameView,requests sound
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.desktop.LockChangeSubject,dependency,ar.edu.uade.sokoban.movement.RuntimeState,calculates changes only
+08_Observer_Locks_AS_IMPLEMENTED,ar.edu.uade.sokoban.movement.RuntimeMovementEngine,dependency,ar.edu.uade.sokoban.movement.RuntimeState,domain owns wall rules

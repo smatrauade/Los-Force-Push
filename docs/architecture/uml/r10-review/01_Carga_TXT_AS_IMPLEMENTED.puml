@@ -1,0 +1,112 @@
+@startuml
+' R10 REVIEW DRAFT: reviewed against impaciencia e7d4c33f3fb17bd3a72bca25ddee1ad37f529087
+' Source: GitHub, no local compilation/PlantUML renderer used.
+title 01 - TXT Loading: legacy, C2, Fragile and Extended (AS_IMPLEMENTED)
+left to right direction
+skinparam classAttributeIconSize 0
+hide empty members
+package "ar.edu.uade.sokoban.level" {
+  class Position <<record>> {
+    +row() : int
+    +column() : int
+  }
+  enum Terrain {
+  WALL
+  FLOOR
+  GOAL
+}
+  enum Occupant {
+  EMPTY
+  PLAYER
+  BOX
+}
+  class Cell <<record>> {
+    +terrain() : Terrain
+    +occupant() : Occupant
+  }
+  class Board <<record>> {
+    +rows() : List<List<Cell>>
+    +cellAt(position : Position) : Cell
+    +playerPosition() : Position
+  }
+  class Level <<record>> {
+    +board() : Board
+  }
+  class LevelBuilder <<package-private>> {
+    ~addRow(row : List<Cell>) : void
+    ~build() : Level
+  }
+  class LevelFormatException
+  class IllegalArgumentException <<JDK>>
+  class LevelParser {
+    +parse(text : String) : Level
+  }
+  class C2LevelParser <<package-private>> {
+    {static} ~parse(text : String) : Level
+  }
+  class LevelLoader {
+    -parser : LevelParser
+    +load(path : Path) : Level
+    +loadExperimentalFragile(path : Path) : ExperimentalFragileLevel
+    +loadExtended(path : Path) : ExtendedLevelDefinition
+    -readText(path : Path) : String
+  }
+  class ExperimentalFragileParser {
+    +parse(text : String) : ExperimentalFragileLevel
+  }
+  class ExperimentalFragileLevel <<record>> {
+    +spatialTemplate() : Board
+    +fragileBoxes() : List<FragileBox>
+  }
+  class "ExperimentalFragileLevel.FragileBox" as FragileBox <<record>> {
+    +id() : String
+    +position() : Position
+    +initialResistance() : int
+  }
+  class ExtendedLevelParser {
+    +parse(text : String) : ExtendedLevelDefinition
+  }
+  class ExtendedLevelDefinition <<record>> {
+    +base() : ExperimentalFragileLevel
+    +ice() : Set<Position>
+    +keys() : List<Key>
+    +locks() : List<Lock>
+    +walls() : List<Wall>
+  }
+  class "ExtendedLevelDefinition.Key" as ExtKey <<record>>
+  class "ExtendedLevelDefinition.Lock" as ExtLock <<record>>
+  class "ExtendedLevelDefinition.Wall" as ExtWall <<record>>
+}
+IllegalArgumentException <|-- LevelFormatException
+LevelLoader --> LevelParser : injected field
+LevelLoader ..> LevelFormatException : rejects invalid load
+LevelLoader ..> ExperimentalFragileParser : creates in loadExperimentalFragile
+LevelLoader ..> ExtendedLevelParser : creates in loadExtended
+LevelParser ..> C2LevelParser : static C2 dispatch
+LevelParser ..> LevelBuilder : creates (legacy)
+C2LevelParser ..> LevelBuilder : creates (C2)
+LevelBuilder ..> Level : constructs
+Level --> "1" Board : value field
+Board --> "1..*" Cell : rows of values
+Cell --> Terrain
+Cell --> Occupant
+ExperimentalFragileParser ..> LevelParser : normalizes and validates C2
+ExperimentalFragileParser ..> ExperimentalFragileLevel : constructs
+ExperimentalFragileLevel --> "1" Board : spatial template
+ExperimentalFragileLevel --> "0..*" FragileBox : initial data
+FragileBox --> Position
+ExtendedLevelParser ..> ExperimentalFragileParser : normalizes and delegates
+ExtendedLevelParser ..> ExtendedLevelDefinition : constructs
+ExtendedLevelDefinition --> "1" ExperimentalFragileLevel : base
+ExtendedLevelDefinition --> "0..*" ExtKey : keys
+ExtendedLevelDefinition --> "0..*" ExtLock : locks
+ExtendedLevelDefinition --> "0..*" ExtWall : walls
+ExtendedLevelDefinition ..> Position : ice cells
+note bottom of ExtendedLevelDefinition
+  Initial immutable definition; playable only after RuntimeState.fromExtended().
+  Its nested Key/Lock/Wall records do not implement gameplay on their own.
+end note
+note bottom of LevelLoader
+  Shared strict UTF-8 and 65536-byte boundary, explicit load modes.
+end note
+@enduml

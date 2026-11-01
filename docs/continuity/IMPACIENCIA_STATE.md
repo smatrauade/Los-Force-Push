@@ -66,3 +66,7 @@ R3 extiende el consumidor individual con mecánicas dinámicas, sin incorporar e
 ## Compatibilidad Windows R9W.1
 
 La [evidencia nativa](../testing/IMPACIENCIA_WINDOWS_COMPATIBILITY.md) documenta runners PowerShell, regresión, selector TXT y el ajuste de accesibilidad de la pantalla final. La elegibilidad académica, derechos y aceptación TEAM permanecen pendientes; R10 requiere autorización separada.
+
+## R10 â€” Modelo de clases en revisiÃ³n
+
+Se preparÃ³ y versionÃ³ un [paquete UML R10 AS_IMPLEMENTED en estado DRAFT](../architecture/uml/r10-review/README.md), derivado de la implementaciÃ³n individual `e7d4c33f3fb17bd3a72bca25ddee1ad37f529087`, con nueve vistas, trazabilidad y un `.mdj` estructuralmente comprobado. La apertura/ediciÃ³n/guardado y reapertura en StarUML **no** estÃ¡n verificadas y el entregable permanece pendiente; no se modificaron las reglas del juego. Las aprobaciones TEAM, la elegibilidad RF-12 y los derechos de assets continÃºan sin cierre externo.

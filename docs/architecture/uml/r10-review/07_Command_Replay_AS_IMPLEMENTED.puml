@@ -1,0 +1,32 @@
+@startuml
+title 07 - Command de replay y estado independiente
+left to right direction
+package "ar.edu.uade.sokoban.movement" {
+ class RuntimeMovementEngine
+ class RuntimeState <<record>>
+ class RuntimeMoveResult <<record>>
+ enum Direction
+}
+package "ar.edu.uade.sokoban.desktop" {
+ class MoveCommand <<record concrete Command>>
+ class ReplayTrace <<record>>
+ class ReplayRecorder
+ class ReplayPlayer <<Invoker>>
+ class GameController
+ class "SwingApplication.GameWindow" as GameWindow
+}
+MoveCommand --> Direction
+MoveCommand ..> RuntimeMovementEngine : execute()
+MoveCommand ..> RuntimeState : execute()
+MoveCommand ..> RuntimeMoveResult : returns
+ReplayRecorder --> "0..*" MoveCommand : accepted moves
+ReplayRecorder ..> ReplayTrace : assembles
+ReplayRecorder ..> ReplayPlayer : verifies
+ReplayTrace --> "0..*" MoveCommand : immutable trace
+ReplayTrace --> RuntimeState : initial and final
+ReplayPlayer *-- RuntimeMovementEngine : own engine
+ReplayPlayer --> ReplayTrace
+ReplayPlayer ..> MoveCommand : invokes
+GameController --> ReplayRecorder : manages
+GameWindow --> ReplayPlayer : displays
+@enduml

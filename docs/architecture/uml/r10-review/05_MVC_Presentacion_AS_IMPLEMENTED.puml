@@ -1,0 +1,40 @@
+@startuml
+title 05 - MVC de Swing implementado
+left to right direction
+package "ar.edu.uade.sokoban.movement" {
+ class RuntimeState <<record>>
+ enum Direction
+}
+package "ar.edu.uade.sokoban.session" {
+ class LevelProgression
+ class LevelCatalog
+}
+package "ar.edu.uade.sokoban.desktop" {
+ class SwingApplication
+ class "SwingApplication.GameWindow" as GameWindow
+ interface GameView
+ class GameController
+ class GamePresentation <<record>>
+ class BoardPanel
+ class PixelAssets
+ class UiCommands <<record>>
+ class LevelResult <<record>>
+ class ArrowBindings
+}
+SwingApplication ..> GameWindow : instancia en EDT
+GameWindow ..|> GameView
+GameWindow *-- "1" GameController : coordinador
+GameWindow *-- "2" BoardPanel : tablero y replay
+GameWindow ..> ArrowBindings
+GameController --> "1" GameView : interfaz
+GameController --> "0..1" LevelProgression : partida
+GameController ..> GamePresentation : proyeccion
+GameController ..> LevelResult : adapta score
+GamePresentation --> RuntimeState : estado inmutable
+BoardPanel --> RuntimeState : proyeccion read-only
+BoardPanel --> PixelAssets : render sprites
+GameView ..> UiCommands : callbacks
+GameView ..> LevelResult : muestra score
+GameController ..> Direction
+LevelProgression --> LevelCatalog
+@enduml

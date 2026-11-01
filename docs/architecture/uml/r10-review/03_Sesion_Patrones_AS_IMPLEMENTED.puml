@@ -1,0 +1,109 @@
+@startuml
+' R10 REVIEW DRAFT: code-based, SHA e7d4c33f3fb17bd3a72bca25ddee1ad37f529087
+title 03 - Session, Memento, Strategy and progression (AS_IMPLEMENTED)
+left to right direction
+skinparam classAttributeIconSize 0
+hide empty members
+package "ar.edu.uade.sokoban.movement" {
+  class RuntimeState <<record>>
+  class RuntimeMoveResult <<record>>
+  class RuntimeMovementEngine <<stateless>>
+  enum Direction
+}
+package "ar.edu.uade.sokoban.level" {
+  class LevelLoader
+}
+package "ar.edu.uade.sokoban.session" {
+  interface GameMemento <<package-private opaque>>
+  class "GameSession.Snapshot" as Snapshot <<private record>> {
+    -state : RuntimeState
+    -moves : long
+    -pushes : long
+  }
+  class "GameSession.Metrics" as Metrics <<record>> {
+    +moves() : long
+    +pushes() : long
+    +undoUsesTotal() : long
+    +undoUsesSinceReset() : int
+  }
+  class UndoManager <<package-private Caretaker>> {
+    -history : Deque<GameMemento>
+    ~record(snapshot : GameMemento) : void
+    ~peekBack(steps : int) : GameMemento
+    ~discardBack(steps : int) : void
+    ~clear() : void
+  }
+  class GameSession <<Originator>> {
+    -engine : RuntimeMovementEngine
+    -history : UndoManager
+    -initial : RuntimeState
+    -current : RuntimeState
+    +move(direction : Direction) : RuntimeMoveResult
+    +undoFive() : UndoResult
+    +restart() : void
+    +changeLevel(state : RuntimeState, context : String) : void
+    +metrics() : Metrics
+  }
+  class LevelStats <<record>> {
+    +levelContext() : String
+    +moves() : long
+    +pushes() : long
+    +undoUsesTotal() : long
+    {static} +fromSession(session : GameSession) : LevelStats
+  }
+  interface ScoreStrategy <<Strategy>> {
+    +calculate(stats : LevelStats) : long
+  }
+  class WeightedPenaltyScoreStrategy <<record ConcreteStrategy>> {
+    +calculate(stats : LevelStats) : long
+  }
+  class VictoryEvaluator <<stateless>> {
+    +evaluate(state : RuntimeState) : VictoryResult
+  }
+  class "VictoryEvaluator.VictoryResult" as VictoryResult <<record>>
+  class LevelCatalog <<record>>
+  class "LevelCatalog.Entry" as CatalogEntry <<record>>
+  class LevelProgression <<application coordinator>> {
+    -catalog : LevelCatalog
+    -score : ScoreStrategy
+    -session : GameSession
+    +move(direction : Direction) : RuntimeMoveResult
+    +undoFive() : UndoResult
+    +restart() : void
+    +finish() : Optional<LevelResult>
+    +advance() : AdvanceResult
+  }
+  class "LevelProgression.LevelResult" as CoreResult <<record>>
+}
+GameMemento <|.. Snapshot
+GameSession *-- "1" UndoManager : creates and owns
+UndoManager --> "0..15" GameMemento : stores opaque tokens
+GameSession ..> Snapshot : creates / restores
+Snapshot --> RuntimeState : immutable snapshot
+GameSession *-- "1" RuntimeMovementEngine : owns engine
+GameSession --> RuntimeState : initial / current
+GameSession ..> Metrics : produces
+GameSession ..> RuntimeMoveResult
+LevelStats ..> GameSession : reads metrics
+ScoreStrategy <|.. WeightedPenaltyScoreStrategy
+ScoreStrategy ..> LevelStats
+LevelProgression --> "1" LevelCatalog : supplied catalog
+LevelCatalog --> "1..*" CatalogEntry : immutable level entries
+LevelProgression --> "1" ScoreStrategy : injected scoring policy
+LevelProgression *-- "1" GameSession : constructed session
+LevelProgression *-- "1" LevelLoader : constructed loader
+LevelProgression *-- "1" VictoryEvaluator : constructed evaluator
+LevelProgression --> "0..*" CoreResult : collected completed results
+CoreResult --> LevelStats
+VictoryEvaluator ..> RuntimeState
+VictoryEvaluator ..> VictoryResult : returns immutable evaluation
+note right of Snapshot
+  Private nested implementation of a package-private opaque GameMemento.
+  UndoManager does not inspect record fields; only GameSession casts/restores.
+  Undo usage totals deliberately remain outside the snapshot.
+end note
+note bottom of WeightedPenaltyScoreStrategy
+  Technical Strategy: 10000 - 10*moves - 25*pushes - 100*undoUsesTotal,
+  saturated at zero. Experimental formula, not TEAM ratified.
+end note
+@enduml

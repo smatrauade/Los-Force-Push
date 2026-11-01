@@ -1,0 +1,115 @@
+@startuml
+' R10 REVIEW DRAFT: code-based, SHA e7d4c33f3fb17bd3a72bca25ddee1ad37f529087
+title 02 - Immutable runtime and movement (AS_IMPLEMENTED)
+left to right direction
+skinparam classAttributeIconSize 0
+hide empty members
+package "ar.edu.uade.sokoban.level" {
+  class Level <<record>>
+  class Board <<record>>
+  class ExperimentalFragileLevel <<record>>
+  class ExtendedLevelDefinition <<record>>
+  class Position <<record>>
+}
+package "ar.edu.uade.sokoban.movement" {
+  enum Direction {
+  UP
+  DOWN
+  LEFT
+  RIGHT
+}
+  enum "RuntimeState.Ground" as Ground {
+  WALL
+  FLOOR
+  GOAL
+  ICE
+  LOCK
+  DYNAMIC_WALL
+}
+  enum "RuntimeState.BoxKind" as BoxKind {
+  NORMAL
+  FRAGILE
+  KEY
+}
+  class RuntimeState <<immutable record>> {
+    +terrain() : List<List<Ground>>
+    +player() : Position
+    +boxes() : List<Box>
+    +locks() : List<Lock>
+    +walls() : List<DynamicWall>
+    +lockActive(id : String) : boolean
+    +wallOpen(position : Position) : boolean
+    +boxAt(position : Position) : Box
+    {static} +fromLevel(level : Level) : RuntimeState
+    {static} +fromDefinition(definition : ExperimentalFragileLevel) : RuntimeState
+    {static} +fromExtended(definition : ExtendedLevelDefinition) : RuntimeState
+  }
+  class "RuntimeState.Box" as RuntimeBox <<record>> {
+    +kind() : BoxKind
+    +position() : Position
+    +id() : String
+    +resistance() : int
+  }
+  class "RuntimeState.Lock" as RuntimeLock <<record>> {
+    +id() : String
+    +position() : Position
+  }
+  class "RuntimeState.DynamicWall" as RuntimeWall <<record>> {
+    +id() : String
+    +position() : Position
+    +lockIds() : Set<String>
+  }
+  class RuntimeMovementEngine <<stateless>> {
+    +move(state : RuntimeState, direction : Direction) : RuntimeMoveResult
+  }
+  class RuntimeMoveResult <<record>> {
+    +kind() : MoveResult.Kind
+    +state() : RuntimeState
+    +pushedBox() : RuntimeState.Box
+    +boxDestination() : Position
+    +boxDistance() : int
+    +broken() : boolean
+    +lockChanges() : List<LockChange>
+  }
+  class "RuntimeMoveResult.LockChange" as LockChange <<record>>
+  class MovementEngine <<legacy stateless>>
+  class MoveResult <<legacy record>>
+  enum "MoveResult.Kind" as MoveKind {
+    MOVED
+    PUSHED
+    BLOCKED
+  }
+}
+RuntimeState --> "0..*" RuntimeBox : boxes (immutable values)
+RuntimeState --> "0..*" RuntimeLock : locks (immutable values)
+RuntimeState --> "0..*" RuntimeWall : walls (immutable values)
+RuntimeState --> Ground
+RuntimeState --> Position : player
+RuntimeBox --> BoxKind
+RuntimeBox --> Position
+RuntimeLock --> Position
+RuntimeWall --> Position
+RuntimeWall ..> RuntimeLock : references lock IDs (no object pointers)
+RuntimeState ..> Level : adapter
+RuntimeState ..> ExperimentalFragileLevel : adapter
+RuntimeState ..> ExtendedLevelDefinition : adapter
+RuntimeMovementEngine ..> RuntimeState : reads; creates next
+RuntimeMovementEngine ..> RuntimeMoveResult : returns
+RuntimeMovementEngine ..> Direction
+RuntimeMoveResult --> "1" RuntimeState : resulting state
+RuntimeMoveResult --> MoveKind : status
+RuntimeMoveResult --> "0..1" RuntimeBox : pushedBox
+RuntimeMoveResult --> "0..*" LockChange : deltas
+note right of RuntimeState
+  RuntimeState is the canonical occupancy source in gameplay.
+  Special wall openness is derived from key-on-lock state.
+  Boxes / locks / walls are immutable record lists, no shared mutable graph.
+end note
+note bottom of RuntimeMovementEngine
+  Single transition; ice slide and Fragile decrement/break are atomic.
+  Occupied wall closure is blocked. It does not implement Observer.
+end note
+note bottom of MovementEngine
+  Retained legacy normal-box engine; not the gameplay campaign coordinator.
+end note
+@enduml

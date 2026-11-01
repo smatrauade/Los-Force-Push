@@ -1,0 +1,55 @@
+@startuml
+' AS_IMPLEMENTED summary, SHA e7d4c33f3fb17bd3a72bca25ddee1ad37f529087
+' Lightweight overview; details in 01-04
+left to right direction
+title 00 - Arquitectura general implementada (Java 17 / Swing)
+package "ar.edu.uade.sokoban.level" {
+  class LevelLoader
+  class LevelParser
+  class ExtendedLevelParser
+  class ExtendedLevelDefinition
+}
+package "ar.edu.uade.sokoban.movement" {
+  class RuntimeState <<record>>
+  class RuntimeMovementEngine
+  class RuntimeMoveResult <<record>>
+}
+package "ar.edu.uade.sokoban.session" {
+  class GameSession
+  class LevelProgression
+  interface ScoreStrategy
+  class VictoryEvaluator
+}
+package "ar.edu.uade.sokoban.desktop" {
+  interface GameView
+  class GameController
+  class GamePresentation <<record>>
+  class BoardPanel
+  class "SwingApplication.GameWindow" as GameWindow
+  interface VisualThemeFactory
+  class ReplayRecorder
+  class ReplayPlayer
+  class LockChangeSubject
+}
+LevelLoader --> LevelParser : carga STANDARD
+LevelLoader ..> ExtendedLevelParser : carga EXTENDED
+ExtendedLevelParser ..> ExtendedLevelDefinition
+RuntimeState ..> ExtendedLevelDefinition : fromExtended()
+RuntimeMovementEngine ..> RuntimeState : transicion inmutable
+RuntimeMovementEngine ..> RuntimeMoveResult : produce
+GameSession --> RuntimeMovementEngine : mover
+GameSession --> RuntimeState : estado actual
+LevelProgression --> GameSession : coordina
+LevelProgression --> ScoreStrategy : politica inyectada
+LevelProgression --> VictoryEvaluator
+GameController --> LevelProgression : facade del core
+GameController --> GameView : callbacks
+GameController ..> GamePresentation : proyeccion
+GamePresentation --> RuntimeState : solo lectura
+GameWindow ..|> GameView
+GameWindow --> BoardPanel : dos tableros
+GameWindow --> VisualThemeFactory : tema seleccionado
+GameController --> ReplayRecorder : registra
+GameWindow --> ReplayPlayer : reproduce
+GameController --> LockChangeSubject : notifica
+@enduml

@@ -87,3 +87,7 @@ El diagrama desktop refleja el controlador con `LevelProgression`, proyección `
 ## Extras y Observer individuales R8 — 31/10/2026
 
 El diagrama desktop muestra familias visuales, Command replay y Observer de notificación; el candidato histórico no cambia. `.mdj` de StarUML sigue pendiente; elegibilidad académica de extras no confirmada.
+
+## R10 â€” RevisiÃ³n de modelo UML en sandbox
+
+El [paquete documental R10](r10-review/README.md) incorpora un **borrador** `.mdj` y nueve diagramas de revisiÃ³n AS_IMPLEMENTED sobre el commit `e7d4c33f3fb17bd3a72bca25ddee1ad37f529087`, junto con trazabilidad y auditorÃ­a de patrones. Se verificÃ³ la estructura JSON, IDs y referencias del borrador (sin referencias colgantes), pero **NO** se abriÃ³ ni guardÃ³ con StarUML: `STARUML_DELIVERABLE=PENDING`, `STARUML_NATIVE_OPEN_SAVE_REOPEN=NOT_RUN`. Los esquemas Graphviz externos son sÃ³lo previsualizaciones. Los diagramas `*-spike-v1.puml` y el candidato v0.5 conservan sus cortes histÃ³ricos; este directorio no reemplaza automÃ¡ticamente ninguna decisiÃ³n del equipo.

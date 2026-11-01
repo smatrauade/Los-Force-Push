@@ -1,0 +1,33 @@
+@startuml
+title 08 - Observer de notificaciones Lock/Wall
+left to right direction
+package "ar.edu.uade.sokoban.movement" {
+ class RuntimeState <<immutable record>>
+ class RuntimeMovementEngine
+}
+package "ar.edu.uade.sokoban.desktop" {
+ interface GameView
+ class GameController
+ class LockChangeSubject <<Subject>>
+ interface "LockChangeSubject.Observer" as Observer
+ class "LockChangeSubject.Event" as Event <<record>>
+ class "LockChangeSubject.Delta" as Delta <<record>>
+ enum "LockChangeSubject.Origin" as Origin
+ class GatePresentationObserver
+ class LockSoundObserver
+}
+GameController *-- LockChangeSubject : owns window scoped subscriptions
+GameController ..> GatePresentationObserver : subscribes
+GameController ..> LockSoundObserver : subscribes
+GameController ..> RuntimeState : before/after
+LockChangeSubject --> "0..*" Observer : subscribers
+LockChangeSubject ..> Event : publishes confirmed delta
+Event --> "0..*" Delta
+Event --> Origin
+Observer <|.. GatePresentationObserver
+Observer <|.. LockSoundObserver
+GatePresentationObserver --> GameView : requests repaint
+LockSoundObserver --> GameView : requests sound
+LockChangeSubject ..> RuntimeState : calculates changes only
+RuntimeMovementEngine ..> RuntimeState : domain owns wall rules
+@enduml

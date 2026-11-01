@@ -1,0 +1,30 @@
+@startuml
+title 06 - Abstract Factory de temas visuales
+left to right direction
+package "ar.edu.uade.sokoban.desktop" {
+ interface VisualThemeFactory
+ class "VisualThemeFactory.UiPalette" as UiPalette <<nested record>>
+ interface "VisualThemeFactory.SpritePresentation" as SpritePresentation
+ class VisualThemes
+ abstract class "VisualThemes.Family" as Family
+ class "VisualThemes.Copper" as Copper
+ class "VisualThemes.Night" as Night
+ class "VisualThemes.Jade" as Jade
+ class PixelAssets
+ class BoardPanel
+ class "SwingApplication.GameWindow" as GameWindow
+}
+VisualThemeFactory ..> UiPalette : palette()
+VisualThemeFactory ..> SpritePresentation : sprites()
+VisualThemeFactory <|.. Family
+Family <|-- Copper
+Family <|-- Night
+Family <|-- Jade
+VisualThemes ..> Copper : creates
+VisualThemes ..> Night : creates
+VisualThemes ..> Jade : creates
+GameWindow --> VisualThemeFactory : selector
+BoardPanel ..> VisualThemeFactory : setTheme
+PixelAssets --> SpritePresentation : sprite transform
+PixelAssets ..> VisualThemeFactory : setTheme
+@enduml

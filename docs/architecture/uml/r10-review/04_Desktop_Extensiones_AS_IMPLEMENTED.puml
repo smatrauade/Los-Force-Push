@@ -1,0 +1,154 @@
+@startuml
+' R10 REVIEW DRAFT: code-based, SHA e7d4c33f3fb17bd3a72bca25ddee1ad37f529087
+title 04 - Desktop MVC, Abstract Factory, Command and Observer (AS_IMPLEMENTED)
+left to right direction
+skinparam classAttributeIconSize 0
+hide empty members
+package "ar.edu.uade.sokoban.movement" {
+  class RuntimeState <<record>>
+  class RuntimeMoveResult <<record>>
+  class RuntimeMovementEngine <<stateless>>
+  enum Direction
+}
+package "ar.edu.uade.sokoban.session" {
+  class LevelProgression
+  class LevelCatalog <<record>>
+}
+package "ar.edu.uade.sokoban.desktop" {
+  class JFrame <<JDK java.desktop>>
+  class JPanel <<JDK java.desktop>>
+  interface AutoCloseable <<JDK java.base>>
+  class SwingApplication {
+    {static} +main(args : String[]) : void
+  }
+  class "SwingApplication.GameWindow" as GameWindow <<private JFrame subclass>>
+  interface GameView {
+    +render(presentation : GamePresentation) : void
+    +showVictory(result : LevelResult) : void
+    +onGateChanged(event : LockChangeSubject.Event) : void
+  }
+  class GameController {
+    -view : GameView
+    -game : LevelProgression
+    -recorder : ReplayRecorder
+    -subject : LockChangeSubject
+    +loadCatalog(catalog : LevelCatalog) : void
+    +move(direction : Direction) : void
+    +undo() : void
+    +restart() : void
+    +nextLevel() : void
+  }
+  class GamePresentation <<record>>
+  class ArrowBindings <<keyboard bindings>>
+  class PixelTheme <<view-only styling>>
+  class BoardPanel <<JPanel renderer>>
+  class PixelAssets {
+    -presentation : VisualThemeFactory.SpritePresentation
+    +setTheme(theme : VisualThemeFactory) : void
+    +image(name : String) : BufferedImage
+  }
+  class SoundManager
+  enum "SoundManager.Effect" as SoundEffect
+  class UiCommands <<record>>
+  class LevelResult <<record>>
+  interface VisualThemeFactory <<AbstractFactory>> {
+    +name() : String
+    +palette() : UiPalette
+    +sprites() : SpritePresentation
+  }
+  class "VisualThemeFactory.UiPalette" as UiPalette <<nested record>>
+  interface "VisualThemeFactory.SpritePresentation" as SpritePresentation <<nested functional interface>>
+  class VisualThemes <<registry>> {
+    {static} +all() : List<VisualThemeFactory>
+  }
+  abstract class "VisualThemes.Family" as ThemeFamily <<private abstract>>
+  class "VisualThemes.Copper" as Copper <<private static final>>
+  class "VisualThemes.Night" as Night <<private static final>>
+  class "VisualThemes.Jade" as Jade <<private static final>>
+  class MoveCommand <<record Command>> {
+    +execute(engine : RuntimeMovementEngine, state : RuntimeState) : RuntimeMoveResult
+  }
+  class ReplayTrace <<record immutable>>
+  class ReplayRecorder
+  class ReplayPlayer <<Invoker>>
+  class LockChangeSubject <<Subject>> {
+    +subscribe(observer : Observer) : void
+    +unsubscribe(observer : Observer) : void
+    +publish(origin : Origin, before : RuntimeState, after : RuntimeState) : void
+  }
+  interface "LockChangeSubject.Observer" as LockObserver <<nested Observer>> {
+    +onLockChange(event : Event) : void
+  }
+  class "LockChangeSubject.Event" as LockEvent <<nested record>>
+  class "LockChangeSubject.Delta" as LockDelta <<nested record>>
+  enum "LockChangeSubject.Origin" as LockOrigin
+  class GatePresentationObserver
+  class LockSoundObserver
+}
+JFrame <|-- GameWindow
+JPanel <|-- BoardPanel
+AutoCloseable <|.. SoundManager
+AutoCloseable <|.. LockChangeSubject
+SwingApplication ..> GameWindow : constructs on EDT
+GameWindow ..> ArrowBindings : installs window key actions
+GameWindow ..> PixelTheme : builds styled controls
+GameWindow ..|> GameView
+GameWindow *-- "1" GameController : constructed, closes
+GameWindow *-- "2" BoardPanel : main and replay boards
+GameWindow *-- "1" SoundManager : local audio
+GameWindow --> "0..1" ReplayPlayer : active playback
+GameWindow --> "0..1" VisualThemeFactory : selected family
+GameController --> "1" GameView : receives callbacks
+GameController --> "0..1" LevelProgression : loaded application state
+GameController *-- "1" LockChangeSubject : constructs / closes
+GameController --> "0..1" ReplayRecorder : creates per level
+GameController ..> GamePresentation : sends immutable projection
+GameController ..> LevelResult : adapts core result
+GameController ..> RuntimeMoveResult
+GamePresentation --> "1" RuntimeState : read-only state
+BoardPanel --> "0..1" RuntimeState : displays
+BoardPanel --> "1" PixelAssets : sprite dependency (default ctor creates)
+PixelAssets --> "1" SpritePresentation : active image transform
+SoundManager --> SoundEffect : sound lookup
+GameView ..> UiCommands
+GameView ..> LevelResult
+VisualThemeFactory ..> UiPalette : creates compatible palette
+VisualThemeFactory ..> SpritePresentation : produces sprite transform
+VisualThemeFactory <|.. ThemeFamily
+ThemeFamily <|-- Copper
+ThemeFamily <|-- Night
+ThemeFamily <|-- Jade
+VisualThemes ..> Copper : creates
+VisualThemes ..> Night : creates
+VisualThemes ..> Jade : creates
+ReplayRecorder --> "0..*" MoveCommand : stores accepted commands
+ReplayRecorder ..> ReplayTrace : constructs
+ReplayRecorder ..> ReplayPlayer : verifies trace
+ReplayTrace --> "0..*" MoveCommand : immutable list
+ReplayTrace --> RuntimeState : initial and final values
+ReplayPlayer --> "1" ReplayTrace : replay source
+ReplayPlayer *-- "1" RuntimeMovementEngine : own engine
+ReplayPlayer ..> MoveCommand : invokes execute
+LockChangeSubject --> "0..*" LockObserver : subscriptions
+LockChangeSubject ..> LockEvent : publishes
+LockEvent --> "0..*" LockDelta : immutable changes
+LockEvent --> LockOrigin
+LockObserver <|.. GatePresentationObserver
+LockObserver <|.. LockSoundObserver
+GatePresentationObserver --> "1" GameView : refresh callback
+LockSoundObserver --> "1" GameView : sound callback
+GameController ..> GatePresentationObserver : constructs + subscribes
+GameController ..> LockSoundObserver : constructs + subscribes
+note bottom of ThemeFamily
+  Private nested Family implements Abstract Factory;
+  three private concrete subclasses are the actual runtime types.
+end note
+note bottom of MoveCommand
+  Concrete immutable Command, with no separate Command interface.
+  ReplayPlayer invokes it against a separate runtime instance.
+end note
+note bottom of LockChangeSubject
+  Subject owns observer subscriptions only.
+  It does not own Lock/Wall domain state, nor decide wall openness.
+end note
+@enduml

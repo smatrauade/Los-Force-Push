@@ -1,0 +1,51 @@
+{
+  "source_sha": "e7d4c33f3fb17bd3a72bca25ddee1ad37f529087",
+  "status": "DRAFT_STATIC_VALIDATION_ONLY",
+  "mdj": "Los_Force_Push_R10_AS_IMPLEMENTED_DRAFT.mdj",
+  "project_model_elements": 82,
+  "unique_relationship_models": 185,
+  "diagrams": {
+    "00_Arquitectura_General_AS_IMPLEMENTED": {
+      "class_views": 20,
+      "relation_views": 21
+    },
+    "01_Carga_TXT_AS_IMPLEMENTED": {
+      "class_views": 20,
+      "relation_views": 25
+    },
+    "02_Runtime_Movimiento_AS_IMPLEMENTED": {
+      "class_views": 18,
+      "relation_views": 20
+    },
+    "03_Sesion_Patrones_AS_IMPLEMENTED": {
+      "class_views": 19,
+      "relation_views": 22
+    },
+    "04_Desktop_Extensiones_AS_IMPLEMENTED": {
+      "class_views": 41,
+      "relation_views": 54
+    },
+    "05_MVC_Presentacion_AS_IMPLEMENTED": {
+      "class_views": 14,
+      "relation_views": 16
+    },
+    "06_Abstract_Factory_Temas_AS_IMPLEMENTED": {
+      "class_views": 11,
+      "relation_views": 13
+    },
+    "07_Command_Replay_AS_IMPLEMENTED": {
+      "class_views": 10,
+      "relation_views": 14
+    },
+    "08_Observer_Locks_AS_IMPLEMENTED": {
+      "class_views": 11,
+      "relation_views": 14
+    }
+  },
+  "all_generated_objects": 2421,
+  "all_refs_resolve": 3755,
+  "dangling_references": 0,
+  "native_StarUML_open": "NOT_RUN",
+  "puml_compilation": "NOT_RUN",
+  "preview_engine": "Graphviz DOT semantic schematic (not PlantUML compiler)"
+}
