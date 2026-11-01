@@ -162,3 +162,29 @@ La [fuente directa](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-cor
 | OQ-07/08 extensiones y OQ-11 global | Dependencia real de consumidores/integración | OPEN_DEPENDENCY / OPEN | No tokens hielo/KeyBox/Lock/muros ni build global ratificado | OQ, contrato y siguiente tarea TODO |
 
 QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, src/scripts idénticos a 5ac2bba. [Entorno, comandos y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Nueva ejecución Java NOT_RUN_DOCS_ONLY. Elegir una regla o consolidar un esquema no cierra RF-05/RF-07 ni prueba puzzles de demo.
+
+
+## Undo, Restart y score — reglas ratificadas 2026-11-01
+
+La [ratificación complementaria del 01/11](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta E08, E09 y E10. Los siguientes casos son `PLAN / NOT_RUN` hasta que exista implementación y evidencia de ejecución. No se modifica la evidencia histórica de los incrementos anteriores.
+
+| Req | Regla / decisión | Responsabilidad candidata | Caso futuro de aceptación |
+|---|---|---|---|
+| RF-07 | Undo restaura tablero, `moves` y `pushes` | GameSession / historial Undo | Ejecutar movimientos y empujes, hacer Undo y comprobar que se restaura el estado anterior y sus contadores. |
+| RF-07 / RF-09 | `undoUsesTotal` acumula usos válidos de Undo durante el intento | Métricas de sesión | Ejecutar Undo y comprobar que el contador aumenta y no se restaura al deshacer. |
+| RF-07 | `consecutiveUndoUses` controla el límite de tres usos | Sesión / UndoManager | Consumir tres usos y comprobar que un cuarto Undo no está disponible. |
+| RF-07 | Un movimiento normal no reinicia el límite | Sesión / UndoManager | Consumir tres usos, ejecutar un movimiento válido y comprobar que Undo continúa bloqueado. |
+| RF-07 | Restart inicia un intento nuevo y reinicia las cuatro métricas | GameSession | Modificar tablero y contadores, ejecutar Restart y verificar tablero inicial, historial vacío y las cuatro métricas en cero. |
+| RF-07 | Cambio de nivel reinicia el límite de Undo | Progresión / GameSession | Consumir los tres usos, cambiar de nivel y comprobar que `consecutiveUndoUses` vuelve a cero. El resto de métricas requiere contrato de progresión. |
+| RF-09 | Fórmula de score ratificada | ScoreStrategy o política de cálculo | Verificar 40 movimientos, 10 empujes y 0 Undo = 940 puntos. |
+| RF-09 | Penalización por Undo | Política de score | Verificar 60 movimientos, 15 empujes y 2 Undo = 890 puntos. |
+| RF-09 | El score tiene mínimo cero | Política de score | Usar métricas cuya penalización supere la base y comprobar que el resultado sea cero, nunca negativo. |
+| RF-09 | Restart no agrega penalización adicional | GameSession / política de score | Ejecutar Restart y comprobar que el score del nuevo intento se calcula sólo con sus métricas, sin un contador o descuento adicional por reinicio. |
+
+**Límites de aceptación:**
+
+- Los casos anteriores son planes; no se declaran ejecutados.
+- El historial de Undo debe respetar además el alcance oficial de RF-07: 15 movimientos y retroceso de 5 por uso, junto con el umbral E07.
+- El cambio de nivel reinicia el límite de Undo, pero el tratamiento de las demás métricas no está definido por la ratificación del 01/11.
+- La ratificación de la fórmula no obliga a implementar Strategy ni Memento. La elección de patrones debe justificarse por el diseño real.
+- RF-07 y RF-09 continúan sin aceptación productiva hasta contar con implementación integrada, pruebas ejecutadas y evidencia reproducible.

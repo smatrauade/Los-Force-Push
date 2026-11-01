@@ -11,8 +11,8 @@
 | D-005 | Variaciones de caja | Polimorfismo `PREFERRED`; checks distribuidos por tipo descartados | LSP y variación real sin ratificación nueva; reglas en [E02](#e02), [E03](#e03) y [E04](#e04); E04 decidida, implementación pendiente en Model/Movement |
 | D-006 | Implementar variantes | Herencia frente a composición `OPEN` | UML usa jerarquía ilustrativa; comparar claridad y extensibilidad real |
 | D-007 | Revertir estado complejo | Memento `PREFERRED`; operaciones inversas como alternativa | Diseño de snapshots sin ratificar; [E07](#e07) acepta sólo el umbral de disponibilidad Undo, no Memento |
-| D-008 | No borrar coste de Undo | Comportamiento de métricas [E09](#e09) `ACCEPTED_SCOPE`; SessionMetrics fuera del snapshot sigue `TEAM-PROPOSAL` | Reinicio del límite decidido en [E08](#e08); bordes de sesión y efectos de Restart en métricas pendientes; [OQ-04/OQ-09](../requirements/OPEN_QUESTIONS.md) |
-| D-009 | Puntaje | ScoreStrategy `PREFERRED`; métricas penalizadas [E10](#e10) `ACCEPTED_SCOPE`; fórmula `OPEN` | [E09](#e09) aporta la distinción de contadores; base, coeficientes y normalización pendientes en [OQ-09](../requirements/OPEN_QUESTIONS.md) |
+| D-008 | No borrar coste de Undo | Comportamiento de métricas [E09](#e09) `ACCEPTED_SCOPE`; métricas de Undo fuera del snapshot como definición de sesión | E09 establece que Undo restaura movimientos/empujes y acumula sus usos dentro del intento. [E08](#e08) establece que sólo Restart/cambio de nivel reinician el límite de tres usos. La ratificación complementaria del 01/11 define que Restart inicia un intento nuevo y reinicia las cuatro métricas. Ver [ratificación complementaria](#ratificación-complementaria-2026-11-01) y [OQ-04/OQ-09](../requirements/OPEN_QUESTIONS.md). |
+| D-009 | Puntaje | `ScoreStrategy` `PREFERRED`; fórmula y métricas penalizadas ratificadas por TEAM el 01/11/2026 | El score penaliza movimientos, empujes y usos de Undo. Fórmula: `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. Base 1000; −1 por movimiento, −2 adicionales por empuje y −10 por Undo. Mínimo cero. Restart no tiene penalización adicional. El score corresponde al intento actual. Ver [ratificación complementaria](#ratificación-complementaria-2026-11-01) y [OQ-09](../requirements/OPEN_QUESTIONS.md). |
 | D-010 | Lock notifica muros | Observer `PREFERRED`, con indicación oral de incorporación según ASR del 21/10; conducta de cierre [E06](#e06) `ACCEPTED_SCOPE` | IDs, cardinalidad, ocupación al cerrar y restauración siguen pendientes en [OQ-07](../requirements/OPEN_QUESTIONS.md); no ratifica Observer |
 | D-011 | Armar nivel de TXT | Builder `PREFERRED`, construcción directa alternativa pendiente | Sugerido como válido por profesor; separar sintaxis/ensamblado sólo si spike aporta claridad |
 | D-012 | Coordinar construcción | Parser como Director opcional `PREFERRED` | Puede dirigir pasos sin clase extra; operaciones dependen de TXT ratificado |
@@ -152,3 +152,64 @@ La tabla E01–E11, sus recuentos y el estado original de E11 permanecen intacto
 - **Diseño pendiente:** Strategy o Abstract Factory son alternativas para el selector sólo si su intención y estructura reales se justifican. Las sugerencias del 29/10 de Factory Method/Abstract Factory para entidades/niveles tampoco ratifican arquitectura ni cambian D-014/D-015.
 
 [OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) mantiene el inventario residual. No se transforma persistencia en obligación académica por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED; la defensa sigue exigiendo explicar patrones efectivamente aplicados.
+
+
+## Ratificación complementaria — Undo, Restart y score — 2026-11-01
+
+**Autoridad:** `TEAM`. **Fecha:** 2026-11-01. **Procedencia:** ratificación del equipo comunicada directamente por la responsable de la tarea. Esta sección complementa E08, E09 y E10, cuyos resultados históricos del 23/10 se conservan sin modificación. No se incorporan recuentos de votos porque no fueron consignados en esta actualización documental.
+
+### 1. Undo y métricas
+
+Se ratifican las siguientes definiciones:
+
+- Undo restaura el tablero, el contador `moves` y el contador `pushes` al estado anterior correspondiente.
+- `undoUsesTotal` acumula los usos válidos de Undo durante el intento actual. No se restaura al ejecutar Undo.
+- `consecutiveUndoUses` cuenta los usos de Undo consumidos desde el último Restart o cambio de nivel.
+- El límite es de tres usos. Un movimiento normal no recupera usos disponibles.
+- Al consumir los tres usos, no se permite otro Undo hasta que ocurra un Restart o cambio de nivel.
+
+### 2. Restart
+
+Restart inicia un intento completamente nuevo del nivel actual.
+
+Al ejecutarlo, se restaura el tablero inicial del nivel y se reinician a cero las cuatro métricas:
+
+- `moves`
+- `pushes`
+- `undoUsesTotal`
+- `consecutiveUndoUses`
+
+También se descarta el historial de Undo del intento anterior.
+
+Restart no agrega una penalización adicional al score. El puntaje se calcula sobre las métricas del intento actual.
+
+### 3. Fórmula de score
+
+Se ratifica la siguiente fórmula:
+
+`Score = max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`
+
+- Puntaje inicial: 1000.
+- Cada movimiento descuenta 1 punto.
+- Cada empuje descuenta 2 puntos adicionales, además del punto correspondiente al movimiento.
+- Cada uso válido de Undo descuenta 10 puntos.
+- El resultado no puede ser inferior a cero.
+
+Ejemplos:
+
+| Moves | Pushes | Undo | Score |
+|---:|---:|---:|---:|
+| 40 | 10 | 0 | 940 |
+| 60 | 15 | 2 | 890 |
+
+### 4. Alcance y límites
+
+Esta ratificación concreta el comportamiento de Restart y la fórmula del score sin modificar los resultados originales de E08, E09 y E10.
+
+El cambio de nivel reinicia `consecutiveUndoUses`, conforme E08. No se extrapola que reinicie las demás métricas: el tratamiento de `moves`, `pushes` y `undoUsesTotal` al cambiar de nivel debe definirse en el contrato de progresión si resulta necesario para la implementación.
+
+La elección de `ScoreStrategy` continúa siendo `PREFERRED`: la ratificación de la fórmula no obliga a utilizar ese patrón ni ratifica una arquitectura concreta.
+
+**Estado:** reglas funcionales ratificadas por TEAM; implementación y pruebas pendientes.
+
+**Documentos afectados:** [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md), [REQUIREMENTS](../requirements/REQUIREMENTS.md) y [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md).
