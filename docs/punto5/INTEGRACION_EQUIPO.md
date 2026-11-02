@@ -66,15 +66,13 @@ normalizado, sin imponer un valor inicial en el modelo. Para locks/portones usar
 - El score se recibe a traves de `LevelResult` desde el servicio de score,
   con sus valores ya calculados. No elegir una formula dentro de la vista.
 
-## Para integrar el Punto 3 - victoria, niveles, locks
+## Punto 3 integrado en rama victoria
 
-- Cuando la sesion confirme victoria, emitir `view.showVictory(new LevelResult(...))`.
-- `FINISH` ya muestra nivel, movimientos, empujes, Undo y score.
-- El boton `SIGUIENTE NIVEL` permanece deshabilitado. Habilitarlo solo cuando el
-  catalogo de niveles entregue un destino y conectar al controller (no a
-  LevelLoader directamente desde el panel de victoria).
-- No inferir victoria haciendo `boxCount == goalCount`: cantidad igual no prueba
-  que todas las cajas esten en destino.
+- `GameController` confirma victoria con `VictoryEvaluator` y emite `showVictory`.
+- `FINISH` muestra nivel, movimientos y empujes; Undo y score oficiales siguen en 0.
+- `SIGUIENTE NIVEL` se habilita solo si el catálogo tiene otro nivel y el actual está finalizado.
+- `BoardPanel` pinta KeyBox, Lock activo y muros abiertos/cerrados desde `RuntimeState`.
+- No inferir victoria haciendo `boxCount == goalCount` en la vista.
 
 ## Para la funcionalidad adicional de guardado y recuperacion
 

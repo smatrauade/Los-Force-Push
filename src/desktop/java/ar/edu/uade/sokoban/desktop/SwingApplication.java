@@ -1,10 +1,8 @@
 package ar.edu.uade.sokoban.desktop;
 
-import ar.edu.uade.sokoban.level.LevelLoader;
-import ar.edu.uade.sokoban.level.LevelParser;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MoveResult;
-import ar.edu.uade.sokoban.movement.MovementEngine;
+import ar.edu.uade.sokoban.session.LevelCatalog;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -92,8 +90,7 @@ public final class SwingApplication {
         private final JCheckBox soundToggle = new JCheckBox("ACTIVAR EFECTOS DE SONIDO", true);
         private final JComboBox<String> zoomSelector = new JComboBox<>(new String[]{
                 "1x  (32 px)", "2x  (64 px)", "3x  (96 px)"});
-        private final transient GameController controller = new GameController(
-                new LevelLoader(new LevelParser()), new MovementEngine(), this);
+        private final transient GameController controller = new GameController(this);
         private final transient Path defaultDemo;
         private transient Path currentLevel;
         private transient Path pendingLevel;
@@ -124,7 +121,7 @@ public final class SwingApplication {
             pending(undoButton, "El Undo de 5 movimientos requiere el modulo del punto 4");
             pending(saveButton, "Guardar partida requiere la funcionalidad adicional");
             pending(loadSaveButton, "Cargar partida guardada requiere la funcionalidad adicional");
-            pending(nextButton, "La progresion requiere el modulo del punto 3");
+            pending(nextButton, "Disponible al completar un nivel con siguiente en el catalogo");
             installKeys();
             addWindowListener(new WindowAdapter() {
                 @Override
@@ -387,10 +384,12 @@ public final class SwingApplication {
                     "LAS CAJAS NO SE PUEDEN TIRAR",
                     "COLOCA CADA CAJA EN UN DESTINO",
                     "ESC: PAUSAR / CONTINUAR",
-                    "R: REINICIAR (AL INTEGRAR PUNTO 4)",
+                    "R: REINICIAR EL NIVEL ACTUAL",
+                    "LA CAJA LLAVE SOBRE CERROJO ABRE MUROS",
+                    "EL CERROJO NO CUENTA COMO DESTINO",
                     "M: ACTIVAR O DESACTIVAR AUDIO",
                     "ZOOM: + Y -",
-                    "UNDO / CAJAS ESPECIALES: EN DESARROLLO"}) {
+                    "UNDO / SCORE: PENDIENTE"}) {
                 JLabel row = label(text, PixelTheme.SMALL);
                 row.setAlignmentX(Component.CENTER_ALIGNMENT);
                 stack.add(row);
@@ -424,7 +423,16 @@ public final class SwingApplication {
         }
 
         private void startDemo() {
-            if (java.nio.file.Files.isRegularFile(defaultDemo)) {
+            Path levels = defaultDemo.getParent();
+            Path campaign = levels == null ? null : levels.resolve("campaign-b.txt");
+            if (java.nio.file.Files.isRegularFile(defaultDemo)
+                    && campaign != null && java.nio.file.Files.isRegularFile(campaign)) {
+                pendingLevel = defaultDemo;
+                controller.loadCatalog(new LevelCatalog(java.util.List.of(
+                        new LevelCatalog.Entry("demo", defaultDemo, LevelCatalog.Format.STANDARD),
+                        new LevelCatalog.Entry("campaign_b", campaign, LevelCatalog.Format.EXTENDED))));
+                pendingLevel = null;
+            } else if (java.nio.file.Files.isRegularFile(defaultDemo)) {
                 openLevel(defaultDemo);
             } else {
                 showLoadError("No se encontro demo.txt. Usa ABRIR NIVEL TXT para seleccionarlo.");
@@ -548,7 +556,7 @@ public final class SwingApplication {
             levelText.setToolTipText(fullName);
             movesText.setText(String.format(java.util.Locale.ROOT, "%04d", presentation.moves()));
             pushesText.setText(String.format(java.util.Locale.ROOT, "%04d", presentation.pushes()));
-            board.showBoard(presentation.board());
+            board.showState(presentation.state());
             continueButton.setEnabled(true);
             configureUiCommands(commands);
             status.setText("CAJAS: " + presentation.board().boxCount()

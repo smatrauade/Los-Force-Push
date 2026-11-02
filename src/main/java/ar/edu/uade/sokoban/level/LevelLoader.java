@@ -32,6 +32,11 @@ public final class LevelLoader {
         return new ExperimentalFragileParser().parse(readText(path));
     }
 
+    /** Explicit Key/Lock/Wall extension; does not change historical loading routes. */
+    public ExtendedLevelDefinition loadExtended(Path path) throws IOException {
+        return new ExtendedLevelParser().parse(readText(path));
+    }
+
     private String readText(Path path) throws IOException {
         byte[] bytes;
         try (InputStream input = Files.newInputStream(path)) {

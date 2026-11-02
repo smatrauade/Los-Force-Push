@@ -1,5 +1,9 @@
 # Estrategia de pruebas y evidencia experimental
 
+## Incremento victoria — 2026-11-01
+
+Rama `victoria`. Core `java.base`, desktop `java.base,java.desktop`, Temurin 17.0.16, `--release 17`. Comandos: `powershell -NoProfile -File ./scripts/test-level-loading.ps1 -IncludeMovement` y `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. Resultados: Loading 40, Movement 31, Extended 26, DynamicWorld 6, Completion 36, C2 32, Fragile 41, Desktop 16, VisualAssets 44, todos PASS/exit 0. GUI manual y audio audible: NOT_RUN. No cierra OQ ni TEAM_ACCEPTANCE.
+
 ## QA combinado PR 8 y PR 9 — 2026-10-28
 
 **Evidencia anterior a este mantenimiento**, ejecutada en SOKOBAN_POST_PR9_INTEGRATION_R1 por Codex sobre la referencia de merge de prueba 99783067a51dea8867924a629daf7fb017cae5ff y su árbol 1796932307df319e3636daee942cf49920b4eb05. Padres: main fafae98642cefd38e466c689b3c8a16825773738 y PR #8 289fef6eda97a2bbd5593c74f06382ae6caf433c. El merge real de #8, 565376452affa9b2146569e5da27dbfd1ee9d4f0, conserva exactamente ese árbol; la equivalencia se comprobó en R2, no se atribuye otra ejecución funcional al merge.

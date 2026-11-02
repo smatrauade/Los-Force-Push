@@ -52,7 +52,7 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | UiCommands | Callbacks opcionales de servicios externos; null indica no disponible |
 | LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados, sólo para presentación |
 
-GameSession, UndoManager/Memento, ScoreStrategy, Observer de locks, LevelCatalog, persistencia y cajas especiales siguen ausentes. Las interfaces y la jerarquía integral no se adoptan por existir hooks visuales. Requisitos/decisiones y evidencia de ejecución se consultan por separado.
+`RuntimeState` / `RuntimeMovementEngine` administran KeyBox, Lock y muros. `VictoryEvaluator` y `LevelCatalog` / `LevelProgression` coordinan victoria y avance. GameSession en este incremento sólo cuenta movimientos/empujes y reinicia el nivel; no hay Undo/Memento ni ScoreStrategy. Persistencia, hielo y Fragile jugable siguen ausentes. Las interfaces y la jerarquía integral no se adoptan por existir hooks visuales. Requisitos/decisiones y evidencia de ejecución se consultan por separado.
 
 ## Responsables de cierre por módulo — 29/10/2026
 

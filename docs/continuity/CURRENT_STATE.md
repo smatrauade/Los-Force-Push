@@ -1,6 +1,10 @@
 # Estado vivo — Los Force Push
 
-AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
+AS_OF = 2026-11-01. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
+
+## Incremento victoria — llaves, cerrojos, muros y progresión — 01/11/2026
+
+En la rama `victoria` se implementó un runtime explícito, separado del Board jugable histórico: `ExtendedLevelParser` / `ExtendedLevelDefinition`, `RuntimeState` / `RuntimeMovementEngine`, `VictoryEvaluator`, `LevelCatalog` y `LevelProgression`. `load(Path)` y `loadExperimentalFragile(Path)` no cambian y siguen rechazando la extensión. Hipótesis individuales, no ratificación TEAM de OQ-01/07 ni de una fórmula de score: asociación Lock↔Walls OR, rechazo de muro cerrado ocupado, KeyBox en Lock no es Goal, campaña `demo.txt` → `campaign-b.txt`. Undo, hielo y Fragile jugable permanecen ausentes. TEAM_ACCEPTANCE = NOT_RECORDED.
 
 ## Cierre semántico y contractual — 29/10/2026
 
@@ -46,8 +50,9 @@ Los PR #8, #9, #10, #11, #12 y #13 están MERGED; los SHA de la tabla identifica
 
 - [LevelLoader / LevelParser / C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level): lectura externa UTF-8 estricta, máximo 65.536 bytes, legacy y C2 opt-in; Board inmutable, grillas hasta 100×100, exactamente un jugador.
 - [MovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/MovementEngine.java): movimiento cardinal y empuje de una caja normal. MOVED/PUSHED producen Board nuevo; BLOCKED conserva la misma instancia.
-- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop): menú, juego, HUD, pausa, opciones, ayuda, zoom, sprites y audio. GameController coordina carga/movimiento; BoardPanel sólo representa; PixelAssets y SoundManager cargan desde classpath.
-- [UiCommands](../../src/desktop/java/ar/edu/uade/sokoban/desktop/UiCommands.java) expone callbacks opcionales y [LevelResult](../../src/desktop/java/ar/edu/uade/sokoban/desktop/LevelResult.java) datos finales. No implementan Undo, Restart, persistencia, score ni progresión.
+- [RuntimeState](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeState.java) / [RuntimeMovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeMovementEngine.java): KeyBox, Lock y muros dinámicos; victoria y campaña en [session](../../src/main/java/ar/edu/uade/sokoban/session).
+- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop): menú, juego, HUD, pausa, opciones, ayuda, zoom, sprites y audio. GameController coordina carga, movimiento, victoria y siguiente nivel; BoardPanel representa RuntimeState; PixelAssets y SoundManager cargan desde classpath.
+- [UiCommands](../../src/desktop/java/ar/edu/uade/sokoban/desktop/UiCommands.java) habilita Restart y Next cuando hay sesión; Undo, persistencia y score oficial siguen ausentes.
 - [Recursos](../../src/desktop/resources/assets): 31 PNG, incluidos 29 base y dos variantes opcionales; 12 WAV. [Manifiesto](../punto5/ASSETS_REGISTRO_SHA256.csv), [contrato entre módulos](../punto5/INTEGRACION_EQUIPO.md) y [derechos pendientes](../punto5/USO_IA_Y_LICENCIAS.md).
 
 ## Spike local C2-L7 — 2026-10-24

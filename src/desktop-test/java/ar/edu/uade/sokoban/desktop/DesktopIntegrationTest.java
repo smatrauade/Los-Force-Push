@@ -200,7 +200,7 @@ public final class DesktopIntegrationTest {
     }
 
     private static GameController controller(Probe view) {
-        return new GameController(new LevelLoader(new LevelParser()), new MovementEngine(), view);
+        return new GameController(view);
     }
 
     private static GameController loaded(Probe view, String text) throws Exception {

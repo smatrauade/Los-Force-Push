@@ -1,12 +1,17 @@
 package ar.edu.uade.sokoban.desktop;
 
 import ar.edu.uade.sokoban.level.Board;
+import ar.edu.uade.sokoban.movement.RuntimeState;
 import java.util.Objects;
 
-/** Read-only projection; the Board reference is the core's immutable value. */
-public record GamePresentation(Board board, String levelName, long moves, long pushes) {
+/** Read-only projection of the runtime world and session counters. */
+public record GamePresentation(RuntimeState state, String levelName, long moves, long pushes) {
     public GamePresentation {
-        Objects.requireNonNull(board, "board");
+        Objects.requireNonNull(state, "state");
         Objects.requireNonNull(levelName, "levelName");
+    }
+
+    public Board board() {
+        return state.toBoard();
     }
 }

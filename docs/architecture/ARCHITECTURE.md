@@ -28,6 +28,8 @@ LevelBuilder es concreto, interno y por carga; Board protege también la constru
 
 MovementEngine es un servicio sin estado: Board + Direction → MoveResult. MOVED/PUSHED crean un Board validado nuevo; BLOCKED conserva la misma instancia. Mantiene terreno/cajas/jugador e inmutabilidad de estados anteriores. Sólo piso, destino, pared, límites y caja normal. Copiar/validar cuesta O(alto×ancho) por éxito; no es Memento ni una decisión definitiva sobre el modelo futuro. [UML](uml/movement-core-spike-v1.puml).
 
+El incremento de victoria añade `RuntimeMovementEngine` sobre `RuntimeState`: KeyBox, Lock y muros dinámicos. Un Lock se activa sólo con KeyBox; los muros asociados abren si al menos un Lock referenciado está activo y vuelven a cerrarse al retirar la llave. Un intento que dejaría ocupado un muro que cierra se bloquea y conserva el estado. `VictoryEvaluator` consulta destinos `GOAL`; Lock no es destino. `LevelProgression` congela el nivel al finalizar y avanza un `LevelCatalog` de formato explícito. No implementa hielo, Fragile jugable ni Undo.
+
 ## Swing y recursos — Punto 5
 
 [GameView](../../src/desktop/java/ar/edu/uade/sokoban/desktop/GameView.java) permite sondas sin JFrame. Conserva render/showLoadError y ofrece métodos default onMove, showVictory, configureUiCommands y playEffect. GameController publica onMove para MOVED/PUSHED/BLOCKED; los bloqueos no cambian proyección ni contadores.

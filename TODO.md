@@ -7,7 +7,7 @@ Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CUR
 | Estado | Alcance | Evidencia y límite |
 |---|---|---|
 | IMPLEMENTED_VERIFIED / PARTIAL | UTF-8 externo, legacy/C2-L7, Board inmutable y LevelBuilder concreto | Código integrado; Loading 40/C2 32 históricos; especiales jugables rechazados |
-| IMPLEMENTED_VERIFIED / PARTIAL | Movement cardinal y caja normal | Movement 31 histórico; hielo/Fragile/KeyBox/Lock/muros dinámicos ausentes |
+| IMPLEMENTED_PARTIAL | Movement cardinal, caja normal, KeyBox/Lock/muros y victoria | Movement 31 histórico más Extended/Dynamic/Completion de esta rama; hielo/Fragile jugable/Undo ausentes |
 | IMPLEMENTED_VERIFIED / PARTIAL | Swing pixel art, menú/HUD/pausa/opciones/zoom, sprites/SFX | Desktop 16, Assets 44, UI 17 y CLI 18 históricos; callbacks pendientes no son servicios |
 | IMPLEMENTED / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET | Definición Fragile inmutable desde String/Path; contrato soportado D-020 | Fragile 41, sin gameplay; OQ-06 resuelta, OQ-08 extensiones pendientes |
 | PARTIAL | 31 PNG (29 base + dos opcionales) y 12 WAV versionados | Manifiesto disponible; revisión de derechos pendiente |
@@ -22,10 +22,10 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 |---|---|---|---|---|
 | P0 / 02/11 | OPEN_DEPENDENCY: extensiones TXT e integración; Java/build global | TXT + consumidores/integración | OQ-08 extensiones; OQ-07/11 | Subconjunto soportado ya decidido D-020; obtener contrato consumidor, preservar E01/E02 y legacy/C2 |
 | P0 / 02/11 | TEAM_DECIDED / IMPLEMENTATION_PENDING_OTHER_MODULE: Fragile/hielo y límite Undo | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
-| P0 / 06/11 | NOT_IMPLEMENTED: hielo, Fragile jugable, KeyBox/Lock y muros dinámicos | Model/Movement + TXT | OQ-01/02/07/08; contrato TXT soportado | Preservar identidad/resistencia y terrenos; casos de bordes, cierre ocupado y rechazo atómico |
-| P0 / 06/11 | NOT_IMPLEMENTED: Observer con candidato Lock→Walls | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración probados |
-| P0 / 09/11 | NOT_IMPLEMENTED: Undo/Restart y métricas | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5; justificar Command o Memento |
-| P0 / 09/11 | NOT_IMPLEMENTED: victoria/progresión y score | Sesión/niveles/score | OQ-01/09, fórmula del equipo | Goal/KeyBox y progresión probados; LevelResult recibe score real; Strategy justificada |
+| P0 / 06/11 | IMPLEMENTED_PARTIAL: KeyBox/Lock/muros, victoria y campaña; hielo/Fragile jugable siguen ausentes | Model/Movement + sesión | OQ-01/07 hipótesis individuales; OQ-02/08 abiertas | Preservar identidad/resistencia; casos de cierre ocupado y E05 ejecutados en esta rama |
+| P0 / 06/11 | PARTIAL: Lock abre muros asociados por consulta derivada, no Observer GoF | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración Undo pendientes |
+| P0 / 09/11 | PARTIAL: Restart de nivel implementado; Undo y métricas oficiales ausentes | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5; justificar Command o Memento |
+| P0 / 09/11 | PARTIAL: victoria/progresión implementadas; score oficial ausente (0 en pantalla) | Sesión/niveles/score | OQ-01 hipótesis; OQ-09 abierta | Goal/KeyBox y progresión probados; LevelResult aún no recibe fórmula TEAM |
 | P0 / 10/11 | TEAM_DECISION_REQUIRED: confirmar dos adicionales elegibles y su selección | Equipo de producto/arquitectura e interfaz | OQ-10; reporte docente indirecto y E11 histórica | No computar guardar automáticamente; selector candidato con elegibilidad reportada, sin mayoría ni implementación verificadas. Confirmar dos extras y demostrar patrón real, sin imponer Strategy/Abstract Factory |
 | P1 / 12/11 | PARTIAL: conectar servicios a UiCommands/renderer | Swing e integración | Servicios operativos y DTO acordado | Disponibilidad real de botones; render de especiales, sin reglas ni resistencia inferida desde sprites |
 | P1 / 13/11 | NOT_IMPLEMENTED: aceptación integral de niveles propios | TXT/QA/Movement | Contrato y mecánicas integrados | TXT externo editado→Board→UI; error conserva estado; cada puzzle tiene secuencia solución y resistencia coherente |

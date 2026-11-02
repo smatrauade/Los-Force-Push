@@ -41,8 +41,10 @@ cd "$root"
 # Product-wide compilation belongs to the future product build (OQ-11).
 find src/main/java/ar/edu/uade/sokoban/level \
     src/main/java/ar/edu/uade/sokoban/movement \
+    src/main/java/ar/edu/uade/sokoban/session \
     src/test/java/ar/edu/uade/sokoban/level \
     src/test/java/ar/edu/uade/sokoban/movement \
+    src/test/java/ar/edu/uade/sokoban/session \
     -name '*.java' -type f | LC_ALL=C sort > "$spike_run_dir/sources"
 "$compiler" --release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror \
     -d "$spike_run_dir/classes" @"$spike_run_dir/sources"
@@ -50,7 +52,14 @@ find src/main/java/ar/edu/uade/sokoban/level \
     -cp "$spike_run_dir/classes" ar.edu.uade.sokoban.level.LevelLoadingTest \
     "$root/src/test/resources/levels"
 if [[ "$include_movement" -eq 1 ]]; then
-    "$runtime" --limit-modules java.base -Djava.io.tmpdir="$spike_run_dir" \
-        -cp "$spike_run_dir/classes" ar.edu.uade.sokoban.movement.MovementTest \
-        "$root/src/test/resources/levels"
+    for test_class in \
+        ar.edu.uade.sokoban.movement.MovementTest \
+        ar.edu.uade.sokoban.level.ExtendedLevelTest \
+        ar.edu.uade.sokoban.movement.DynamicWorldTest \
+        ar.edu.uade.sokoban.session.CompletionTest
+    do
+        "$runtime" --limit-modules java.base -Djava.io.tmpdir="$spike_run_dir" \
+            -cp "$spike_run_dir/classes" "$test_class" \
+            "$root/src/test/resources/levels"
+    done
 fi

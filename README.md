@@ -2,7 +2,7 @@
 
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
-**Estado:** se puede ejecutar una porción del juego con carga de niveles y movimiento básico; el TPO está incompleto. Hielo, cajas especiales jugables, Undo, Restart, victoria y puntaje todavía no están implementados. La aceptación del código por el equipo no está registrada.
+**Estado:** se puede ejecutar una porción del juego con carga de niveles, movimiento, llaves/cerrojos/muros dinámicos, victoria y progresión de campaña. El TPO está incompleto. Hielo, Fragile jugable, Undo y puntaje oficial todavía no están implementados. La aceptación del código por el equipo no está registrada.
 
 ## Inicio rápido
 
@@ -58,7 +58,7 @@ El runner Swing Bash no entrecomilla las rutas de fuentes en el archivo de argum
 
 ## Uso del juego
 
-En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir el [nivel incluido](src/desktop/resources/levels/demo.txt), o **ABRIR NIVEL TXT** para seleccionar un archivo externo compatible. Las flechas mueven al jugador y empujan una caja normal; `Esc` pausa, `M` controla el sonido y `+`/`-` cambian el zoom. Undo, Restart, guardar/cargar partida y siguiente nivel necesitan servicios todavía ausentes; sus controles permanecen deshabilitados sin callbacks operativos. El HUD muestra nivel y contadores demostrativos; la pantalla final no detecta victoria ni calcula score.
+En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir la campaña: el [nivel incluido](src/desktop/resources/levels/demo.txt) y luego [campaign-b](src/desktop/resources/levels/campaign-b.txt) con llave, cerrojo y muro. **ABRIR NIVEL TXT** acepta legacy/C2 ordinario o la extensión explícita de llaves. Las flechas mueven al jugador y empujan una caja; `Esc` pausa, `R` reinicia el nivel, `M` controla el sonido y `+`/`-` cambian el zoom. Al cubrir todos los destinos se muestra victoria; **SIGUIENTE NIVEL** avanza si el catálogo tiene otro archivo. Undo, guardar/cargar y fórmula de score siguen pendientes; el puntaje de la pantalla final permanece en 0.
 
 También se puede iniciar con un nivel externo como argumento, reemplazando la ruta por un archivo propio:
 
@@ -85,7 +85,7 @@ La sección `[attributes]` debe estar vacía en la ruta jugable; se rechazan ent
 
 ## Capacidades y pruebas
 
-El core implementa carga legacy/C2-L7, tablero inmutable y movimiento cardinal con empuje de una caja normal. Swing ofrece menú, pausa, opciones, ayuda, HUD, sprites y sonidos. La definición Fragile descrita abajo **no** habilita cajas frágiles jugables. Quedan pendientes hielo, KeyBox, Lock y muros dinámicos, sesión y Undo/Restart, victoria/progresión, score y dos adicionales elegibles.
+El core implementa carga legacy/C2-L7, tablero inmutable, movimiento cardinal y un runtime separado para KeyBox, Lock y muros dinámicos. La victoria exige todas las cajas —incluida la llave— sobre destinos normales; un Lock no cuenta (E05). Retirar la llave cierra los muros asociados (E06). Swing representa esos estados, detecta victoria y avanza de nivel. La definición Fragile descrita abajo **no** habilita cajas frágiles jugables. Quedan pendientes hielo, Fragile jugable, Undo y score.
 
 Para comprobar el runner de escritorio sin abrir ventana, desde la raíz:
 
