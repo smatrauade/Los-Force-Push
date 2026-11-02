@@ -101,10 +101,11 @@ public final class C2LevelLoadingTest {
             }
         });
         test("10 attributes are never ignored", () -> {
-            for (String record : List.of("fragile f1 resistance=2", "wall w1 initial=closed",
+            for (String record : List.of("wall w1 initial=closed",
                     "link l1 -> w1", "unknown=value", "# comment", " ")) {
                 reject(envelope("@") + "\n" + record, "UNSUPPORTED_FEATURE");
             }
+            reject(envelope("@") + "\nfragile f1 resistance=2", "ATTRIBUTE");
         });
         test("11 strict single ASCII separator", () -> {
             for (String row : List.of(" @", "@ ", "@  _", "@\t_", "@\r_")) {
@@ -161,11 +162,37 @@ public final class C2LevelLoadingTest {
             reject(envelope("@ " + "x".repeat(129)), "TOKEN_LIMIT");
             reject(envelope("@ " + "x".repeat(1_000_000)), "TOKEN_LIMIT");
         });
-        test("20 special entities fail explicitly", () -> {
-            for (String token : List.of("{floor|fragile:f1}", "{goal|fragile:f2}",
-                    "{floor|key:k1}", "{ice|empty}", "{lock:l1|empty}", "{wall:w1|empty}")) {
+        test("20 unimplemented entities still fail explicitly", () -> {
+            for (String token : List.of("{floor|key:k1}", "{lock:l1|empty}",
+                    "{wall:w1|empty}")) {
                 reject(envelope("@ " + token), "UNSUPPORTED_FEATURE");
             }
+            reject(envelope("@ {floor|fragile:f1}"), "ATTRIBUTE");
+        });
+        test("24 ice is a terrain the grid accepts", () -> {
+            Board board = parser.parse(envelope("@ {ice|empty} {ice|box} .")).board();
+            check(board.cellAt(new Position(0, 1)).terrain() == Terrain.ICE, "ice lost");
+            check(board.cellAt(new Position(0, 2)).equals(
+                    new Cell(Terrain.ICE, Occupant.BOX)), "box on ice lost");
+        });
+        test("25 fragile carries its declared resistance", () -> {
+            Board board = parser.parse(envelope("@ {floor|fragile:f1} {goal|fragile:f2}")
+                    + "\nfragile f1 resistance=3\nfragile f2 resistance=1").board();
+            check(board.cellAt(new Position(0, 1)).equals(
+                    new Cell(Terrain.FLOOR, Occupant.FRAGILE_BOX, 3)), "f1 resistance lost");
+            check(board.cellAt(new Position(0, 2)).equals(
+                    new Cell(Terrain.GOAL, Occupant.FRAGILE_BOX, 1)), "f2 resistance lost");
+            check(board.boxCount() == 2, "fragile boxes are not counted as boxes");
+        });
+        test("26 fragile identity and resistance are mandatory", () -> {
+            reject(envelope("@ {floor|fragile:f1} {floor|fragile:f1}")
+                    + "\nfragile f1 resistance=2", "ATTRIBUTE");
+            reject(envelope("@ {floor|fragile:f1}")
+                    + "\nfragile f1 resistance=1\nfragile f1 resistance=2", "ATTRIBUTE");
+            reject(envelope("@ {floor|fragile:f1}")
+                    + "\nfragile f2 resistance=2", "ATTRIBUTE");
+            reject(envelope("@ {wall|fragile:f1}")
+                    + "\nfragile f1 resistance=2", "UNSUPPORTED_FEATURE");
         });
         test("21 unclosed and unrecognized combinations reject", () -> {
             for (String token : List.of("{floor|empty", "{wall|player}", "{wall|box}",
@@ -183,7 +210,7 @@ public final class C2LevelLoadingTest {
         });
         test("23 interleaved legacy and C2 calls are independent", () -> {
             Level first = parser.parse(envelope("@ _"));
-            reject(envelope("@ {ice|empty}"), "UNSUPPORTED_FEATURE");
+            reject(envelope("@ {lock:l1|empty}"), "UNSUPPORTED_FEATURE");
             check(parser.parse("@ ").equals(first), "legacy polluted");
             Level second = parser.parse(envelope("@ _"));
             check(first.equals(second) && first != second && first.board() != second.board(),

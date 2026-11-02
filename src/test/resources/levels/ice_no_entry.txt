@@ -1,0 +1,6 @@
+!sokoban-txt 2
+[grid]
+# # # # # # # #
+# @ $ _ {ice|empty} {ice|empty} . #
+# # # # # # # #
+[attributes]

@@ -11,8 +11,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Objects;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /** Read-only view of the core Board. No movement, collision or victory rules. */
 public final class BoardPanel extends JPanel {
@@ -20,6 +22,8 @@ public final class BoardPanel extends JPanel {
     private static final int MARGIN = 24;
     private final transient PixelAssets sprites;
     private transient Board board;
+    private transient Board overlay;        // frame de animacion; null = usar board
+    private transient Timer slideTimer;
     private int scale = 2;
     private Direction facing = Direction.DOWN;
     private long appearanceTick;
@@ -70,6 +74,41 @@ public final class BoardPanel extends JPanel {
         }
     }
 
+    /** True while the slide animation owns the panel. */
+    public boolean isAnimating() {
+        return slideTimer != null && slideTimer.isRunning();
+    }
+
+    /** Shows every intermediate board, then lets the real one stand. */
+    public void playSlide(List<Board> frames, int millisPerCell) {
+        stopSlide();
+        if (frames == null || frames.size() < 2) {
+            return;
+        }
+        List<Board> sequence = List.copyOf(frames);
+        int[] index = {0};
+        overlay = sequence.get(0);
+        repaint();
+        slideTimer = new Timer(millisPerCell, event -> {
+            index[0]++;
+            if (index[0] >= sequence.size() - 1) {
+                stopSlide();            // el ultimo frame ya es el board real
+            } else {
+                overlay = sequence.get(index[0]);
+            }
+            repaint();
+        });
+        slideTimer.start();
+    }
+
+    private void stopSlide() {
+        if (slideTimer != null) {
+            slideTimer.stop();
+            slideTimer = null;
+        }
+        overlay = null;
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -79,19 +118,20 @@ public final class BoardPanel extends JPanel {
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
-            if (board == null) {
+            Board shown = overlay != null ? overlay : board;
+            if (shown == null) {
                 return;
             }
             int tile = PixelAssets.NATIVE_SIZE * scale;
             g.setColor(new Color(104, 75, 64));
             g.fillRect(MARGIN - 5, MARGIN - 5,
-                    board.width() * tile + 10, board.height() * tile + 10);
+                    shown.width() * tile + 10, shown.height() * tile + 10);
             g.setColor(new Color(228, 168, 111));
             g.fillRect(MARGIN - 3, MARGIN - 3,
-                    board.width() * tile + 6, board.height() * tile + 6);
-            for (int row = 0; row < board.height(); row++) {
-                for (int col = 0; col < board.width(); col++) {
-                    Cell cell = board.rows().get(row).get(col);
+                    shown.width() * tile + 6, shown.height() * tile + 6);
+            for (int row = 0; row < shown.height(); row++) {
+                for (int col = 0; col < shown.width(); col++) {
+                    Cell cell = shown.rows().get(row).get(col);
                     drawCell(g, cell, MARGIN + col * tile, MARGIN + row * tile,
                             tile, row, col);
                 }
@@ -112,7 +152,7 @@ public final class BoardPanel extends JPanel {
         if (!terrain.equals("floor")) {
             draw(g, terrain, x, y, tile);
         }
-        String occupant = spriteForOccupant(cell.occupant(), cell.terrain());
+        String occupant = spriteForOccupant(cell);
         if (occupant != null) {
             draw(g, occupant, x, y, tile);
         }
@@ -133,15 +173,19 @@ public final class BoardPanel extends JPanel {
     }
 
     /** Future names are presentation hints, not definitions of future gameplay rules. */
-    static String spriteForOccupant(Occupant occupant, Terrain terrain) {
-        return switch (occupant.name()) {
+    static String spriteForOccupant(Cell cell) {
+        return switch (cell.occupant().name()) {
             case "PLAYER" -> "player_down";
-            case "BOX" -> (terrain.name().equals("GOAL")
-                    || terrain.name().equals("DESTINATION")) ? "box_goal" : "box";
+            case "BOX" -> onGoal(cell.terrain()) ? "box_goal" : "box";
             case "KEY_BOX", "BOX_KEY" -> "box_key";
-            case "FRAGILE_BOX", "BOX_FRAGILE" -> "box_fragile_3";
+            case "FRAGILE_BOX", "BOX_FRAGILE" ->
+                    "box_fragile_" + Math.min(Math.max(cell.resistance(), 0), 3);
             default -> null;
         };
+    }
+
+    private static boolean onGoal(Terrain terrain) {
+        return terrain.name().equals("GOAL") || terrain.name().equals("DESTINATION");
     }
 
     private void draw(Graphics2D g, String name, int x, int y, int tile) {

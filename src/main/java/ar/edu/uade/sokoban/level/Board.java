@@ -62,7 +62,8 @@ public record Board(List<List<Cell>> rows) {
 
     public long boxCount() {
         return rows.stream().flatMap(List::stream)
-                .filter(cell -> cell.occupant() == Occupant.BOX).count();
+                .filter(cell -> cell.occupant() == Occupant.BOX
+                        || cell.occupant() == Occupant.FRAGILE_BOX).count();
     }
 
     public long goalCount() {
