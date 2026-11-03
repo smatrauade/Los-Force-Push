@@ -366,6 +366,33 @@ public final class DesktopIntegrationTest {
                         "score should not be negative");
             });
 
+            test("SCORE handles maximum moves without overflow", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(
+                        calculator.calculate(Long.MAX_VALUE, 0, 0) == 0,
+                        "score should be zero with maximum moves"
+                );
+            });
+
+            test("SCORE handles maximum pushes without overflow", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(
+                        calculator.calculate(0, Long.MAX_VALUE, 0) == 0,
+                        "score should be zero with maximum pushes"
+                );
+            });
+
+            test("SCORE handles maximum Undo uses without overflow", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(
+                        calculator.calculate(0, 0, Integer.MAX_VALUE) == 0,
+                        "score should be zero with maximum Undo uses"
+                );
+            });
+
             test("SCORE rejects negative statistics", () -> {
                 ScoreCalculator calculator = new ScoreCalculator();
 
