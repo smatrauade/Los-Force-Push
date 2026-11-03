@@ -206,6 +206,39 @@ public final class MovementTest {
                         "max-board edge");
             }
         });
+        test("32 a pushed box crosses the ice strip and stops on the first normal cell", () ->
+                checkMove(c2("# @ $ {ice|empty} {ice|empty} {ice|empty} . #"), Direction.RIGHT,
+                        MoveResult.Kind.PUSHED,
+                        c2("# _ @ {ice|empty} {ice|empty} {ice|empty} * #")));
+        test("33 a blocked exit leaves the box standing on the ice", () ->
+                checkMove(c2("# @ $ {ice|empty} {ice|empty} # . #"), Direction.RIGHT,
+                        MoveResult.Kind.PUSHED,
+                        c2("# _ @ {ice|empty} {ice|box} # . #")));
+        test("34 landing on normal floor never starts a slide", () ->
+                checkMove(c2("# @ $ _ {ice|empty} . #"), Direction.RIGHT,
+                        MoveResult.Kind.PUSHED,
+                        c2("# _ @ $ {ice|empty} . #")));
+        test("35 a pushed fragile box loses exactly one resistance point", () ->
+                checkMove(c2("# @ {floor|fragile:f1} _ #", "fragile f1 resistance=2"),
+                        Direction.RIGHT, MoveResult.Kind.PUSHED,
+                        c2("# _ @ {floor|fragile:f1} #", "fragile f1 resistance=1")));
+        test("36 a fragile box shatters at zero and frees its cell", () -> {
+            Board before = board(c2("# @ {floor|fragile:f1} _ #", "fragile f1 resistance=1"));
+            check(before.boxCount() == 1, "a fragile box is not counted");
+            Board after = engine.move(before, Direction.RIGHT).board();
+            check(after.cellAt(new Position(0, 3)).equals(
+                    new Cell(Terrain.FLOOR, Occupant.EMPTY)), "the box did not disappear");
+            check(after.boxCount() == 0, "a shattered box still counts");
+            MoveResult again = engine.move(after, Direction.RIGHT);
+            check(again.kind() == MoveResult.Kind.MOVED, "the freed cell stayed blocked");
+        });
+        test("37 one push costs one point however far the box slides", () -> {
+            Board after = engine.move(board(c2(
+                    "# @ {floor|fragile:f1} {ice|empty} {ice|empty} . #",
+                    "fragile f1 resistance=3")), Direction.RIGHT).board();
+            check(after.cellAt(new Position(0, 5)).equals(
+                    new Cell(Terrain.GOAL, Occupant.FRAGILE_BOX, 2)), "the slide charged extra");
+        });
     }
 
     private void boundedTransitions() {
@@ -280,6 +313,16 @@ public final class MovementTest {
 
     private static Board board(String text) {
         return new LevelParser().parse(text).board();
+    }
+
+    /** C2-L7 envelope so a board can declare ice terrain and individual fragile resistance. */
+    private static String c2(String rows, String... attributes) {
+        StringBuilder text = new StringBuilder("!sokoban-txt 2\n[grid]\n")
+                .append(rows).append("\n[attributes]");
+        for (String attribute : attributes) {
+            text.append('\n').append(attribute);
+        }
+        return text.toString();
     }
 
     private static void invariants(Board before, Board after) {

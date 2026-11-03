@@ -26,7 +26,8 @@ public final class MovementEngine {
             return blocked(state);
         }
         Position boxDestination = null;
-        if (destination.occupant() == Occupant.BOX) {
+        List<Position> boxPath = new ArrayList<>();
+        if (pushable(destination.occupant())) {
             int boxRow = targetRow + direction.rowDelta();
             int boxColumn = targetColumn + direction.columnDelta();
             if (!inside(state, boxRow, boxColumn)) {
@@ -36,6 +37,22 @@ public final class MovementEngine {
             Cell behindBox = state.cellAt(boxDestination);
             if (behindBox.terrain() == Terrain.WALL || behindBox.occupant() != Occupant.EMPTY) {
                 return blocked(state);
+            }
+            boxPath.add(boxDestination);
+            while (state.cellAt(boxDestination).terrain() == Terrain.ICE) {
+                int nextRow = boxDestination.row() + direction.rowDelta();
+                int nextColumn = boxDestination.column() + direction.columnDelta();
+                if (!inside(state, nextRow, nextColumn)) {
+                    break;
+                }
+                Position next = new Position(nextRow, nextColumn);
+                Cell nextCell = state.cellAt(next);
+                if (nextCell.terrain() == Terrain.WALL
+                    || nextCell.occupant() != Occupant.EMPTY) {
+                    break;
+                }
+                boxDestination = next;
+                boxPath.add(boxDestination);
             }
         } else if (destination.occupant() != Occupant.EMPTY) {
             return blocked(state);
@@ -49,11 +66,14 @@ public final class MovementEngine {
         replaceOccupant(rows, player, Occupant.EMPTY);
         replaceOccupant(rows, target, Occupant.PLAYER);
         if (boxDestination != null) {
-            replaceOccupant(rows, boxDestination, Occupant.BOX);
+            // One push costs one resistance point, however far the box then slides.
+            Occupant pushed = Cell.afterPush(destination.occupant(), destination.resistance());
+            int left = pushed == Occupant.FRAGILE_BOX ? destination.resistance() - 1 : 0;
+            replaceOccupant(rows, boxDestination, pushed, left);
         }
         Board next = new Board(rows); // same aggregate invariants as loaded levels
         return new MoveResult(boxDestination == null ? MoveResult.Kind.MOVED
-                : MoveResult.Kind.PUSHED, next);
+                : MoveResult.Kind.PUSHED, next, boxPath);
     }
 
     private boolean inside(Board state, int row, int column) {
@@ -64,9 +84,19 @@ public final class MovementEngine {
         return new MoveResult(MoveResult.Kind.BLOCKED, state);
     }
 
+    private boolean pushable(Occupant occupant) {
+        return occupant == Occupant.BOX || occupant == Occupant.FRAGILE_BOX;
+    }
+
     private void replaceOccupant(List<List<Cell>> rows, Position position, Occupant occupant) {
+        replaceOccupant(rows, position, occupant, 0);
+    }
+
+    private void replaceOccupant(List<List<Cell>> rows, Position position,
+                                 Occupant occupant, int resistance) {
         List<Cell> row = rows.get(position.row());
         Cell old = row.get(position.column());
-        row.set(position.column(), new Cell(old.terrain(), occupant));
+        row.set(position.column(), new Cell(old.terrain(), occupant, resistance));
     }
+
 }

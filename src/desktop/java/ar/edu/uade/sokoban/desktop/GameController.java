@@ -48,6 +48,8 @@ public final class GameController {
         if (game == null || game.isFinalized()) {
             return;
         }
+        // No animation is emitted until runtime supplies authoritative slide
+        // frames/path (I1.B/I3). The legacy Board path would lose Lock metadata.
         RuntimeMoveResult result = game.move(direction);
         view.onMove(result.kind());
         if (result.kind() == MoveResult.Kind.BLOCKED) {
@@ -57,7 +59,7 @@ public final class GameController {
             boolean opened = result.lockChanges().stream().anyMatch(RuntimeMoveResult.LockChange::active);
             view.playEffect(opened ? SoundManager.Effect.LOCK : SoundManager.Effect.GATE);
         }
-        if (result.boxDestination() != null
+        if (result.boxDestination() != null && !result.boxShattered()
                 && result.state().terrain().get(result.boxDestination().row())
                 .get(result.boxDestination().column()) == RuntimeState.Ground.GOAL) {
             view.playEffect(SoundManager.Effect.GOAL);

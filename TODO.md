@@ -88,3 +88,11 @@ El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece
 | I4 | QA/entregables y revisión TEAM | INT-01–10, Java17, derechos, StarUML del código integrado, informe/video | NOT_RUN |
 
 Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md). No duplicar el estado real de los commits en esta fotografía: actualizar este TODO **por impacto** al cerrar cada fase. Ningún PR Draft concede autorización de merge.
+
+## Checkpoint I1.C — staging local de `Objetivo2` (03/11/2026)
+
+- [x] Ejecutado `bash scripts/test-integration-i1.sh` tras I1.C: JDK 17.0.20.1, core **256/256**, Desktop **16/16**, Visual Assets **44/44**, exit 0 y `GIT_STATE_PRESERVED=YES`; evidencia reportada por el usuario (03/11/2026).
+- [ ] Auditar diff completo, tres resoluciones Swing, contratos TXT/Fragile, ausencia de estado duplicado y documentación viva. [Evidencia y fuentes](docs/integration/I1_LOCAL_VALIDATION_2026-11-03.md).
+- [ ] Resolver **con autorización** el índice `UU` de los tres archivos, crear el merge commit de **dos padres** preservando los dos commits originales `Objetivo2` y volver a probar contra el HEAD confirmado.
+- [ ] Promover sólo ese merge validado al **mismo PR Draft #17** tras verificar SHA remoto; nunca a `main` automáticamente ni sin revisión humana.
+- [ ] I2 (Undo/Restart/Score), I3 (GUI/animación), I4 (QA/entregables/TEAM) siguen sin cerrar.

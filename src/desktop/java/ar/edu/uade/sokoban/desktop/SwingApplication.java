@@ -1,5 +1,6 @@
 package ar.edu.uade.sokoban.desktop;
 
+import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MoveResult;
 import ar.edu.uade.sokoban.session.LevelCatalog;
@@ -14,6 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -73,6 +75,7 @@ public final class SwingApplication {
 
         private final CardLayout layout = new CardLayout();
         private final JPanel cards = new JPanel(layout);
+        private static final int SLIDE_MILLIS_PER_CELL = 240;
         private final BoardPanel board = new BoardPanel();
         private final transient SoundManager audio = new SoundManager();
         private final JLabel levelText = label("SIN NIVEL", PixelTheme.BODY);
@@ -482,7 +485,7 @@ public final class SwingApplication {
 
         private void installKeys() {
             ArrowBindings.install(getRootPane(), direction -> {
-                if (GAME.equals(active) && currentLevel != null) {
+                if (GAME.equals(active) && currentLevel != null && !board.isAnimating()) {
                     board.setFacing(direction);
                     controller.move(direction);
                 }
@@ -562,6 +565,11 @@ public final class SwingApplication {
             status.setText("CAJAS: " + presentation.board().boxCount()
                     + "  /  DESTINOS: " + presentation.board().goalCount());
             showScreen(GAME);
+        }
+
+        @Override
+        public void animateBoxSlide(List<Board> frames) {
+            board.playSlide(frames, SLIDE_MILLIS_PER_CELL);
         }
 
         @Override

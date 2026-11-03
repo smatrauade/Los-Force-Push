@@ -128,3 +128,7 @@ La entrega informada es el **18/11/2026**, con demo en vivo de 15–20 minutos y
 <!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
 
 La propuesta de combinación se coordina mediante un **PR Draft** desde `integration/tpo-unificado-2026-11-03`, inicialmente basado en `victoria`, sin afirmar integración de `Objetivo2` o `feature/undo-restart-score` hasta futuros commits. Leer [el índice de integración](docs/integration/README.md), [la matriz de contratos y pruebas](docs/integration/INTEGRATION_ACCEPTANCE.md) y [el protocolo de frescura](docs/continuity/BRANCH_AWARE_FRESHNESS.md). Este apartado describe la **rama experimental de integración**; el README de `main` debe representar únicamente lo realmente fusionado allí.
+
+## Seguimiento de I1 en el worktree auxiliar — 03/11/2026
+
+La integración TXT/ICE/Fragile de `Objetivo2` está **validada localmente pero todavía sin commit de merge ni publicación en el PR #17**. Los resultados, pendientes y comandos autocontenidos de Java 17 están en [evidencia I1 local](docs/integration/I1_LOCAL_VALIDATION_2026-11-03.md). Para repetir las suites completas: `bash scripts/test-integration-i1.sh`. Ni el estado Draft ni los tests implican aceptación TEAM o incorporación a `main`.

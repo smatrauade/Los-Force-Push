@@ -3,6 +3,7 @@ package ar.edu.uade.sokoban.movement;
 import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.level.Cell;
 import ar.edu.uade.sokoban.level.ExtendedLevelDefinition;
+import ar.edu.uade.sokoban.level.ExperimentalFragileLevel;
 import ar.edu.uade.sokoban.level.Level;
 import ar.edu.uade.sokoban.level.Occupant;
 import ar.edu.uade.sokoban.level.Position;
@@ -13,11 +14,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/** Immutable runtime value for ordinary boxes plus Key/Lock/dynamic walls. */
+/** Immutable playable runtime. Fragile identity and resistance never depend on cell coordinates. */
 public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box> boxes,
         List<Lock> locks, List<DynamicWall> walls) {
-    public enum Ground { WALL, FLOOR, GOAL, LOCK, DYNAMIC_WALL }
-    public enum BoxKind { NORMAL, KEY }
+    public enum Ground { WALL, FLOOR, GOAL, ICE, LOCK, DYNAMIC_WALL }
+    public enum BoxKind { NORMAL, KEY, FRAGILE }
 
     public record Lock(String id, Position position) {
         public Lock {
@@ -38,25 +39,45 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
         }
     }
 
-    public record Box(BoxKind kind, Position position, String id) {
+    public record Box(BoxKind kind, Position position, String id, int resistance) {
         public Box {
             Objects.requireNonNull(kind, "kind");
             Objects.requireNonNull(position, "position");
             if (kind == BoxKind.NORMAL) {
-                if (id != null) {
-                    throw new IllegalArgumentException("Normal boxes have no id");
+                if (id != null || resistance != 0) {
+                    throw new IllegalArgumentException("Normal boxes have neither id nor resistance");
                 }
             } else {
                 validateId(id);
+                if (kind == BoxKind.KEY && resistance != 0) {
+                    throw new IllegalArgumentException("Key boxes have no resistance");
+                }
+                if (kind == BoxKind.FRAGILE && resistance <= 0) {
+                    throw new IllegalArgumentException("Fragile boxes require positive resistance");
+                }
             }
         }
 
+        /** Compatibility constructor for the historical normal/key box API. */
+        public Box(BoxKind kind, Position position, String id) {
+            this(kind, position, id, 0);
+        }
+
         public static Box normal(Position position) {
-            return new Box(BoxKind.NORMAL, position, null);
+            return new Box(BoxKind.NORMAL, position, null, 0);
         }
 
         public static Box key(String id, Position position) {
-            return new Box(BoxKind.KEY, position, id);
+            return new Box(BoxKind.KEY, position, id, 0);
+        }
+
+        public static Box fragile(String id, Position position, int resistance) {
+            return new Box(BoxKind.FRAGILE, position, id, resistance);
+        }
+
+        /** Relocation is an immutable value operation, not a mutation of a session. */
+        public Box movedTo(Position destination) {
+            return new Box(kind, destination, id, resistance);
         }
     }
 
@@ -202,6 +223,17 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
         return new RuntimeState(nextTerrain, base.player(), nextBoxes, nextLocks, nextWalls);
     }
 
+    /** Explicit opt-in adapter: preserve each D-020 Fragile id/resistance from its definition. */
+    public static RuntimeState fromExperimentalFragile(ExperimentalFragileLevel definition) {
+        Objects.requireNonNull(definition, "definition");
+        RuntimeState base = fromBoard(definition.spatialTemplate());
+        List<Box> next = new ArrayList<>(base.boxes());
+        for (ExperimentalFragileLevel.FragileBox fragile : definition.fragileBoxes()) {
+            next.add(Box.fragile(fragile.id(), fragile.position(), fragile.initialResistance()));
+        }
+        return new RuntimeState(base.terrain(), base.player(), next);
+    }
+
     private static RuntimeState fromBoard(Board board) {
         List<List<Ground>> nextTerrain = new ArrayList<>();
         List<Box> nextBoxes = new ArrayList<>();
@@ -212,6 +244,9 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
                 line.add(Ground.valueOf(cell.terrain().name()));
                 if (cell.occupant() == Occupant.BOX) {
                     nextBoxes.add(Box.normal(new Position(row, col)));
+                } else if (cell.occupant() == Occupant.FRAGILE_BOX) {
+                    // Board/Level cells have resistance, but no D-020 id.
+                    throw new IllegalArgumentException("Fragile requires an identity-preserving definition");
                 }
             }
             nextTerrain.add(line);
@@ -230,6 +265,7 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
                 Terrain cellTerrain = switch (ground) {
                     case WALL -> Terrain.WALL;
                     case GOAL -> Terrain.GOAL;
+                    case ICE -> Terrain.ICE;
                     case DYNAMIC_WALL -> wallOpen(position) ? Terrain.FLOOR : Terrain.WALL;
                     default -> Terrain.FLOOR;
                 };
@@ -237,9 +273,12 @@ public record RuntimeState(List<List<Ground>> terrain, Position player, List<Box
                 if (player.equals(position)) {
                     occupant = Occupant.PLAYER;
                 } else if (boxAt(position) != null) {
-                    occupant = Occupant.BOX;
+                    Box box = boxAt(position);
+                    occupant = box.kind() == BoxKind.FRAGILE ? Occupant.FRAGILE_BOX : Occupant.BOX;
                 }
-                line.add(new Cell(cellTerrain, occupant));
+                Box box = boxAt(position);
+                int resistance = box != null && box.kind() == BoxKind.FRAGILE ? box.resistance() : 0;
+                line.add(new Cell(cellTerrain, occupant, resistance));
             }
             rows.add(line);
         }

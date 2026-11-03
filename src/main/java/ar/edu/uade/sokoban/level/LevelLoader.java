@@ -20,7 +20,19 @@ public final class LevelLoader {
     }
 
     public Level load(Path path) throws IOException {
-        return parser.parse(readText(path));
+        Level candidate = parser.parse(readText(path));
+        // D-020: a playable Level has no stable Fragile IDs. Reject the lossy
+        // conversion; callers requiring identity must load its definition.
+        for (var row : candidate.board().rows()) {
+            for (Cell cell : row) {
+                if (cell.occupant() == Occupant.FRAGILE_BOX) {
+                    throw new LevelFormatException(
+                            "Fragile IDs cannot be preserved in playable Level; "
+                            + "use loadExperimentalFragile for its definition");
+                }
+            }
+        }
+        return candidate;
     }
 
     /**

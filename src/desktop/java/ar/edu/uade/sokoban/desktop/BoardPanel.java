@@ -12,9 +12,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /** Read-only renderer. The runtime remains the sole authority for occupancy. */
 public final class BoardPanel extends JPanel {
@@ -22,6 +24,9 @@ public final class BoardPanel extends JPanel {
     private static final int MARGIN = 24;
     private final transient PixelAssets sprites;
     private transient RuntimeState state;
+    // Presentation-only frames: never used as the authoritative gameplay state.
+    private transient Board overlay;
+    private transient Timer slideTimer;
     private int scale = 2;
     private Direction facing = Direction.DOWN;
     private long appearanceTick;
@@ -43,6 +48,7 @@ public final class BoardPanel extends JPanel {
     }
 
     public void showState(RuntimeState next) {
+        stopSlide();
         state = Objects.requireNonNull(next, "state");
         updateSize();
         repaint();
@@ -67,6 +73,57 @@ public final class BoardPanel extends JPanel {
         repaint();
     }
 
+    /** The overlay is visual only; the session's RuntimeState remains authoritative. */
+    public boolean isAnimating() {
+        return slideTimer != null && slideTimer.isRunning();
+    }
+
+    /**
+     * Transitional Board-frame adapter for the legacy animation contribution.
+     * Not called by the current RuntimeState controller. Its connection to
+     * authoritative ICE/Fragile events belongs to I1.B/I3.
+     */
+    public void playSlide(List<Board> frames, int millisPerCell) {
+        stopSlide();
+        if (state == null || frames == null || frames.size() < 2) {
+            return;
+        }
+        if (millisPerCell <= 0) {
+            throw new IllegalArgumentException("Intervalo de animacion invalido");
+        }
+        // A legacy Board cannot represent Lock/DynamicWall metadata faithfully.
+        if (!state.locks().isEmpty() || !state.walls().isEmpty()) {
+            return;
+        }
+        List<Board> sequence = List.copyOf(frames);
+        for (Board frame : sequence) {
+            if (frame.width() != state.width() || frame.height() != state.height()) {
+                throw new IllegalArgumentException("Dimensiones de animacion incompatibles");
+            }
+        }
+        int[] index = {0};
+        overlay = sequence.get(0);
+        repaint();
+        slideTimer = new Timer(millisPerCell, event -> {
+            index[0]++;
+            if (index[0] >= sequence.size() - 1) {
+                stopSlide();
+            } else {
+                overlay = sequence.get(index[0]);
+            }
+            repaint();
+        });
+        slideTimer.start();
+    }
+
+    private void stopSlide() {
+        if (slideTimer != null) {
+            slideTimer.stop();
+            slideTimer = null;
+        }
+        overlay = null;
+    }
+
     private void updateSize() {
         if (state != null) {
             int tile = PixelAssets.NATIVE_SIZE * scale;
@@ -80,6 +137,7 @@ public final class BoardPanel extends JPanel {
         return switch (world.terrain().get(position.row()).get(position.column())) {
             case WALL -> "wall_" + Math.floorMod(position.row() * 3 + position.column(), 3);
             case FLOOR -> "floor";
+            case ICE -> "ice";
             case GOAL -> world.boxAt(position) == null ? "goal" : "goal_active";
             case LOCK -> world.lockActive(world.locks().stream()
                     .filter(lock -> lock.position().equals(position))
@@ -97,6 +155,8 @@ public final class BoardPanel extends JPanel {
             case NORMAL -> world.terrain().get(position.row()).get(position.column())
                     == RuntimeState.Ground.GOAL ? "box_goal" : "box";
             case KEY -> "box_key";
+            // Pixel assets only have three intact resistance states; higher values share level 3.
+            case FRAGILE -> "box_fragile_" + Math.min(3, box.resistance());
         };
     }
 
@@ -105,6 +165,7 @@ public final class BoardPanel extends JPanel {
         return switch (terrain.name()) {
             case "WALL" -> "wall_" + Math.floorMod(row * 3 + col, 3);
             case "GOAL", "DESTINATION" -> "goal";
+            case "ICE", "SLIPPERY", "SLIPPERY_FLOOR" -> "ice";
             case "LOCK", "LOCK_CLOSED", "LOCK_TILE" -> "lock";
             case "LOCK_OPEN", "LOCK_ACTIVE" -> "lock_active";
             case "CLOSED_WALL", "GATE_CLOSED", "WALL_CLOSED" -> "gate_closed";
@@ -132,6 +193,10 @@ public final class BoardPanel extends JPanel {
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             if (state == null) {
+                return;
+            }
+            if (overlay != null) {
+                paintOverlay(g, overlay);
                 return;
             }
             int tile = PixelAssets.NATIVE_SIZE * scale;
@@ -165,6 +230,45 @@ public final class BoardPanel extends JPanel {
             }
         } finally {
             g.dispose();
+        }
+    }
+
+    /** Renders legacy frames without publishing or mutating the runtime. */
+    private void paintOverlay(Graphics2D g, Board frame) {
+        int tile = PixelAssets.NATIVE_SIZE * scale;
+        g.setColor(new Color(104, 75, 64));
+        g.fillRect(MARGIN - 5, MARGIN - 5, frame.width() * tile + 10,
+                frame.height() * tile + 10);
+        g.setColor(new Color(228, 168, 111));
+        g.fillRect(MARGIN - 3, MARGIN - 3, frame.width() * tile + 6,
+                frame.height() * tile + 6);
+        for (int row = 0; row < frame.height(); row++) {
+            for (int col = 0; col < frame.width(); col++) {
+                var cell = frame.rows().get(row).get(col);
+                int x = MARGIN + col * tile;
+                int y = MARGIN + row * tile;
+                String terrain = spriteForTerrain(cell.terrain(), row, col);
+                if (terrain.startsWith("wall_")) {
+                    draw(g, terrain, x, y, tile);
+                    continue;
+                }
+                draw(g, "floor_" + Math.floorMod(row * 11 + col * 7, 3), x, y, tile);
+                if (!terrain.equals("floor")) {
+                    draw(g, terrain, x, y, tile);
+                }
+                String occupant = switch (cell.occupant()) {
+                    case EMPTY -> null;
+                    case FRAGILE_BOX -> "box_fragile_" + Math.min(Math.max(cell.resistance(), 0), 3);
+                    default -> spriteForOccupant(cell.occupant(), cell.terrain());
+                };
+                if (occupant != null) {
+                    if (occupant.equals("player_down")) {
+                        occupant = "player_" + facing.name().toLowerCase(Locale.ROOT)
+                                + ((appearanceTick % 2L == 1L) ? "_step" : "");
+                    }
+                    draw(g, occupant, x, y, tile);
+                }
+            }
         }
     }
 

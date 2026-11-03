@@ -50,6 +50,9 @@ public final class LevelProgression {
         return switch (entry.format()) {
             case STANDARD -> RuntimeState.fromLevel(loader.load(entry.path()));
             case EXTENDED -> RuntimeState.fromExtended(loader.loadExtended(entry.path()));
+            // Opt-in only: D-020 definition keeps IDs; STANDARD remains lossless-only.
+            case EXPERIMENTAL_FRAGILE -> RuntimeState.fromExperimentalFragile(
+                    loader.loadExperimentalFragile(entry.path()));
         };
     }
 

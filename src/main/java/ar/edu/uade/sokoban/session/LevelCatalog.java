@@ -9,7 +9,7 @@ import java.util.Set;
 
 /** Ordered, immutable level references; format is explicit and never auto-detected. */
 public record LevelCatalog(List<Entry> levels) {
-    public enum Format { STANDARD, EXTENDED }
+    public enum Format { STANDARD, EXTENDED, EXPERIMENTAL_FRAGILE }
 
     public record Entry(String id, Path path, Format format) {
         public Entry {

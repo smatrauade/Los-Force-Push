@@ -1,6 +1,6 @@
 package ar.edu.uade.sokoban.level;
 
-/** BOX denotes only a normal box in this experiment. */
+/** BOX is a normal box; FRAGILE_BOX carries resistance and leaves no trace once it shatters. */
 public enum Occupant {
-    EMPTY, PLAYER, BOX
+    EMPTY, PLAYER, BOX, FRAGILE_BOX
 }

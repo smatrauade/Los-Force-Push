@@ -30,3 +30,7 @@
 | `R-EXTRAS-RIGHTS` | RF-12 y licencias requieren aceptación/atribución | Validar funcionalidades y derechos individuales antes de entrega |
 
 **Estados:** `SOURCE_BRANCH_ONLY`, `IN_INTEGRATION_BRANCH`, `IN_MAIN`, `REPORTED_QA`, `EXECUTED_VERIFIED`, `TEAM_ACCEPTED`, `NOT_RUN`. Las reglas no acordadas permanecen en [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md); no generar otro libro de decisiones.
+
+## Evidencia local previa a commit I1.C (03/11/2026)
+
+La matriz superior conserva los **oráculos**. En el worktree auxiliar `integration/i1-santino-stage-2026-11-03`, el usuario ejecutó con OpenJDK 17 las ocho suites core (252/252), Desktop (16/16) y Visual Assets (44/44), todas PASS en la versión **anterior a I1.C**; el postcheck preservó Git. En I1.C los casos INT-01..04 pasan a comprobar expresamente las resistencias **2 y 3**, varios empujes, ICE por `LevelProgression`, rotura sin reinicio y cierre ocupado. Tras I1.C, el usuario **ejecutó** el runner [test-integration-i1.sh](../../scripts/test-integration-i1.sh) con `java`/`javac 17.0.20.1`: core **256/256**, Desktop **16/16**, Visual Assets **44/44**, total **316/316**, exit 0 y `GIT_STATE_PRESERVED=YES`; el verificador documental también pasó (170 archivos, 541 enlaces, 43 assets). Evidencia local reportada, **no** HEAD remoto ni aceptación TEAM. Limitaciones: sin GUI interactiva, sin Windows nativo, sin commit de integración ni aceptación TEAM. [Registro técnico y fase siguiente](I1_LOCAL_VALIDATION_2026-11-03.md).

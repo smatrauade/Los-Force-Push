@@ -1,11 +1,16 @@
 package ar.edu.uade.sokoban.desktop;
 
+import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.movement.MoveResult;
+import java.util.List;
 
 /** Boundary for Swing and screen-free integration tests. */
 public interface GameView {
     void render(GamePresentation presentation);
     void showLoadError(String message);
+
+    /** Optional slide animation; headless probes keep the default no-op. */
+    default void animateBoxSlide(List<Board> frames) { }
 
     /** Optional event so SFX does not execute during paint/repaint. */
     default void onMove(MoveResult.Kind kind) { }

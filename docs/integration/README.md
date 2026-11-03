@@ -32,3 +32,7 @@ Los originales de cátedra y chats privados permanecen fuera de Git. La informac
 <!-- I0_PR17_PUBLICATION_VERIFIED_2026_11_03 -->
 
 [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) abierto como **Draft** el 03/11/2026, `main` sin cambios al corte y HEAD inicial de integración `50a559a55e1d57afaad68e9f952e552228f45779`. El bloque `BRANCH_SNAPSHOT_2026-11-03.md` es histórico e inmutable, anterior a abrir el PR. I0 = completado; I1-I4 = pendientes. No fusionar el PR sin revisión y aceptación.
+
+## Gate local I1 — no publicado
+
+La reconciliación I1.A/I1.B0/I1.B1 y el testigo I1.C están en el **worktree auxiliar local**, con el merge real pendiente de resolución formal en el índice. Consultar [evidencia y límites I1](I1_LOCAL_VALIDATION_2026-11-03.md), y ejecutar `bash scripts/test-integration-i1.sh` antes de cualquier commit. El PR #17 continúa siendo el único vehículo previsto para la integración grupal; este documento no autoriza promoverlo.

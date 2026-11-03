@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Atomic, stateless movement over typed Key/Lock/Wall runtime state. */
+/** Atomic moves over the sole RuntimeState authority; a slide costs one push. */
 public final class RuntimeMovementEngine {
     public RuntimeMoveResult move(RuntimeState state, Direction direction) {
         Objects.requireNonNull(state, "state");
@@ -23,11 +23,28 @@ public final class RuntimeMovementEngine {
         if (!free(state, destination)) {
             return new RuntimeMoveResult(MoveResult.Kind.BLOCKED, state);
         }
+        List<Position> path = new ArrayList<>();
+        path.add(destination);
+        // E03: when an exit is blocked, stop on the last free tile.
+        while (state.terrain().get(destination.row()).get(destination.column()) == RuntimeState.Ground.ICE) {
+            Position next = step(state, destination, direction);
+            if (!free(state, next)) {
+                break;
+            }
+            destination = next;
+            path.add(destination);
+        }
+        // E04: consume one resistance after the entire trajectory, including on ICE.
+        boolean shattered = box.kind() == RuntimeState.BoxKind.FRAGILE && box.resistance() == 1;
         List<RuntimeState.Box> boxes = new ArrayList<>(state.boxes());
         int index = boxes.indexOf(box);
-        boxes.set(index, box.kind() == RuntimeState.BoxKind.KEY
-                ? RuntimeState.Box.key(box.id(), destination)
-                : RuntimeState.Box.normal(destination));
+        if (shattered) {
+            boxes.remove(index);
+        } else if (box.kind() == RuntimeState.BoxKind.FRAGILE) {
+            boxes.set(index, RuntimeState.Box.fragile(box.id(), destination, box.resistance() - 1));
+        } else {
+            boxes.set(index, box.movedTo(destination));
+        }
         if (!RuntimeState.closuresSafe(target, boxes, state.locks(), state.walls())) {
             return new RuntimeMoveResult(MoveResult.Kind.BLOCKED, state);
         }
@@ -36,7 +53,7 @@ public final class RuntimeMovementEngine {
                 .filter(lock -> state.lockActive(lock.id()) != next.lockActive(lock.id()))
                 .map(lock -> new RuntimeMoveResult.LockChange(lock.id(), next.lockActive(lock.id())))
                 .toList();
-        return new RuntimeMoveResult(MoveResult.Kind.PUSHED, next, box, destination, changes);
+        return new RuntimeMoveResult(MoveResult.Kind.PUSHED, next, box, destination, changes, path, shattered);
     }
 
     private boolean free(RuntimeState state, Position position) {

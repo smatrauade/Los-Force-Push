@@ -68,3 +68,7 @@ Revisión documental contra el código integrado por PR #11/#12; [evidencia doce
 | Audio y adicionales | SoundManager por ventana; sin persistencia operativa | No Singleton GoF; State/Factory/Decorator no están acreditados por ejemplos o nombres |
 
 Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. Esa reconciliación no ejecutó R7. El incremento posterior 5ac2bba implementó la entrada filesystem de definición experimental; gameplay e integración runtime siguen pendientes.
+
+## Frontera runtime I1 local — 03/11/2026
+
+En el worktree auxiliar I1, `LevelCatalog` diferencia explícitamente `STANDARD`, `EXTENDED` y `EXPERIMENTAL_FRAGILE`; `LevelLoader.load` rechaza la conversión Fragile sin ID, mientras `loadExperimentalFragile` y `RuntimeState.fromExperimentalFragile` conservan ID/resistencia (D-020). `RuntimeState` es el **único estado jugable**; `RuntimeMovementEngine` resuelve ICE/E03, Fragile/E04 y eventos Lock/Wall, emitiendo `RuntimeMoveResult.boxPath` y `boxShattered` como datos de transición. `GameSession`/`LevelProgression` coordinan juego y niveles; `Board` es una **proyección visual**, no segunda autoridad. El uso de trayectorias para animación EDT se conserva como pendiente de I3, sin certificarlo por pasar tests headless. Esta sección describe **solo la integración local aún no confirmada**, no `main` ni UML final. [Auditoría y evidencia](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
