@@ -166,25 +166,25 @@ QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, s
 
 ## Undo, Restart y score — reglas ratificadas 2026-11-01
 
-La [ratificación complementaria del 01/11](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta E08, E09 y E10. Los siguientes casos son `PLAN / NOT_RUN` hasta que exista implementación y evidencia de ejecución. No se modifica la evidencia histórica de los incrementos anteriores.
+La [ratificación complementaria del 01/11](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta E08, E09 y E10. Las reglas fueron ratificadas por TEAM; en el árbol actual ya existen la implementación de `GameController` para Undo y Restart, el cálculo del score en `ScoreCalculator`, el transporte del resultado en `LevelResult` y la conexión de callbacks en `UiCommands`. Las suites registradas reportan `DESKTOP RESULT: 30 PASS, 0 FAIL` y `VISUAL ASSETS RESULT: 44 PASS, 0 FAIL`. Esos resultados documentan evidencia ejecutada general; no acreditan automáticamente la cobertura individual de cada escenario de aceptación. `TEAM_ACCEPTANCE = NOT_RECORDED` para el código.
 
-| Req | Regla / decisión | Responsabilidad candidata | Caso futuro de aceptación |
+| Req | Regla / decisión | Responsabilidad real | Caso de verificación / límite |
 |---|---|---|---|
-| RF-07 | Undo restaura tablero, `moves` y `pushes` | GameSession / historial Undo | Ejecutar movimientos y empujes, hacer Undo y comprobar que se restaura el estado anterior y sus contadores. |
-| RF-07 / RF-09 | `undoUsesTotal` acumula usos válidos de Undo durante el intento | Métricas de sesión | Ejecutar Undo y comprobar que el contador aumenta y no se restaura al deshacer. |
-| RF-07 | `consecutiveUndoUses` controla el límite de tres usos | Sesión / UndoManager | Consumir tres usos y comprobar que un cuarto Undo no está disponible. |
-| RF-07 | Un movimiento normal no reinicia el límite | Sesión / UndoManager | Consumir tres usos, ejecutar un movimiento válido y comprobar que Undo continúa bloqueado. |
-| RF-07 | Restart inicia un intento nuevo y reinicia las cuatro métricas | GameSession | Modificar tablero y contadores, ejecutar Restart y verificar tablero inicial, historial vacío y las cuatro métricas en cero. |
-| RF-07 | Cambio de nivel reinicia el límite de Undo | Progresión / GameSession | Consumir los tres usos, cambiar de nivel y comprobar que `consecutiveUndoUses` vuelve a cero. El resto de métricas requiere contrato de progresión. |
-| RF-09 | Fórmula de score ratificada | ScoreStrategy o política de cálculo | Verificar 40 movimientos, 10 empujes y 0 Undo = 940 puntos. |
-| RF-09 | Penalización por Undo | Política de score | Verificar 60 movimientos, 15 empujes y 2 Undo = 890 puntos. |
-| RF-09 | El score tiene mínimo cero | Política de score | Usar métricas cuya penalización supere la base y comprobar que el resultado sea cero, nunca negativo. |
-| RF-09 | Restart no agrega penalización adicional | GameSession / política de score | Ejecutar Restart y comprobar que el score del nuevo intento se calcula sólo con sus métricas, sin un contador o descuento adicional por reinicio. |
+| RF-07 | Undo restaura tablero, `moves` y `pushes` | `GameController` coordina Undo, historial de snapshots, métricas y `getLevelResult()` | Mantener el escenario de verificación funcional: movimientos y empujes, luego Undo y comprobar restauración del estado anterior y sus contadores. |
+| RF-07 / RF-09 | `undoUsesTotal` acumula usos válidos de Undo durante el intento | `GameController` acumula métricas; `LevelResult` presenta `undoUses` calculado | Verificar que el contador aumenta con cada Undo válido y no se restaura al deshacer; no existe evidencia individual de cada caso por las suites generales. |
+| RF-07 | `consecutiveUndoUses` controla el límite de tres usos | `GameController` gestiona historial y métricas en la sesión actual | Mantener el caso de verificar tres usos válidos y comprobar que el cuarto Undo no queda disponible. |
+| RF-07 | Un movimiento normal no reinicia el límite | `GameController` decide la disponibilidad de Undo | Mantener el caso de consumir tres usos, ejecutar un movimiento válido y comprobar que Undo continúa bloqueado. |
+| RF-07 | Restart inicia un intento nuevo y reinicia las cuatro métricas | `GameController` restaura el estado inicial, limpia el historial y reinicia `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses` | Verificar tablero inicial, historial vacío y las cuatro métricas en cero. |
+| RF-07 | Cambio de nivel reinicia el límite de Undo | `GameController` / flujo de nivel | Consumir los tres usos, cambiar de nivel y comprobar que `consecutiveUndoUses` vuelve a cero. El tratamiento del resto de métricas en cambio de nivel no se ratifica en este bloque. |
+| RF-09 | Fórmula de score ratificada | `ScoreCalculator` calcula el score con `applyPenalty`; `LevelResult` transporta el resultado final | Verificar `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)` con casos deterministas. |
+| RF-09 | Penalización por Undo | `ScoreCalculator` aplica penalización incremental; `LevelResult` expone `score` | Verificar 60 movimientos, 15 empujes y 2 Undo = 890 puntos. |
+| RF-09 | El score tiene mínimo cero | `ScoreCalculator` y `applyPenalty` | Usar métricas cuya penalización supere la base y comprobar que el resultado sea cero, nunca negativo. |
+| RF-09 | Restart no agrega penalización adicional | `GameController` reinicia las métricas del intento; `ScoreCalculator` calcula sobre el intento actual | Ejecutar Restart y comprobar que el score del nuevo intento se calcula sólo con sus métricas actuales, sin un contador o descuento adicional por reinicio. |
 
 **Límites de aceptación:**
 
-- Los casos anteriores son planes; no se declaran ejecutados.
-- El historial de Undo debe respetar además el alcance oficial de RF-07: 15 movimientos y retroceso de 5 por uso, junto con el umbral E07.
+- La matriz conserva los escenarios de regla que deben verificarse; no los convierte automáticamente en casos ejecutados ni cubiertos por las suites generales.
+- El historial de Undo debe respetar además el alcance oficial de RF-07: 15 movimientos, retroceso de 5 por uso y límite de tres usos consecutivos.
 - El cambio de nivel reinicia el límite de Undo, pero el tratamiento de las demás métricas no está definido por la ratificación del 01/11.
-- La ratificación de la fórmula no obliga a implementar Strategy ni Memento. La elección de patrones debe justificarse por el diseño real.
-- RF-07 y RF-09 continúan sin aceptación productiva hasta contar con implementación integrada, pruebas ejecutadas y evidencia reproducible.
+- La ratificación de la fórmula no obliga a implementar `ScoreStrategy`, `GameSession`, `UndoManager`, `GameMemento` o `SessionMetrics`; esas clases pueden ser alternativas de diseño no adoptadas.
+- `GameController`, `ScoreCalculator`, `LevelResult` y `UiCommands` son las responsabilidades implementadas actualmente; la aceptación formal del código sigue siendo `TEAM_ACCEPTANCE = NOT_RECORDED`.

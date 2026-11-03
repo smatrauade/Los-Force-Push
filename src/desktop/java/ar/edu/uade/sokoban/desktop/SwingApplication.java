@@ -121,7 +121,6 @@ public final class SwingApplication {
             continueButton.setEnabled(false);
             restartButton.setEnabled(false);
             pauseRestartButton.setEnabled(false);
-            pending(undoButton, "El Undo de 5 movimientos requiere el modulo del punto 4");
             pending(saveButton, "Guardar partida requiere la funcionalidad adicional");
             pending(loadSaveButton, "Cargar partida guardada requiere la funcionalidad adicional");
             pending(nextButton, "La progresion requiere el modulo del punto 3");
@@ -319,7 +318,7 @@ public final class SwingApplication {
             status.setForeground(PixelTheme.AQUA);
             hud.add(status);
             result.add(hud, BorderLayout.EAST);
-            JLabel footer = label(" FLECHAS MOVER     ESC PAUSA     Z UNDO*     R REINICIAR*     M SONIDO     +/- ZOOM",
+            JLabel footer = label(" FLECHAS MOVER     ESC PAUSA     Z UNDO     R REINICIAR     M SONIDO     +/- ZOOM",
                     PixelTheme.SMALL);
             footer.setForeground(PixelTheme.MUTED);
             footer.setBorder(BorderFactory.createEmptyBorder(7, 17, 12, 0));
@@ -387,10 +386,11 @@ public final class SwingApplication {
                     "LAS CAJAS NO SE PUEDEN TIRAR",
                     "COLOCA CADA CAJA EN UN DESTINO",
                     "ESC: PAUSAR / CONTINUAR",
-                    "R: REINICIAR (AL INTEGRAR PUNTO 4)",
+                    "R: REINICIAR NIVEL",
+                    "Z: DESHACER (5 MOVIMIENTOS; HASTA 3 USOS)",
                     "M: ACTIVAR O DESACTIVAR AUDIO",
                     "ZOOM: + Y -",
-                    "UNDO / CAJAS ESPECIALES: EN DESARROLLO"}) {
+                    "CAJAS ESPECIALES: EN DESARROLLO"}) {
                 JLabel row = label(text, PixelTheme.SMALL);
                 row.setAlignmentX(Component.CENTER_ALIGNMENT);
                 stack.add(row);
@@ -502,12 +502,12 @@ public final class SwingApplication {
                     status.setText(audio.isEnabled() ? "SONIDO ACTIVADO" : "SONIDO SILENCIADO");
                 }
             });
-            bind("Z", "undo-pending", () -> {
+            bind("Z", "undo", () -> {
                 if (GAME.equals(active)) {
                     if (undoButton.isEnabled()) {
                         runCommand(commands.undo());
                     } else {
-                        status.setText("UNDO: PENDIENTE DEL PUNTO 4");
+                        status.setText("UNDO NO DISPONIBLE");
                     }
                 }
             });

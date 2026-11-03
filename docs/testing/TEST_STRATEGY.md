@@ -20,6 +20,66 @@ Los 44 controles de VisualAssets son 29 sprites base + 12 WAV + tres controles d
 
 NOT_RUN en R1: interacción manual nueva, escucha de altavoces, GUI Linux y macOS. Xvfb no estaba instalado. La reproducción no prueba derechos CC0 ni ratifica gramática, patrones, OQ o aceptación grupal. Logs/capturas completos no están versionados; el registro normalizado identifica comandos, árbol y límites.
 
+## Ratificación funcional 01/11/2026 — Undo, Restart y score
+
+`TEAM_ACCEPTANCE = NOT_RECORDED`.
+
+La ratificación del 01/11/2026 dejó fijadas las reglas funcionales que coinciden con la implementación actual de `GameController`, `ScoreCalculator`, `LevelResult` y la conexión de `UiCommands`, pero sin convertir esas reglas en aceptación formal del equipo. Esta sección conserva la distinción entre: (a) reglas ratificadas, (b) implementación efectiva en código, y (c) escenarios de prueba realmente cubiertos por la suite actual.
+
+### Regla ratificada y su reflejo en la implementación
+
+- Undo retrocede cinco movimientos exitosos por uso; en `GameController.undo()`, si `canUndo()` es true, se extraen los últimos cinco snapshots del historial (`history.removeLast()`) y se reutiliza el último de esos snapshots removidos como estado restaurado. Eso vuelve al estado de cinco movimientos exitosos antes del intento actual.
+- Se conserva un historial máximo de 15 snapshots; `history` usa `ArrayDeque` y elimina el más antiguo cuando supera `HISTORY_LIMIT = 15` durante `move()`.
+- Se permiten hasta tres usos consecutivos de Undo; `MAX_UNDO_USES = 3` y `canUndo()` usa `consecutiveUndoUses < MAX_UNDO_USES`.
+- Undo restaura el tablero, `moves` y `pushes`; los tests `UNDO restores state from five moves ago` y `UNDO restores pushes counter` verifican ese comportamiento en `DesktopIntegrationTest`.
+- `undoUsesTotal` acumula los usos de Undo durante el intento; `GameController.getLevelResult()` expone el valor calculado, y el test `GameController exposes current statistics and score` valida la propagación de `undoUses` en `LevelResult`.
+- Un movimiento normal no reinicia el límite de usos consecutivos; `move()` no borra `consecutiveUndoUses`.
+- Cada uso de Undo incrementa `consecutiveUndoUses`; `undo()` hace `consecutiveUndoUses++` después de restaurar el snapshot.
+- `restart()` y `load()` reinician ese contador; `restart()` pone `consecutiveUndoUses = 0` y `load()` también limpia la sesión antes de renderizar un nivel nuevo.
+- Restart restaura el estado inicial y reinicia `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses`; el test `RESTART restores initial state and resets counters` verifica ese comportamiento.
+- El score parte de 1000 puntos, descuenta 1 por movimiento, 2 adicionales por empuje y 10 por uso de Undo, con un mínimo de cero; la fórmula la ejecuta `ScoreCalculator.calculate()`, y `GameController.getLevelResult()` expone el resultado calculado.
+- Restart no agrega una penalización; `restart()` vuelve a `initial` y limpia contadores/historial, pero no ejecuta una penalización de score adicional.
+
+### Implementación efectiva actual
+
+La implementación vigente y verificable queda en:
+
+- `GameController`: `history`, `move()`, `undo()`, `restart()`, `canUndo()`, `refreshUiCommands()` y `getLevelResult()`, así como la actualización de `undoUsesTotal` y `consecutiveUndoUses`.
+- `ScoreCalculator`: calcula el score con `INITIAL_SCORE = 1000`, penalidades por movimiento, empuje y Undo, y limita el resultado a un mínimo de cero mediante `applyPenalty()`.
+- `LevelResult`: registro para `levelName`, `moves`, `pushes`, `undoUses`, `score`.
+- `UiCommands`: contrato de callbacks `undo` y `restart` que `GameController.refreshUiCommands()` crea y que `SwingApplication.configureUiCommands()` usa para habilitar/deshabilitar los botones.
+
+La conexión real del UI está confirmada en el código de Swing: `SwingApplication.configureUiCommands(UiCommands)` activa `undoButton` y `restartButton` según `value.undo()` y `value.restart()`, y `installKeys()` enlaza la tecla `Z` con `commands.undo()` y la tecla `R` con `commands.restart()`. El smoke test `DesktopUiSmokeTest` valida que esos callbacks se habilitan y se ejecutan desde la vista.
+
+### Evidencia y alcance de cobertura real
+
+Los resultados generales `DESKTOP RESULT: 30 PASS, 0 FAIL` y `VISUAL ASSETS RESULT: 44 PASS, 0 FAIL` son evidencia válida de integración general del desktop y de assets, pero no reemplazan la cobertura específica de cada regla de Undo, Restart y score.
+
+La suite actual con casos específicos que sí existen en `DesktopIntegrationTest` es la siguiente:
+
+- `UNDO restores state from five moves ago`: verifica el retroceso de cinco movimientos exitosos y la restauración del tablero y del contador de pushes.
+- `UNDO restores pushes counter`: verifica la restauración del número de empujes.
+- `UNDO can be used only three times`: verifica el límite de tres usos consecutivos y la prohibición del cuarto Undo.
+- `RESTART restores initial state and resets counters`: verifica que resetee el tablero, `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses`.
+- `UNDO is unavailable with fewer than five moves`: verifica que no se ejecute Undo cuando no hay cinco movimientos disponibles.
+- `BLOCKED movement is not added to undo history`: verifica que un movimiento bloqueado no se agregue al historial y que el Undo posterior restaura el estado válido previo.
+- `SCORE starts at 1000 points`: caso base.
+- `SCORE penalizes each move`: aplica la penalidad por movimiento.
+- `SCORE applies additional penalty for pushes`: aplica la penalidad extra por empuje.
+- `SCORE penalizes Undo uses`: verifica la penalidad por Undo.
+- `SCORE never goes below zero`: limita el valor a un mínimo de cero.
+- `SCORE handles maximum moves without overflow`: resguardo de overflow por movimientos extremos.
+- `SCORE handles maximum pushes without overflow`: resguardo de overflow por empujes extremos.
+- `SCORE handles maximum Undo uses without overflow`: resguardo de overflow por usos extremos de Undo.
+- `SCORE rejects negative statistics`: validación de entrada negativa.
+- `GameController exposes current statistics and score`: valida la propagación de `moves`, `pushes`, `undoUses` y `score` desde el controlador hasta `LevelResult`.
+
+No existe un caso nombrado que ejerza explícitamente la regla de que un movimiento normal no reinicia el límite de usos consecutivos ni un test aislado de `Restart no agrega penalización`; esa semántica está implementada en `GameController` y puede inferirse de la lógica, pero no dispone de una prueba específica con nombre separado en la suite actual. Del mismo modo, no se cierran aquí cuestiones pendientes sobre el efecto del cambio de nivel sobre otras métricas; esta sección solo documenta la regla ratificada del score y la implementación real de Undo/Restart en el intento vigente.
+
+### Ejecución del conjunto relevante
+
+Los casos anteriores se ejecutan como parte del runner Swing del repositorio. En este worktree quedó registrado el comando real `bash scripts/run-swing.sh --test`, y el resultado global se usa como evidencia de integración del desktop, sin presentarlo como prueba individual de cada regla.
+
 ## Verificador del repositorio — mantenimiento R2, 2026-10-28
 
 Base integrada: 565376452affa9b2146569e5da27dbfd1ee9d4f0, árbol funcional citado arriba. Esta misión cambia documentación/UML y verificación, **cero archivos del juego, tests Java, recursos o runners funcionales**. El SHA final de mantenimiento se obtiene del historial/PR; no se inserta dentro del documento que lo contiene.

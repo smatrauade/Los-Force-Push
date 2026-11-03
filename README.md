@@ -2,7 +2,7 @@
 
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
-**Estado:** se puede ejecutar una porción del juego con carga de niveles y movimiento básico; el TPO está incompleto. Hielo, cajas especiales jugables, Undo, Restart, victoria y puntaje todavía no están implementados. La aceptación del código por el equipo no está registrada.
+**Estado:** el prototipo permite cargar niveles y jugar con movimiento y empuje de cajas normales. También cuenta con Undo, Restart y cálculo de puntaje por intento. Siguen pendientes las mecánicas especiales, la detección de victoria y la progresión entre niveles. El TPO está incompleto y la aceptación integral del código por el equipo no está registrada.
 
 ## Inicio rápido
 
@@ -58,8 +58,7 @@ El runner Swing Bash no entrecomilla las rutas de fuentes en el archivo de argum
 
 ## Uso del juego
 
-En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir el [nivel incluido](src/desktop/resources/levels/demo.txt), o **ABRIR NIVEL TXT** para seleccionar un archivo externo compatible. Las flechas mueven al jugador y empujan una caja normal; `Esc` pausa, `M` controla el sonido y `+`/`-` cambian el zoom. Undo, Restart, guardar/cargar partida y siguiente nivel necesitan servicios todavía ausentes; sus controles permanecen deshabilitados sin callbacks operativos. El HUD muestra nivel y contadores demostrativos; la pantalla final no detecta victoria ni calcula score.
-
+En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir el [nivel incluido](src/desktop/resources/levels/demo.txt), o **ABRIR NIVEL TXT** para seleccionar un archivo externo compatible. Las flechas mueven al jugador y empujan una caja normal; `Esc` pausa, `M` controla el sonido y `+`/`-` cambian el zoom. `Z` ejecuta Undo, que retrocede cinco movimientos exitosos y permite hasta tres usos consecutivos; los movimientos normales no reinician el contador de usos consecutivos. `R` reinicia el nivel y sus contadores. El HUD muestra los movimientos y empujes de la partida. El cálculo del puntaje está implementado y se expone mediante `LevelResult`; la detección de victoria y la progresión entre niveles siguen pendientes del módulo correspondiente.
 También se puede iniciar con un nivel externo como argumento, reemplazando la ruta por un archivo propio:
 
 ```powershell
@@ -85,7 +84,7 @@ La sección `[attributes]` debe estar vacía en la ruta jugable; se rechazan ent
 
 ## Capacidades y pruebas
 
-El core implementa carga legacy/C2-L7, tablero inmutable y movimiento cardinal con empuje de una caja normal. Swing ofrece menú, pausa, opciones, ayuda, HUD, sprites y sonidos. La definición Fragile descrita abajo **no** habilita cajas frágiles jugables. Quedan pendientes hielo, KeyBox, Lock y muros dinámicos, sesión y Undo/Restart, victoria/progresión, score y dos adicionales elegibles.
+El core implementa carga legacy/C2-L7, tablero inmutable y movimiento cardinal con empuje de una caja normal. Swing ofrece menú, pausa, opciones, ayuda, HUD, sprites y sonidos. El controlador de escritorio implementa Undo, Restart e historial de estados; `ScoreCalculator` calcula el puntaje del intento con base inicial de 1000 puntos, penaliza 1 por movimiento, 2 adicionales por cada push y 10 por cada uso de Undo, con mínimo 0 y fórmula `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`, y `LevelResult` expone sus estadísticas. `Restart` restablece los contadores del intento sin aplicar penalizaciones. La definición Fragile descrita abajo **no** habilita cajas frágiles jugables. Quedan pendientes hielo, KeyBox, Lock, muros dinámicos, detección de victoria, progresión y la definición de las dos adicionales académicamente válidas.
 
 Para comprobar el runner de escritorio sin abrir ventana, desde la raíz:
 

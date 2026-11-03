@@ -4,7 +4,7 @@ AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este do
 
 ## Cierre semántico y contractual — 29/10/2026
 
-[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. Gameplay especial, Undo y aceptación del código continúan NOT_IMPLEMENTED / NOT_RECORDED según corresponda.
+[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. Gameplay especial sigue sin implementarse; Undo/Restart y score sí existen en la implementación actual, mientras que la aceptación formal del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`.
 
 Este hito sólo cambia Markdown. QA Java previa por Codex sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, con src/scripts idénticos a 5ac2bba; no reejecutada en este cierre. [Comandos, entorno y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). La [matriz de frescura](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#cierre-semántico-del-contrato-soportado--29102026) identifica los documentos revisados y las excepciones conservadas. PR/reviews/HEAD se consultan dinámicamente; no hay permiso de Ready/merge ni SHA de squash predicho.
 
@@ -46,8 +46,10 @@ Los PR #8, #9, #10, #11, #12 y #13 están MERGED; los SHA de la tabla identifica
 
 - [LevelLoader / LevelParser / C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level): lectura externa UTF-8 estricta, máximo 65.536 bytes, legacy y C2 opt-in; Board inmutable, grillas hasta 100×100, exactamente un jugador.
 - [MovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/MovementEngine.java): movimiento cardinal y empuje de una caja normal. MOVED/PUSHED producen Board nuevo; BLOCKED conserva la misma instancia.
-- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop): menú, juego, HUD, pausa, opciones, ayuda, zoom, sprites y audio. GameController coordina carga/movimiento; BoardPanel sólo representa; PixelAssets y SoundManager cargan desde classpath.
-- [UiCommands](../../src/desktop/java/ar/edu/uade/sokoban/desktop/UiCommands.java) expone callbacks opcionales y [LevelResult](../../src/desktop/java/ar/edu/uade/sokoban/desktop/LevelResult.java) datos finales. No implementan Undo, Restart, persistencia, score ni progresión.
+- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop): menú, juego, HUD, pausa, opciones, ayuda, zoom, sprites y audio. `GameController` coordina carga, movimiento, historial, `undo()`, `restart()`, métricas y `getLevelResult()`: Undo retrocede cinco movimientos exitosos por uso, conserva hasta 15 snapshots y permite hasta tres usos consecutivos; Restart restaura el estado inicial, limpia el historial y reinicia las métricas del intento; `BoardPanel` sólo representa; `PixelAssets` y `SoundManager` cargan desde classpath.
+- [ScoreCalculator](../../src/desktop/java/ar/edu/uade/sokoban/desktop/ScoreCalculator.java): calcula el resultado final con penalidad inicial de 1000, −1 por movimiento, −2 adicionales por push y −10 por uso de Undo, aplicando `applyPenalty` incrementalmente para evitar overflow y mantener un mínimo de 0.
+- [UiCommands](../../src/desktop/java/ar/edu/uade/sokoban/desktop/UiCommands.java): callbacks opcionales de interfaz. `undo` y `restart` se exponen solo cuando el módulo los entrega; `save`, `loadSaved` y `nextLevel` permanecen `null`.
+- [LevelResult](../../src/desktop/java/ar/edu/uade/sokoban/desktop/LevelResult.java): DTO con nivel, movimientos, pushes, usos de Undo y score calculado, usado para presentar el resultado final del nivel.
 - [Recursos](../../src/desktop/resources/assets): 31 PNG, incluidos 29 base y dos variantes opcionales; 12 WAV. [Manifiesto](../punto5/ASSETS_REGISTRO_SHA256.csv), [contrato entre módulos](../punto5/INTEGRACION_EQUIPO.md) y [derechos pendientes](../punto5/USO_IA_Y_LICENCIAS.md).
 
 ## Spike local C2-L7 — 2026-10-24
@@ -74,7 +76,7 @@ El merge de #5 y su QA previa son historia: [checkpoint Windows](checkpoints/WIN
 
 [README](../../README.md) contiene ejecución desde clon; [TEST_STRATEGY](../testing/TEST_STRATEGY.md), suites y regresión del verificador. No se requieren ZIP de instalación ni assets externos. Java/build definitivo sigue OQ-11 OPEN; los runners provisionales compilan a release 17. [Arquitectura](../architecture/ARCHITECTURE.md) y [UML](../architecture/uml/STARUML_STATUS.md) separan implementación de candidato.
 
-Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. Siguen pendientes hielo, Fragile/KeyBox/Lock, Undo/Restart, score, victoria/progresión, persistencia y segunda adicional. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
+Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. Siguen pendientes hielo, Fragile/KeyBox/Lock, victoria/progresión, persistencia y segunda adicional. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
 
 ## Historia y fuentes
 

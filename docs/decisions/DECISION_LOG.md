@@ -210,6 +210,6 @@ El cambio de nivel reinicia `consecutiveUndoUses`, conforme E08. No se extrapola
 
 La elección de `ScoreStrategy` continúa siendo `PREFERRED`: la ratificación de la fórmula no obliga a utilizar ese patrón ni ratifica una arquitectura concreta.
 
-**Estado:** reglas funcionales ratificadas por TEAM; implementación y pruebas pendientes.
+**Estado:** reglas funcionales ratificadas por TEAM; `GameController` implementa Undo y Restart, y `ScoreCalculator` implementa el cálculo del score acordado. La implementación contempla la restauración de `moves` y `pushes` al deshacer, la acumulación de usos de Undo, el reinicio de las cuatro métricas con Restart y la fórmula de score ratificada. `TEAM_ACCEPTANCE = NOT_RECORDED` para el código; la ratificación se refiere a las reglas funcionales, no a la aceptación formal del equipo sobre la implementación actual.
 
 **Documentos afectados:** [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md), [REQUIREMENTS](../requirements/REQUIREMENTS.md) y [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md).
