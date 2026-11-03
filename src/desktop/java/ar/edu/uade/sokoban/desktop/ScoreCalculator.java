@@ -1,4 +1,3 @@
-
 package ar.edu.uade.sokoban.desktop;
 
 /**
@@ -18,12 +17,27 @@ public final class ScoreCalculator {
                     "Las estadisticas no pueden ser negativas"
             );
         }
+        
+        long score = INITIAL_SCORE;
 
-        long score = INITIAL_SCORE
-                - MOVE_PENALTY * moves
-                - PUSH_PENALTY * pushes
-                - UNDO_PENALTY * undoUses;
+        score = applyPenalty(score, moves, MOVE_PENALTY);
+        score = applyPenalty(score, pushes, PUSH_PENALTY);
+        score = applyPenalty(score, undoUses, UNDO_PENALTY);
 
-        return Math.max(0, score);
+        return score;
+    }
+
+    private long applyPenalty(long score, long count, long penalty) {
+        if (score == 0) {
+            return 0;
+        }
+
+        long countToReachZero = (score + penalty - 1) / penalty;
+
+        if (count >= countToReachZero) {
+            return 0;
+        }
+
+        return score - count * penalty;
     }
 }
