@@ -108,3 +108,9 @@ El [resumen privado aportado](SOURCE_REGISTRY.md#contexto-grupal-privado--comple
 <!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
 
 En la rama `integration/tpo-unificado-2026-11-03`, el **punto de partida funcional** es el árbol de `victoria@a7df64172dbb857e7a10709ec9ea85a5f80aacf7` (KeyBox/Lock/Wall y progresión); se agrega contrato documental para integraciones futuras. Al redactar este corte, `Objetivo2`, `feature/undo-restart-score` y `impaciencia` **no** estaban integradas y el PR no existía. Este párrafo es una **fotografía de I0**, no un estado permanentemente verdadero. Para el estado actual y cada hito posterior consultar [README de integración](../integration/README.md), [plan I0–I4](../integration/TEAM_INTEGRATION_PLAN.md), el HEAD real del checkout y el PR remoto. `main` no queda modificado por documentar esta rama.
+
+## I0.1 — Publicación verificada del PR #17 (03/11/2026)
+
+<!-- I0_PR17_PUBLICATION_VERIFIED_2026_11_03 -->
+
+La rama `integration/tpo-unificado-2026-11-03` publicó el PR [#17](https://github.com/smatrauade/Los-Force-Push/pull/17) en estado **Draft**, con origen `victoria@a7df64172dbb857e7a10709ec9ea85a5f80aacf7` y commit documental I0 `50a559a55e1d57afaad68e9f952e552228f45779`. `main=f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2` permanecía intacta al verificar este corte. La implementación de hielo/Fragile de `Objetivo2`, Undo/Restart/score de Martina y la rama individual `impaciencia` **NO** están integradas aún. El PR no aprueba un merge. Las pruebas combinadas permanecen `NOT_RUN`. Esta anotación certifica la publicación I0; los SHA son históricos y deben revalidarse en GitHub. Siguiente etapa: I1 TXT/Runtime/Movement; [plan](../integration/TEAM_INTEGRATION_PLAN.md) y [matriz](../integration/INTEGRATION_ACCEPTANCE.md).

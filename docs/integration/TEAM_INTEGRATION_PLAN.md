@@ -22,7 +22,7 @@ La consigna exige Java/Swing 2D, TXT externos, Undo 15/5/3, Restart, KeyBox/Lock
 
 | Hito | Dominio técnico único | Verificación requerida | Estado al crear este plan |
 |---|---|---|---|
-| **I0** | Coordinación Git + continuidad | branch remota, PR Draft, docs versionados, SHA remoto, main intacta | PREPARADO, PR NO PUBLICADO |
+| **I0** | Coordinación Git + continuidad | branch remota, PR Draft, docs versionados, SHA remoto, main intacta | PUBLISHED_DRAFT_VERIFIED — PR #17; `main` intacta al corte |
 | **I1** | TXT + `RuntimeState` + movimiento | INT-01 a INT-04, identidad Fragile, terreno ICE, E03/E04/Lock; 0 regresiones | NOT_RUN |
 | **I2** | Sesión + Undo + Restart + score | INT-05/06/08, Undo 15/5/3, contadores, fórmula TEAM saturada, no duplicidad | NOT_RUN |
 | **I3** | Swing + campaña + presentación | INT-09, GUI/EDT, HUD, audio, fin y Next, animación de rotura | NOT_RUN |

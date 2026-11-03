@@ -81,7 +81,7 @@ El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece
 
 | Fase | Entrega | Criterio de cierre | Estado inicial |
 |---|---|---|---|
-| I0 | Rama compartida y PR Draft documentado | PR Draft con autoría, SHA, documentación viva y `main` intacta | Preparación; verificar publicación remota |
+| I0 | Rama compartida y PR Draft documentado | PR Draft con autoría, SHA, documentación viva y `main` intacta | DONE — PR #17 Draft publicado, `main` intacta al corte |
 | I1 | TXT/runtime/movimiento integrado | INT-01–04 (IDs Fragile, ICE, Lock/Wall) sobre HEAD combinado | NOT_RUN |
 | I2 | Sesión/Undo/Restart/Score | INT-05/06/08, fórmula ratificada y sin duplicidad | NOT_RUN |
 | I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | NOT_RUN |
