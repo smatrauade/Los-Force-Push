@@ -91,3 +91,9 @@ No incluir libros, PDFs de cátedra, grabaciones, transcripciones completas o c�
 ## Cierre de cada iteración
 
 Actualizar documentos vivos afectados según `FRESHNESS_POLICY.md`; preservar cápsulas previas. No exigir un cambio documental si es realmente inaplicable: explicar el motivo. Entregar cambios, verificaciones reales, riesgos, decisiones abiertas, HEAD base/final y siguiente acción segura. Un nuevo hito puede crear una cápsula, tras actualizar y validar los documentos vivos.
+
+## Rama compartida de integración — continuidad por dominio (03/11/2026)
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+Al trabajar en `integration/tpo-unificado-2026-11-03`, leer también [el índice de integración](docs/integration/README.md), [el plan I0–I4](docs/integration/TEAM_INTEGRATION_PLAN.md) y [el protocolo de frescura por rama](docs/continuity/BRANCH_AWARE_FRESHNESS.md) tras las lecturas obligatorias de este contrato. No interpretar como integradas en `main` las funciones alojadas sólo en `victoria`, `Objetivo2`, `feature/undo-restart-score` o `impaciencia`. Un SHA de corte es evidencia histórica, no HEAD permanente. Esta sección **no autoriza** merge a `main` ni cambios de reglas TEAM.

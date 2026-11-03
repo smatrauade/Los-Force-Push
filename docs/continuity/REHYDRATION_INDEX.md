@@ -45,3 +45,9 @@ Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectad
 ## Entrega y siguiente gate
 
 Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; el alcance autónomo TXT de R7 ofrece carga de definición experimental y contrato, sin gameplay. Antes de integración runtime revisar contrato, dependencias OQ y autorización específica; este índice no es una orden de implementación.
+
+## Rama de integración I0 — ruta adicional de rehidratación (03/11/2026)
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+Si el checkout corresponde a `integration/tpo-unificado-2026-11-03`, **después de las once lecturas obligatorias de AGENTS**, continuar por [integración grupal](../integration/README.md), [riesgos y oráculos](../integration/INTEGRATION_ACCEPTANCE.md) y [frescura consciente de la rama](BRANCH_AWARE_FRESHNESS.md). Verificar HEAD/PR remotos en cada nueva misión: [fotografía 03/11](../integration/BRANCH_SNAPSHOT_2026-11-03.md) es un corte inmutable, no el estado remoto actual.

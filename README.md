@@ -122,3 +122,9 @@ El [índice documental](docs/README.md) incluye más guías, entre ellas instala
 ## Contexto académico
 
 La entrega informada es el **18/11/2026**, con demo en vivo de 15–20 minutos y explicación de patrones. La consigna normalizada exige repositorio público con código y README de ejecución, video de gameplay, StarUML e informe técnico; los entregables siguen pendientes. La explicación oral aportada por el solicitante también describe cómo descargar, ejecutar y conocer dependencias; procede de ASR sin verificación acústica. [Requisitos y entrega](docs/requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026) · [procedencia de fuentes](docs/continuity/SOURCE_REGISTRY.md) · [pendientes de entrega](TODO.md).
+
+## Integración grupal en revisión — alcance distinto de `main`
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+La propuesta de combinación se coordina mediante un **PR Draft** desde `integration/tpo-unificado-2026-11-03`, inicialmente basado en `victoria`, sin afirmar integración de `Objetivo2` o `feature/undo-restart-score` hasta futuros commits. Leer [el índice de integración](docs/integration/README.md), [la matriz de contratos y pruebas](docs/integration/INTEGRATION_ACCEPTANCE.md) y [el protocolo de frescura](docs/continuity/BRANCH_AWARE_FRESHNESS.md). Este apartado describe la **rama experimental de integración**; el README de `main` debe representar únicamente lo realmente fusionado allí.

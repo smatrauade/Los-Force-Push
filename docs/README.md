@@ -19,3 +19,9 @@ Los experimentos, checkpoints y cápsulas fechados conservan evidencia históric
 ## Entrega y reconciliación académica — 29/10/2026
 
 PR #11 y #12 están integrados; Fragile permanece no jugable. El contrato soportado se adoptó posteriormente por el responsable TXT en D-020; integración runtime y extensiones siguen pendientes. Para el **18/11/2026**, leer [entrega y demo](requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [brechas de patrones](architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026) y [ruta crítica](../TODO.md#ruta-crítica-hacia-el-1811). El código ofrece carga de definición experimental y contrato TXT; la integración runtime sigue pendiente. Para trabajo paralelo, consultar el [traspaso a Model/Movement](requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026).
+
+## Integración grupal por ramas — 03/11/2026
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+[Entrada de integración](integration/README.md) · [Plan I0–I4](integration/TEAM_INTEGRATION_PLAN.md) · [Criterios INT-01–10](integration/INTEGRATION_ACCEPTANCE.md) · [Frescura por rama](continuity/BRANCH_AWARE_FRESHNESS.md). Estas fuentes distinguen estado histórico/branch-only de código realmente integrado en `main`.

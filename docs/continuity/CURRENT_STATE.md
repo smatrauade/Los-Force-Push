@@ -102,3 +102,9 @@ Esta reconciliación revisa documentación y fuentes contra el código integrado
 ## Complemento grupal del PR #13 — 29/10/2026
 
 El [resumen privado aportado](SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026) cuestiona la elegibilidad académica de guardar/recuperar mediante un reporte docente de segunda mano. E11 conserva su voto histórico; [OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) exige confirmar dos adicionales válidas. El selector de estilos es candidato con elegibilidad reportada, sin mayoría ni implementación verificadas. No se declara satisfecho RF-12 ni persistencia obligatoria por Undo/Memento. Las propuestas de áreas/Issues y patrones no son asignaciones ni diseños ratificados. Ese corte conservaba entrega 18/11 y R7 no ejecutada; precede al incremento TXT descrito al comienzo. Las demás fuentes de navegación, política y arquitectura se revisaron sin necesidad de cambio: no se incorpora software ni nueva decisión de patrón.
+
+## I0 — Estado de la rama compartida de integración (corte 03/11/2026)
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+En la rama `integration/tpo-unificado-2026-11-03`, el **punto de partida funcional** es el árbol de `victoria@a7df64172dbb857e7a10709ec9ea85a5f80aacf7` (KeyBox/Lock/Wall y progresión); se agrega contrato documental para integraciones futuras. Al redactar este corte, `Objetivo2`, `feature/undo-restart-score` y `impaciencia` **no** estaban integradas y el PR no existía. Este párrafo es una **fotografía de I0**, no un estado permanentemente verdadero. Para el estado actual y cada hito posterior consultar [README de integración](../integration/README.md), [plan I0–I4](../integration/TEAM_INTEGRATION_PLAN.md), el HEAD real del checkout y el PR remoto. `main` no queda modificado por documentar esta rama.

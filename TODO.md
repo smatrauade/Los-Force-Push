@@ -74,3 +74,17 @@ Mantener [arquitectura](docs/architecture/ARCHITECTURE.md), UML implementado y c
 - **Patrones:** sugerencias de Factory Method/Abstract Factory del 29/10 no son decisiones ratificadas ni autorizan refactors. La segunda funcionalidad y el cómputo final de ambas siguen pendientes.
 
 El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece de contexto de voces omitidas: no es deadline. Continúa **18/11/2026** como entrega oficial; las fechas internas de la tabla anterior son sólo propuestas. El estado actual de R7 se describe en «Próximo dominio TXT/niveles»; este complemento conserva su contexto documental anterior.
+
+## Integración grupal — backlog I0–I4 (corte 03/11/2026)
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+| Fase | Entrega | Criterio de cierre | Estado inicial |
+|---|---|---|---|
+| I0 | Rama compartida y PR Draft documentado | PR Draft con autoría, SHA, documentación viva y `main` intacta | Preparación; verificar publicación remota |
+| I1 | TXT/runtime/movimiento integrado | INT-01–04 (IDs Fragile, ICE, Lock/Wall) sobre HEAD combinado | NOT_RUN |
+| I2 | Sesión/Undo/Restart/Score | INT-05/06/08, fórmula ratificada y sin duplicidad | NOT_RUN |
+| I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | NOT_RUN |
+| I4 | QA/entregables y revisión TEAM | INT-01–10, Java17, derechos, StarUML del código integrado, informe/video | NOT_RUN |
+
+Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md). No duplicar el estado real de los commits en esta fotografía: actualizar este TODO **por impacto** al cerrar cada fase. Ningún PR Draft concede autorización de merge.

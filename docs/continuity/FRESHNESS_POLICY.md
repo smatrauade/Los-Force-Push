@@ -65,3 +65,9 @@ Cada agente nuevo aplica este contraste **en lectura**, y edita sólo los archiv
 La [ratificación del 23/10](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23) permanece sólo en DECISION_LOG; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene el inventario residual. Registrar autoridad TEAM, método, participación/selecciones, alcance, anomalías y límites; corregir en ambos documentos cuando proceda, sin tabla paralela ni reabrir por defecto lo ya mayoritario. Conflictos normativos requieren contraste con cátedra antes de implementación, sin borrar el resultado del equipo.
 
 Publicar sólo agregados anónimos de la transcripción del solicitante; originales privados externos no equivalen a evidencia bruta verificada por este agente. No incluir capturas, nombres/IDs ligados a votos, teléfonos ni hashes inventados. Votos y QA no cambian por sí solos TEAM_ACCEPTANCE del código ni estados técnicos de patrones/UML. El siguiente gate es especificación/compatibilidad, no una nueva encuesta general ni permiso de merge.
+
+## Control por rama y disparadores explícitos — 03/11/2026
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+[Protocolo BRANCH_AWARE_FRESHNESS](BRANCH_AWARE_FRESHNESS.md) **complementa** esta política con inspección de HEADs, separación de estado `main` / `SOURCE_BRANCH_ONLY` / `IN_INTEGRATION_BRANCH`, oráculos INT y tabla de documentos vivos a revisar. Ejecutarlo después de cada incremento, antes/después del PR y en cada handoff; revisión al menos semanal mientras la integración esté activa. Es una comprobación manual, no una automatización ya programada. Evitar actualizar por apariencia los encabezados históricos sin contrastar ramas y código; registrar `UNCHANGED_VERIFIED` para archivos sin impacto.
