@@ -114,3 +114,12 @@ Las tareas sin marcar del checkpoint histórico anterior pertenecen a su corte a
 ## I2 — avance local 04/11/2026
 
 Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `GameSession` conserva el mundo, historial y métricas; `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` permitiendo que el score histórico persista tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada y `GameController` expone el resultado a `SwingApplication`, cuyo HUD y pantalla de victoria reciben el puntaje. Con JDK 17.0.20.1 se ejecutaron 58 comprobaciones Undo, 258 casos core I1, 36 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0. El reset de métricas al cambiar de nivel es provisional; no hay aceptación del código por el equipo (`TEAM_ACCEPTANCE=NOT_RECORDED`). Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+
+## I2 — Fragile TXT GUI hotfix (04/11/2026)
+
+- Detectar formato por parsers estrictos existentes: STANDARD, EXTENDED y EXPERIMENTAL_FRAGILE.
+- El archivo `fragile_demo.txt` y el mismo contenido con nombre externo arbitrario conservan ID `f1` y resistencia 4 en runtime.
+- La carga inválida preserva el estado previamente publicado; regresión de STANDARD, ICE y EXTENDED en `DesktopIntegrationTest`.
+- Evidencia: `scripts/test-integration-i2.sh` con JDK 17 y `scripts/verify-repo-readonly.sh` (ejecutar sobre el commit resultante).
+- QA gráfica nativa integral, aprobación TEAM, I3/I4 y merge a `main` siguen pendientes.
+- La frescura/publicación del PR #17 se comprueba en GitHub; no deducirla del HEAD local.

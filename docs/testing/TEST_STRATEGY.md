@@ -456,3 +456,12 @@ La rama `integration/tpo-unificado-2026-11-03` recibió el merge de dos padres `
 ## I2 — avance local 04/11/2026
 
 Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `GameSession` conserva el mundo, historial y métricas; `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` permitiendo que el score histórico persista tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada acordada y `GameController` expone el resultado a `SwingApplication`, cuyo HUD (`status`) y pantalla de victoria reciben el puntaje. Con OpenJDK 17.0.20.1 se ejecutaron **58 comprobaciones Undo** (`GameSessionUndoTest`), **258 casos core I1** (Loading 40, Movement 37, Extended 26, Dynamic 6, Completion 38, C2 36, Fragile 41, Runtime_I1C 34), **36 casos desktop** (`DesktopIntegrationTest`) y **44 assets** (`DesktopVisualAssetsTest`): `bash scripts/test-integration-i2.sh` terminó con exit 0. Casos INT-05 (Undo que restaura DynamicWall y Lock abiertos), INT-06 (Restart desde cuatro contadores estrictamente no nulos) e INT-08 (retención histórica de score 987 y control 997 persistentes tras advance y restart) `PASS`. `NATIVE_GUI_QA=NOT_RUN`. El reset de métricas al cambiar de nivel es provisional; `TEAM_ACCEPTANCE=NOT_RECORDED`. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+
+## I2 — Fragile TXT GUI hotfix (04/11/2026)
+
+- Detectar formato por parsers estrictos existentes: STANDARD, EXTENDED y EXPERIMENTAL_FRAGILE.
+- El archivo `fragile_demo.txt` y el mismo contenido con nombre externo arbitrario conservan ID `f1` y resistencia 4 en runtime.
+- La carga inválida preserva el estado previamente publicado; regresión de STANDARD, ICE y EXTENDED en `DesktopIntegrationTest`.
+- Evidencia: `scripts/test-integration-i2.sh` con JDK 17 y `scripts/verify-repo-readonly.sh` (ejecutar sobre el commit resultante).
+- QA gráfica nativa integral, aprobación TEAM, I3/I4 y merge a `main` siguen pendientes.
+- La frescura/publicación del PR #17 se comprueba en GitHub; no deducirla del HEAD local.

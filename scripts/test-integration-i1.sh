@@ -70,9 +70,9 @@ run_core RUNTIME_I1C ar.edu.uade.sokoban.movement.RuntimeIceFragileTest 'RUNTIME
 
 echo '=== DESKTOP ==='
 if (cd "$root" && bash scripts/run-swing.sh --test) >"$scratch/desktop.log" 2>&1 && \
-    grep -Fxq 'DESKTOP RESULT: 36 PASS, 0 FAIL' "$scratch/desktop.log" && \
+    grep -Fxq 'DESKTOP RESULT: 40 PASS, 0 FAIL' "$scratch/desktop.log" && \
     grep -Fxq 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL' "$scratch/desktop.log"; then
-    echo 'DESKTOP RESULT: 36 PASS, 0 FAIL'
+    echo 'DESKTOP RESULT: 40 PASS, 0 FAIL'
     echo 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL'
 else
     echo 'DESKTOP_OR_VISUAL_ASSETS=FAILED'; tail -n 45 "$scratch/desktop.log"; failures=1

@@ -153,8 +153,18 @@ public final class GameController {
             loader.load(path);
             return LevelCatalog.Format.STANDARD;
         } catch (LevelFormatException ignored) {
-            loader.loadExtended(path);
-            return LevelCatalog.Format.EXTENDED;
+            try {
+                loader.loadExtended(path);
+                return LevelCatalog.Format.EXTENDED;
+            } catch (LevelFormatException extendedFailure) {
+                try {
+                    loader.loadExperimentalFragile(path);
+                    return LevelCatalog.Format.EXPERIMENTAL_FRAGILE;
+                } catch (LevelFormatException fragileFailure) {
+                    extendedFailure.addSuppressed(fragileFailure);
+                    throw extendedFailure;
+                }
+            }
         }
     }
 

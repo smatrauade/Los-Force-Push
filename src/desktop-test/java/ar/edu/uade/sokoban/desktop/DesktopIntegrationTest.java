@@ -70,6 +70,48 @@ public final class DesktopIntegrationTest {
                 check(view.state.board().boxCount() == 1 && view.state.board().goalCount() == 1, "entities");
                 check(view.state.board().rows().get(2).get(6).terrain() == Terrain.GOAL, "goal");
             });
+            test("Fragile fixture loads with ID and resistance", () -> {
+                Probe view = new Probe();
+                Path source = Path.of(args[0]).resolveSibling("fragile_demo.txt");
+                controller(view).load(source);
+                check(view.error == null && view.renders == 1, "Fragile load rejected");
+                var box = view.state.state().boxAt(new Position(1, 2));
+                check(box != null && box.kind() == ar.edu.uade.sokoban.movement.RuntimeState.BoxKind.FRAGILE
+                        && "f1".equals(box.id()) && box.resistance() == 4, "Fragile runtime identity");
+            });
+            test("Fragile external name is loaded by grammar", () -> {
+                Probe view = new Probe();
+                Path fixture = Path.of(args[0]).resolveSibling("fragile_demo.txt");
+                Path renamed = write("external_fragile_arbitrary.txt",
+                        Files.readString(fixture, StandardCharsets.UTF_8));
+                controller(view).load(renamed);
+                check(view.error == null && view.renders == 1, "Filename-dependent Fragile parser");
+                var box = view.state.state().boxAt(new Position(1, 2));
+                check(box != null && "f1".equals(box.id()) && box.resistance() == 4,
+                        "External Fragile metadata lost");
+            });
+            test("Invalid Fragile leaves active game and metrics intact", () -> {
+                Probe view = new Probe();
+                GameController game = controller(view);
+                game.load(Path.of(args[0]));
+                check(view.error == null && view.renders == 1, "Initial demo invalid");
+                GamePresentation before = view.state;
+                Path fixture = Path.of(args[0]).resolveSibling("fragile_demo.txt");
+                String invalid = Files.readString(fixture, StandardCharsets.UTF_8)
+                        .replace("fragile f1 resistance=4", "");
+                check(!invalid.equals(Files.readString(fixture, StandardCharsets.UTF_8)),
+                        "Fragile fixture contract drift");
+                game.load(write("invalid_fragile_missing_attribute.txt", invalid));
+                check(view.error != null && view.state == before && view.renders == 1,
+                        "Invalid Fragile changed active level");
+            });
+            test("Standard ICE and Extended loading remain available", () -> {
+                for (String name : List.of("demo.txt", "ice_demo.txt", "campaign-b.txt")) {
+                    Probe view = new Probe();
+                    controller(view).load(Path.of(args[0]).resolveSibling(name));
+                    check(view.error == null && view.renders == 1, "Format regression " + name);
+                }
+            });
             test("external TXT reload reads changed bytes", () -> {
                 Probe view = new Probe();
                 GameController game = controller(view);

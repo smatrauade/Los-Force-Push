@@ -1,5 +1,14 @@
 # Estado vivo — Los Force Push
 
+## I2 — Fragile TXT GUI hotfix (04/11/2026)
+
+- Detectar formato por parsers estrictos existentes: STANDARD, EXTENDED y EXPERIMENTAL_FRAGILE.
+- El archivo `fragile_demo.txt` y el mismo contenido con nombre externo arbitrario conservan ID `f1` y resistencia 4 en runtime.
+- La carga inválida preserva el estado previamente publicado; regresión de STANDARD, ICE y EXTENDED en `DesktopIntegrationTest`.
+- Evidencia: `scripts/test-integration-i2.sh` con JDK 17 y `scripts/verify-repo-readonly.sh` (ejecutar sobre el commit resultante).
+- QA gráfica nativa integral, aprobación TEAM, I3/I4 y merge a `main` siguen pendientes.
+- La frescura/publicación del PR #17 se comprueba en GitHub; no deducirla del HEAD local.
+
 ## I2 — integración local verificada (04/11/2026)
 
 Rama auxiliar `integration/i2-martina-stage-2026-11-03`; base `9aebe52501bb25d2ccf39781eb515c178dc11983`, fuente Martina `efd0fcd2a1423bd1d5b064458671ec9b149fd054`. Integración y corrección local completadas; estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). Correcciones I2 aplicadas: `LevelProgression.CompletedLevel` almacena `(victory, metrics, undoUsesTotal)` preservando la información para el cálculo del score tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada y `GameController` expone el resultado communicating score al HUD (`status`) y pantalla de victoria (`showVictory`); INT-05 (Undo que restaura DynamicWall y Lock abiertos), INT-06 (Restart desde cuatro métricas simultáneamente mayores a cero) e INT-08 (retención histórica de score 987 con Undo y 997 control) `PASS`. En OpenJDK 17.0.20.1 se ejecutaron 58 comprobaciones Undo (`GameSessionUndoTest`), core 258/258, desktop 36/36 y assets 44/44: `bash scripts/test-integration-i2.sh` exit 0. `NATIVE_GUI_QA=NOT_RUN`. La verificación documental pasó; `TEAM_ACCEPTANCE=NOT_RECORDED`; cambio de nivel reinicia métricas como comportamiento provisional. Próximo gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
