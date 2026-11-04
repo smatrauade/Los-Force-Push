@@ -3,7 +3,6 @@ package ar.edu.uade.sokoban.desktop;
 import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MoveResult;
-import ar.edu.uade.sokoban.session.LevelCatalog;
 import ar.edu.uade.sokoban.replay.ReplayTrace;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -77,7 +76,7 @@ public final class SwingApplication {
         Path initial = requested;
         SwingUtilities.invokeLater(() -> {
             PixelTheme.install();
-            GameWindow window = new GameWindow(initial);
+            GameWindow window = new GameWindow();
             window.setVisible(true);
             if (initial != null) {
                 window.openLevel(initial);
@@ -107,6 +106,8 @@ public final class SwingApplication {
         private final JLabel levelText = label("SIN NIVEL", PixelTheme.BODY);
         private final JLabel movesText = label("0000", PixelTheme.TITLE);
         private final JLabel pushesText = label("0000", PixelTheme.TITLE);
+        private final JLabel scoreText = label("PUNTAJE: 1000", PixelTheme.BODY);
+        private final JLabel undoText = label("USOS UNDO: 0 / 3", PixelTheme.SMALL);
         private final JLabel status = label("LISTO PARA JUGAR", PixelTheme.SMALL);
         private final JLabel victoryData = label("", PixelTheme.BODY);
         private final JButton continueButton = PixelTheme.button("CONTINUAR");
@@ -118,6 +119,7 @@ public final class SwingApplication {
         private final JButton nextButton = PixelTheme.button("SIGUIENTE NIVEL");
         private final JButton replayButton = PixelTheme.button("VER REPLAY");
         private transient ReplayTrace replayTrace;
+        private transient LevelResult lastVictory;
         private final JComboBox<VisualThemeFactory> themeSelector =
                 new JComboBox<>(VisualThemes.all().toArray(VisualThemeFactory[]::new));
         private final JCheckBox soundToggle = new JCheckBox("ACTIVAR EFECTOS DE SONIDO", true);
@@ -132,9 +134,9 @@ public final class SwingApplication {
         private String optionsReturn = MENU;
         private transient UiCommands commands = UiCommands.EMPTY;
 
-        private GameWindow(Path initial) {
+        private GameWindow() {
             super("LOS FORCE PUSH  |  SOKOBAN");
-            defaultDemo = initial != null ? initial : Path.of(
+            defaultDemo = Path.of(
                     System.getProperty("forcepush.repo.root", "."),
                     "src", "desktop", "resources", "levels", "demo.txt").toAbsolutePath();
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -155,8 +157,8 @@ public final class SwingApplication {
             restartButton.setEnabled(false);
             pauseRestartButton.setEnabled(false);
             pending(undoButton, "Disponible tras cinco movimientos exitosos");
-            pending(saveButton, "Guardar partida requiere la funcionalidad adicional");
-            pending(loadSaveButton, "Cargar partida guardada requiere la funcionalidad adicional");
+            pending(saveButton, "No implementado. ABRIR TXT inicia un nivel, no recupera una partida");
+            pending(loadSaveButton, "No implementado. ABRIR NIVEL TXT inicia un nivel nuevo");
             pending(nextButton, "Disponible al completar un nivel con siguiente en el catalogo");
             installKeys();
             addWindowListener(new WindowAdapter() {
@@ -299,7 +301,7 @@ public final class SwingApplication {
                 startDemo();
             });
             addStackButton(stack, newGame);
-            continueButton.addActionListener(event -> navigate(GAME));
+            continueButton.addActionListener(event -> resumeGame());
             addStackButton(stack, continueButton);
             JButton open = PixelTheme.button("ABRIR NIVEL TXT...");
             open.addActionListener(event -> {
@@ -364,6 +366,9 @@ public final class SwingApplication {
             hud.add(Box.createVerticalStrut(18));
             hud.add(label("EMPUJES", PixelTheme.SMALL));
             hud.add(pushesText);
+            hud.add(Box.createVerticalStrut(12));
+            hud.add(scoreText);
+            hud.add(undoText);
             hud.add(Box.createVerticalStrut(25));
             undoButton.addActionListener(event -> runCommand(commands.undo()));
             addHudButton(hud, undoButton);
@@ -400,7 +405,7 @@ public final class SwingApplication {
             JPanel card = centerStack("PAUSA", "PARTIDA EN CURSO");
             JPanel stack = stackOf(card);
             JButton resume = PixelTheme.button("CONTINUAR PARTIDA");
-            resume.addActionListener(event -> navigate(GAME));
+            resume.addActionListener(event -> resumeGame());
             addStackButton(stack, resume);
             pauseRestartButton.addActionListener(event -> runCommand(commands.restart()));
             addStackButton(stack, pauseRestartButton);
@@ -464,6 +469,8 @@ public final class SwingApplication {
                     "Z: DESHACER (5 MOVIMIENTOS; HASTA 3 USOS)",
                     "LA CAJA LLAVE SOBRE CERROJO ABRE MUROS",
                     "EL CERROJO NO CUENTA COMO DESTINO",
+                    "HIELO: DESLIZA LA CAJA, NO EL JUGADOR",
+                    "FRAGILE: PIERDE RESISTENCIA POR EMPUJE",
                     "M: ACTIVAR O DESACTIVAR AUDIO",
                     "ZOOM: + Y -"}) {
                 JLabel row = label(text, PixelTheme.SMALL);
@@ -516,28 +523,27 @@ public final class SwingApplication {
         }
 
         private void startDemo() {
-            stopPresentation();
-            Path levels = defaultDemo.getParent();
-            Path campaign = levels == null ? null : levels.resolve("campaign-b.txt");
-            if (java.nio.file.Files.isRegularFile(defaultDemo)
-                    && campaign != null && java.nio.file.Files.isRegularFile(campaign)) {
-                pendingLevel = defaultDemo;
-                controller.loadCatalog(new LevelCatalog(java.util.List.of(
-                        new LevelCatalog.Entry("demo", defaultDemo, LevelCatalog.Format.STANDARD),
-                        new LevelCatalog.Entry("campaign_b", campaign, LevelCatalog.Format.EXTENDED))));
-                pendingLevel = null;
-            } else if (java.nio.file.Files.isRegularFile(defaultDemo)) {
-                openLevel(defaultDemo);
-            } else {
-                showLoadError("No se encontro demo.txt. Usa ABRIR NIVEL TXT para seleccionarlo.");
-            }
+            prepareLevelLoad();
+            pendingLevel = defaultDemo;
+            controller.loadCatalog(DemoCampaign.catalog(defaultDemo.getParent()));
+            pendingLevel = null;
         }
 
         private void openLevel(Path path) {
-            stopPresentation();
+            prepareLevelLoad();
             pendingLevel = Objects.requireNonNull(path, "path");
             controller.load(path);
             pendingLevel = null;
+        }
+
+        private void prepareLevelLoad() {
+            LevelResult deferred = victoryGate.take();
+            stopPresentation();
+            if (deferred != null) { presentVictory(deferred); }
+        }
+
+        private void resumeGame() {
+            navigate(lastVictory == null ? GAME : FINISH);
         }
 
         private void chooseLevel() {
@@ -586,7 +592,7 @@ public final class SwingApplication {
                 if (GAME.equals(active)) {
                     pauseGame();
                 } else if (PAUSE.equals(active)) {
-                    showScreen(GAME);
+                    resumeGame();
                 } else if (OPTIONS.equals(active)) {
                     showScreen(optionsReturn);
                 } else if (REPLAY.equals(active)) {
@@ -637,6 +643,7 @@ public final class SwingApplication {
         @Override
         public void render(GamePresentation presentation) {
             victoryGate.clear();
+            lastVictory = null;
             if (pendingLevel != null) {
                 currentLevel = pendingLevel;
                 board.setFacing(Direction.DOWN);
@@ -647,6 +654,9 @@ public final class SwingApplication {
             levelText.setToolTipText(fullName);
             movesText.setText(String.format(java.util.Locale.ROOT, "%04d", presentation.moves()));
             pushesText.setText(String.format(java.util.Locale.ROOT, "%04d", presentation.pushes()));
+            LevelResult attempt = controller.getLevelResult();
+            scoreText.setText("PUNTAJE: " + attempt.score());
+            undoText.setText("USOS UNDO: " + attempt.undoUses() + " / 3");
             board.showState(presentation.state());
             continueButton.setEnabled(true);
             configureUiCommands(commands);
@@ -690,6 +700,7 @@ public final class SwingApplication {
         @Override
         public void showVictory(LevelResult result) {
             Objects.requireNonNull(result, "result");
+            lastVictory = result;
             if (victoryGate.defer(result, board.isAnimating())) {
                 return;
             }

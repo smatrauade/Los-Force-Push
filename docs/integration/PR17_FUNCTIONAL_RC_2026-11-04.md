@@ -31,3 +31,13 @@ Evidencia por Codex, Ubuntu 26.04/Linux x86_64, java/javac 17.0.20.1 del mismo J
 | `bash scripts/test-integration-i2.sh` | Base + delta Replay antes de commit | Bases conservadas; ReplayController 8 y ReplayPresentation 8 PASS | 0 |
 
 Las dos suites nuevas se ejecutan desde los runners Bash/PowerShell; las bases no se sustituyen ni se suman repeticiones como casos nuevos. Ventana nativa, escucha y gate final se registrarán tras su ejecución. TEAM_ACCEPTANCE sigue NOT_RECORDED; RF-12/OQ-10, derechos, StarUML y entregables externos no se cierran por estos tests.
+
+## Campaña y hardening
+
+Catálogo único `DemoCampaign`: demo → campaign-b → ICE → Fragile → Fragile/ICE. Nuevo TXT `fragile-ice-demo.txt` reutiliza gramática vigente: resistencia 1, piso inicial, franja ICE y caja normal hacia Goal. Testigo → ↓ → → → → →, 7 movimientos, 2 empujes, score 989. La primera caja completa el path y rompe; el motor y la regla de victoria no cambian. Los cinco resultados esperados son 993/983/996/991/989. Se conservan intactas las 41 comprobaciones de niveles anteriores; suite nueva de release: 6 escenarios.
+
+Defectos confirmados en Swing: Continuar dirigía siempre a GAME, incluso con sesión finalizada; una carga inválida durante animación de victoria descartaba `VictoryGate` y dejaba el nivel congelado sin resumen. Se conserva ahora el resultado presentado y se resuelve la victoria diferida antes de una carga. Nueva partida siempre usa los TXT distribuidos, incluso si la ventana abrió antes un archivo externo. Los botones de persistencia siguen deshabilitados con explicación explícita, sin imponer un servicio inexistente. HUD mantiene score/usos Undo, además de las métricas previas.
+
+Pruebas del delta sobre `ad4575d`: `PATH=<JDK17>/bin:$PATH bash scripts/run-swing.sh --test`, exit 0, suites previas preservadas y ReleaseCampaign 6 PASS. `bash scripts/run-swing.sh --ui-test` con la pareja JDK17 y acceso al escritorio, exit 0: UI Smoke 17 + Release UI 7 PASS. Esta última usa ventana visible, bindings y botones reales, verifica Replay aislado, Back/ESC/Continue, cambio de temas, progresión de cinco niveles, carga inválida durante victoria ICE y Restart durante rotura, cierre con timer activo. Es QA automatizada Linux; no es evaluación visual humana ni escucha. Los screenshots del smoke anterior son pintura de la ventana, no evidencia de escucha. Windows/macOS y PowerShell nativo: NOT_RUN.
+
+El runner PowerShell omitía `ShippedLevelsIntegrationTest`; ahora ejecuta esa suite y las nuevas de Replay/campaña con chequeos de exit. Cambio inspeccionado estáticamente; no ejecutado en Windows. Se conserva el baseline Java 17 y no se añade CI (AGENTS lo prohíbe).

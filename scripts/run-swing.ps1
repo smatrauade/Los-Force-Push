@@ -92,6 +92,16 @@ try {
         & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReplayPresentationTest' (Join-Path $root 'src/desktop/resources/levels')
         if ($LASTEXITCODE -ne 0) { throw 'ReplayPresentationTest failed.' }
     }
+    if ($Test) {
+        foreach ($suite in @('ShippedLevelsIntegrationTest', 'ReleaseCampaignTest')) {
+            & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath ('ar.edu.uade.sokoban.desktop.' + $suite) (Join-Path $root 'src/desktop/resources/levels')
+            if ($LASTEXITCODE -ne 0) { throw ($suite + ' failed.') }
+        }
+    }
+    if ($UiTest) {
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' ('-Dforcepush.repo.root=' + $root) '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReleaseUiSmokeTest'
+        if ($LASTEXITCODE -ne 0) { throw 'Release UI smoke failed.' }
+    }
     $exitCode = 0
 } catch {
     Write-Error -Message $_.Exception.Message -ErrorAction Continue

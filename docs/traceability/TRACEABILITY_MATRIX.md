@@ -1,5 +1,9 @@
 # Matriz viva de trazabilidad
 
+## Campaña y navegación RC — 04/11/2026
+
+`DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## RC PR17 — Replay de extremo a extremo (04/11/2026)
 
 RF-12 técnico: `GameController` → `ReplayRecorder` → `ReplayTrace` verificada → `ReplayPanel`/`ReplayPlayer`; Command existente, sin modificar sesión. `ReplayControllerTest` cubre éxito/bloqueo, Undo, Restart, carga/Next atómicos, ICE/Fragile/KeyBox y overflow sin perder victoria (8 escenarios). `ReplayPresentationTest` cubre cursor/final, Reset, Pause, cancelación/cierre/reapertura, temas/zoom, traza inválida, EDT y timer real sin tocar resultado (8 escenarios). RF-07/08/09 conservan sus reglas y regresión. RF-12 académico sigue OPEN por OQ-10; los PASS técnicos no ratifican elegibilidad. [Auditoría completa](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

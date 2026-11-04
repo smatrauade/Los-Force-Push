@@ -1,0 +1,8 @@
+!sokoban-txt 2
+[grid]
+# # # # # # # # # #
+# @ {floor|fragile:glass} {ice|empty} {ice|empty} _ _ _ _ #
+# _ _ _ _ _ _ $ . #
+# # # # # # # # # #
+[attributes]
+fragile glass resistance=1

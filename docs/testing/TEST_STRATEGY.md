@@ -1,5 +1,9 @@
 # Estrategia de pruebas y evidencia experimental
 
+## Campaña y navegación RC — 04/11/2026
+
+`DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## RC PR17 — incremento Replay (04/11/2026)
 
 Codex, Ubuntu/Linux, pareja java/javac 17.0.20.1, base `b73b480` + delta de este incremento. `bash scripts/test-integration-i2.sh`: exit 0; Undo 58, core 258, Desktop 40, campaña 41, temas 7, animación 14, assets 44 conservados; nuevos `ReplayControllerTest` 8 y `ReplayPresentationTest` 8 PASS. Pruebas de timer EDT real y callbacks obsoletos son headless; no equivalen a ventana ni escucha. Runner Bash/PowerShell conecta las dos nuevas suites con propagación de exit. El núcleo no se modifica; baseline `bash scripts/test-replay-i3d1.sh`: 20 PASS, exit 0. [Evidencia progresiva y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

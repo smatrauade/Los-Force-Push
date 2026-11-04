@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## Campaña y navegación RC — 04/11/2026
+
+`DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## Cierre funcional PR #17 — Replay integrado (04/11/2026)
 
 `GameController` registra después de transiciones exitosas, reconcilia Undo, inicia registro nuevo tras Restart/carga/avance y verifica mundo/moves/pushes al finalizar. La traza del nivel actual se borra sólo al reemplazar exitosamente el intento; una carga fallida la conserva. `ReplayPanel` reproduce con tablero separado, controles Play/Pause/Step/Reset/Back y timer EDT con generación de cancelación; no conoce sesión, score ni progresión. Los tres temas se aplican desde el mismo `VisualThemeController` a ambos tableros. Core Replay I3.D.1 intacto. [Auditoría, evidencia y próximo gate](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
