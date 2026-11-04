@@ -53,7 +53,7 @@ public final class DesktopUiSmokeTest {
             if (previews != null) { screenshot(frame, previews.resolve("PANTALLA_MENU.png")); }
             SwingUtilities.invokeAndWait(() -> button(frame, "NUEVA PARTIDA  /  DEMO").doClick());
             SwingUtilities.invokeAndWait(() -> {
-                check(!button(frame, "R  REINICIAR").isEnabled(), "restart sin modulo");
+                check(button(frame, "R  REINICIAR").isEnabled(), "restart disponible");
                 check(!button(frame, "Z  DESHACER").isEnabled(), "undo sin modulo");
                 check(!button(frame, "GUARDAR PARTIDA").isEnabled(), "save sin modulo");
                 check(findText(frame, "DEMO.TXT"), "HUD nivel");
@@ -85,7 +85,7 @@ public final class DesktopUiSmokeTest {
             SwingUtilities.invokeAndWait(() -> {
                 button(frame, "CONTINUAR PARTIDA").doClick();
                 ((GameView) frame).showVictory(new LevelResult("demo.txt", 17, 3, 1, 900));
-                check(!button(frame, "SIGUIENTE NIVEL").isEnabled(), "nivel siguiente pendiente");
+                check(!button(frame, "SIGUIENTE NIVEL").isEnabled(), "siguiente solo tras victoria real");
             });
             if (previews != null) { screenshot(frame, previews.resolve("PANTALLA_VICTORIA_DEMO.png")); }
             System.out.println("UI SMOKE RESULT: " + passed

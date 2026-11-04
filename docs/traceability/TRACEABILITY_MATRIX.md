@@ -1,5 +1,53 @@
 # Matriz viva de trazabilidad
 
+## Estado vigente RF-01–RF-12 y RT-01–RT-04 — 04/11/2026
+
+La [matriz del candidato PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md#matriz-de-requisitos-del-candidato) clasifica cada requisito con código/evidencia y límites. RF-01–RF-10 y RT-01 tienen verificación técnica en los contratos soportados; RF-11/12 y RT-02/03/04 permanecen PARTIAL por derechos, elegibilidad, revisión y entregables externos. No confundir VERIFIED técnico con aceptación TEAM ni elevar las hipótesis OQ a norma. Los apartados fechados siguientes conservan la historia.
+
+## Victoria al cargar — 04/11/2026
+
+Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Observer de presentación — 04/11/2026
+
+`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Campaña y navegación RC — 04/11/2026
+
+`DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## RC PR17 — Replay de extremo a extremo (04/11/2026)
+
+RF-12 técnico: `GameController` → `ReplayRecorder` → `ReplayTrace` verificada → `ReplayPanel`/`ReplayPlayer`; Command existente, sin modificar sesión. `ReplayControllerTest` cubre éxito/bloqueo, Undo, Restart, carga/Next atómicos, ICE/Fragile/KeyBox y overflow sin perder victoria (8 escenarios). `ReplayPresentationTest` cubre cursor/final, Reset, Pause, cancelación/cierre/reapertura, temas/zoom, traza inválida, EDT y timer real sin tocar resultado (8 escenarios). RF-07/08/09 conservan sus reglas y regresión. RF-12 académico sigue OPEN por OQ-10; los PASS técnicos no ratifican elegibilidad. [Auditoría completa](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## I3.C — animación ICE/Fragile, 04/11/2026
+
+Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03`; no está en `main` ni acredita aceptación TEAM. `BoxAnimation` es una proyección inmutable de `RuntimeMoveResult`; `GameController` publica el runtime final antes de solicitar frames y emite `ICE`/`FRAGILE` fuera de `paintComponent`; `BoardPanel` sólo dibuja el `boxPath` autoritativo y `SwingApplication` difiere FINISH mientras anima. No se duplica física, estado ni assets.
+
+| Requisito / alcance | Implementación | Casos reales / evidencia del incremento | Brecha restante |
+|---|---|---|---|
+| INT-09, trayectoria ICE | `BoxAnimation`, `GameView.animateBox`, `GameController`, `BoardPanel.planBoxAnimation` | `AnimationPresentationTest`: orden exacto `(2,3)…(2,7)`, frames deterministas y ausencia de caja fantasma en el destino | QA GUI nativa y percepción visual NOT_RUN |
+| INT-03/INT-09, rotura Fragile | Frames última celda + `box_broken` + ausencia; identidad/resistencia conservadas | Fragile 1 sobre ICE, Fragile 1 de una celda, Fragile 2 no roto; rotura sólo tras la trayectoria | Igual limitación: evidencia headless, no ventana interactiva |
+| E05/E06, metadatos especiales | `BoxAnimation` conserva `BoxKind`; `BoardPanel` no muta `RuntimeState` | KeyBox sobre ICE con Lock/DynamicWall y resistencia intactos; tema/zoom durante animación | Sin nivel jugable que combine ICE y Lock en un mismo TXT |
+| RF-11/audio, no interferencia | SFX desde controller; un timer EDT cancelable por generación | `ICE`/`FRAGILE` una vez, sin duplicar `PUSH`/`GOAL`; Undo/Restart/recarga/ESC/cierre cancelan | Audio audible, Windows/macOS y QA nativa NOT_RUN |
+| Assets | Sólo sprites existentes (`box`, `box_key`, `box_fragile_*`, `box_broken`, `ice`) | Hashes SHA-256 de PNG antes/después iguales; 44 assets de regresión PASS | Derechos/licencias siguen pendientes |
+
+La regresión del mismo árbol fue Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS (`bash scripts/test-integration-i2.sh`, exit 0, OpenJDK 17.0.20.1, `--release 17`, UTF-8, `-Xlint:all -Werror`). `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`, `REMOTE_PUSH=NOT_RUN`; I4 pendiente. [Comandos y límites](../testing/TEST_STRATEGY.md).
+
+## I3.B — selector de estilo visual, 04/11/2026
+
+Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03`; no está en `main` ni acredita aceptación TEAM. Justificación del patrón: existe una familia real de productos coordinados (paleta Swing + presentación de sprites) y dos variantes concretas con consumidores efectivos (`SwingApplication`, `BoardPanel`, `PixelAssets`, `PixelTheme.Surface`), por lo que Abstract Factory evita condicionales por tema y mantiene el conmutador en un único punto. La alternativa simple —un `enum` con `if/switch` en cada widget— se descartó porque duplicaría la tabla de colores y arriesgaría restauraciones parciales al volver al original.
+
+| Requisito / alcance | Implementación | Casos reales / evidencia del incremento | Brecha restante |
+|---|---|---|---|
+| RF-11, presentación conmutable por familia | `VisualThemeFactory`, `VisualThemes`, `VisualThemeController`, `VisualThemeApplier`; selector en OPCIONES | `VisualThemeTest` 7/7 PASS headless; Desktop 40, Campaña 41 y Assets 44 conservan sus conteos | QA GUI nativa, percepción visual y audio audible NOT_RUN |
+| RF-11, identidad y reversibilidad del aspecto previo | Familia original con `SpritePresentation` identidad y restauración de colores/bordes guardados | Sprites originales idénticos al PNG; vuelta al original restaura tablero, controles y superficie | No se compara contra captura histórica externa; sólo contra los PNG y la paleta previa en código |
+| RF-11, assets y caché | `PixelAssets` transforma en memoria, invalida caché por familia y nunca escribe archivos | Hashes SHA-256 de todos los PNG antes/después iguales; alfa intacto y salida determinista | Derechos/licencias de assets siguen pendientes y no se modifican por este incremento |
+| RF-03/04/05/06, no interferencia con gameplay | `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score y referencias Lock/DynamicWall no se tocan | Tableros ICE/Fragile/Lock conservan mundo, movimientos, pushes, Undo y zoom tras cambiar de tema | La animación ICE/Fragile se cubre después en I3.C (headless); la QA nativa sigue abierta |
+| RF-12 / OQ-10, adicionales | Selector funcional y probado | Candidato con implementación verificada localmente | Elegibilidad y segunda funcionalidad `OPEN`; no computar como adicional aceptada |
+
+La regresión completa del mismo árbol fue Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS (`bash scripts/test-integration-i2.sh`, exit 0, OpenJDK 17.0.20.1, `--release 17`, UTF-8, `-Xlint:all -Werror`). [Comandos y límites](../testing/TEST_STRATEGY.md).
+
 ## Cobertura integrada tras PR 8 y PR 9 — 2026-10-28
 
 [CURRENT_STATE](../continuity/CURRENT_STATE.md) identifica los merges; [TEST_STRATEGY](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28) registra el árbol probado y la QA anterior a este mantenimiento. La tabla de plan/candidato y las evidencias fechadas que siguen no niegan las capacidades actuales. Sus OQ abiertas describen aquellos cortes; el cierre posterior del subconjunto soportado se registra al final, sin reatribuir QA.
@@ -10,7 +58,7 @@
 | RF-03 / RF-04 | MovementEngine y ArrowBindings/GameController | Movement 31, Desktop 16 y UI Smoke 17 PASS; sin hielo ni cajas especiales |
 | RF-10 | GameWindow/GamePresentation, hooks GameView y UiCommands | HUD y navegación implementados; Undo/Restart/persistencia/Next sólo callbacks opcionales deshabilitados sin servicio |
 | RF-11 | BoardPanel, PixelAssets, PixelTheme y SoundManager/Effect | VisualAssets 44 y manifiesto 43 PASS; 29 sprites base, dos opcionales, 12 WAV; derechos/QA audible pendientes |
-| RF-08 / RF-09 | LevelResult y showVictory como presentación | Pantalla probada con DTO demostrativo; sin detección de victoria, score calculado ni progresión |
+| RF-08 / RF-09 | VictoryEvaluator, LevelProgression y showVictory | Victoria y siguiente nivel implementados en rama victoria; score permanece 0 (OQ-09) |
 | RT-01 / RT-03 | Runners core/desktop separados, UML implementado actualizado | Release 17 provisional, java.base/java.desktop; Java/build y ratificación pendientes |
 | RT-02 / RT-04 | Índices, README, contratos de módulos, manifiesto y declaración de IA | Clon autocontenido para el subconjunto; StarUML .mdj, entrega y revisión del equipo pendientes |
 
@@ -162,3 +210,19 @@ La [fuente directa](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-cor
 | OQ-07/08 extensiones y OQ-11 global | Dependencia real de consumidores/integración | OPEN_DEPENDENCY / OPEN | No tokens hielo/KeyBox/Lock/muros ni build global ratificado | OQ, contrato y siguiente tarea TODO |
 
 QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, src/scripts idénticos a 5ac2bba. [Entorno, comandos y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). Nueva ejecución Java NOT_RUN_DOCS_ONLY. Elegir una regla o consolidar un esquema no cierra RF-05/RF-07 ni prueba puzzles de demo.
+
+## Traspaso I1 al runtime unificado — estado local 03/11/2026
+
+`INT-01`: D-020 Fragile con IDs y resistencias 2/3, 2 empujes y reinicio de sesión, test `RuntimeIceFragileTest.testIds`; `INT-02`: E03 ICE por `LevelProgression`/`GameSession` con bloqueo de salida, `testIce`; `INT-03`: E04 Fragile sobre piso que atraviesa ICE, pierde una resistencia por empuje y se destruye después del trayecto sin reinicio automático, `testFragileIce`/`testFailClose`; `INT-04`: E05/E06 KeyBox/Lock/DynamicWall, cierre ocupado bloqueado atómicamente, `testExistingKeyWall`. La gramática inicial Fragile en ICE sigue fuera de D-020. Evidencia anterior: **312/312** tests JDK17 reportados sobre tree local **antes de I1.C**. Evidencia posterior reportada: [runner versionado](../../scripts/test-integration-i1.sh) **316/316 PASS** (core 256, Desktop 16, Visual Assets 44), más auditoría read-only de **38 paths esperados**, sin rutas inesperadas. La ejecución no acredita GUI interactiva ni aceptación TEAM. [Matriz de aceptación y límites](../integration/INTEGRATION_ACCEPTANCE.md). `IN_MAIN=NO`, `TEAM_ACCEPTANCE=NOT_RECORDED`, `INT-09=NOT_RUN`.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Trazabilidad de publicación I1 — 03/11/2026
+
+`IN_INTEGRATION_BRANCH`: en PR #17 Draft, `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`, se incorporaron ICE/Fragile runtime con ID y resistencia (D-020, E03/E04) y compatibilidad KeyBox/Lock/Wall (E05/E06). INT-01–04 se cubrieron en el árbol local consolidado mediante `RuntimeIceFragileTest` y las regresiones (316/316 PASS, JDK17), con árbol y blobs verificados antes del commit. **No** se ejecutaron de nuevo tras el push; `IN_MAIN=NO`, aceptación TEAM pendiente. I2 (Undo/Restart/Score), I3 (frames GUI/HUD) e I4 (QA final/StarUML/entrega) continúan abiertos. [Registro](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
+
+El aporte de Martina sobre Undo/Restart/score y sus casos se integra en I2 sobre `GameSession` y `LevelProgression`; la procedencia del complemento del 01/11 consta en DECISION_LOG. Consultar el checkpoint I2 para evidencia local y límites.
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `GameSession` conserva el mundo, historial y métricas; `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` permitiendo que el score histórico persista tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada acordada y `GameController` expone el resultado a `SwingApplication`, cuyo HUD (`status`) y pantalla de victoria reciben el puntaje. Con OpenJDK 17.0.20.1 se ejecutaron **58 comprobaciones Undo** (`GameSessionUndoTest`), **258 casos core I1**, **36 casos desktop** y **44 assets**: `bash scripts/test-integration-i2.sh` terminó con exit 0. Casos INT-05, INT-06 e INT-08 `PASS` verificados localmente. El reset de métricas al cambiar de nivel es provisional; `TEAM_ACCEPTANCE=NOT_RECORDED`. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

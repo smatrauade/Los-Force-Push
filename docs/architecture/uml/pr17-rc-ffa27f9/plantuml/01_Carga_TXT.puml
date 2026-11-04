@@ -1,0 +1,41 @@
+@startuml
+title Sokoban - Carga TXT
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+skinparam classAttributeIconSize 0
+left to right direction
+class "level.LevelLoader" as N493bcab3ebd
+class "level.LevelParser" as Nda8e2574347
+class "level.C2LevelParser" as N53322267a49
+class "level.LevelBuilder" as Nb73e7e04219
+class "level.Level" as N9879f7989af <<record>>
+class "level.Board" as N8359e2031a6 <<record>>
+class "level.Cell" as N507ebdbe86f <<record>>
+enum "level.Terrain" as Ne6bf88550d5
+enum "level.Occupant" as Ndc8623af9fa
+class "level.ExperimentalFragileParser" as Nd2f3cb292cb
+class "level.ExperimentalFragileLevel" as N465dd3cf25b <<record>>
+class "level.ExperimentalFragileLevel.FragileBox" as N45c6c96b859 <<record>>
+class "level.ExtendedLevelParser" as N6c77c245a74
+class "level.ExtendedLevelDefinition" as N21838391249 <<record>>
+class "movement.RuntimeState" as Nf3d3f105568 <<record>>
+N493bcab3ebd --> Nda8e2574347
+N493bcab3ebd ..> Nd2f3cb292cb
+N493bcab3ebd ..> N6c77c245a74
+Nda8e2574347 ..> Nb73e7e04219
+N53322267a49 ..> Nb73e7e04219
+Nb73e7e04219 ..> N9879f7989af
+N9879f7989af --> N8359e2031a6
+N8359e2031a6 --> N507ebdbe86f
+N507ebdbe86f --> Ne6bf88550d5
+N507ebdbe86f --> Ndc8623af9fa
+Nd2f3cb292cb ..> N465dd3cf25b
+N465dd3cf25b --> N45c6c96b859
+N6c77c245a74 ..> N21838391249
+N21838391249 --> N465dd3cf25b
+Nf3d3f105568 ..> N9879f7989af
+Nf3d3f105568 ..> N465dd3cf25b
+Nf3d3f105568 ..> N21838391249
+@enduml

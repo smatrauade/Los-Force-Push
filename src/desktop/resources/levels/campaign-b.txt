@@ -1,0 +1,9 @@
+!sokoban-txt 2
+[grid]
+# # # # # # #
+# _ + {floor|key:k} {lock:l|empty} _ #
+# _ _ # {wall:w|empty} _ #
+# _ _ _ _ # #
+# # # # # # #
+[attributes]
+wall w locks=l

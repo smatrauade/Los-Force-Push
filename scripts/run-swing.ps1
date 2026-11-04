@@ -81,6 +81,26 @@ try {
     if ($Test) {
         & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.DesktopVisualAssetsTest' $LevelPath
         if ($LASTEXITCODE -ne 0) { throw 'UI asset tests failed.' }
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.VisualThemeTest' (Join-Path $root 'src/desktop/resources/assets/sprites') (Join-Path $root 'src/desktop/resources/levels')
+        if ($LASTEXITCODE -ne 0) { throw 'Visual theme tests failed.' }
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.AnimationPresentationTest' (Join-Path $root 'src/desktop/resources/levels') (Join-Path $root 'src/desktop/resources/assets/sprites')
+        if ($LASTEXITCODE -ne 0) { throw 'Animation presentation tests failed.' }
+    }
+    if ($Test) {
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReplayControllerTest' (Join-Path $root 'src/desktop/resources/levels')
+        if ($LASTEXITCODE -ne 0) { throw 'ReplayControllerTest failed.' }
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReplayPresentationTest' (Join-Path $root 'src/desktop/resources/levels')
+        if ($LASTEXITCODE -ne 0) { throw 'ReplayPresentationTest failed.' }
+    }
+    if ($Test) {
+        foreach ($suite in @('ShippedLevelsIntegrationTest', 'ReleaseCampaignTest', 'LockObserverTest', 'ControllerBoundaryTest')) {
+            & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath ('ar.edu.uade.sokoban.desktop.' + $suite) (Join-Path $root 'src/desktop/resources/levels')
+            if ($LASTEXITCODE -ne 0) { throw ($suite + ' failed.') }
+        }
+    }
+    if ($UiTest) {
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' ('-Dforcepush.repo.root=' + $root) '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReleaseUiSmokeTest'
+        if ($LASTEXITCODE -ne 0) { throw 'Release UI smoke failed.' }
     }
     $exitCode = 0
 } catch {

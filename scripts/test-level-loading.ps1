@@ -48,8 +48,10 @@ try {
     $coreDirectories = @(
         'src/main/java/ar/edu/uade/sokoban/level'
         'src/main/java/ar/edu/uade/sokoban/movement'
+        'src/main/java/ar/edu/uade/sokoban/session'
         'src/test/java/ar/edu/uade/sokoban/level'
         'src/test/java/ar/edu/uade/sokoban/movement'
+        'src/test/java/ar/edu/uade/sokoban/session'
     )
     $sources = @($coreDirectories | ForEach-Object {
         Get-ChildItem -LiteralPath (Join-Path $root $_) -Recurse -File -Filter '*.java'
@@ -67,7 +69,14 @@ try {
     & $compiler @compileArgs
     if ($LASTEXITCODE -ne 0) { throw 'Java compilation failed.' }
     $testClasses = @('ar.edu.uade.sokoban.level.LevelLoadingTest')
-    if ($IncludeMovement) { $testClasses += 'ar.edu.uade.sokoban.movement.MovementTest' }
+    if ($IncludeMovement) {
+        $testClasses += @(
+            'ar.edu.uade.sokoban.movement.MovementTest'
+            'ar.edu.uade.sokoban.level.ExtendedLevelTest'
+            'ar.edu.uade.sokoban.movement.DynamicWorldTest'
+            'ar.edu.uade.sokoban.session.CompletionTest'
+        )
+    }
     foreach ($testClass in $testClasses) {
         $testArgs = @('--limit-modules', 'java.base', ('-Djava.io.tmpdir=' + $runDirectory),
             '-cp', $classes, $testClass, (Join-Path $root 'src/test/resources/levels'))

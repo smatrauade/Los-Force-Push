@@ -19,6 +19,7 @@ public final class PixelTheme {
     public static final Color CREAM = new Color(244, 226, 190);
     public static final Color MUTED = new Color(196, 172, 150);
     public static final Color AQUA = new Color(135, 207, 200);
+    public static final Color BORDER = new Color(113, 80, 66);
     public static final Font TITLE = new Font(Font.MONOSPACED, Font.BOLD, 25);
     public static final Font BODY = new Font(Font.MONOSPACED, Font.BOLD, 14);
     public static final Font SMALL = new Font(Font.MONOSPACED, Font.PLAIN, 12);
@@ -48,27 +49,43 @@ public final class PixelTheme {
 
     /** Pixel-grid background; only the scene and HUD have visible boundaries. */
     public static JPanel surface() {
-        return new JPanel() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(BACKGROUND);
-                g.fillRect(0, 0, getWidth(), getHeight());
-                g.setColor(new Color(53, 43, 47));
-                for (int x = 0; x < getWidth(); x += 32) {
-                    g.drawLine(x, 0, x, getHeight());
-                }
-                for (int y = 0; y < getHeight(); y += 32) {
-                    g.drawLine(0, y, getWidth(), y);
-                }
+        return new Surface();
+    }
+
+    /** Grid backdrop whose palette follows the selected visual family. */
+    static final class Surface extends JPanel {
+        private static final long serialVersionUID = 1L;
+        private transient VisualThemeFactory.UiPalette palette = VisualThemes.original().palette();
+
+        Surface() {
+            setOpaque(true);
+            setBackground(palette.background());
+        }
+
+        void setPalette(VisualThemeFactory.UiPalette next) {
+            palette = java.util.Objects.requireNonNull(next, "palette");
+            setBackground(palette.background());
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(palette.background());
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(palette.grid());
+            for (int x = 0; x < getWidth(); x += 32) {
+                g.drawLine(x, 0, x, getHeight());
             }
-        };
+            for (int y = 0; y < getHeight(); y += 32) {
+                g.drawLine(0, y, getWidth(), y);
+            }
+        }
     }
 
     public static void border(JComponent value) {
         value.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(113, 80, 66), 3),
+                BorderFactory.createLineBorder(BORDER, 3),
                 BorderFactory.createEmptyBorder(16, 18, 16, 18)));
     }
 }

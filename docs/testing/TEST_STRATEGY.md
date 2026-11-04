@@ -1,5 +1,55 @@
 # Estrategia de pruebas y evidencia experimental
 
+## Regresión del freeze RC — 04/11/2026
+
+Ejecución Codex sobre `0bbc60e381c0666e4c5f2803bcf469ff23830267`, Ubuntu 26.04.1/Linux x86_64, java/javac 17.0.20.1. `bash scripts/test-replay-i3d1.sh` exit 0: 20 PASS. `bash scripts/test-integration-i2.sh` exit 0: Undo 58/core 258/Desktop 40/campaña previa 41/temas 7/animación 14/assets 44; nuevas ReplayController 8/ReplayPresentation 8/ReleaseCampaign 6/LockObserver 6/ControllerBoundary 3 PASS. Core java.base; desktop java.base,java.desktop; release 17, UTF-8 y lint estricto. Las repeticiones no agregan casos únicos. [Registro por comando, fallos intermedios y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Ventana Linux automatizada y dispositivo de audio tienen evidencia propia; escucha humana y Windows/PowerShell/macOS NOT_RUN.
+
+## Victoria al cargar — 04/11/2026
+
+Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Observer de presentación — 04/11/2026
+
+`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Campaña y navegación RC — 04/11/2026
+
+`DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## RC PR17 — incremento Replay (04/11/2026)
+
+Codex, Ubuntu/Linux, pareja java/javac 17.0.20.1, base `b73b480` + delta de este incremento. `bash scripts/test-integration-i2.sh`: exit 0; Undo 58, core 258, Desktop 40, campaña 41, temas 7, animación 14, assets 44 conservados; nuevos `ReplayControllerTest` 8 y `ReplayPresentationTest` 8 PASS. Pruebas de timer EDT real y callbacks obsoletos son headless; no equivalen a ventana ni escucha. Runner Bash/PowerShell conecta las dos nuevas suites con propagación de exit. El núcleo no se modifica; baseline `bash scripts/test-replay-i3d1.sh`: 20 PASS, exit 0. [Evidencia progresiva y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## I3.D.1 — Replay/Command puro, sin GUI (04/11/2026)
+
+Ejecutar `bash scripts/test-replay-i3d1.sh` desde el repositorio con OpenJDK 17. El runner compila el **core completo** y la nueva prueba con `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`, luego ejecuta `ReplayIntegrationTest`. Suite propia: **20 comprobaciones** (Command, bloqueo, ICE, Fragile, KeyBox/Lock/DynamicWall, Undo 5, Restart, 10.001 operaciones, trazas divergentes/alteradas, métricas, inmutabilidad, cursor aislado y reset). Exigir `REPLAY RESULT: 20 PASS, 0 FAIL`, exit 0 y preservar HEAD/worktree.
+
+Al cerrar el candidato en la notebook, volver a ejecutar `bash scripts/test-integration-i2.sh` (Undo/Core/Desktop/Campaña/Temas/Animación/Assets) y `bash scripts/verify-repo-readonly.sh --require-clean` sobre el commit candidato; en sandbox sin remoto, el verificador precisa un overlay temporal de configuración Git de **solo lectura**. No declarar nuevas cifras ni QA gráfica/Windows/TEAM hasta ejecutar esos controles sobre el commit exacto y registrar SHA, actor, JDK, exit y logs. La compilación aislada del sandbox de ChatGPT con contratos auxiliares no acredita el árbol integrado completo.
+
+## I3.C — animación ICE/Fragile (04/11/2026)
+
+Nueva suite headless [AnimationPresentationTest](../../src/desktop-test/java/ar/edu/uade/sokoban/desktop/AnimationPresentationTest.java), ejecutada por `bash scripts/run-swing.sh --test` y por transitividad por `bash scripts/test-integration-i1.sh`/`test-integration-i2.sh`. Cubre 14 escenarios: orden exacto de `RuntimeMoveResult.boxPath` sobre ICE; ausencia de caja fantasma en el destino final mediante comparación de píxeles por celda; Fragile resistencia 1 sobre ICE con última celda, `box_broken` y ausencia; Fragile de una sola celda; Fragile resistencia 2 con ID/resistencia originales; KeyBox sobre ICE con Lock/DynamicWall intactos; bloqueo y movimientos sin empuje sin animación; `ICE`/`FRAGILE` una vez por transición sin duplicar `PUSH`/`GOAL`; publicación del runtime final antes de animar y victoria headless inmediata; diferimiento de FINISH durante la animación; cancelación por Undo, Restart y recarga; cancelación explícita sin callbacks obsoletos; un único `javax.swing.Timer` no bloqueante en EDT; tema/zoom durante la animación con mundo y frames conservados y tema original restaurado; y hashes SHA-256 de los PNG sin cambios.
+
+La suite no reemplaza las suites existentes: `DesktopIntegrationTest` continúa en 40 casos, `ShippedLevelsIntegrationTest` en 41 y `DesktopVisualAssetsTest` en 44. Evidencia local con OpenJDK 17.0.20.1, release 17, UTF-8, `-Xlint:all -Werror`, `java.awt.headless=true`: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS; `bash scripts/test-integration-i2.sh` exit 0 y `GIT_STATE_PRESERVED=YES`. El runner exige `ANIMATION RESULT: [1-9][0-9]* PASS, 0 FAIL`, de modo que una suite vacía o fallida rompe el gate.
+
+Límites: la suite pinta componentes en `BufferedImage` y avanza frames de forma determinista; no abre una ventana interactiva ni acredita percepción visual, audio audible, Windows/macOS ni aceptación TEAM. `GUI_NATIVE_QA=NOT_RUN`; INT-09 no queda cerrado por QA nativa. [Aceptación y riesgos](../integration/INTEGRATION_ACCEPTANCE.md).
+
+## I3.B — selector de estilo visual (04/11/2026)
+
+Nueva suite headless [VisualThemeTest](../../src/desktop-test/java/ar/edu/uade/sokoban/desktop/VisualThemeTest.java), ejecutada por `bash scripts/run-swing.sh --test` y por transitividad por `bash scripts/test-integration-i1.sh`/`test-integration-i2.sh`. Cubre siete escenarios: tres familias estables y diferenciadas; sprites alternativos deterministas de 32×32 con canal alfa idéntico al PNG; tema original idéntico byte a byte al PNG y reversible tras alternar; cambio de familia sobre tableros ICE, Fragile y Lock conservando `RuntimeState`, movimientos, pushes, Undo y zoom; selección Swing aplicada en EDT sobre tablero, botones, etiquetas y `PixelTheme.Surface`; rechazo de entradas nulas sin estado a medias ni caché invalidada; y comparación de hashes SHA-256 de los PNG antes/después, que deben permanecer iguales.
+
+La suite no reemplaza las suites existentes: `DesktopIntegrationTest` continúa en 40 casos, `ShippedLevelsIntegrationTest` en 41 y `DesktopVisualAssetsTest` en 44. Evidencia local con OpenJDK 17.0.20.1, release 17, UTF-8, `-Xlint:all -Werror`, `java.awt.headless=true`: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS; `bash scripts/test-integration-i2.sh` exit 0 y `GIT_STATE_PRESERVED=YES`. Los umbrales de los runners exigen `THEME RESULT: [1-9][0-9]* PASS, 0 FAIL`, de modo que una suite vacía o fallida rompe el gate.
+
+Límites: la suite pinta componentes en `BufferedImage`, no abre una ventana interactiva; no acredita percepción visual, audio, Windows/macOS ni aceptación TEAM. El selector es candidato a adicional RF-12/OQ-10 y no cierra la elegibilidad de extras. `GUI_NATIVE_QA=NOT_RUN`. [Aceptación y riesgos](../integration/INTEGRATION_ACCEPTANCE.md).
+
+## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
+
+Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
+
+## Incremento victoria — 2026-11-01
+
+Rama `victoria`. Core `java.base`, desktop `java.base,java.desktop`, Temurin 17.0.16, `--release 17`. Comandos: `powershell -NoProfile -File ./scripts/test-level-loading.ps1 -IncludeMovement` y `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. Resultados: Loading 40, Movement 31, Extended 26, DynamicWorld 6, Completion 36, C2 32, Fragile 41, Desktop 16, VisualAssets 44, todos PASS/exit 0. GUI manual y audio audible: NOT_RUN. No cierra OQ ni TEAM_ACCEPTANCE.
+
 ## QA combinado PR 8 y PR 9 — 2026-10-28
 
 **Evidencia anterior a este mantenimiento**, ejecutada en SOKOBAN_POST_PR9_INTEGRATION_R1 por Codex sobre la referencia de merge de prueba 99783067a51dea8867924a629daf7fb017cae5ff y su árbol 1796932307df319e3636daee942cf49920b4eb05. Padres: main fafae98642cefd38e466c689b3c8a16825773738 y PR #8 289fef6eda97a2bbd5593c74f06382ae6caf433c. El merge real de #8, 565376452affa9b2146569e5da27dbfd1ee9d4f0, conserva exactamente ese árbol; la equivalencia se comprobó en R2, no se atribuye otra ejecución funcional al merge.
@@ -19,6 +69,68 @@ Windows nativo, Temurin java/javac 21.0.12.1, --release 17, -encoding UTF-8, -Xl
 Los 44 controles de VisualAssets son 29 sprites base + 12 WAV + tres controles de panel/escala. Las dos variantes opcionales se incluyen en el manifiesto de 43 recursos y su validación de formato/hash. Las repeticiones C2 y CLI no suman nuevos casos Java únicos.
 
 NOT_RUN en R1: interacción manual nueva, escucha de altavoces, GUI Linux y macOS. Xvfb no estaba instalado. La reproducción no prueba derechos CC0 ni ratifica gramática, patrones, OQ o aceptación grupal. Logs/capturas completos no están versionados; el registro normalizado identifica comandos, árbol y límites.
+
+## Ratificación funcional 01/11/2026 — Undo, Restart y score
+
+**Fuente histórica de Martina:** esta sección describe su rama original, no la arquitectura o ejecución del árbol combinado I2. La evidencia actual está al final de este documento.
+
+`TEAM_ACCEPTANCE = NOT_RECORDED`.
+
+La ratificación del 01/11/2026 dejó fijadas las reglas funcionales que coinciden con la implementación actual de `GameController`, `ScoreCalculator`, `LevelResult` y la conexión de `UiCommands`, pero sin convertir esas reglas en aceptación formal del equipo. Esta sección conserva la distinción entre: (a) reglas ratificadas, (b) implementación efectiva en código, y (c) escenarios de prueba realmente cubiertos por la suite actual.
+
+### Regla ratificada y su reflejo en la implementación
+
+- Undo retrocede cinco movimientos exitosos por uso; en `GameController.undo()`, si `canUndo()` es true, se extraen los últimos cinco snapshots del historial (`history.removeLast()`) y se reutiliza el último de esos snapshots removidos como estado restaurado. Eso vuelve al estado de cinco movimientos exitosos antes del intento actual.
+- Se conserva un historial máximo de 15 snapshots; `history` usa `ArrayDeque` y elimina el más antiguo cuando supera `HISTORY_LIMIT = 15` durante `move()`.
+- Se permiten hasta tres usos consecutivos de Undo; `MAX_UNDO_USES = 3` y `canUndo()` usa `consecutiveUndoUses < MAX_UNDO_USES`.
+- Undo restaura el tablero, `moves` y `pushes`; los tests `UNDO restores state from five moves ago` y `UNDO restores pushes counter` verifican ese comportamiento en `DesktopIntegrationTest`.
+- `undoUsesTotal` acumula los usos de Undo durante el intento; `GameController.getLevelResult()` expone el valor calculado, y el test `GameController exposes current statistics and score` valida la propagación de `undoUses` en `LevelResult`.
+- Un movimiento normal no reinicia el límite de usos consecutivos; `move()` no borra `consecutiveUndoUses`.
+- Cada uso de Undo incrementa `consecutiveUndoUses`; `undo()` hace `consecutiveUndoUses++` después de restaurar el snapshot.
+- `restart()` y `load()` reinician ese contador; `restart()` pone `consecutiveUndoUses = 0` y `load()` también limpia la sesión antes de renderizar un nivel nuevo.
+- Restart restaura el estado inicial y reinicia `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses`; el test `RESTART restores initial state and resets counters` verifica ese comportamiento.
+- El score parte de 1000 puntos, descuenta 1 por movimiento, 2 adicionales por empuje y 10 por uso de Undo, con un mínimo de cero; la fórmula la ejecuta `ScoreCalculator.calculate()`, y `GameController.getLevelResult()` expone el resultado calculado.
+- Restart no agrega una penalización; `restart()` vuelve a `initial` y limpia contadores/historial, pero no ejecuta una penalización de score adicional.
+
+### Implementación efectiva actual
+
+La implementación vigente y verificable queda en:
+
+- `GameController`: `history`, `move()`, `undo()`, `restart()`, `canUndo()`, `refreshUiCommands()` y `getLevelResult()`, así como la actualización de `undoUsesTotal` y `consecutiveUndoUses`.
+- `ScoreCalculator`: calcula el score con `INITIAL_SCORE = 1000`, penalidades por movimiento, empuje y Undo, y limita el resultado a un mínimo de cero mediante `applyPenalty()`.
+- `LevelResult`: registro para `levelName`, `moves`, `pushes`, `undoUses`, `score`.
+- `UiCommands`: contrato de callbacks `undo` y `restart` que `GameController.refreshUiCommands()` crea y que `SwingApplication.configureUiCommands()` usa para habilitar/deshabilitar los botones.
+
+La conexión real del UI está confirmada en el código de Swing: `SwingApplication.configureUiCommands(UiCommands)` activa `undoButton` y `restartButton` según `value.undo()` y `value.restart()`, y `installKeys()` enlaza la tecla `Z` con `commands.undo()` y la tecla `R` con `commands.restart()`. El smoke test `DesktopUiSmokeTest` valida que esos callbacks se habilitan y se ejecutan desde la vista.
+
+### Evidencia y alcance de cobertura real
+
+Los resultados generales `DESKTOP RESULT: 30 PASS, 0 FAIL` y `VISUAL ASSETS RESULT: 44 PASS, 0 FAIL` son evidencia válida de integración general del desktop y de assets, pero no reemplazan la cobertura específica de cada regla de Undo, Restart y score.
+
+La suite actual con casos específicos que sí existen en `DesktopIntegrationTest` es la siguiente:
+
+- `UNDO restores state from five moves ago`: verifica el retroceso de cinco movimientos exitosos y la restauración del tablero y del contador de pushes.
+- `UNDO restores pushes counter`: verifica la restauración del número de empujes.
+- `UNDO can be used only three times`: verifica el límite de tres usos consecutivos y la prohibición del cuarto Undo.
+- `RESTART restores initial state and resets counters`: verifica que resetee el tablero, `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses`.
+- `UNDO is unavailable with fewer than five moves`: verifica que no se ejecute Undo cuando no hay cinco movimientos disponibles.
+- `BLOCKED movement is not added to undo history`: verifica que un movimiento bloqueado no se agregue al historial y que el Undo posterior restaura el estado válido previo.
+- `SCORE starts at 1000 points`: caso base.
+- `SCORE penalizes each move`: aplica la penalidad por movimiento.
+- `SCORE applies additional penalty for pushes`: aplica la penalidad extra por empuje.
+- `SCORE penalizes Undo uses`: verifica la penalidad por Undo.
+- `SCORE never goes below zero`: limita el valor a un mínimo de cero.
+- `SCORE handles maximum moves without overflow`: resguardo de overflow por movimientos extremos.
+- `SCORE handles maximum pushes without overflow`: resguardo de overflow por empujes extremos.
+- `SCORE handles maximum Undo uses without overflow`: resguardo de overflow por usos extremos de Undo.
+- `SCORE rejects negative statistics`: validación de entrada negativa.
+- `GameController exposes current statistics and score`: valida la propagación de `moves`, `pushes`, `undoUses` y `score` desde el controlador hasta `LevelResult`.
+
+No existe un caso nombrado que ejerza explícitamente la regla de que un movimiento normal no reinicia el límite de usos consecutivos ni un test aislado de `Restart no agrega penalización`; esa semántica está implementada en `GameController` y puede inferirse de la lógica, pero no dispone de una prueba específica con nombre separado en la suite actual. Del mismo modo, no se cierran aquí cuestiones pendientes sobre el efecto del cambio de nivel sobre otras métricas; esta sección solo documenta la regla ratificada del score y la implementación real de Undo/Restart en el intento vigente.
+
+### Ejecución del conjunto relevante
+
+Los casos anteriores se ejecutan como parte del runner Swing del repositorio. En este worktree quedó registrado el comando real `bash scripts/run-swing.sh --test`, y el resultado global se usa como evidencia de integración del desktop, sin presentarlo como prueba individual de cada regla.
 
 ## Verificador del repositorio — mantenimiento R2, 2026-10-28
 
@@ -376,3 +488,26 @@ La comparación de blobs debe terminar con exit 0; no es una ejecución Java. El
 Las frases «no se ratifica OQ-06/OQ-08» de los apartados de pruebas anteriores describen sus hitos: el cierre posterior D-020 adopta el esquema soportado con autoridad MODULE_OWNER, sin convertir los PASS históricos en una votación o aprobación del código.
 
 Validación documental ejecutada por Codex antes del commit sobre el worktree de cierre basado en 38e5a2e: `git diff --check`, `bash scripts/verify-repo-readonly.sh` y comparación de src/scripts anterior, **exit 0** cada uno. Verificador: **137 archivos, 431 enlaces relativos y 43 assets con formato/SHA-256 válidos**. Control adicional de fragmentos locales: **156 anclas** válidas en los 16 Markdown afectados, incluidos E01–E11; IDs OQ-01…11 preservados. Contraste de filas oficiales, recuentos ajenos a la corrección, fixture contra ejemplo y secciones no TXT de INTEGRACION_EQUIPO: PASS. Son controles de documentación/integridad, sin compilar, ejecutar Java ni verificar derechos o fuentes privadas originales.
+
+## I1 — Gate local de integración con JDK17 (03/11/2026)
+
+En el worktree auxiliar, el usuario ejecutó las ocho suites core con `javac`/`java 17.0.20.1`: Loading 40, Movement 37, Extended 26, Dynamic 6, Completion 36, C2 36, Experimental Fragile 41, Runtime ICE/Fragile 30; **252/252**. Desktop headless **16/16** y Visual Assets **44/44**, totales **312/312**, con postcheck independiente preservando fuente, refs e índice. Esa corrida es **anterior al refuerzo de INT-01..04 de I1.C**. El usuario ejecutó **después de I1.C** el comando autocontenido versionado `bash scripts/test-integration-i1.sh`: Loading 40, Movement 37, Extended 26, Dynamic 6, Completion 36, C2 36, Experimental Fragile 41, Runtime ICE/Fragile 34 (**256/256 core**), Desktop headless **16/16**, Visual Assets **44/44**; total **316/316 PASS**, `RESULTADO_GLOBAL=PASS_I1C_LOCAL_TESTS_316`, exit 0 y `GIT_STATE_PRESERVED=YES`. Verificador documental: **170 archivos, 541 enlaces, 43 assets PASS**. Evidencia del worktree local sin commit, no del PR ni de `main`. JAVA 17 pareja, UTF-8, `--release 17`, `-Xlint:all -Werror`; compilación y recursos originales del checkout. GUI real, audio audible, Windows/macOS, ramas remotas y aceptación TEAM: NOT_RUN/NOT_RECORDED. [Procedencia y límites I1](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## I1 publicado en PR #17 — alcance de QA al 03/11/2026
+
+La rama `integration/tpo-unificado-2026-11-03` recibió el merge de dos padres `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`. Los **316/316 casos** (256 core, 16 Desktop headless, 44 Visual Assets) se ejecutaron con `java`/`javac 17.0.20.1` **en el árbol local inmediatamente anterior al commit**, y los blobs resultantes fueron auditados antes del push. Para reproducir: `bash scripts/test-integration-i1.sh` y `bash scripts/verify-repo-readonly.sh`. No atribuir a `6abb8ad0` una reejecución no efectuada. GUI interactiva, Windows nativo y QA de I2–I4 siguen `NOT_RUN`.
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `GameSession` conserva el mundo, historial y métricas; `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` permitiendo que el score histórico persista tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada acordada y `GameController` expone el resultado a `SwingApplication`, cuyo HUD (`status`) y pantalla de victoria reciben el puntaje. Con OpenJDK 17.0.20.1 se ejecutaron **58 comprobaciones Undo** (`GameSessionUndoTest`), **258 casos core I1** (Loading 40, Movement 37, Extended 26, Dynamic 6, Completion 38, C2 36, Fragile 41, Runtime_I1C 34), **36 casos desktop** (`DesktopIntegrationTest`) y **44 assets** (`DesktopVisualAssetsTest`): `bash scripts/test-integration-i2.sh` terminó con exit 0. Casos INT-05 (Undo que restaura DynamicWall y Lock abiertos), INT-06 (Restart desde cuatro contadores estrictamente no nulos) e INT-08 (retención histórica de score 987 y control 997 persistentes tras advance y restart) `PASS`. `NATIVE_GUI_QA=NOT_RUN`. El reset de métricas al cambiar de nivel es provisional; `TEAM_ACCEPTANCE=NOT_RECORDED`. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+
+## I2 — Fragile TXT GUI hotfix (04/11/2026)
+
+- Detectar formato por parsers estrictos existentes: STANDARD, EXTENDED y EXPERIMENTAL_FRAGILE.
+- El archivo `fragile_demo.txt` y el mismo contenido con nombre externo arbitrario conservan ID `f1` y resistencia 4 en runtime.
+- La carga inválida preserva el estado previamente publicado; regresión de STANDARD, ICE y EXTENDED en `DesktopIntegrationTest`.
+- Evidencia: `scripts/test-integration-i2.sh` con JDK 17 y `scripts/verify-repo-readonly.sh` (ejecutar sobre el commit resultante).
+- QA gráfica nativa integral, aprobación TEAM, I3/I4 y merge a `main` siguen pendientes.
+- La frescura/publicación del PR #17 se comprueba en GitHub; no deducirla del HEAD local.

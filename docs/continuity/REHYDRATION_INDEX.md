@@ -1,6 +1,26 @@
 # Índice de rehidratación
 
-AS_OF = 2026-10-29. Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado) y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) (reconciliación académica y política de continuidad), están integrados.
+[Guía de transferencia al equipo](../integration/PR17_TEAM_HANDOFF.md): ejecución, arquitectura, patrones y próximos pasos.
+
+## Continuidad del freeze RC — 04/11/2026
+
+Para el estado vigente del software usar [auditoría RC PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md), [README](../../README.md) y [TODO](../../TODO.md). Replay controlador/Swing, campaña y Observer ya están implementados; las frases pendientes de los hitos posteriores conservados son históricas. Consigna/votos siguen en sus registros canónicos; elegibilidad RF-12, derechos, revisión TEAM y StarUML requieren gates separados. Consultar GitHub para publicación/HEAD actual.
+
+## Ruta vigente RC PR17 — 04/11/2026
+
+Tras las lecturas obligatorias, consultar [auditoría y gates del candidato funcional](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Replay ya incluye coordinación y pantalla Swing; los apartados fechados previos describen sus cortes. El estado Git remoto se revalida antes de publicar; consultar GitHub para el estado actual del PR y de `main`.
+
+## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+
+I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
+
+Consultar [CURRENT_STATE](CURRENT_STATE.md), [AGENTS](../../AGENTS.md) y [plan I0–I4](../integration/TEAM_INTEGRATION_PLAN.md) para detalles. El siguiente apartado describe un corte previo a la publicación.
+
+## I2 — integración local verificada (04/11/2026)
+
+Rama auxiliar `integration/i2-martina-stage-2026-11-03`; base `9aebe52501bb25d2ccf39781eb515c178dc11983`, fuente Martina `efd0fcd2a1423bd1d5b064458671ec9b149fd054`. Corrección e integración local verificadas; estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `LevelProgression.CompletedLevel` retiene `undoUsesTotal`, preservando score histórico tras `advance()` y `restart()`; INT-05, INT-06 e INT-08 PASS. 58 comprobaciones Undo (`GameSessionUndoTest`), core I1: 258/258, desktop 36/36 y assets 44/44 en OpenJDK 17; `bash scripts/test-integration-i2.sh` terminó exit 0. `NATIVE_GUI_QA=NOT_RUN`. La verificación documental pasó; `TEAM_ACCEPTANCE=NOT_RECORDED`; cambio de nivel reinicia métricas como comportamiento provisional. Próximo gate: revisión funcional del equipo y nueva verificación remota antes de cualquier publicación.
+
+AS_OF = 2026-11-01. La rama `victoria` añade Key/Lock/muros, victoria y campaña; contrastar código en `session` y `RuntimeState` con [CURRENT_STATE](CURRENT_STATE.md). Leer primero [AGENTS](../../AGENTS.md); luego seguir esta ruta y contrastar Git/GitHub. [CURRENT_STATE](CURRENT_STATE.md) registra eventos y capacidades, no un HEAD permanente. PR #8 (C2-L7), #9 (Punto 5), #10 (continuidad) y #11 (Fragile experimental), además de #12 (contrato candidato no ratificado) y [#13](https://github.com/smatrauade/Los-Force-Push/pull/13) (reconciliación académica y política de continuidad), están integrados.
 
 **Supersesión acotada del 29/10:** [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) registra la delegación expresa del responsable TXT: OQ-06 resuelta y OQ-08 parcialmente resuelta para lo implementado. La frase anterior de AGENTS «sintaxis/rangos/errores aún sin ratificar» describía el corte previo y fue corregida; los comentarios históricos de fuentes Java/UML conservan ese corte y no son un bloqueo del contrato soportado. Sus bytes permanecen sin cambios. La política de trabajo continúa vigente; decisiones y pendientes actuales se consultan en los registros canónicos, sin necesidad del chat o adjunto privado.
 
@@ -45,3 +65,9 @@ Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectad
 ## Entrega y siguiente gate
 
 Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; el alcance autónomo TXT de R7 ofrece carga de definición experimental y contrato, sin gameplay. Antes de integración runtime revisar contrato, dependencias OQ y autorización específica; este índice no es una orden de implementación.
+
+## Rama de integración I0 — ruta adicional de rehidratación (03/11/2026)
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+Si el checkout corresponde a `integration/tpo-unificado-2026-11-03`, **después de las once lecturas obligatorias de AGENTS**, continuar por [integración grupal](../integration/README.md), [riesgos y oráculos](../integration/INTEGRATION_ACCEPTANCE.md) y [frescura consciente de la rama](BRANCH_AWARE_FRESHNESS.md). Verificar HEAD/PR remotos en cada nueva misión: [fotografía 03/11](../integration/BRANCH_SNAPSHOT_2026-11-03.md) es un corte inmutable, no el estado remoto actual.

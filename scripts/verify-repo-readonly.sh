@@ -40,7 +40,7 @@ fi
 git diff --check
 git diff --cached --check
 "$python_command" -B - "$bootstrap" <<'PY'
-import csv, hashlib, io, pathlib, re, struct, subprocess, sys, wave, zlib
+import csv, hashlib, io, pathlib, re, struct, subprocess, sys, wave, zlib, json
 from urllib.parse import unquote
 root=pathlib.Path.cwd()
 bootstrap=sys.argv[1]=='1'
@@ -126,6 +126,30 @@ def valid_wav(data):
         frames=audio.getnframes()
         return frames>0 and len(audio.readframes(frames))==frames*2
 
+# UML_PR17_PINNED_PNG_REGISTRY_START
+# Game PNG/WAV resources still use the original asset policy. This whitelist
+# is for exactly nine documentation renders under one frozen, fixed path.
+uml_images = {}
+uml_registry = root/'docs/architecture/uml/pr17-rc-ffa27f9/RENDER_GATE.json'
+if uml_registry.is_file():
+    try:
+        entry=json.loads(uml_registry.read_text(encoding='utf-8'))
+        details=entry['diagrams']
+        if entry['source_head']!='ffa27f9d8c72bd204db76f887b2ca0cd8e6f454c' or len(details)!=9:
+            raise ValueError('Invalid UML diagram source/count')
+        if {name[:3] for name in details}!={f'{i:02}_' for i in range(9)}:
+            raise ValueError('Incomplete UML diagram indices')
+        for filename,record in details.items():
+            if not re.fullmatch(r'0[0-8]_[A-Za-z0-9_]+\.png',filename):
+                raise ValueError('Invalid UML filename')
+            if not re.fullmatch(r'[0-9a-f]{64}',record['sha256']):
+                raise ValueError('Invalid UML SHA')
+            if not (100<=record['width']<=30000 and 100<=record['height']<=30000):
+                raise ValueError('Invalid UML dimensions')
+            uml_images['docs/architecture/uml/pr17-rc-ffa27f9/png/'+filename]=record
+    except (OSError,UnicodeError,KeyError,TypeError,ValueError,OverflowError):
+        errors.append('Invalid pinned UML PNG registry')
+# UML_PR17_PINNED_PNG_REGISTRY_END
 link_count=0
 for name in paths:
     p=root/name
@@ -137,6 +161,15 @@ for name in paths:
     if len(data)>10*1024*1024:
         errors.append('Large file: '+name); continue
     if p.suffix.lower() in {'.png','.wav'}:
+        if name in uml_images:
+            record=uml_images[name]
+            # Preserve original game asset rules; validate UML SHA and IHDR separately.
+            if (hashlib.sha256(data).hexdigest()!=record['sha256'] or
+                len(data)<24 or data[:8]!=b'\x89PNG\r\n\x1a\n' or
+                data[12:16]!=b'IHDR' or
+                struct.unpack_from('>II',data,16)!=(record['width'],record['height'])):
+                errors.append('Invalid pinned UML PNG: '+name)
+            continue
         if not asset_pattern.fullmatch(name):
             errors.append('Unauthorized binary asset: '+name); continue
         if name not in manifest: errors.append('Unregistered asset: '+name)
@@ -147,7 +180,7 @@ for name in paths:
         continue
     text_suffixes={'.md','.puml','.json','.csv','.py','.ps1','.sh','.java','.txt',
                    '.xml','.properties','.yml','.yaml','.toml','.ini','.cfg','.html','.css','.js','.ts','.svg'}
-    if p.suffix.lower() not in text_suffixes and p.name not in {'.gitkeep','.gitignore','.gitattributes','.editorconfig','LICENSE'}:
+    if p.suffix.lower() not in text_suffixes and name != 'docs/architecture/uml/pr17-rc-ffa27f9/SOURCE_INVENTORY_PINNED.tsv' and p.name not in {'.gitkeep','.gitignore','.gitattributes','.editorconfig','LICENSE'}:
         errors.append('Unexpected file type: '+name)
     try: text=data.decode('utf-8')
     except UnicodeDecodeError: errors.append('Non UTF-8/binary: '+name); continue

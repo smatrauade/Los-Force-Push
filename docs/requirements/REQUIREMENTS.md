@@ -1,6 +1,6 @@
 # Requisitos normalizados
 
-`LAST_REVIEWED = 2026-10-29` (refinamientos TEAM separados; baseline oficial normalizado del 08/10 preservado y aclaración de procedencia documental). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no forma parte del clon ni se redistribuye; fue recibido y su SHA-256 verificado en una revisión externa del 21/10/2026, como consta en SOURCE_REGISTRY. Un agente nuevo con solo el repositorio tiene la normalización y la procedencia, no el PDF original. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
+`LAST_REVIEWED = 2026-11-01` (refinamientos TEAM separados; baseline oficial normalizado del 08/10 preservado y aclaración de procedencia documental). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no forma parte del clon ni se redistribuye; fue recibido y su SHA-256 verificado en una revisión externa del 21/10/2026, como consta en SOURCE_REGISTRY. Un agente nuevo con solo el repositorio tiene la normalización y la procedencia, no el PDF original. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
 
 ## Baseline oficial
 
@@ -12,9 +12,9 @@
 | RF-04 | Caja normal desplazada por empuje; deslizamiento en terreno resbaladizo | Empuje y deslizamiento conforme aclaración docente |
 | RF-05 | Fragile pierde resistencia en cada empuje y se rompe al llegar a cero | Decremento/rotura; definición inicial TXT según D-020/OQ-06 resuelta; regla hielo E04 decidida, implementación pendiente |
 | RF-06 | KeyBox sobre cerrojo abre muros correspondientes | Activación; asociación/cierre dependen de OQ-07 |
-| RF-07 | Historial de 15 movimientos, retroceso de 5 por pulsación Undo, hasta 3 usos consecutivos | Restaurar N-5/N-10/N-15; OQ-04/OQ-05 para bordes |
+| RF-07 | Historial de 15 movimientos, retroceso de 5 por pulsación Undo, hasta 3 usos consecutivos | Restaurar N-5/N-10/N-15; aplicar E07/E08 y la ratificación complementaria del 01/11: Undo restaura tablero, movimientos y empujes; sólo Restart o cambio de nivel reinician el límite de tres usos. Restart inicia un intento nuevo y reinicia las cuatro métricas. |
 | RF-08 | Victoria cuando todas las cajas están en destinos; avanzar al siguiente nivel | Victoria/progresión tras cerrar OQ-01 |
-| RF-09 | Resumen con movimientos, empujes, usos de Undo y puntaje final; fórmula del equipo | Ejemplos deterministas tras OQ-09 |
+| RF-09 | Resumen con movimientos, empujes, usos de Undo y puntaje final; fórmula ratificada por TEAM | `Score = max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. Base 1000; −1 por movimiento, −2 adicionales por empuje y −10 por uso de Undo; mínimo cero. Restart reinicia las métricas del intento y no tiene penalización adicional. |
 | RF-10 | HUD con movimientos, empujes y nivel actual; botones visibles Undo y Restart | Verificación de presentación e interacción |
 | RF-11 | Todos los elementos del tablero mediante imágenes; acciones con efectos sonoros apropiados; assets de dominio público | Cobertura visual/sonora y registro individual de licencias |
 | RF-12 | Dos funcionalidades adicionales que impliquen patrones de diseño | Selección OQ-10; no contar automáticamente requisitos obligatorios |
@@ -37,9 +37,13 @@ La cápsula histórica reporta además guía sobre interacción por eventos sin 
 
 ## Propuestas y límites
 
-La discusión del 30/09 proponía separar métricas. El alcance de comportamiento ahora aceptado está en [E09 / D-008](../decisions/DECISION_LOG.md#e09) y [E10 / D-009](../decisions/DECISION_LOG.md#e10); no ratifica la clase SessionMetrics ni el patrón Memento/Strategy. Los resets de métricas y fórmula siguen en [OQ-09](OPEN_QUESTIONS.md); el evento de reinicio del límite está decidido en [E08 / OQ-04](../decisions/DECISION_LOG.md#e08). Se conserva «consecutivos» en la normalización oficial, sin reabrir la elección ni especificar aquí Undo. Restart es requerido, pero no se extrapolan efectos sobre cada contador.
+La discusión del 30/09 proponía separar métricas. E09 establece que Undo restaura movimientos y empujes, mientras que sus usos se acumulan durante el intento. La ratificación complementaria TEAM del 01/11 define `undoUsesTotal`, `consecutiveUndoUses` y el efecto de Restart: inicia un intento nuevo y reinicia `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses`. E08 conserva su regla: sólo Restart o cambio de nivel reinician el límite de tres usos.
 
-Sintaxis/rango/validación de resistencia inicial TXT soportados fueron adoptados por el responsable en D-020. Siguen sin fijarse extensiones especiales del formato, fórmula numérica, asociación/ocupación cerrojos-muros, segunda adicional, contratos técnicos de persistencia y Java/build. Ver [OPEN_QUESTIONS](OPEN_QUESTIONS.md). Los refinamientos siguientes no cambian el parser experimental ni constituyen pruebas o aceptación productiva.
+La fórmula de score también quedó ratificada el 01/11: `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. No existe penalización adicional por Restart. El tratamiento de las métricas al cambiar de nivel sigue pendiente.
+
+Estas definiciones no ratifican por sí mismas la clase SessionMetrics ni los patrones Memento/Strategy. `ScoreStrategy` continúa siendo una alternativa PREFERRED, no una obligación de diseño. Ver [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) y [OPEN_QUESTIONS](OPEN_QUESTIONS.md).
+
+Sintaxis/rango/validación de resistencia inicial TXT soportados fueron adoptados por el responsable en D-020. Siguen sin fijarse extensiones especiales del formato, asociación/ocupación cerrojos-muros, segunda adicional, contratos técnicos de persistencia y Java/build. Ver [OPEN_QUESTIONS](OPEN_QUESTIONS.md). Los refinamientos siguientes no cambian el parser experimental ni constituyen pruebas o aceptación productiva.
 
 ## Refinamientos TEAM del 2026-10-23
 
@@ -52,7 +56,7 @@ Este apartado es un mapa hacia la autoridad canónica, no otra definición norma
 | RF-05 | Regla Fragile/hielo: [E04 / D-005](../decisions/DECISION_LOG.md#e04) | [OQ-03](OPEN_QUESTIONS.md): TEAM_RULE_DECIDED; completar deslizamiento y luego romper; implementación pendiente en otro módulo |
 | RF-06 / RF-08 | Objetivo KeyBox y cierre: [E05 / D-019](../decisions/DECISION_LOG.md#e05), [E06 / D-010](../decisions/DECISION_LOG.md#e06) | [OQ-01/OQ-07](OPEN_QUESTIONS.md): ocupación, IDs y puzzles pendientes |
 | RF-07 / RF-10 | Umbral y reinicio de límite: [E07 / D-007](../decisions/DECISION_LOG.md#e07), [E08 / D-008](../decisions/DECISION_LOG.md#e08) | [OQ-05/OQ-04](OPEN_QUESTIONS.md): umbral y evento de reinicio decididos, bordes operativos pendientes en sesión/Undo |
-| RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y resets pendientes |
+| RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y resets pendientes; [ratificación complementaria 2026-11-01](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta la fórmula y el comportamiento de Restart |
 | RF-12 | Preferencia TEAM histórica: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026): elegibilidad de guardar cuestionada por reporte indirecto; cómputo de dos adicionales, contratos y GoF pendientes |
 
 La revisión del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`. OQ-11 no tuvo encuesta: los comandos actuales y release 17 no ratifican Java/build final. Los estados técnicos de arquitectura/UML y patrones se conservan.
@@ -72,3 +76,16 @@ Estos criterios son objetivos de aceptación, no resultados nuevos. Fragile juga
 RF-07 exige Undo con historial 15, bloques 5 y hasta 3 usos consecutivos; la consigna escrita no exige textualmente persistencia en disco. Memento representa estado para restaurar, sin implicar guardar archivos o sobrevivir al cierre del juego. No resolver por esa asociación la ambigüedad del [reporte grupal](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026).
 
 RF-12 sigue exigiendo **dos adicionales académicamente válidas con patrones vistos en clase**. Guardar/recuperar no se computa automáticamente: su exclusión y la elegibilidad del selector fueron atribuidas al docente por un tercero, sin respuesta original verificada. El selector permanece candidato y requiere evidencia de comportamiento y patrón justificado; el cómputo final y la segunda selección siguen pendientes en OQ-10. No se alteran E11 ni la entrega oficial del 18/11/2026.
+
+## Refinamientos TEAM del 2026-11-01
+
+La ratificación complementaria del 01/11 concreta las reglas de Undo, Restart y score. No modifica el baseline oficial de la consigna ni los recuentos históricos E08, E09 y E10.
+
+| Requisito | Aspecto ratificado | Alcance y límites |
+|---|---|---|
+| RF-07 | Undo restaura tablero, `moves` y `pushes`; `undoUsesTotal` acumula usos dentro del intento; `consecutiveUndoUses` controla el límite de tres. | Sólo Restart o cambio de nivel reinician el límite. Un movimiento normal no recupera usos. Restart inicia un intento nuevo y reinicia las cuatro métricas. |
+| RF-09 | Fórmula: `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. | Base 1000; −1 por movimiento; −2 adicionales por empuje; −10 por Undo; mínimo cero. Restart no tiene penalización adicional y el score corresponde al intento actual. |
+
+El cambio de nivel reinicia `consecutiveUndoUses`, pero no se ha ratificado el efecto sobre las demás métricas. En el corte histórico I2 anterior a la publicación, en la rama auxiliar, `GameSession` implementa Undo y Restart, coordinados por `GameController`, `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` asegurando la persistencia del puntaje histórico, y `ScoreCalculator` implementa el cálculo del score acordado. `UiCommands` conecta Undo y Restart; la implementación contempla la restauración de `moves` y `pushes` al deshacer, la acumulación de usos de Undo, el reinicio de las cuatro métricas con Restart y la fórmula de score ratificada. Las pruebas registradas en esta integración local incluyen `CORE_TOTAL: 258 PASS, 0 FAIL`, `SESSION UNDO: 58 PASS, 0 FAIL`, `DESKTOP RESULT: 36 PASS, 0 FAIL` y `VISUAL ASSETS RESULT: 44 PASS, 0 FAIL`. `TEAM_ACCEPTANCE = NOT_RECORDED` para el código; la ratificación no equivale a aceptación formal del equipo sobre la implementación actual. La elección de Memento, SessionMetrics o ScoreStrategy conserva su estado técnico y no queda ratificada por estas reglas.
+
+**Estado de implementación posterior (04/11/2026):** I1+I2 y hotfix TXT Fragile publicados en PR #17 Draft (hito `4d6cb612b38e5ebdb6869bb990301045044e863f`). Tests locales JDK17 reportados: Undo 58, core 258, Desktop 40, assets 44, todos PASS; GUI nativa post-hotfix y aceptación TEAM pendientes. Esto no modifica reglas OFFICIAL, E01–E11 ni preguntas abiertas; consultar [CURRENT_STATE](../continuity/CURRENT_STATE.md).

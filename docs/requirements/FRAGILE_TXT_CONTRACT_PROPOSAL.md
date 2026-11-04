@@ -1,5 +1,9 @@
 # Propuesta de contrato TXT C2 — atributos individuales Fragile (R1)
 
+## Consumidor integrado en PR17 — 04/11/2026
+
+El contrato adoptado por D-020 se conserva. Las descripciones fechadas del prototipo no representan ausencia de gameplay en esta rama: `RuntimeState.fromExperimentalFragile` consume plantilla + IDs/resistencia; `GameController` conecta la carga dedicada; ICE ordinario adyacente puede atravesarse y la definición rechaza Fragile inicialmente sobre ICE. Key/Lock/Wall utilizan otra entrada extendida. [Correspondencia efectiva y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md#correspondencia-txt-efectiva). Esto actualiza el consumidor, sin ampliar el rango/sintaxis ratificados ni cerrar OQ-07/08.
+
 - `STATUS = MODULE_OWNER_DECIDED_SUPPORTED_SUBSET / EXPERIMENTAL_NON_PLAYABLE_DEFINITION`
 - `AS_OF = 2026-10-29`
 - `DOMAIN = SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`

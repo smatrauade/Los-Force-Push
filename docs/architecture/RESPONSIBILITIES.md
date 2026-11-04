@@ -1,5 +1,18 @@
 # Responsabilidades candidatas
 
+## Observer de presentación — 04/11/2026
+
+`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Roles efectivos Replay — 04/11/2026
+
+- `GameController`: registra éxitos, reconcilia intentos y verifica la traza al ganar; no reproduce sobre la sesión.
+- `ReplayRecorder`/`ReplayTrace`/`MoveCommand`/`ReplayPlayer`: historial acotado, valor inmutable, acción y cursor aislado respectivamente; core I3.D.1 conservado.
+- `ReplayPanel`: controles, tablero independiente y timer EDT cancelable; sin score/audio/progresión.
+- `VisualThemeController`: un cambio de familia para tablero real, Replay, menú y árbol Swing.
+
+[Auditoría](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). `UiCommands` son callbacks; el Command defendible es `MoveCommand`.
+
 Roles candidatos al 2026-10-08; la implementación integrada al 28/10 se distingue en la tabla posterior. Aplicar GRASP Expert/Creator/Controller, bajo acoplamiento y alta cohesión antes de adoptar un patrón.
 
 | Rol | Responsabilidad y colaboradores | Límite |
@@ -40,19 +53,24 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | ExperimentalFragileParser / ExperimentalFragileLevel | Prototipo aislado: definición inmutable con identidad, posición y resistencia; no es Level jugable |
 | LevelLoader / LevelFormatException | E/S externa limitada y UTF-8 estricto compartidos por `load` jugable y `loadExperimentalFragile` de definición experimental; errores explícitos, sin caché ni reglas runtime |
 | Direction / MovementEngine / MoveResult | Transición normal MOVED/PUSHED/BLOCKED; motor sin estado ni contadores |
-| GameController | Carga atómica, delegación de movimiento, GamePresentation y eventos onMove; sin reglas/parser/pintura |
-| GamePresentation | Proyección con referencia al Board inmutable, nombre y dos contadores demostrativos |
-| GameView | Frontera render/error y hooks default de eventos, comandos y resultado final |
-| SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT y captura de acciones; sin score/victoria automática |
+| GameController | Carga atómica y coordinación de movimiento, sesión, `undo()`, `restart()`, `getLevelResult()` y solicitud de animación posterior a publicar; sin historial propio ni reglas/parser/pintura |
+| ScoreCalculator | Calcula el score del intento desde 1000 con penalidades incrementalmente aplicadas: −1 por movimiento, −2 por push y −10 por uso de Undo; evita overflow con `applyPenalty` y devuelve un mínimo de 0 |
+| GamePresentation | Proyección con referencia al Board inmutable, nombre y dos contadores fundamentales del intento (`moves`, `pushes`) |
+| GameView | Frontera render/error y hooks default de eventos, animación de caja, comandos y resultado final |
+| SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT, selector de estilo visual y captura de acciones; `configureUiCommands` activa/desactiva Undo y Restart según callbacks disponibles |
 | ArrowBindings | Traduce flechas a Direction; la ventana controla la pantalla activa |
-| BoardPanel | Render por capas, orientación y escala; no modifica el Board ni infiere resistencia |
-| PixelAssets | Carga y caché de PNG 32×32 por classpath |
-| PixelTheme | Paleta, tipografía y widgets Swing |
+| BoardPanel | Render por capas, orientación y escala; proyecta frames de `BoxAnimation` desde el path autoritativo sin recalcular física; toma la paleta de la familia visual activa; no modifica el Board ni infiere resistencia |
+| PixelAssets | Carga y caché de PNG 32×32 por classpath; aplica la presentación de sprites de la familia activa e invalida la caché al cambiarla, sin escribir archivos |
+| PixelTheme | Paleta, tipografía y widgets Swing; `Surface` lee la paleta de la familia activa |
+| VisualThemeFactory | Abstract Factory de vista: contrato de `UiPalette` y `SpritePresentation`; no expone estado de juego |
+| VisualThemes | Catálogo inmutable de las familias `ORIGINAL COBRE`, `NOCTURNO` y `JADE`, con tinte determinista que preserva alfa |
+| VisualThemeController | Único punto de cambio de familia: actualiza tablero, arte de menú y árbol Swing; rechaza nulos |
+| VisualThemeApplier | Aplica la paleta y restaura colores/bordes Swing originales al volver al tema base; no toca `BoardPanel` |
 | SoundManager / Effect | Clips y reproducción opcional por ventana, mute y fallo de dispositivo controlado; sin Singleton/core global |
-| UiCommands | Callbacks opcionales de servicios externos; null indica no disponible |
-| LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados, sólo para presentación |
+| UiCommands | Callbacks opcionales de servicios externos; `undo`, `restart` y `nextLevel` se habilitan según sesión; `save` y `loadSaved` siguen pendientes |
+| LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados; transporta el resumen final del nivel y se usa para la vista |
 
-GameSession, UndoManager/Memento, ScoreStrategy, Observer de locks, LevelCatalog, persistencia y cajas especiales siguen ausentes. Las interfaces y la jerarquía integral no se adoptan por existir hooks visuales. Requisitos/decisiones y evidencia de ejecución se consultan por separado.
+`RuntimeState` / `RuntimeMovementEngine` administran el mundo y las transiciones. `GameSession` concentra historial Undo y métricas; `LevelProgression` coordina victoria y avance; `GameController` conecta presentación y `ScoreCalculator`. Persistencia, arquitectura final y aceptación del equipo permanecen pendientes.
 
 ## Responsables de cierre por módulo — 29/10/2026
 
@@ -60,6 +78,6 @@ Son roles de planificación, no asignaciones personales ni arquitectura ratifica
 
 - TXT/niveles: contrato externo, errores atómicos, definición inicial e invariantes; preservar identidad/resistencia antes de integración runtime.
 - Model/Movement: reglas, estado de cajas y asociaciones; candidato Observer para Lock→Walls pendiente de OQ-07. No delegar esos efectos a Swing.
-- Sesión/score/persistencia: Undo/Restart, métricas, victoria/progresión y guardado; justificar Command/Memento/Strategy cuando exista contrato.
-- Swing: representar DTO/Board y conectar servicios realmente disponibles. Los callbacks UiCommands no son el patrón Command demostrado.
+- Sesión/score: `GameSession` administra Undo/Restart e historial; `LevelProgression` coordina victoria/progresión y `GameController` usa `ScoreCalculator`. Persistencia sigue pendiente.
+- Swing: representar DTO/Board y conectar servicios realmente disponibles. `UiCommands` habilita callbacks concretos cuando el módulo los entrega; no debe asumirse un patrón Command sin evidencia.
 - Integración/entrega: coordinar compatibilidad, pruebas, licencias, StarUML, informe, video y defensa. Evaluar LevelBuilder por intención y consecuencias, no por nombre.

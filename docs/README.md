@@ -1,5 +1,9 @@
 # Índice documental
 
+## Estado técnico RC PR17 — 04/11/2026
+
+Punto de entrada al [candidato funcional y sus gates](integration/PR17_FUNCTIONAL_RC_2026-11-04.md): Replay Swing, campaña de cinco TXT, Observer de presentación y regresión Java 17. [README de ejecución](../README.md), [TODO vigente](../TODO.md), [arquitectura](architecture/ARCHITECTURE.md) y [contrato entre módulos](punto5/INTEGRACION_EQUIPO.md). Las secciones fechadas siguientes describen hitos anteriores; sus pendientes de gameplay no prevalecen sobre este candidato. No hay merge a main ni aceptación TEAM.
+
 Revisado 29/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](continuity/REHYDRATION_INDEX.md) → [CURRENT_STATE](continuity/CURRENT_STATE.md). La reconciliación del PR #13 ya está integrada; no deducir el HEAD de fechas o cápsulas, contrastarlo con Git/GitHub.
 
 | Tema | Documento |
@@ -19,3 +23,9 @@ Los experimentos, checkpoints y cápsulas fechados conservan evidencia históric
 ## Entrega y reconciliación académica — 29/10/2026
 
 PR #11 y #12 están integrados; Fragile permanece no jugable. El contrato soportado se adoptó posteriormente por el responsable TXT en D-020; integración runtime y extensiones siguen pendientes. Para el **18/11/2026**, leer [entrega y demo](requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [brechas de patrones](architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026) y [ruta crítica](../TODO.md#ruta-crítica-hacia-el-1811). El código ofrece carga de definición experimental y contrato TXT; la integración runtime sigue pendiente. Para trabajo paralelo, consultar el [traspaso a Model/Movement](requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026).
+
+## Integración grupal por ramas — 03/11/2026
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+[Entrada de integración](integration/README.md) · [Plan I0–I4](integration/TEAM_INTEGRATION_PLAN.md) · [Criterios INT-01–10](integration/INTEGRATION_ACCEPTANCE.md) · [Frescura por rama](continuity/BRANCH_AWARE_FRESHNESS.md). Estas fuentes distinguen estado histórico/branch-only de código realmente integrado en `main`.

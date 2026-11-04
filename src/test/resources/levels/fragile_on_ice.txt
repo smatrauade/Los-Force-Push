@@ -1,0 +1,7 @@
+!sokoban-txt 2
+[grid]
+# # # # # # # #
+# @ {floor|fragile:f1} {ice|empty} {ice|empty} {ice|empty} . #
+# # # # # # # #
+[attributes]
+fragile f1 resistance=2

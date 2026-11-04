@@ -1,10 +1,79 @@
 # Estado vivo — Los Force Push
 
-AS_OF = 2026-10-29. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
+## UML PR #17 — PlantUML verificado (04/11/2026)
+
+Diagramación del candidato funcional congelado `ffa27f9`: [nueve fuentes PlantUML y PNG oficiales](../architecture/uml/pr17-rc-ffa27f9/README.md). Validación del motor PlantUML registrada en `RENDER_GATE.json`; este incremento solo documenta UML, no vuelve a ejecutar las pruebas Java ni modifica reglas TEAM. El formato StarUML exigido en la consigna conserva gate académico pendiente.
+
+## Candidato funcional estabilizado — 04/11/2026
+
+El código congelado `0bbc60e381c0666e4c5f2803bcf469ff23830267` integra Replay, catálogo de cinco TXT, navegación corregida, Observer de hechos Lock y victoria inicial. JDK17: Replay 20, Undo 58, core 258, Desktop 40, campaña previa 41, temas 7, animación 14 y assets 44 preservados; nuevas suites 8/8/6/6/3 PASS, runner exit 0. Ventana Linux automatizada 17 + 7 PASS y audio por dispositivo 12 PASS; escucha y evaluación visual humana, Windows/macOS y TEAM no acreditados. [Matriz completa, commits y gates externos](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Las secciones fechadas siguientes son evolución histórica; consultar GitHub para el estado actual del PR y de main.
+
+## Victoria al cargar — 04/11/2026
+
+Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Observer de presentación — 04/11/2026
+
+`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Campaña y navegación RC — 04/11/2026
+
+`DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## Cierre funcional PR #17 — Replay integrado (04/11/2026)
+
+`GameController` registra después de transiciones exitosas, reconcilia Undo, inicia registro nuevo tras Restart/carga/avance y verifica mundo/moves/pushes al finalizar. La traza del nivel actual se borra sólo al reemplazar exitosamente el intento; una carga fallida la conserva. `ReplayPanel` reproduce con tablero separado, controles Play/Pause/Step/Reset/Back y timer EDT con generación de cancelación; no conoce sesión, score ni progresión. Los tres temas se aplican desde el mismo `VisualThemeController` a ambos tableros. Core Replay I3.D.1 intacto. [Auditoría, evidencia y próximo gate](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
+## I3.D.1 — Núcleo aislado Replay/Command (04/11/2026)
+
+Este incremento incorpora `ar.edu.uade.sokoban.replay` en `src/main/java` con `MoveCommand`, `ReplayRecorder`, `ReplayTrace` y `ReplayPlayer`. Es una adaptación revisada de la **implementación individual** de `impaciencia`, no una contribución TEAM ratificada ni una fusión de esa rama. Encapsula direcciones exitosas en comandos inmutables y los reproduce con una instancia independiente de `RuntimeMovementEngine` desde `RuntimeState` inicial. No cambia `GameSession`, Undo 15/5/3, el score acordado, `GameController`, `GameView` ni Swing. No hay nuevo botón de Replay en I3.D.1.
+
+`ReplayRecorder` invalida la reproducción si la trayectoria supera 10.000 operaciones o se detecta incoherencia al reconciliar Undo; un Replay parcial nunca se ofrece como completo. Antes de usar una traza se comprueban estado final **y** movimientos/empujes. Fuente de verdad: `src/main/java/ar/edu/uade/sokoban/replay/`; pruebas: `src/test/java/ar/edu/uade/sokoban/replay/ReplayIntegrationTest.java`, runner `scripts/test-replay-i3d1.sh`. El estado **publicado** se determina comparando HEAD/PR #17 en Git, no por la presencia del texto de este checkpoint.
+
+Pendientes: I3.D.2 coordinación de registro en `GameController`, I3.D.3 pantalla Swing y timers, I3.D.4 cierre de regresión/documentación y revisión; elegibilidad RF-12/OQ-10 y aceptación TEAM **no acreditadas**. Mantener PR Draft y `main` sin merge.
+
+## I3.C — animación ICE/Fragile desde RuntimeMoveResult (04/11/2026)
+
+Se incorporó `BoxAnimation` como proyección inmutable de `RuntimeMoveResult`: conserva `BoxKind`, identidad y resistencia Fragile y el `boxPath` autoritativo. `GameView.animateBox` es un hook default de presentación; `GameController` publica primero el `RuntimeState` final, emite `ICE` una vez cuando `boxPath` supera una celda (evidencia E03 de deslizamiento) y `FRAGILE` una vez al romper, y recién después solicita la animación. `BoardPanel` calcula frames deterministas: orden exacto del path, supresión de la caja final mientras la trayectoria está en curso, última celda + `box_broken` + ausencia para Fragile, y un único `javax.swing.Timer` no bloqueante con generación que invalida callbacks obsoletos. `SwingApplication` difiere la pantalla FINISH solo mientras el tablero anima; las sondas headless siguen recibiendo `showVictory` y el score exacto al volver de `move`. Undo, Restart, carga, pausa/ESC, reemplazo de nivel y cierre cancelan la animación sin mutar el mundo.
+
+`AnimationPresentationTest` aporta 14 escenarios headless: trayectoria ICE exacta sin caja fantasma, Fragile sobre ICE y de una celda, Fragile no roto con ID/resistencia, KeyBox con Lock/DynamicWall, ausencia de animación en bloqueo o movimiento sin empuje, propiedad única de SFX, orden publicación→animación→victoria, diferimiento de victoria, cancelación por Undo/Restart/recarga, cancelación explícita sin callbacks obsoletos, un solo timer en EDT, tema/zoom durante animación y hashes de PNG sin cambios. Regresión: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS; `bash scripts/test-integration-i2.sh` exit 0. INT-09 queda con evidencia headless local; `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`, `REMOTE_PUSH=NOT_RUN` e I4 pendiente. No se modificaron PNG ni se agregaron assets.
+
+## I3.B — selector de estilo visual con Abstract Factory (04/11/2026)
+
+Se incorporó un selector real de tres familias de presentación en OPCIONES: `ORIGINAL COBRE` (`original_cobre`, aspecto previo intacto), `NOCTURNO` (`nocturno`) y `JADE` (`jade`). `VisualThemeFactory` declara la Abstract Factory de vista con dos productos coordinados —`UiPalette` y `SpritePresentation`—; `VisualThemes` aloja el catálogo inmutable y las tres familias concretas; `VisualThemeController` es el único punto de cambio y `VisualThemeApplier` guarda/restaura colores y bordes Swing para que volver al tema original sea exacto. La familia original devuelve el PNG sin transformar; las alternativas aplican un tinte determinista 55/45 que conserva el canal alfa. `PixelAssets` invalida la caché al cambiar de familia y nunca escribe archivos; `BoardPanel` y `PixelTheme.Surface` leen la paleta activa. El cambio es sólo de presentación, se aplica en EDT y no muta `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score, TXT ni referencias Lock/DynamicWall.
+
+`VisualThemeTest` (7 escenarios headless) cubre catálogo estable y diferenciado, sprites alternativos deterministas con alfa intacto, identidad y reversibilidad del tema original, tableros ICE/Fragile/Lock con mundo, métricas y zoom conservados, selección Swing en EDT, entradas nulas sin estado parcial y hashes de PNG sin cambios. Regresión: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS, `bash scripts/test-integration-i2.sh` exit 0. `GUI_NATIVE_QA=NOT_RUN`; el selector es candidato a adicional RF-12/OQ-10 y no cierra esa elegibilidad ni la segunda funcionalidad. `TEAM_ACCEPTANCE=NOT_RECORDED`; sin publicación ni merge. [Detalle de aceptación](../integration/INTEGRATION_ACCEPTANCE.md).
+
+## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
+
+Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
+
+## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+
+I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
+
+## I2 — Fragile TXT GUI hotfix (04/11/2026)
+
+- Detectar formato por parsers estrictos existentes: STANDARD, EXTENDED y EXPERIMENTAL_FRAGILE.
+- El archivo `fragile_demo.txt` y el mismo contenido con nombre externo arbitrario conservan ID `f1` y resistencia 4 en runtime.
+- La carga inválida preserva el estado previamente publicado; regresión de STANDARD, ICE y EXTENDED en `DesktopIntegrationTest`.
+- Evidencia: `scripts/test-integration-i2.sh` con JDK 17 y `scripts/verify-repo-readonly.sh` (ejecutar sobre el commit resultante).
+- QA gráfica nativa integral, aprobación TEAM, I3/I4 y merge a `main` siguen pendientes.
+- La frescura/publicación del PR #17 se comprueba en GitHub; no deducirla del HEAD local.
+
+## I2 — integración local verificada (04/11/2026)
+
+Rama auxiliar `integration/i2-martina-stage-2026-11-03`; base `9aebe52501bb25d2ccf39781eb515c178dc11983`, fuente Martina `efd0fcd2a1423bd1d5b064458671ec9b149fd054`. Integración y corrección local completadas; estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). Correcciones I2 aplicadas: `LevelProgression.CompletedLevel` almacena `(victory, metrics, undoUsesTotal)` preservando la información para el cálculo del score tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada y `GameController` expone el resultado communicating score al HUD (`status`) y pantalla de victoria (`showVictory`); INT-05 (Undo que restaura DynamicWall y Lock abiertos), INT-06 (Restart desde cuatro métricas simultáneamente mayores a cero) e INT-08 (retención histórica de score 987 con Undo y 997 control) `PASS`. En OpenJDK 17.0.20.1 se ejecutaron 58 comprobaciones Undo (`GameSessionUndoTest`), core 258/258, desktop 36/36 y assets 44/44: `bash scripts/test-integration-i2.sh` exit 0. `NATIVE_GUI_QA=NOT_RUN`. La verificación documental pasó; `TEAM_ACCEPTANCE=NOT_RECORDED`; cambio de nivel reinicia métricas como comportamiento provisional. Próximo gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+
+AS_OF = 2026-11-01. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
+
+## Incremento victoria — llaves, cerrojos, muros y progresión — 01/11/2026
+
+En la rama `victoria` se implementó un runtime explícito, separado del Board jugable histórico: `ExtendedLevelParser` / `ExtendedLevelDefinition`, `RuntimeState` / `RuntimeMovementEngine`, `VictoryEvaluator`, `LevelCatalog` y `LevelProgression`. `load(Path)` y `loadExperimentalFragile(Path)` no cambian y siguen rechazando la extensión. Hipótesis individuales, no ratificación TEAM de OQ-01/07 ni de una fórmula de score: asociación Lock↔Walls OR, rechazo de muro cerrado ocupado, KeyBox en Lock no es Goal, campaña `demo.txt` → `campaign-b.txt`. Undo, hielo y Fragile jugable permanecen ausentes. TEAM_ACCEPTANCE = NOT_RECORDED.
 
 ## Cierre semántico y contractual — 29/10/2026
 
-[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. Gameplay especial, Undo y aceptación del código continúan NOT_IMPLEMENTED / NOT_RECORDED según corresponda.
+[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. En aquel corte, gameplay especial y Undo seguían sin implementarse; el estado actual de I1/I2 figura en los checkpoints de esta rama. La aceptación formal del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`.
 
 Este hito sólo cambia Markdown. QA Java previa por Codex sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, con src/scripts idénticos a 5ac2bba; no reejecutada en este cierre. [Comandos, entorno y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). La [matriz de frescura](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#cierre-semántico-del-contrato-soportado--29102026) identifica los documentos revisados y las excepciones conservadas. PR/reviews/HEAD se consultan dinámicamente; no hay permiso de Ready/merge ni SHA de squash predicho.
 
@@ -46,8 +115,9 @@ Los PR #8, #9, #10, #11, #12 y #13 están MERGED; los SHA de la tabla identifica
 
 - [LevelLoader / LevelParser / C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level): lectura externa UTF-8 estricta, máximo 65.536 bytes, legacy y C2 opt-in; Board inmutable, grillas hasta 100×100, exactamente un jugador.
 - [MovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/MovementEngine.java): movimiento cardinal y empuje de una caja normal. MOVED/PUSHED producen Board nuevo; BLOCKED conserva la misma instancia.
-- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop): menú, juego, HUD, pausa, opciones, ayuda, zoom, sprites y audio. GameController coordina carga/movimiento; BoardPanel sólo representa; PixelAssets y SoundManager cargan desde classpath.
-- [UiCommands](../../src/desktop/java/ar/edu/uade/sokoban/desktop/UiCommands.java) expone callbacks opcionales y [LevelResult](../../src/desktop/java/ar/edu/uade/sokoban/desktop/LevelResult.java) datos finales. No implementan Undo, Restart, persistencia, score ni progresión.
+- [RuntimeState](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeState.java) / [RuntimeMovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeMovementEngine.java): ICE, Fragile, KeyBox, Lock y muros dinámicos.
+- [GameSession](../../src/main/java/ar/edu/uade/sokoban/session/GameSession.java) concentra Undo/Restart y métricas; `LevelProgression` coordina victoria y campaña.
+- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop) conecta presentación, Undo/Restart, resultado y siguiente nivel; `ScoreCalculator` calcula score saturado.
 - [Recursos](../../src/desktop/resources/assets): 31 PNG, incluidos 29 base y dos variantes opcionales; 12 WAV. [Manifiesto](../punto5/ASSETS_REGISTRO_SHA256.csv), [contrato entre módulos](../punto5/INTEGRACION_EQUIPO.md) y [derechos pendientes](../punto5/USO_IA_Y_LICENCIAS.md).
 
 ## Spike local C2-L7 — 2026-10-24
@@ -74,7 +144,7 @@ El merge de #5 y su QA previa son historia: [checkpoint Windows](checkpoints/WIN
 
 [README](../../README.md) contiene ejecución desde clon; [TEST_STRATEGY](../testing/TEST_STRATEGY.md), suites y regresión del verificador. No se requieren ZIP de instalación ni assets externos. Java/build definitivo sigue OQ-11 OPEN; los runners provisionales compilan a release 17. [Arquitectura](../architecture/ARCHITECTURE.md) y [UML](../architecture/uml/STARUML_STATUS.md) separan implementación de candidato.
 
-Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. Siguen pendientes hielo, Fragile/KeyBox/Lock, Undo/Restart, score, victoria/progresión, persistencia y segunda adicional. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
+Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. En el corte de esta sección quedaban pendientes hielo, Fragile/KeyBox/Lock y victoria/progresión; el estado I1/I2 actual se registra arriba. Persistencia y segunda adicional siguen pendientes. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
 
 ## Historia y fuentes
 
@@ -97,3 +167,25 @@ Esta reconciliación revisa documentación y fuentes contra el código integrado
 ## Complemento grupal del PR #13 — 29/10/2026
 
 El [resumen privado aportado](SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026) cuestiona la elegibilidad académica de guardar/recuperar mediante un reporte docente de segunda mano. E11 conserva su voto histórico; [OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) exige confirmar dos adicionales válidas. El selector de estilos es candidato con elegibilidad reportada, sin mayoría ni implementación verificadas. No se declara satisfecho RF-12 ni persistencia obligatoria por Undo/Memento. Las propuestas de áreas/Issues y patrones no son asignaciones ni diseños ratificados. Ese corte conservaba entrega 18/11 y R7 no ejecutada; precede al incremento TXT descrito al comienzo. Las demás fuentes de navegación, política y arquitectura se revisaron sin necesidad de cambio: no se incorpora software ni nueva decisión de patrón.
+
+## I0 — Estado de la rama compartida de integración (corte 03/11/2026)
+
+<!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
+
+En la rama `integration/tpo-unificado-2026-11-03`, el **punto de partida funcional** es el árbol de `victoria@a7df64172dbb857e7a10709ec9ea85a5f80aacf7` (KeyBox/Lock/Wall y progresión); se agrega contrato documental para integraciones futuras. Al redactar este corte, `Objetivo2`, `feature/undo-restart-score` y `impaciencia` **no** estaban integradas y el PR no existía. Este párrafo es una **fotografía de I0**, no un estado permanentemente verdadero. Para el estado actual y cada hito posterior consultar [README de integración](../integration/README.md), [plan I0–I4](../integration/TEAM_INTEGRATION_PLAN.md), el HEAD real del checkout y el PR remoto. `main` no queda modificado por documentar esta rama.
+
+## I0.1 — Publicación verificada del PR #17 (03/11/2026)
+
+<!-- I0_PR17_PUBLICATION_VERIFIED_2026_11_03 -->
+
+La rama `integration/tpo-unificado-2026-11-03` publicó el PR [#17](https://github.com/smatrauade/Los-Force-Push/pull/17) en estado **Draft**, con origen `victoria@a7df64172dbb857e7a10709ec9ea85a5f80aacf7` y commit documental I0 `50a559a55e1d57afaad68e9f952e552228f45779`. `main=f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2` permanecía intacta al verificar este corte. La implementación de hielo/Fragile de `Objetivo2`, Undo/Restart/score de Martina y la rama individual `impaciencia` **NO** están integradas aún. El PR no aprueba un merge. Las pruebas combinadas permanecen `NOT_RUN`. Esta anotación certifica la publicación I0; los SHA son históricos y deben revalidarse en GitHub. Siguiente etapa: I1 TXT/Runtime/Movement; [plan](../integration/TEAM_INTEGRATION_PLAN.md) y [matriz](../integration/INTEGRATION_ACCEPTANCE.md).
+
+## Checkpoint histórico — worktree auxiliar I1 antes de publicación (03/11/2026)
+
+`integration/i1-santino-stage-2026-11-03` mantiene HEAD base `5af4a586001ecd8da1856483da023ce15eeccfc1` y MERGE_HEAD de `Objetivo2` `ac728a2241d2fae8c4c32b78e29fd4c9bc6228eb`; los tres conflictos Swing están **resueltos en texto** pero no marcados en el índice Git. I1.A/B0/B1 está implementado provisionalmente en el árbol local con **312/312 pruebas JDK17 reportadas antes de I1.C**. I1.C agregó testigos más estrictos, documentos y runner; la ejecución posterior reportada por el usuario aprobó **316/316** pruebas (core 256, Desktop 16, Visual Assets 44), Java/javac 17.0.20.1, `GIT_STATE_PRESERVED=YES`, `bash scripts/verify-repo-readonly.sh` PASS y auditoría read-only de los 38 paths esperados PASS. Son resultados del árbol local aún **sin merge commit**; GUI real y aceptación TEAM continúan pendientes. Ver [evidencia de integración](../integration/I1_LOCAL_VALIDATION_2026-11-03.md). `IN_MAIN=NO`, `IN_PR17_REMOTE=NO`, `TEAM_ACCEPTANCE=NOT_RECORDED`; no reinterpretar las secciones históricas anteriores como estado del worktree actual.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## I1 publicado en rama de integración — estado actual 03/11/2026
+
+El PR [#17](https://github.com/smatrauade/Los-Force-Push/pull/17) permanece abierto y Draft, con `integration/tpo-unificado-2026-11-03@6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`, basado en `main@f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`, sin modificar `main`. Merge padres `5af4a586` y `ac728a22`, con los dos commits históricos de `Objetivo2` preservados. I1 incorpora TXT/runtime ICE/Fragile, KeyBox/Lock/Wall y reconciliación Swing, no Undo/Score ni animación completa. Prueba local **316/316 PASS** previa al commit sobre los mismos blobs; no reejecutada en el nuevo SHA. [Registro de I1](../integration/I1_LOCAL_VALIDATION_2026-11-03.md). I2–I4 pendientes; `TEAM_ACCEPTANCE=NOT_RECORDED`. Los cortes I0/I1 anteriores son históricos.
