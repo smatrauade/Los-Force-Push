@@ -1,12 +1,14 @@
 # Índice de rehidratación
 
+[Guía de transferencia al equipo](../integration/PR17_TEAM_HANDOFF.md): ejecución, arquitectura, patrones y próximos pasos.
+
 ## Continuidad del freeze RC — 04/11/2026
 
 Para el estado vigente del software usar [auditoría RC PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md), [README](../../README.md) y [TODO](../../TODO.md). Replay controlador/Swing, campaña y Observer ya están implementados; las frases pendientes de los hitos posteriores conservados son históricas. Consigna/votos siguen en sus registros canónicos; elegibilidad RF-12, derechos, revisión TEAM y StarUML requieren gates separados. Consultar GitHub para publicación/HEAD actual.
 
 ## Ruta vigente RC PR17 — 04/11/2026
 
-Tras las lecturas obligatorias, consultar [auditoría y gates del candidato funcional](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Replay ya incluye coordinación y pantalla Swing; los apartados fechados previos describen sus cortes. El estado Git remoto se revalida antes de publicar; el PR permanece Draft y `main` no está integrado.
+Tras las lecturas obligatorias, consultar [auditoría y gates del candidato funcional](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Replay ya incluye coordinación y pantalla Swing; los apartados fechados previos describen sus cortes. El estado Git remoto se revalida antes de publicar; consultar GitHub para el estado actual del PR y de `main`.
 
 ## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
 

@@ -1,8 +1,10 @@
 # Integración compartida del TPO — plan operativo I0–I4
 
+[Guía vigente para el equipo](PR17_TEAM_HANDOFF.md). Los checkpoints y planes fechados de este documento describen su momento; consultar GitHub para el estado actual del PR y main.
+
 ## Cierre técnico de software RC — 04/11/2026
 
-I1/I2 y el software I3 están implementados y revalidados: Replay de extremo a extremo, campaña, animación y avisos Lock. I4 académico continúa abierto por elegibilidad, derechos, QA humana/plataformas y entregables. [Auditoría final](PR17_FUNCTIONAL_RC_2026-11-04.md) y [TODO vigente](../../TODO.md) sustituyen como estado operativo las tablas históricas de este plan; no alteran E01–E11 ni D-020. Publicación permitida sólo en PR #17 Draft con gate remoto y fast-forward.
+I1/I2 y el software I3 están implementados y revalidados: Replay de extremo a extremo, campaña, animación y avisos Lock. I4 académico continúa abierto por elegibilidad, derechos, QA humana/plataformas y entregables. [Auditoría final](PR17_FUNCTIONAL_RC_2026-11-04.md) y [TODO vigente](../../TODO.md) sustituyen como estado operativo las tablas históricas de este plan; no alteran E01–E11 ni D-020. El estado de publicación e integración se consulta en GitHub.
 
 ## Avance RC PR17 — 04/11/2026
 

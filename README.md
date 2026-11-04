@@ -4,7 +4,7 @@
 
 La arquitectura del candidato está documentada en [nueve diagramas editables PlantUML y PNG](docs/architecture/uml/pr17-rc-ffa27f9/README.md). Se verificó la generación PNG con el motor oficial PlantUML 1.2026.9. Esto facilita revisión y presentación, pero **no acredita automáticamente** el archivo StarUML solicitado por la consigna.
 
-Sokoban 2D en **Java/Swing** para el TPO de Procesos de Desarrollo de Software (UADE). Esta rama integra los aportes de movimiento, cajas especiales, cerrojos, sesión y presentación del equipo. El [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) continúa **Draft**; estas capacidades todavía no están fusionadas a `main` ni aprobadas por el equipo.
+Sokoban 2D en **Java/Swing** para el TPO de Procesos de Desarrollo de Software (UADE). Esta rama integra los aportes de movimiento, cajas especiales, cerrojos, sesión y presentación del equipo. Consultar el [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) para conocer el estado de integración; la aceptación del equipo sigue pendiente. [Guía para el equipo](docs/integration/PR17_TEAM_HANDOFF.md).
 
 El candidato incluye TXT externos, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score TEAM, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría y gates pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
 
@@ -12,12 +12,11 @@ El candidato incluye TXT externos, movimiento cardinal, cajas normales/Fragile/K
 
 Se necesita un **JDK completo 17 o superior** con `java` y `javac` compatibles y un escritorio gráfico. Los scripts compilan con `--release 17`, UTF-8, `-Xlint:all -Werror`. La selección definitiva de toolchain sigue [OQ-11](docs/requirements/OPEN_QUESTIONS.md). No se necesitan Maven, Gradle ni bibliotecas externas; imágenes, WAV y niveles están en el clon. El audio depende del dispositivo disponible. Observer publica cambios Lock confirmados para avisos y SFX; los muros siguen derivados por el modelo.
 
-Para revisar este candidato desde un clon nuevo:
+Para usar la versión consolidada después de integrar el PR, clonar la rama predeterminada:
 
 ```bash
 git clone https://github.com/smatrauade/Los-Force-Push.git
 cd Los-Force-Push
-git switch integration/tpo-unificado-2026-11-03
 java -version
 javac -version
 ```

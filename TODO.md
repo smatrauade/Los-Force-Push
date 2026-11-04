@@ -2,7 +2,7 @@
 
 `LAST_REVIEWED=2026-11-04` · `SCOPE=PR17_SOFTWARE_RC` · `TEAM_ACCEPTANCE=NOT_RECORDED`.
 
-El estado técnico del candidato y sus evidencias están en [auditoría PR17](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md). El PR sigue Draft; no confundir esta rama con `main`. Los checkpoints históricos permanecen en sus documentos fechados y el historial Git.
+El estado técnico del candidato y sus evidencias están en [auditoría PR17](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Consultar GitHub para el estado actual del PR y de `main`. Los checkpoints históricos permanecen en sus documentos fechados y el historial Git.
 
 ## Software cerrado en este candidato
 
@@ -23,11 +23,11 @@ Entrega informada: **18/11/2026**, demo de **15–20 minutos**. Las acciones sig
 
 1. **Equipo/docente:** confirmar en [OQ-10](docs/requirements/OPEN_QUESTIONS.md) que selector y Replay son las dos adicionales elegibles; registrar autoridad/fecha/alcance. E11 histórica se conserva.
 2. **Titulares de recursos:** aportar evidencia individual de autoría/titularidad y licencia/dominio público de los 43 assets; los hashes no acreditan derechos.
-3. **Revisión TEAM:** revisar código/contratos/patrones del Draft PR #17, resolver detalles OQ-01/02/07/08/09/11 que requieran ratificación; el reset por nivel y asociación OR permanecen hipótesis implementadas, sin nuevos acuerdos.
+3. **Revisión TEAM:** revisar código/contratos/patrones del PR #17, resolver detalles OQ-01/02/07/08/09/11 que requieran ratificación; el reset por nivel y asociación OR permanecen hipótesis implementadas, sin nuevos acuerdos.
 4. **QA humana/plataformas:** percepción visual de los tres temas y animaciones, escucha real, teclado/ratón y carga externa docente; ejecutar Windows/PowerShell sobre este árbol. Linux automatizado no sustituye Windows ni revisión humana.
 5. **Otra misión UML:** actualizar clases/relaciones desde el freeze funcional y crear/validar `.mdj` en StarUML nativo. El R10 de `impaciencia` es DRAFT de otro HEAD; no copiarlo como definitivo.
 6. **Otra misión de entrega:** informe técnico con alternativas/SOLID/GRASP/MVC/GoF y declaración IA; video de todas las mecánicas; ensayo 15–20 minutos y entrega institucional.
-7. **Integración:** conservar Draft; Ready y merge a `main` requieren revisión y autorización posteriores. No hay autorización en este candidato para esos actos.
+7. **Integración:** consultar el PR #17 para su estado; posteriores cambios se proponen mediante PR nuevos hacia `main`.
 
 ## Próximo dominio TXT/niveles
 
