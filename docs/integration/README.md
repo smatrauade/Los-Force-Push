@@ -1,5 +1,9 @@
 # Integración grupal — punto de entrada (I0, I1, I2 e I3 local)
 
+## Freeze funcional RC PR17 — 04/11/2026
+
+[Auditoría de release](PR17_FUNCTIONAL_RC_2026-11-04.md) clasifica RF/RT, patrones, resultados y límites sobre el código `0bbc60e`. El software está listo para revisión con gates externos pendientes; revisar estado remoto antes de publicar. El PR debe continuar Draft; no hay permiso de merge/Ready. Las secciones siguientes conservan la evolución de integración.
+
 ## RC funcional — 04/11/2026
 
 [Auditoría funcional PR17](PR17_FUNCTIONAL_RC_2026-11-04.md): diagnóstico previo, Replay conectado y pruebas nuevas, incrementos de hardening y gates de publicación. Las notas I3 local siguientes son históricas; Git define qué está publicado.

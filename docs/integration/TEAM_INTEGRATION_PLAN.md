@@ -1,5 +1,9 @@
 # Integración compartida del TPO — plan operativo I0–I4
 
+## Cierre técnico de software RC — 04/11/2026
+
+I1/I2 y el software I3 están implementados y revalidados: Replay de extremo a extremo, campaña, animación y avisos Lock. I4 académico continúa abierto por elegibilidad, derechos, QA humana/plataformas y entregables. [Auditoría final](PR17_FUNCTIONAL_RC_2026-11-04.md) y [TODO vigente](../../TODO.md) sustituyen como estado operativo las tablas históricas de este plan; no alteran E01–E11 ni D-020. Publicación permitida sólo en PR #17 Draft con gate remoto y fast-forward.
+
 ## Avance RC PR17 — 04/11/2026
 
 I3.D.2/I3.D.3 implementados: registro del controlador y pantalla Replay independiente con cancelación EDT. Nueva evidencia propia 8 + 8 escenarios; reglas y núcleo I3.D.1 preservados. Continuar con campaña/hardening y gate final descritos en [auditoría RC](PR17_FUNCTIONAL_RC_2026-11-04.md). No hay aprobación TEAM ni autorización de Ready/merge.

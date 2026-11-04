@@ -1,5 +1,9 @@
 # Estrategia de pruebas y evidencia experimental
 
+## Regresión del freeze RC — 04/11/2026
+
+Ejecución Codex sobre `0bbc60e381c0666e4c5f2803bcf469ff23830267`, Ubuntu 26.04.1/Linux x86_64, java/javac 17.0.20.1. `bash scripts/test-replay-i3d1.sh` exit 0: 20 PASS. `bash scripts/test-integration-i2.sh` exit 0: Undo 58/core 258/Desktop 40/campaña previa 41/temas 7/animación 14/assets 44; nuevas ReplayController 8/ReplayPresentation 8/ReleaseCampaign 6/LockObserver 6/ControllerBoundary 3 PASS. Core java.base; desktop java.base,java.desktop; release 17, UTF-8 y lint estricto. Las repeticiones no agregan casos únicos. [Registro por comando, fallos intermedios y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Ventana Linux automatizada y dispositivo de audio tienen evidencia propia; escucha humana y Windows/PowerShell/macOS NOT_RUN.
+
 ## Victoria al cargar — 04/11/2026
 
 Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

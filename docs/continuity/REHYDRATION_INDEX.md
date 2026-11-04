@@ -1,5 +1,9 @@
 # Índice de rehidratación
 
+## Continuidad del freeze RC — 04/11/2026
+
+Para el estado vigente del software usar [auditoría RC PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md), [README](../../README.md) y [TODO](../../TODO.md). Replay controlador/Swing, campaña y Observer ya están implementados; las frases pendientes de los hitos posteriores conservados son históricas. Consigna/votos siguen en sus registros canónicos; elegibilidad RF-12, derechos, revisión TEAM y StarUML requieren gates separados. Consultar GitHub para publicación/HEAD actual.
+
 ## Ruta vigente RC PR17 — 04/11/2026
 
 Tras las lecturas obligatorias, consultar [auditoría y gates del candidato funcional](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Replay ya incluye coordinación y pantalla Swing; los apartados fechados previos describen sus cortes. El estado Git remoto se revalida antes de publicar; el PR permanece Draft y `main` no está integrado.

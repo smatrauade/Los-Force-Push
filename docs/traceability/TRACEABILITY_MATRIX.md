@@ -1,5 +1,9 @@
 # Matriz viva de trazabilidad
 
+## Estado vigente RF-01–RF-12 y RT-01–RT-04 — 04/11/2026
+
+La [matriz del candidato PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md#matriz-de-requisitos-del-candidato) clasifica cada requisito con código/evidencia y límites. RF-01–RF-10 y RT-01 tienen verificación técnica en los contratos soportados; RF-11/12 y RT-02/03/04 permanecen PARTIAL por derechos, elegibilidad, revisión y entregables externos. No confundir VERIFIED técnico con aceptación TEAM ni elevar las hipótesis OQ a norma. Los apartados fechados siguientes conservan la historia.
+
 ## Victoria al cargar — 04/11/2026
 
 Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

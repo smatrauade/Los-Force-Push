@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## Candidato funcional estabilizado — 04/11/2026
+
+El código congelado `0bbc60e381c0666e4c5f2803bcf469ff23830267` integra Replay, catálogo de cinco TXT, navegación corregida, Observer de hechos Lock y victoria inicial. JDK17: Replay 20, Undo 58, core 258, Desktop 40, campaña previa 41, temas 7, animación 14 y assets 44 preservados; nuevas suites 8/8/6/6/3 PASS, runner exit 0. Ventana Linux automatizada 17 + 7 PASS y audio por dispositivo 12 PASS; escucha y evaluación visual humana, Windows/macOS y TEAM no acreditados. [Matriz completa, commits y gates externos](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Las secciones fechadas siguientes son evolución histórica; PR sigue Draft, main sin merge.
+
 ## Victoria al cargar — 04/11/2026
 
 Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

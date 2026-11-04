@@ -1,5 +1,9 @@
 # Estado de UML y StarUML
 
+## Freeze funcional RC PR17 — 04/11/2026
+
+Los `.puml` siguientes representan subconjuntos históricos y el candidato v0.5; no representan el runtime/sesión/Replay/Observer integrados actuales. El `.mdj` R10 DRAFT existe sólo en `impaciencia@b2c6332`, corresponde a otro HEAD/score y no tiene QA nativa acreditada. No se importó ni se modificó UML en esta misión. Próximo gate separado: actualizar desde el freeze de [auditoría RC](../../integration/PR17_FUNCTIONAL_RC_2026-11-04.md) y abrir/guardar/reabrir en StarUML nativo, con revisión del equipo. `STARUML_DELIVERABLE=PENDING`.
+
 `LAST_REVIEWED = 2026-10-29`, `STARUML_DELIVERABLE = PENDING`.
 
 La entrega exige un diagrama de clases en **StarUML**. No hay `.mdj` versionado ni se afirma haber abierto StarUML. PlantUML facilita revisión/versionado y no sustituye ese entregable.

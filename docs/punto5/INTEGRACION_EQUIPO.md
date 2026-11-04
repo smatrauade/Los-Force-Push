@@ -1,136 +1,39 @@
-# Contrato de integracion entre Punto 5 y los otros modulos
+# Contrato de integración entre presentación y dominio
 
-Esta entrega toca exclusivamente presentacion, eventos UI y audio; no introduce
-reglas de cajas, score, guardado, Undo ni progresion. Los archivos base afectados
-son los del Swing experimental; hay que reconciliarlos si otra rama tambien los
-modifico. Revisado 28/10/2026: Punto 5 esta integrado por PR #9 y TXT C2-L7 por PR #8.
-El estado y los commits historicos se consultan en [CURRENT_STATE](../continuity/CURRENT_STATE.md);
-la ejecucion parte de un [clon actualizado](GUIA_INSTALACION_GITHUB_DESKTOP.md), sin reinstalar ZIP.
+`LAST_REVIEWED=2026-11-04` · `BRANCH_SCOPE=PR17_DRAFT`. Este contrato vivo refleja el candidato integrado; los cortes Punto 5 previos se conservan en Git. No acredita incorporación a `main`, revisión TEAM ni derechos.
 
-## Clases y limites
+## Autoridad y flujo
 
-| Clase | Contrato nuevo | Limite |
+`RuntimeState` es el mundo inmutable; `RuntimeMovementEngine` resuelve transiciones. `GameSession` concentra historial/Undo/Restart/métricas; `LevelProgression` finaliza y avanza. `GameController` coordina carga, publicación, registro Replay y eventos; `GameView`, `SwingApplication` y `BoardPanel` presentan. `ScoreCalculator` aplica la fórmula TEAM; `LevelResult` transporta el resultado ya calculado.
+
+| Frontera | Contrato efectivo | Límite |
 |---|---|---|
-| `BoardPanel` | Recorre `Board.rows()` y pinta capas terrain -> goal -> occupant | Nunca muta el tablero ni decide movimiento. |
-| `PixelAssets` | Carga bajo `/assets/sprites/*.png`, cachea imagenes | Requiere recursos en classpath. |
-| `PixelTheme` | Paleta, tipografia y botones Swing | Sin dominio. |
-| `SoundManager` | Reproduce WAVs originales y soporta mute/error de dispositivo | No se invoca desde `paintComponent`. |
-| `GameView` | Mantiene `render`, `showLoadError`; agrega metodos default `onMove` y `showVictory` | Las sondas de tests existentes siguen compilando. |
-| `LevelResult` | DTO de datos finales (nivel, moves, pushes, undoUses, score) | No calcula score. |
-| `SwingApplication` | Cards MENU/GAME/PAUSE/OPTIONS/HELP/FINISH | Solo captura acciones y representa proyecciones. |
-| `GameController` | Avisa de `MoveResult.Kind` a la vista tras movimiento | No agrega regla de gameplay. |
-| `UiCommands` | Callbacks optativos para Undo, Restart, Save, Load y Next | Todos null por defecto; la UI nunca implementa el comando. |
+| `GameView.render(GamePresentation)` | Comparte RuntimeState, nombre y métricas del intento | Board es proyección; no otra autoridad |
+| `GameController.load/loadCatalog` | Construir nivel completo antes de reemplazar; error conserva sesión/traza | E/S local limitada, síncrona en EDT |
+| `UiCommands` | undo/restart/nextLevel según disponibilidad; null deshabilita | save/loadSaved siguen null; callbacks no son Command GoF |
+| `animateBox(BoxAnimation)` | Trayectoria/identidad/resistencia/rotura desde RuntimeMoveResult | No recalcular física ni inferir resistencia desde un PNG |
+| `showVictory(LevelResult)` | Finalización de sesión, incluida carga ya resuelta | VictoryGate difiere sólo FINISH mientras anima |
+| `configureReplay(ReplayTrace)` | Traza completa verificada del nivel actual, null la retira | Sólo se conserva al completar; fallo de carga no la borra |
+| `onLockChange(Event)` | Observer de hechos confirmados para avisos/SFX | No controla muros; cierre/Undo derivados por RuntimeState |
 
-## Contrato TXT actual
+## TXT y runtime
 
-La ruta jugable `LevelLoader.load(Path)` / `LevelParser.parse(String)` acepta
-legacy y C2-L7 ordinario, con [attributes] vacia; sigue rechazando especiales.
-`LevelLoader.loadExperimentalFragile(Path)` devuelve `ExperimentalFragileLevel`:
-plantilla Board mas lista inmutable de ID/posicion/resistencia inicial, sin Level
-jugable ni conexion Swing. Las dos entradas de filesystem comparten UTF-8 estricto y limite de bytes.
-La plantilla deja vacias las celdas Fragile: no enviarla sola al motor/renderer
-como nivel especial completo. Hielo y otras entidades no tienen tokens aceptados.
-Consultar la [matriz y ejemplos para el consumidor](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#traspaso-txt-a-modelmovement--29102026).
-El esquema TXT soportado esta adoptado por MODULE_OWNER_DECISION (D-020):
-OQ-06 resuelta; OQ-08 parcialmente resuelta, solo extensiones abiertas. El contrato
-runtime requiere acuerdo con el consumidor; no se deduce desde sprites
-ni se impone una interfaz nueva a los otros modulos.
+Los archivos se leen UTF-8 estricto y hasta 65.536 bytes. `LevelLoader.load` acepta legacy/C2 ordinario e ICE, rechaza Fragile para evitar perder IDs. `loadExperimentalFragile` devuelve plantilla y lista de ID/posición/resistencia; `RuntimeState.fromExperimentalFragile` usa ambas partes. `loadExtended` carga KeyBox/Lock/Wall con asociaciones explícitas; `fromExtended` crea runtime. El controlador identifica la ruta por validación estricta, no por nombre de archivo. [Contrato soportado D-020](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md) y [límites de las extensiones implementadas](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
 
-## Para agregar tipos futuros
+No enviar la plantilla Fragile sola a Movement ni convertirla en caja normal. Los parsers validan estructura, no garantizan resolubilidad de cualquier TXT. Los cinco niveles distribuidos tienen testigos ejecutados usando el mismo catálogo que el menú.
 
-**Hoy** `Terrain` solo define `WALL/FLOOR/GOAL` y `Occupant` solo
-`EMPTY/PLAYER/BOX`. Por compatibilidad, `BoardPanel` consulta `enum.name()` en un
-adaptador de presentacion para sugerencias `ICE`, `LOCK`, `GATE_*`,
-`KEY_BOX` y `FRAGILE_BOX`. **Esos nombres no constituyen una especificacion de
-modelo.** Cuando el equipo concrete su contrato, reemplazar/ajustar la funcion
-`spriteForTerrain` y `spriteForOccupant` segun las clases y DTO que realmente
-existan. No forzar nuevos enums ni derivar la resistencia de la caja desde Swing.
+## Presentación y ciclo de vida
 
-Para fragiles: el motor/DTO debe informar resistencia efectiva. Asociar
-`box_fragile_3`, `box_fragile_2`, `box_fragile_1`, `box_fragile_0` al estado
-normalizado, sin imponer un valor inicial en el modelo. Para locks/portones usar
-`lock/lock_active`, `gate_closed/gate_open` segun estado del core. Para hielo usar
-`ice` **solo para representar**, no calcular deslizamiento en BoardPanel.
+`BoardPanel` dibuja terreno→objetivo→ocupantes y proyecta el path/rotura sin caja fantasma. `showState`, Undo, Restart, carga exitosa, pausa/navegación y cierre cancelan timers. La carga inválida durante victoria animada conserva y muestra el resultado final. Flechas sólo actúan en GAME y cuando no hay animación. `Z`/`R` usan los mismos callbacks que botones.
 
-## Para integrar el Punto 4 - Undo, Restart y score
+Replay tiene otro BoardPanel y ReplayPlayer; nunca recibe GameSession ni modifica score/progresión. Su Timer EDT invalida callbacks al pausar/resetear/navegar/cerrar; Step es discreto, sin segunda animación ICE ni SFX. El mismo `VisualThemeController` aplica Abstract Factory a tablero real, Replay, menú y árbol Swing; zoom al abrir Replay conserva la escala del tablero real.
 
-- `undoButton` esta visible y deshabilitado, y `Z` informa que falta ese modulo.
-  El responsable de Undo debe agregar al controller un comando de sesion
-  que restaure el snapshot correcto y volver a llamar a `GameView.render`.
-  Habilitar Undo solo cuando el modulo indique disponibilidad real (el documento
-  oficial pide 5 movimientos por uso, 15 de historia y maximo 3 usos consecutivos).
-- El boton **Restart** y la tecla **R** estan preparados pero inactivos. El modulo
-  del Punto 4 debe proveer el callback y la confirmacion/politica de sesion;
-  la interfaz NO recarga TXT ni reinicia metricas por su cuenta.
-- `moves` y `pushes` del HUD vienen de `GamePresentation`, no del panel.
-- El score se recibe a traves de `LevelResult` desde el servicio de score,
-  con sus valores ya calculados. No elegir una formula dentro de la vista.
+`LockChangeSubject` se crea por controlador/ventana. Dos suscriptores efectivos presentan cambios y reproducen LOCK/GATE para MOVE; Undo/Restart conservan sus SFX propios. Los eventos son inmutables, deduplicados y posteriores a publicación; close retira suscriptores. Las paredes no son listeners ni tienen estado mutable paralelo.
 
-## Punto 3 integrado en rama victoria
+## Recursos y audio
 
-- `GameController` confirma victoria con `VictoryEvaluator` y emite `showVictory`.
-- `FINISH` muestra nivel, movimientos y empujes; Undo y score oficiales siguen en 0.
-- `SIGUIENTE NIVEL` se habilita solo si el catálogo tiene otro nivel y el actual está finalizado.
-- `BoardPanel` pinta KeyBox, Lock activo y muros abiertos/cerrados desde `RuntimeState`.
-- No inferir victoria haciendo `boxCount == goalCount` en la vista.
+PixelAssets lee/cacha 31 PNG 32×32 del classpath; los temas alternativos transforman en memoria, con alfa preservado. SoundManager posee clips por ventana, mute y degradación controlada sin dispositivo; no es Singleton. No se emiten SFX desde paintComponent. El [manifiesto](ASSETS_REGISTRO_SHA256.csv) conserva 43 hashes; [derechos e IA](USO_IA_Y_LICENCIAS.md) siguen pendientes de evidencia del equipo. Python/Pillow no son dependencias de ejecución.
 
-## Para la funcionalidad adicional de guardado y recuperacion
+## Pruebas y defensa
 
-- `GUARDAR PARTIDA` y `CARGAR PARTIDA` son botones preparados, **no operativos**.
-- Conectar las acciones al servicio de persistencia una vez definido el contrato
-  del equipo y la semantica de restauracion de Undo/metricas/estados especiales.
-- Mostrar excepciones con un dialogo de error legible y preservar sesion actual
-  si falla la lectura de un archivo guardado.
-
-## Eventos y sonido
-
-`GameController.move` llama a `view.onMove` para `MOVED`, `PUSHED` y `BLOCKED`.
-La implementacion Swing dispara `step`, `push` o `blocked`. La logica futura puede
-emitir eventos tipados `FRAGILE`, `ICE`, `LOCK`, `GATE`, `GOAL`, `UNDO`, `VICTORY`.
-Los WAV estan en `src/desktop/resources/assets/sfx`, son cortos, mono PCM.
-No crear un `SoundManager` global en el core ni usar sonido en renderer.
-
-## Decisiones visuales
-
-- 32x32 RGBA, ampliacion entera 1x/2x/3x (`nearest-neighbor`).
-- Fondo oscuro y HUD cobrizo; piso crema y paredes terracota; objetivo dorado;
-  hielo cian; caja llave azul metalizada; dano fragile rojo.
-- Cada archivo sprite es individual; el generador Python opcional recrea solo los WAV y preserva los PNG finales.
-- `ImageIO` y `javax.sound.sampled` ya vienen con Java 17 (`java.desktop`).
-- Si el equipo migra a Maven/Gradle, registrar `src/desktop/resources` como recursos.
-
-## Preguntas de arquitectura en defensa
-
-¿Que aporta GameView? Permite pruebas sin JFrame y desacopla el controller de Swing.
-¿Que aporta PixelAssets? Cachea recursos y centraliza validacion.
-¿Como se respeta MVC? Board inmutable / motor en core, coordinacion en controller,
-pintura, teclado y audio en modulo desktop.
-¿Por que no se agrega Singleton? No existe necesidad demostrada de estado global de
-sonido. ¿Como evoluciona la UI? Adaptando DTO/renderer al contrato confirmado,
-sin hardcodear reglas nuevas ni convertir Swing en modelo.
-
-## Conectar comandos sin tocar el renderer
-
-El controlador/sesion que construya el equipo puede llamar al metodo nuevo (default)
-`GameView.configureUiCommands` en el EDT, **cuando tenga comandos realmente operativos**:
-
-```java
-view.configureUiCommands(new UiCommands(
-    () -> session.undoFiveMoves(),
-    () -> session.requestRestart(),
-    () -> persistence.save(session.snapshot()),
-    () -> persistence.restore(),
-    () -> levelFlow.nextLevel()));
-```
-
-**El fragmento es pseudocodigo de integracion**, NO son clases ni metodos actuales
-(`session`, `persistence` y `levelFlow` no existen en la implementacion actual).
-Un parametro `null` significa que el boton queda deshabilitado. Para actualizar
-la disponibilidad tras cambios de sesion, llamar otra vez a `configureUiCommands`.
-`R` y `Z` invocan el mismo callback que los botones. La UI no agrega logica de
-persistencia, Undo, restart ni progreso. Ejecutar callbacks breves en EDT y
-trasladar E/S lenta a un servicio apropiado fuera del EDT.
-
-Para sonidos de futuros eventos:
-`view.playEffect(SoundManager.Effect.GOAL)` o `.FRAGILE`, `.ICE`, `.LOCK`, `.GATE`
-cuando el motor notifique un **evento real**, no desde `paintComponent`.
+[TEST_STRATEGY](../testing/TEST_STRATEGY.md) y [auditoría RC](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md) distinguen headless, ventana nativa automatizada, audio por dispositivo y escucha humana. [Guía de clon](GUIA_INSTALACION_GITHUB_DESKTOP.md) y [README actual](../../README.md) contienen ejecución. Los roles reales permiten defender MVC/GRASP, Abstract Factory, Command y Observer; elegibilidad académica de las dos adicionales sigue OQ-10 OPEN.

@@ -6,7 +6,7 @@ El candidato incluye TXT externos, movimiento cardinal, cajas normales/Fragile/K
 
 ## Inicio rápido
 
-Se necesita un **JDK completo 17 o superior** con `java` y `javac` compatibles y un escritorio gráfico. Los scripts compilan con `--release 17`, UTF-8, `-Xlint:all -Werror`. La selección definitiva de toolchain sigue [OQ-11](docs/requirements/OPEN_QUESTIONS.md). No se necesitan Maven, Gradle ni bibliotecas externas; imágenes, WAV y niveles están en el clon. El audio depende del dispositivo disponible.
+Se necesita un **JDK completo 17 o superior** con `java` y `javac` compatibles y un escritorio gráfico. Los scripts compilan con `--release 17`, UTF-8, `-Xlint:all -Werror`. La selección definitiva de toolchain sigue [OQ-11](docs/requirements/OPEN_QUESTIONS.md). No se necesitan Maven, Gradle ni bibliotecas externas; imágenes, WAV y niveles están en el clon. El audio depende del dispositivo disponible. Observer publica cambios Lock confirmados para avisos y SFX; los muros siguen derivados por el modelo.
 
 Para revisar este candidato desde un clon nuevo:
 
@@ -107,7 +107,7 @@ bash scripts/verify-repo-readonly.sh --require-clean
 git diff --check
 ```
 
-Sólo desktop headless: `bash scripts/run-swing.sh --test` o `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. Ventana real requerida: `bash scripts/run-swing.sh --ui-test` o PowerShell `-UiTest`. El verificador documental requiere Git, Bash y Python 3.9+; no es dependencia del juego.
+Sólo desktop headless: `bash scripts/run-swing.sh --test` o `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. Ventana real requerida: `bash scripts/run-swing.sh --ui-test` o PowerShell `-UiTest`. Audio nativo opcional en Bash: `bash scripts/run-swing.sh --audio-test` (comprueba reproducción por dispositivo, sin acreditar escucha humana). El verificador documental requiere Git, Bash y Python 3.9+; no es dependencia del juego.
 
 [TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) y [auditoría RC](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md) identifican comandos, contenido probado, conteos y límites. Headless no acredita percepción visual ni escucha; QA automatizada Linux no certifica Windows, macOS ni aceptación humana.
 
