@@ -24,7 +24,7 @@ La consigna exige Java/Swing 2D, TXT externos, Undo 15/5/3, Restart, KeyBox/Lock
 |---|---|---|---|
 | **I0** | Coordinación Git + continuidad | branch remota, PR Draft, docs versionados, SHA remoto, main intacta | PUBLISHED_DRAFT_VERIFIED — PR #17; `main` intacta al corte |
 | **I1** | TXT + `RuntimeState` + movimiento | INT-01 a INT-04, identidad Fragile, terreno ICE, E03/E04/Lock; 0 regresiones | NOT_RUN |
-| **I2** | Sesión + Undo + Restart + score | INT-05/06/08, Undo 15/5/3, contadores, fórmula TEAM saturada, no duplicidad | NOT_RUN |
+| **I2** | Sesión + Undo + Restart + score | INT-05/06/08, Undo 15/5/3, contadores, fórmula TEAM saturada, no duplicidad | IN_PR17_DRAFT; LOCAL_TESTS_PASS |
 | **I3** | Swing + campaña + presentación | INT-09, GUI/EDT, HUD, audio, fin y Next, animación de rotura | NOT_RUN |
 | **I4** | QA de release y entregables | INT-01–10 ejecutados sobre HEAD combinado, Java 17, Windows/PowerShell, StarUML final, derechos, video, informe, revisión | NOT_RUN |
 
@@ -73,6 +73,10 @@ I1.A resolvió texto Swing; I1.B0 protege la identidad TXT; I1.B1 añadió runti
 - Riesgos pendientes: historia Undo/Restart/Score de Martina, animación ICE/Fragile I3, pruebas de plataformas, licencias, StarUML y entrega. La sección anterior es un checkpoint histórico, no un gate activo.
 
 Siguiente gate: comparar el HEAD de `feature/undo-restart-score` y contratos de sesión con `RuntimeState`/`GameSession`; integrar I2 en un worktree nuevo o aislado, con pruebas antes de promover al mismo PR.
+
+## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+
+I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
 
 ## I2 — avance local 04/11/2026
 

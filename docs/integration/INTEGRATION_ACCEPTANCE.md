@@ -1,6 +1,12 @@
 # Matriz de riesgos y aceptación — integración grupal
 
-`LAST_REVIEWED=2026-11-03` · `TESTED_ON_COMBINED_TREE=YES_PRECOMMIT` · `STATUS=I1_INT01_04_EXECUTED_I2_04_PENDING` · `POLICY=NO_FALSE_POSITIVE`
+## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+
+I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
+
+INT-05/06/08 tienen evidencia de pruebas locales reportadas; INT-09/10 siguen abiertos. El hotfix Fragile cubre TXT válido/renombrado, rechazo sin mutar estado y regresión de otros formatos; falta repetir GUI nativa después de publicarlo. No confundir pruebas headless con aceptación TEAM.
+
+`LAST_REVIEWED=2026-11-04` · `TESTED_ON_COMBINED_TREE=YES_LOCAL_REPORTED` · `STATUS=I1_I2_IN_PR17_DRAFT_GUI_RETEST_PENDING` · `POLICY=NO_FALSE_POSITIVE`
 
 | ID | Criterio verificable | Dependencias | Fase |
 |---|---|---|---|
@@ -15,7 +21,7 @@
 | INT-09 | Animación de Fragile sobre ICE representa trayectoria y destrucción aunque no exista en tablero final | BoardPanel, GameView, EDT | I3 |
 | INT-10 | Compilación real `--release 17` y regresión core+desktop combinada, scripts Windows/Bash, evidencia y `git diff --check` | I1-I3 completos | I4 |
 
-**Estado actual:** INT-01–04 se ejecutaron sobre el árbol combinado I1 antes del commit (blobs auditados), con 316/316 pruebas de regresión aprobadas; INT-05–10 no quedan acreditados por ello. No se reejecutó la suite después del push. Cada resultado nuevo debe registrar SHA exacto, comando, JDK/SO, fixture, salida, exit code y responsable; actualizar [estrategia de tests](../testing/TEST_STRATEGY.md) y [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) según impacto.
+**Corte histórico I1:** INT-01–04 se ejecutaron sobre el árbol combinado I1 antes del commit (blobs auditados), con 316/316 pruebas de regresión aprobadas; INT-05–10 no quedan acreditados por ello. No se reejecutó la suite después del push. Cada resultado nuevo debe registrar SHA exacto, comando, JDK/SO, fixture, salida, exit code y responsable; actualizar [estrategia de tests](../testing/TEST_STRATEGY.md) y [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) según impacto.
 
 ## Riesgos verificables
 

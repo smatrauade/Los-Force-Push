@@ -1,6 +1,10 @@
 # TODO — backlog vivo
 
-Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CURRENT_STATE.md). TEAM_ACCEPTANCE = NOT_RECORDED. Las prioridades son planificación propuesta por módulo, no nuevas decisiones de reglas ni asignaciones personales.
+Revisado 04/11/2026 para el estado de I2 publicado en PR #17; conservar cortes históricos. [Estado integrado y registro de merges](docs/continuity/CURRENT_STATE.md). TEAM_ACCEPTANCE = NOT_RECORDED. Las prioridades son planificación propuesta por módulo, no nuevas decisiones de reglas ni asignaciones personales.
+
+## Checkpoint I2 en PR #17 (04/11/2026)
+
+I1+I2 y el hotfix Fragile TXT están publicados en el Draft PR #17, hito `4d6cb612b38e5ebdb6869bb990301045044e863f`. Pruebas locales JDK17 reportadas: Undo 58, core 258, Desktop 40 y assets 44, todas PASS. Pendientes: retest GUI nativo posterior al hotfix, revisión TEAM, I3/I4 y entrega. El runner I1 valida Desktop 40/40 pero conserva la salida resumen obsoleta `DESKTOP_TOTAL=36/36`; ajustar en una ejecución validada posterior. No equivale a merge en `main`.
 
 ## Base disponible
 
@@ -11,8 +15,8 @@ Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CUR
 | IMPLEMENTED_VERIFIED / PARTIAL | Swing pixel art, menú/HUD/pausa/opciones/zoom, sprites/SFX | Desktop 16, Assets 44, UI 17 y CLI 18 históricos; callbacks pendientes no son servicios |
 | IMPLEMENTED / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET | Definición Fragile inmutable desde String/Path; contrato soportado D-020 | Fragile 41 en parser; runtime I1 publicado; OQ-06 resuelta, OQ-08 extensiones pendientes |
 | PARTIAL | 31 PNG (29 base + dos opcionales) y 12 WAV versionados | Manifiesto disponible; revisión de derechos pendiente |
-| IMPLEMENTED_LOCAL_I2 / UNPUBLISHED | Undo y Restart en GameSession y LevelProgression | Historial limitado a 15 snapshots; cada uso de Undo retrocede 5 movimientos exitosos, se permiten hasta 3 usos consecutivos, restaura el tablero, `moves` y `pushes`, y acumula `undoUsesTotal`; `Restart` restaura el estado inicial y reinicia las cuatro métricas del intento; la carga de un nivel nuevo también reinicia el contador de usos consecutivos; 58 casos ejecutados en GameSessionUndoTest |
-| IMPLEMENTED_LOCAL_I2 / UNPUBLISHED | Cálculo de score por intento y retención histórica | Puntaje inicial 1000; −1 por movimiento, −2 adicionales por cada push, −10 por cada uso de Undo; puntaje mínimo 0; fórmula `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`; `ScoreCalculator` realiza el cálculo, `LevelProgression.CompletedLevel` retiene `undoUsesTotal`, y `LevelResult` expone las estadísticas y el puntaje; `Restart` reinicia los contadores sin aplicar penalizaciones; score conservado tras `advance()` y `restart()` |
+| IN_PR17_DRAFT / TEAM_REVIEW_PENDING | Undo y Restart en GameSession y LevelProgression | Historial limitado a 15 snapshots; cada uso de Undo retrocede 5 movimientos exitosos, se permiten hasta 3 usos consecutivos, restaura el tablero, `moves` y `pushes`, y acumula `undoUsesTotal`; `Restart` restaura el estado inicial y reinicia las cuatro métricas del intento; la carga de un nivel nuevo también reinicia el contador de usos consecutivos; 58 casos ejecutados en GameSessionUndoTest |
+| IN_PR17_DRAFT / TEAM_REVIEW_PENDING | Cálculo de score por intento y retención histórica | Puntaje inicial 1000; −1 por movimiento, −2 adicionales por cada push, −10 por cada uso de Undo; puntaje mínimo 0; fórmula `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`; `ScoreCalculator` realiza el cálculo, `LevelProgression.CompletedLevel` retiene `undoUsesTotal`, y `LevelResult` expone las estadísticas y el puntaje; `Restart` reinicia los contadores sin aplicar penalizaciones; score conservado tras `advance()` y `restart()` |
 
 IMPLEMENTED_VERIFIED describe presencia contrastada en código; no una nueva ejecución funcional. [Comandos, fechas y límites de QA](docs/testing/TEST_STRATEGY.md).
 
@@ -23,11 +27,11 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 | Prioridad / objetivo interno | Estado y trabajo | Responsable por módulo | Dependencia | Criterio de aceptación / siguiente prueba |
 |---|---|---|---|---|
 | P0 / 02/11 | OPEN_DEPENDENCY: extensiones TXT e integración; Java/build global | TXT + consumidores/integración | OQ-08 extensiones; OQ-07/11 | Subconjunto soportado ya decidido D-020; obtener contrato consumidor, preservar E01/E02 y legacy/C2 |
-| P0 / 02/11 | I1_PUBLISHED_DRAFT: Fragile/hielo; límite Undo aún pendiente I2 | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
+| P0 / 02/11 | I1_I2_PUBLISHED_DRAFT: Fragile/hielo y Undo/Restart/Score integrados; QA GUI posterior al hotfix pendiente | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
 | P0 / 06/11 | IMPLEMENTED_PARTIAL: KeyBox/Lock/muros, victoria y campaña; hielo/Fragile runtime incorporados en I1; GUI/animación pendientes I3 | Model/Movement + sesión | OQ-01/07 hipótesis individuales; OQ-02/08 abiertas | Preservar identidad/resistencia; casos de cierre ocupado y E05 ejecutados en esta rama |
 | P0 / 06/11 | PARTIAL: Lock abre muros asociados por consulta derivada, no Observer GoF | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración Undo pendientes |
-| P0 / 09/11 | IMPLEMENTED_LOCAL_I2: Restart de nivel, Undo 15/5/3 y métricas oficiales | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5 verificados localmente en GameSessionUndoTest (58 casos) |
-| P0 / 09/11 | IMPLEMENTED_LOCAL_I2: victoria/progresión integradas con score oficial y retención | Sesión/niveles/score | OQ-01 hipótesis; OQ-09 ratificada | Goal/KeyBox y progresión probados; CompletedLevel retiene undoUsesTotal y LevelResult comunica fórmula TEAM; 987 y 997 probados |
+| P0 / 09/11 | IN_PR17_DRAFT: Restart de nivel, Undo 15/5/3 y métricas oficiales | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5 verificados localmente en GameSessionUndoTest (58 casos) |
+| P0 / 09/11 | IN_PR17_DRAFT: victoria/progresión integradas con score oficial y retención | Sesión/niveles/score | OQ-01 hipótesis; OQ-09 ratificada | Goal/KeyBox y progresión probados; CompletedLevel retiene undoUsesTotal y LevelResult comunica fórmula TEAM; 987 y 997 probados |
 | P0 / 10/11 | TEAM_DECISION_REQUIRED: confirmar dos adicionales elegibles y su selección | Equipo de producto/arquitectura e interfaz | OQ-10; reporte docente indirecto y E11 histórica | No computar guardar automáticamente; selector candidato con elegibilidad reportada, sin mayoría ni implementación verificadas. Confirmar dos extras y demostrar patrón real, sin imponer Strategy/Abstract Factory |
 | P1 / 12/11 | PARTIAL: conectar servicios a UiCommands/renderer | Swing e integración | Servicios operativos y DTO acordado | Disponibilidad real de botones; render de especiales, sin reglas ni resistencia inferida desde sprites |
 | P1 / 13/11 | NOT_IMPLEMENTED: aceptación integral de niveles propios | TXT/QA/Movement | Contrato y mecánicas integrados | TXT externo editado→Board→UI; error conserva estado; cada puzzle tiene secuencia solución y resistencia coherente |

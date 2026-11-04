@@ -1,6 +1,10 @@
-# Integración grupal — punto de entrada (I0 e I1)
+# Integración grupal — punto de entrada (I0, I1 e I2)
 
-`DOMAIN=TEAM_INTEGRATION_AND_REPOSITORY_CONTINUITY` · `STATUS=I0_I1_PUBLISHED_DRAFT_VERIFIED` · `CUT=2026-11-03`
+`DOMAIN=TEAM_INTEGRATION_AND_REPOSITORY_CONTINUITY` · `STATUS=I0_I1_I2_PUBLISHED_PR17_DRAFT` · `CUT=2026-11-04`
+
+## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+
+I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
 
 **Primero leer [AGENTS.md](../../AGENTS.md), el [índice de rehidratación](../continuity/REHYDRATION_INDEX.md) y [CURRENT_STATE](../continuity/CURRENT_STATE.md).** Este directorio es una *capa de coordinación de ramas*, **no** la fuente normativa de reglas ni evidencia de integración funcional completa.
 

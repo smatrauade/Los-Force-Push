@@ -1,5 +1,11 @@
 # Índice de rehidratación
 
+## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+
+I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
+
+Consultar [CURRENT_STATE](CURRENT_STATE.md), [AGENTS](../../AGENTS.md) y [plan I0–I4](../integration/TEAM_INTEGRATION_PLAN.md) para detalles. El siguiente apartado describe un corte previo a la publicación.
+
 ## I2 — integración local verificada (04/11/2026)
 
 Rama auxiliar `integration/i2-martina-stage-2026-11-03`; base `9aebe52501bb25d2ccf39781eb515c178dc11983`, fuente Martina `efd0fcd2a1423bd1d5b064458671ec9b149fd054`. Corrección e integración local verificadas; estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `LevelProgression.CompletedLevel` retiene `undoUsesTotal`, preservando score histórico tras `advance()` y `restart()`; INT-05, INT-06 e INT-08 PASS. 58 comprobaciones Undo (`GameSessionUndoTest`), core I1: 258/258, desktop 36/36 y assets 44/44 en OpenJDK 17; `bash scripts/test-integration-i2.sh` terminó exit 0. `NATIVE_GUI_QA=NOT_RUN`. La verificación documental pasó; `TEAM_ACCEPTANCE=NOT_RECORDED`; cambio de nivel reinicia métricas como comportamiento provisional. Próximo gate: revisión funcional del equipo y nueva verificación remota antes de cualquier publicación.
