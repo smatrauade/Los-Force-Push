@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## Cierre funcional PR #17 — Replay integrado (04/11/2026)
+
+`GameController` registra después de transiciones exitosas, reconcilia Undo, inicia registro nuevo tras Restart/carga/avance y verifica mundo/moves/pushes al finalizar. La traza del nivel actual se borra sólo al reemplazar exitosamente el intento; una carga fallida la conserva. `ReplayPanel` reproduce con tablero separado, controles Play/Pause/Step/Reset/Back y timer EDT con generación de cancelación; no conoce sesión, score ni progresión. Los tres temas se aplican desde el mismo `VisualThemeController` a ambos tableros. Core Replay I3.D.1 intacto. [Auditoría, evidencia y próximo gate](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## I3.D.1 — Núcleo aislado Replay/Command (04/11/2026)
 
 Este incremento incorpora `ar.edu.uade.sokoban.replay` en `src/main/java` con `MoveCommand`, `ReplayRecorder`, `ReplayTrace` y `ReplayPlayer`. Es una adaptación revisada de la **implementación individual** de `impaciencia`, no una contribución TEAM ratificada ni una fusión de esa rama. Encapsula direcciones exitosas en comandos inmutables y los reproduce con una instancia independiente de `RuntimeMovementEngine` desde `RuntimeState` inicial. No cambia `GameSession`, Undo 15/5/3, el score acordado, `GameController`, `GameView` ni Swing. No hay nuevo botón de Replay en I3.D.1.

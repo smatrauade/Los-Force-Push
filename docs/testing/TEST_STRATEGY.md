@@ -1,5 +1,9 @@
 # Estrategia de pruebas y evidencia experimental
 
+## RC PR17 — incremento Replay (04/11/2026)
+
+Codex, Ubuntu/Linux, pareja java/javac 17.0.20.1, base `b73b480` + delta de este incremento. `bash scripts/test-integration-i2.sh`: exit 0; Undo 58, core 258, Desktop 40, campaña 41, temas 7, animación 14, assets 44 conservados; nuevos `ReplayControllerTest` 8 y `ReplayPresentationTest` 8 PASS. Pruebas de timer EDT real y callbacks obsoletos son headless; no equivalen a ventana ni escucha. Runner Bash/PowerShell conecta las dos nuevas suites con propagación de exit. El núcleo no se modifica; baseline `bash scripts/test-replay-i3d1.sh`: 20 PASS, exit 0. [Evidencia progresiva y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## I3.D.1 — Replay/Command puro, sin GUI (04/11/2026)
 
 Ejecutar `bash scripts/test-replay-i3d1.sh` desde el repositorio con OpenJDK 17. El runner compila el **core completo** y la nueva prueba con `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`, luego ejecuta `ReplayIntegrationTest`. Suite propia: **20 comprobaciones** (Command, bloqueo, ICE, Fragile, KeyBox/Lock/DynamicWall, Undo 5, Restart, 10.001 operaciones, trazas divergentes/alteradas, métricas, inmutabilidad, cursor aislado y reset). Exigir `REPLAY RESULT: 20 PASS, 0 FAIL`, exit 0 y preservar HEAD/worktree.

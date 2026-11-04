@@ -2,6 +2,8 @@ package ar.edu.uade.sokoban.desktop;
 
 import java.awt.Component;
 import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Applies one visual family to the board, the menu art and the Swing tree.
@@ -10,14 +12,18 @@ import java.util.Objects;
  */
 final class VisualThemeController {
     private final Component root;
-    private final BoardPanel board;
+    private final List<BoardPanel> boards;
     private final PixelAssets menuArt;
     private final VisualThemeApplier applier = new VisualThemeApplier();
     private VisualThemeFactory current = VisualThemes.original();
 
-    VisualThemeController(Component root, BoardPanel board, PixelAssets menuArt) {
+    VisualThemeController(Component root, BoardPanel board, PixelAssets menuArt,
+            BoardPanel... additionalBoards) {
         this.root = Objects.requireNonNull(root, "root");
-        this.board = Objects.requireNonNull(board, "board");
+        List<BoardPanel> targets = new ArrayList<>();
+        targets.add(Objects.requireNonNull(board, "board"));
+        targets.addAll(List.of(additionalBoards));
+        boards = List.copyOf(targets);
         this.menuArt = Objects.requireNonNull(menuArt, "menuArt");
     }
 
@@ -34,7 +40,7 @@ final class VisualThemeController {
             return false;
         }
         current = theme;
-        board.setTheme(theme);
+        boards.forEach(board -> board.setTheme(theme));
         menuArt.setTheme(theme);
         applier.apply(root, theme);
         root.repaint();

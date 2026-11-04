@@ -1,5 +1,14 @@
 # Responsabilidades candidatas
 
+## Roles efectivos Replay — 04/11/2026
+
+- `GameController`: registra éxitos, reconcilia intentos y verifica la traza al ganar; no reproduce sobre la sesión.
+- `ReplayRecorder`/`ReplayTrace`/`MoveCommand`/`ReplayPlayer`: historial acotado, valor inmutable, acción y cursor aislado respectivamente; core I3.D.1 conservado.
+- `ReplayPanel`: controles, tablero independiente y timer EDT cancelable; sin score/audio/progresión.
+- `VisualThemeController`: un cambio de familia para tablero real, Replay, menú y árbol Swing.
+
+[Auditoría](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). `UiCommands` son callbacks; el Command defendible es `MoveCommand`.
+
 Roles candidatos al 2026-10-08; la implementación integrada al 28/10 se distingue en la tabla posterior. Aplicar GRASP Expert/Creator/Controller, bajo acoplamiento y alta cohesión antes de adoptar un patrón.
 
 | Rol | Responsabilidad y colaboradores | Límite |

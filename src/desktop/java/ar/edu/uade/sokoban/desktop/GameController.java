@@ -7,6 +7,8 @@ import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MoveResult;
 import ar.edu.uade.sokoban.movement.RuntimeMoveResult;
 import ar.edu.uade.sokoban.movement.RuntimeState;
+import ar.edu.uade.sokoban.replay.ReplayRecorder;
+import ar.edu.uade.sokoban.replay.ReplayTrace;
 import ar.edu.uade.sokoban.session.GameSession;
 import ar.edu.uade.sokoban.session.LevelCatalog;
 import ar.edu.uade.sokoban.session.LevelProgression;
@@ -15,12 +17,15 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 
 /** EDT coordinator; progression owns world state, victory and catalog advance. */
 public final class GameController {
     private final GameView view;
     private final ScoreCalculator scoreCalculator = new ScoreCalculator();
     private LevelProgression game;
+    private ReplayRecorder recorder;
+    private ReplayTrace completedReplay;
 
     public GameController(GameView view) {
         this.view = Objects.requireNonNull(view, "view");
@@ -38,6 +43,7 @@ public final class GameController {
     public void loadCatalog(LevelCatalog catalog) {
         try {
             game = new LevelProgression(catalog);
+            startRecording();
             publish();
         } catch (IOException | IllegalArgumentException | SecurityException failure) {
             view.showLoadError("No se pudo cargar el TXT: " + failure.getMessage());
@@ -54,6 +60,7 @@ public final class GameController {
         if (result.kind() == MoveResult.Kind.BLOCKED) {
             return;
         }
+        recorder.record(direction, result);
         if (!result.lockChanges().isEmpty()) {
             boolean opened = result.lockChanges().stream().anyMatch(RuntimeMoveResult.LockChange::active);
             view.playEffect(opened ? SoundManager.Effect.LOCK : SoundManager.Effect.GATE);
@@ -82,6 +89,9 @@ public final class GameController {
         }
         if (game.victory().won()) {
             game.finish().orElseThrow();
+            GameSession.Metrics metrics = game.metrics();
+            completedReplay = recorder.verified(game.currentState(), metrics.moves(),
+                    metrics.pushes()).orElse(null);
             publishCommands();
             view.showVictory(getLevelResult());
         }
@@ -90,6 +100,7 @@ public final class GameController {
     public void restart() {
         if (game != null && !game.isFinalized()) {
             game.restart();
+            startRecording();
             publish();
             view.playEffect(SoundManager.Effect.RESTART);
         }
@@ -97,6 +108,7 @@ public final class GameController {
 
     public void undo() {
         if (game != null && game.canUndo() && game.undo()) {
+            recorder.undoFive();
             publish();
             view.playEffect(SoundManager.Effect.UNDO);
         }
@@ -112,6 +124,16 @@ public final class GameController {
 
     public List<LevelProgression.CompletedLevel> results() {
         return game == null ? List.of() : game.results();
+    }
+
+    /** Only the current completed attempt is offered; playback owns no live session. */
+    public Optional<ReplayTrace> completedReplay() {
+        return Optional.ofNullable(completedReplay);
+    }
+
+    private void startRecording() {
+        recorder = new ReplayRecorder(game.currentState(), game.levelId());
+        completedReplay = null;
     }
 
     public LevelResult getLevelResult() {
@@ -137,6 +159,7 @@ public final class GameController {
         }
         LevelProgression.AdvanceResult result = game.advance();
         if (result.status() == LevelProgression.AdvanceStatus.ADVANCED) {
+            startRecording();
             publish();
         } else if (result.status() == LevelProgression.AdvanceStatus.LOAD_FAILED) {
             view.showLoadError("No se pudo cargar el siguiente nivel: " + result.diagnostic());
@@ -151,6 +174,7 @@ public final class GameController {
     }
 
     private void publishCommands() {
+        view.configureReplay(completedReplay);
         view.configureUiCommands(new UiCommands(game != null && game.canUndo() ? this::undo : null,
                 game != null && !game.isFinalized() ? this::restart : null,
                 null, null,

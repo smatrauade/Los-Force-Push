@@ -1,5 +1,9 @@
 # Arquitectura: implementación y candidato
 
+## Replay integrado — 04/11/2026
+
+El Command existente se coordina con `GameController`: `ReplayRecorder` conserva acciones exitosas y `ReplayTrace` se ofrece sólo tras verificar estado final y métricas. No es autoridad del mundo. `ReplayPanel` invoca `ReplayPlayer` sobre un tablero independiente; no recibe controlador ni sesión. Play/Pause/Step/Reset/Back y navegación invalidan callbacks obsoletos por generación. El mismo coordinador de Abstract Factory aplica temas a ambos tableros. Alternativa descartada: reproducir sobre `GameSession`, que alteraría score/historial/progresión. Coste: verificación O(n), límite 10.000; overflow deshabilita sólo Replay. [Pruebas y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## I3.D.1 — Command de reproducción determinista (04/11/2026)
 
 **Problema:** preservar una secuencia reproducible sin mutar la sesión oficial ni tratar Undo/Memento como una inversión física de movimientos. **Elección individual adaptada:** `MoveCommand` encapsula una `Direction` y su operación `execute(engine, state)`; `ReplayRecorder` almacena comandos exitosos, `ReplayTrace` congela el intento y `ReplayPlayer` invoca esas acciones sobre su **propio** `RuntimeMovementEngine` y `RuntimeState` inmutable. Es un Command concreto sin interfaz ceremonial cuando existe un solo tipo de acción. El receptor se suministra por contexto de reproducción, nunca se captura la `GameSession` real. No hay listener Observer, reloj Swing, persistencia, score alternativo ni motor de movimiento duplicado.

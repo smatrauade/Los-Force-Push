@@ -4,6 +4,7 @@ import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MoveResult;
 import ar.edu.uade.sokoban.session.LevelCatalog;
+import ar.edu.uade.sokoban.replay.ReplayTrace;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -92,14 +93,16 @@ public final class SwingApplication {
         private static final String OPTIONS = "OPTIONS";
         private static final String HELP = "HELP";
         private static final String FINISH = "FINISH";
+        private static final String REPLAY = "REPLAY";
 
         private final CardLayout layout = new CardLayout();
         private final JPanel cards = new JPanel(layout);
         private static final int SLIDE_MILLIS_PER_CELL = 240;
         private final BoardPanel board = new BoardPanel();
+        private final ReplayPanel replayPanel = new ReplayPanel(this::backFromReplay);
         private final transient PixelAssets menuArt = new PixelAssets();
         private final transient VisualThemeController visualThemes =
-                new VisualThemeController(cards, board, menuArt);
+                new VisualThemeController(cards, board, menuArt, replayPanel.board());
         private final transient SoundManager audio = new SoundManager();
         private final JLabel levelText = label("SIN NIVEL", PixelTheme.BODY);
         private final JLabel movesText = label("0000", PixelTheme.TITLE);
@@ -113,6 +116,8 @@ public final class SwingApplication {
         private final JButton saveButton = PixelTheme.button("GUARDAR PARTIDA");
         private final JButton loadSaveButton = PixelTheme.button("CARGAR PARTIDA");
         private final JButton nextButton = PixelTheme.button("SIGUIENTE NIVEL");
+        private final JButton replayButton = PixelTheme.button("VER REPLAY");
+        private transient ReplayTrace replayTrace;
         private final JComboBox<VisualThemeFactory> themeSelector =
                 new JComboBox<>(VisualThemes.all().toArray(VisualThemeFactory[]::new));
         private final JCheckBox soundToggle = new JCheckBox("ACTIVAR EFECTOS DE SONIDO", true);
@@ -143,6 +148,8 @@ public final class SwingApplication {
             cards.add(buildOptions(), OPTIONS);
             cards.add(buildHelp(), HELP);
             cards.add(buildFinish(), FINISH);
+            cards.add(replayPanel, REPLAY);
+            replayButton.setEnabled(false);
             add(cards);
             continueButton.setEnabled(false);
             restartButton.setEnabled(false);
@@ -187,6 +194,9 @@ public final class SwingApplication {
         }
 
         private void showScreen(String name) {
+            if (!REPLAY.equals(name)) {
+                replayPanel.close();
+            }
             if (!GAME.equals(name)) {
                 board.cancelAnimation();
                 victoryGate.clear();
@@ -197,6 +207,7 @@ public final class SwingApplication {
         }
 
         private void stopPresentation() {
+            replayPanel.close();
             board.cancelAnimation();
             victoryGate.clear();
         }
@@ -475,6 +486,13 @@ public final class SwingApplication {
             stack.add(Box.createVerticalStrut(20));
             nextButton.addActionListener(event -> runCommand(commands.nextLevel()));
             addStackButton(stack, nextButton);
+            replayButton.addActionListener(event -> {
+                if (FINISH.equals(active) && replayTrace != null && replayPanel.open(replayTrace)) {
+                    replayPanel.board().setScale(board.getScale());
+                    showScreen(REPLAY);
+                }
+            });
+            addStackButton(stack, replayButton);
             JButton menu = PixelTheme.button("VOLVER AL MENU");
             menu.addActionListener(event -> navigate(MENU));
             addStackButton(stack, menu);
@@ -485,6 +503,16 @@ public final class SwingApplication {
         private void openOptions(String origin) {
             optionsReturn = origin;
             navigate(OPTIONS);
+        }
+
+        private void backFromReplay() {
+            showScreen(FINISH);
+        }
+
+        @Override
+        public void configureReplay(ReplayTrace trace) {
+            replayTrace = trace;
+            replayButton.setEnabled(trace != null);
         }
 
         private void startDemo() {
@@ -561,6 +589,8 @@ public final class SwingApplication {
                     showScreen(GAME);
                 } else if (OPTIONS.equals(active)) {
                     showScreen(optionsReturn);
+                } else if (REPLAY.equals(active)) {
+                    backFromReplay();
                 } else if (!MENU.equals(active)) {
                     showScreen(MENU);
                 }

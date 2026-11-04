@@ -1,5 +1,9 @@
 # Integración grupal — punto de entrada (I0, I1, I2 e I3 local)
 
+## RC funcional — 04/11/2026
+
+[Auditoría funcional PR17](PR17_FUNCTIONAL_RC_2026-11-04.md): diagnóstico previo, Replay conectado y pruebas nuevas, incrementos de hardening y gates de publicación. Las notas I3 local siguientes son históricas; Git define qué está publicado.
+
 `DOMAIN=TEAM_INTEGRATION_AND_REPOSITORY_CONTINUITY` · `STATUS=I0_I1_I2_PUBLISHED_PR17_DRAFT_I3_LOCAL` · `CUT=2026-11-04`
 
 ## I3 local — niveles distribuidos, selector visual y animación ICE/Fragile (04/11/2026)

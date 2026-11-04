@@ -1,5 +1,9 @@
 # Integración compartida del TPO — plan operativo I0–I4
 
+## Avance RC PR17 — 04/11/2026
+
+I3.D.2/I3.D.3 implementados: registro del controlador y pantalla Replay independiente con cancelación EDT. Nueva evidencia propia 8 + 8 escenarios; reglas y núcleo I3.D.1 preservados. Continuar con campaña/hardening y gate final descritos en [auditoría RC](PR17_FUNCTIONAL_RC_2026-11-04.md). No hay aprobación TEAM ni autorización de Ready/merge.
+
 `LAST_REVIEWED=2026-11-03` · `DOMAIN=GIT_TEAM_INTEGRATION_COORDINATION` · `INTEGRATION_BRANCH=integration/tpo-unificado-2026-11-03` · `TARGET=main` · `REVIEW_MODE=DRAFT` · `MERGE_AUTHORIZATION=NOT_GRANTED`
 
 ## Intención y fuente de verdad

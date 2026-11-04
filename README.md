@@ -1,5 +1,9 @@
 # Los Force Push — Sokoban
 
+## Candidato funcional PR #17 — 04/11/2026
+
+Replay está conectado al controlador y disponible desde el resultado del nivel con Play/Pause/Step/Reset/Back, tablero independiente y timer EDT cancelable. Registra sólo éxitos y reconcilia Undo/Restart/cargas/Next; verifica mundo completo y métricas antes de ofrecerlo. Las notas antiguas de I2 local y Replay pendiente quedan supersedidas para esta rama. [Auditoría y gates](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
 **Estado:** la rama auxiliar I2 combina ICE/Fragile, KeyBox/Lock, victoria y progresión con Undo, Restart y score; está en integración local y requiere validación y revisión. El TPO está incompleto y la aceptación del código por el equipo no está registrada.

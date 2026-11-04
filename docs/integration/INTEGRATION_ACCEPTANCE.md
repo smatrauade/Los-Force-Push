@@ -1,5 +1,9 @@
 # Matriz de riesgos y aceptación — integración grupal
 
+## RC PR17 — Replay (04/11/2026)
+
+Replay controlador/Swing con 8 + 8 escenarios nuevos PASS, además de la regresión preservada. Se verifica mundo completo, movimientos y empujes al ganar; reproducción separada de sesión/score/progresión, timers cancelables y tres temas compartidos. OQ-10, licencias, revisión TEAM, Windows y QA humana siguen pendientes. [Registro de gates](PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## I3.C — animación ICE/Fragile (04/11/2026)
 
 Se incorporó `BoxAnimation` como proyección de presentación de `RuntimeMoveResult` y `GameView.animateBox` como hook default. `GameController` publica primero el runtime final, emite como máximo un `ICE` por deslizamiento E03 y un `FRAGILE` por rotura, y luego anima; no recalcula física ni usa `Board` para el movimiento. `BoardPanel` sigue el `boxPath` autoritativo, suprime la caja final durante la trayectoria, representa la última celda de Fragile seguida de `box_broken` y ausencia, y usa un `javax.swing.Timer` no bloqueante con cancelación por generación. `SwingApplication` difiere FINISH solo mientras el tablero anima; las sondas headless reciben `showVictory` y el score exacto al volver de `move`.

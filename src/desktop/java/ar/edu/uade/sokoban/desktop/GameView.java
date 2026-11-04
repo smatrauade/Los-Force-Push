@@ -2,6 +2,7 @@ package ar.edu.uade.sokoban.desktop;
 
 import ar.edu.uade.sokoban.level.Board;
 import ar.edu.uade.sokoban.movement.MoveResult;
+import ar.edu.uade.sokoban.replay.ReplayTrace;
 import java.util.List;
 
 /** Boundary for Swing and screen-free integration tests. */
@@ -23,6 +24,9 @@ public interface GameView {
 
     /** Presentation-only callbacks injected when companion modules exist. */
     default void configureUiCommands(UiCommands commands) { }
+
+    /** Null clears availability; only complete, verified attempts may be offered. */
+    default void configureReplay(ReplayTrace trace) { }
 
     /** Allows future gameplay events to request sound without owning audio devices. */
     default void playEffect(SoundManager.Effect effect) { }

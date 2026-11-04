@@ -1,5 +1,9 @@
 # Matriz viva de trazabilidad
 
+## RC PR17 — Replay de extremo a extremo (04/11/2026)
+
+RF-12 técnico: `GameController` → `ReplayRecorder` → `ReplayTrace` verificada → `ReplayPanel`/`ReplayPlayer`; Command existente, sin modificar sesión. `ReplayControllerTest` cubre éxito/bloqueo, Undo, Restart, carga/Next atómicos, ICE/Fragile/KeyBox y overflow sin perder victoria (8 escenarios). `ReplayPresentationTest` cubre cursor/final, Reset, Pause, cancelación/cierre/reapertura, temas/zoom, traza inválida, EDT y timer real sin tocar resultado (8 escenarios). RF-07/08/09 conservan sus reglas y regresión. RF-12 académico sigue OPEN por OQ-10; los PASS técnicos no ratifican elegibilidad. [Auditoría completa](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## I3.C — animación ICE/Fragile, 04/11/2026
 
 Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03`; no está en `main` ni acredita aceptación TEAM. `BoxAnimation` es una proyección inmutable de `RuntimeMoveResult`; `GameController` publica el runtime final antes de solicitar frames y emite `ICE`/`FRAGILE` fuera de `paintComponent`; `BoardPanel` sólo dibuja el `boxPath` autoritativo y `SwingApplication` difiere FINISH mientras anima. No se duplica física, estado ni assets.

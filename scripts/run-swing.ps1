@@ -86,6 +86,12 @@ try {
         & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.AnimationPresentationTest' (Join-Path $root 'src/desktop/resources/levels') (Join-Path $root 'src/desktop/resources/assets/sprites')
         if ($LASTEXITCODE -ne 0) { throw 'Animation presentation tests failed.' }
     }
+    if ($Test) {
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReplayControllerTest' (Join-Path $root 'src/desktop/resources/levels')
+        if ($LASTEXITCODE -ne 0) { throw 'ReplayControllerTest failed.' }
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.ReplayPresentationTest' (Join-Path $root 'src/desktop/resources/levels')
+        if ($LASTEXITCODE -ne 0) { throw 'ReplayPresentationTest failed.' }
+    }
     $exitCode = 0
 } catch {
     Write-Error -Message $_.Exception.Message -ErrorAction Continue
