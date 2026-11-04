@@ -1,8 +1,8 @@
 # Índice documental
 
-## Estado técnico RC PR17 — 04/11/2026
+## Versión integrada en main — 04/11/2026
 
-Punto de entrada al [candidato funcional y sus gates](integration/PR17_FUNCTIONAL_RC_2026-11-04.md): Replay Swing, campaña de cinco TXT, Observer de presentación y regresión Java 17. [README de ejecución](../README.md), [TODO vigente](../TODO.md), [arquitectura](architecture/ARCHITECTURE.md) y [contrato entre módulos](punto5/INTEGRACION_EQUIPO.md). Las secciones fechadas siguientes describen hitos anteriores; sus pendientes de gameplay no prevalecen sobre este candidato. El PR #17 se fusionó a main en `6e884226054284981486efb6bef65c43bc5c9fda`; TEAM_ACCEPTANCE sigue NOT_RECORDED.
+Punto de entrada al [candidato funcional y sus gates](integration/PR17_FUNCTIONAL_RC_2026-11-04.md): Replay Swing, campaña de cinco TXT, Observer de presentación y regresión Java 17. [README de ejecución](../README.md), [TODO vigente](../TODO.md), [arquitectura](architecture/ARCHITECTURE.md) y [contrato entre módulos](punto5/INTEGRACION_EQUIPO.md). Las secciones fechadas siguientes describen hitos anteriores; sus pendientes de gameplay no prevalecen sobre este candidato. El PR #17 se fusionó a main en `6e884226054284981486efb6bef65c43bc5c9fda`; las decisiones del grupo se conservan en su registro y la puesta en común permitirá revisar la versión integrada.
 
 Revisado 29/10/2026. Empezar por [AGENTS](../AGENTS.md) → [rehidratación](continuity/REHYDRATION_INDEX.md) → [CURRENT_STATE](continuity/CURRENT_STATE.md). La reconciliación del PR #13 ya está integrada; no deducir el HEAD de fechas o cápsulas, contrastarlo con Git/GitHub.
 

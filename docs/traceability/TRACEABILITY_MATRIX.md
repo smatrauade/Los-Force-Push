@@ -2,7 +2,7 @@
 
 ## Estado vigente RF-01–RF-12 y RT-01–RT-04 — 04/11/2026
 
-La [matriz del candidato PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md#matriz-de-requisitos-del-candidato) clasifica cada requisito con código/evidencia y límites. RF-01–RF-10 y RT-01 tienen verificación técnica en los contratos soportados; RF-11/12 y RT-02/03/04 permanecen PARTIAL por derechos, elegibilidad, revisión y entregables externos. No confundir VERIFIED técnico con aceptación TEAM ni elevar las hipótesis OQ a norma. Los apartados fechados siguientes conservan la historia.
+La [matriz del candidato PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md#matriz-de-requisitos-del-candidato) clasifica cada requisito con código/evidencia y límites. RF-01–RF-10 y RT-01 tienen verificación técnica en los contratos soportados; RF-11/12 y RT-02/03/04 permanecen PARTIAL por derechos, elegibilidad, revisión y entregables externos. VERIFIED refiere a evidencia técnica; las decisiones grupales y los detalles OQ mantienen el alcance de sus fuentes, sin elevar hipótesis a norma. Los apartados fechados siguientes conservan la historia.
 
 ## Victoria al cargar — 04/11/2026
 

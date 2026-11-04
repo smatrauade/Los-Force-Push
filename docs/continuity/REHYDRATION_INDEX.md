@@ -1,6 +1,6 @@
 # Índice de rehidratación
 
-El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD vigente. Los cortes I0–I3 siguientes son históricos. TEAM_ACCEPTANCE=NOT_RECORDED.
+El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD vigente. Los cortes I0–I3 siguientes son históricos. Las decisiones grupales registradas y la coordinación posterior de la versión integrada tienen alcances distintos.
 
 [Guía de transferencia al equipo](../integration/PR17_TEAM_HANDOFF.md): ejecución, arquitectura, patrones y próximos pasos.
 

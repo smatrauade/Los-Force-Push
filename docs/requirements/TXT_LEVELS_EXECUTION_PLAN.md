@@ -1,5 +1,7 @@
 # Los Force Push — Plan de ejecución TXT/niveles y promoción única
 
+**Documento histórico del alcance TXT:** los estados y planes siguientes describen ese corte, no el runtime integrado posteriormente en `main`. Para la implementación actual, consultar la [auditoría funcional](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 **Estado técnico:** `AUTONOMOUS_SCOPE_COMPLETE / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET / NON_PLAYABLE_DEFINITION / RUNTIME_PENDING_TEAM`. El contrato TXT soportado se adopta expresamente en D-020; OQ-06 resuelta, OQ-08 parcialmente resuelta. El plan inicial y sus checkpoints históricos se conservan. Git/GitHub determina publicación, revisión e integración; no se anticipa un merge. **Dominio único:** `SOKOBAN_TXT_LEVEL_DEFINITION_AND_VALIDATION`.
 
 **Referencia inicial histórica:** repositorio público `smatrauade/Los-Force-Push`, `main=24bb3f0d711dd15c79a078b09ec92134a7a600b2`, consultado el 29/10/2026. La rama usada es `feat/txt-levels-release-2026-10-29`; el [PR #15](https://github.com/smatrauade/Los-Force-Push/pull/15) ya existe. Revalidar HEAD, PR y worktrees antes de cada operación. **Política:** varios hitos comprobables en la misma rama; **una sola promoción funcional**, preferentemente squash, con autorización propia y revisión. El cierre semántico sólo permite actualizar el Draft existente; no Ready ni merge. Consultar su estado real en GitHub, sin inferirlo de este checkpoint.

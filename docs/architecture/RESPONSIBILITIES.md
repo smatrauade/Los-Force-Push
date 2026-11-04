@@ -1,4 +1,6 @@
-# Responsabilidades candidatas
+# Responsabilidades de la arquitectura
+
+Los roles efectivos del 04/11 corresponden al juego integrado en `main`. Las tablas de propuestas anteriores se conservan como exploraciones históricas, no como sustituto del código actual.
 
 ## Observer de presentación — 04/11/2026
 

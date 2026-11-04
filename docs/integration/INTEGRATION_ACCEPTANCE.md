@@ -1,5 +1,7 @@
 # Matriz de riesgos y aceptación — integración grupal
 
+El PR #17 está integrado en `main`. Las evidencias y estados fechados siguientes describen sus respectivos cortes; consultar [TODO](../../TODO.md) para la agenda posterior y [decisiones](../decisions/DECISION_LOG.md) para los acuerdos registrados.
+
 ## Observer de presentación — 04/11/2026
 
 `LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](PR17_FUNCTIONAL_RC_2026-11-04.md).

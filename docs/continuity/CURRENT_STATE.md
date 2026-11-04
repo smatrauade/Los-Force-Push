@@ -1,5 +1,7 @@
 # Estado vivo — Los Force Push
 
+**Estado actual:** el PR #17 y el cierre documental posterior están integrados en `main`. El equipo dispone de la versión común para recorrerla, preparar la defensa y decidir eventuales ajustes. Las decisiones grupales documentadas mantienen su alcance. Los apartados fechados siguientes son checkpoints históricos; consultar GitHub para el HEAD actual y [TODO](../../TODO.md) para pendientes.
+
 ## UML PR #17 — PlantUML verificado (04/11/2026)
 
 Diagramación del candidato funcional congelado `ffa27f9`: [nueve fuentes PlantUML y PNG oficiales](../architecture/uml/pr17-rc-ffa27f9/README.md). Validación del motor PlantUML registrada en `RENDER_GATE.json`; este incremento solo documenta UML, no vuelve a ejecutar las pruebas Java ni modifica reglas TEAM. El formato StarUML exigido en la consigna conserva gate académico pendiente.

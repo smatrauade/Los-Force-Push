@@ -1,12 +1,10 @@
 # Los Force Push — Sokoban
 
-## UML PR #17 — PlantUML verificado (04/11/2026)
+Los Force Push es un Sokoban 2D en **Java/Swing** para el TPO de Procesos de Desarrollo de Software (UADE). La versión integrada en `main` reúne aportes del equipo sobre niveles, mecánicas, sesión y presentación; las reglas y decisiones están en el [registro del proyecto](docs/decisions/DECISION_LOG.md). La [guía para el equipo](docs/integration/PR17_TEAM_HANDOFF.md) facilita recorrer la versión común y preparar la puesta en común y la defensa.
 
-La arquitectura del candidato está documentada en [nueve diagramas editables PlantUML y PNG](docs/architecture/uml/pr17-rc-ffa27f9/README.md). Se verificó la generación PNG con el motor oficial PlantUML 1.2026.9. Esto facilita revisión y presentación, pero **no acredita automáticamente** el archivo StarUML solicitado por la consigna.
+El juego incluye TXT externos, cinco niveles, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría técnica y pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
 
-Sokoban 2D en **Java/Swing** para el TPO de Procesos de Desarrollo de Software (UADE). Esta rama integra los aportes de movimiento, cajas especiales, cerrojos, sesión y presentación del equipo. Consultar el [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) para conocer el estado de integración; la aceptación del equipo sigue pendiente. [Guía para el equipo](docs/integration/PR17_TEAM_HANDOFF.md).
-
-El candidato incluye TXT externos, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score TEAM, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría y gates pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+La arquitectura cuenta con [nueve diagramas editables PlantUML y PNG](docs/architecture/uml/pr17-rc-ffa27f9/README.md), verificados con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
 
 ## Inicio rápido
 

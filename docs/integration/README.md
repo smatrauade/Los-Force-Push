@@ -1,12 +1,12 @@
-# Integración grupal — punto de entrada (I0, I1, I2 e I3 local)
+# Integración grupal — punto de entrada
 
-El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD vigente. Los cortes I0–I3 siguientes son históricos. TEAM_ACCEPTANCE=NOT_RECORDED.
+El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD vigente. Los cortes I0–I3 siguientes son históricos; las decisiones grupales registradas mantienen su alcance.
 
 [Guía vigente para el equipo](PR17_TEAM_HANDOFF.md). Los checkpoints y planes fechados de este documento describen su momento; consultar GitHub para el estado actual del PR y main.
 
 ## Freeze funcional RC PR17 — 04/11/2026
 
-[Auditoría de release](PR17_FUNCTIONAL_RC_2026-11-04.md) clasifica RF/RT, patrones, resultados y límites sobre el código `0bbc60e`. El software está listo para revisión con gates externos pendientes; revisar estado remoto antes de publicar. El estado del PR se consulta en GitHub; la revisión TEAM sigue pendiente. Las secciones siguientes conservan la evolución de integración.
+[Auditoría de release](PR17_FUNCTIONAL_RC_2026-11-04.md) clasifica RF/RT, patrones, resultados y límites sobre el código `0bbc60e`. El software está integrado; la puesta en común de la versión completa y los entregables externos continúan en agenda. Las secciones siguientes conservan la evolución de integración.
 
 ## RC funcional — 04/11/2026
 

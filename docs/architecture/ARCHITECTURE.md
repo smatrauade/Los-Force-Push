@@ -1,4 +1,6 @@
-# Arquitectura: implementación y candidato
+# Arquitectura del juego integrado
+
+Las secciones del 04/11 describen componentes integrados en `main`; las propuestas y cortes anteriores conservan su fecha y alcance como historia del diseño.
 
 ## Observer de presentación — 04/11/2026
 

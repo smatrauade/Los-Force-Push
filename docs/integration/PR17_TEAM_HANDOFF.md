@@ -1,6 +1,8 @@
 # Guía de transferencia — Sokoban PR #17
 
-Este árbol reúne la integración del [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17). Consultar GitHub para su estado de merge. La historia preserva las contribuciones de `victoria` (KeyBox/Lock y progresión), `Objetivo2` (ICE/Fragile) y `feature/undo-restart-score` (Undo/Restart/score). Los temas, Replay y Observer incluyen adaptaciones selectivas de `impaciencia`, rama individual divergente; no atribuirla globalmente al equipo. No hay aceptación TEAM registrada.
+La versión integrada en `main` reúne los aportes del equipo y las decisiones documentadas en el [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17). Esta guía sirve para ejecutar la campaña, recorrer las responsabilidades y preparar la puesta en común, el ensayo y los ajustes que surjan.
+
+La historia preserva las contribuciones de `victoria` (KeyBox/Lock y progresión), `Objetivo2` (ICE/Fragile) y `feature/undo-restart-score` (Undo/Restart/score). Los temas, Replay y Observer incluyen adaptaciones selectivas de `impaciencia`, rama individual divergente; no atribuirla globalmente al equipo.
 
 ## Ejecutar y recorrer la campaña
 

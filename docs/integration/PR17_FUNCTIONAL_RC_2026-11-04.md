@@ -1,5 +1,7 @@
 # Auditoría funcional y candidato del PR #17
 
+**Contexto actual:** el PR #17 fue integrado en `main`. Esta auditoría conserva el diagnóstico, resultados y estados del corte en que se ejecutaron; la puesta en común y los entregables externos siguen en la [agenda vigente](../../TODO.md).
+
 `AS_OF=2026-11-04` · `DOMAIN=SOKOBAN_PR17_FUNCTIONAL_RELEASE_CANDIDATE` · `STATUS=SOFTWARE_RC_PENDING_EXTERNAL_GATES`.
 
 Base auditada: `b73b4807f9387b94e7aef9c18c7e1fb45401137d`. Base del PR/main: `f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`. GitHub y `git ls-remote` confirmaron los seis HEAD indicados por la solicitud; PR [#17](https://github.com/smatrauade/Los-Force-Push/pull/17) abierto/Draft, 24 commits, 89 rutas, sin reviews. Cuenta autenticada con push, repositorio público, default `main`. Sandbox independiente, sin modificar los worktrees existentes. Tres ramas fuente son ancestros del PR; `impaciencia` diverge (26/12 commits exclusivos), sólo referencia individual.
