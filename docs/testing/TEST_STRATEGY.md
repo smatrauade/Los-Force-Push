@@ -1,5 +1,9 @@
 # Estrategia de pruebas y evidencia experimental
 
+## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
+
+Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
+
 ## Incremento victoria — 2026-11-01
 
 Rama `victoria`. Core `java.base`, desktop `java.base,java.desktop`, Temurin 17.0.16, `--release 17`. Comandos: `powershell -NoProfile -File ./scripts/test-level-loading.ps1 -IncludeMovement` y `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. Resultados: Loading 40, Movement 31, Extended 26, DynamicWorld 6, Completion 36, C2 32, Fragile 41, Desktop 16, VisualAssets 44, todos PASS/exit 0. GUI manual y audio audible: NOT_RUN. No cierra OQ ni TEAM_ACCEPTANCE.
