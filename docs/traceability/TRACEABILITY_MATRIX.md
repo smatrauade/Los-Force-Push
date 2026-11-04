@@ -1,5 +1,9 @@
 # Matriz viva de trazabilidad
 
+## Victoria al cargar — 04/11/2026
+
+Un TXT ya resuelto se finaliza al cargar o avanzar, incluso sin movimientos válidos; score 1000 y Replay vacío verificado. `ControllerBoundaryTest` agrega 3 escenarios, preserva las suites anteriores y demuestra el fallo previo (exit 1) y la corrección (exit 0). No cambia `VictoryEvaluator` ni la sesión. [Registro](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## Observer de presentación — 04/11/2026
 
 `LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

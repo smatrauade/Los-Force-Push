@@ -17,6 +17,7 @@ if [[ "${1:-}" == "--test" ]]; then
     java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.ReplayPresentationTest "$ROOT/src/desktop/resources/levels"
     java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.ReleaseCampaignTest "$ROOT/src/desktop/resources/levels"
     java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.LockObserverTest "$ROOT/src/desktop/resources/levels"
+    java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.ControllerBoundaryTest "$ROOT/src/desktop/resources/levels"
     (cd "$ROOT" && java -Dfile.encoding=UTF-8 -Djava.awt.headless=true --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.DesktopVisualAssetsTest)
 elif [[ "${1:-}" == "--audio-test" ]]; then
     java -Dfile.encoding=UTF-8 --limit-modules java.base,java.desktop -cp "$CP" ar.edu.uade.sokoban.desktop.NativeAudioSmokeTest

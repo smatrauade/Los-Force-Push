@@ -78,6 +78,7 @@ if (cd "$root" && bash scripts/run-swing.sh --test) >"$scratch/desktop.log" 2>&1
     grep -Eq '^REPLAY PRESENTATION RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log" && \
     grep -Eq '^RELEASE CAMPAIGN RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log" && \
     grep -Eq '^LOCK OBSERVER RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log" && \
+    grep -Eq '^CONTROLLER BOUNDARY RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log" && \
     grep -Fxq 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL' "$scratch/desktop.log"; then
     echo 'DESKTOP RESULT: 40 PASS, 0 FAIL'
     grep -E '^CAMPAIGN RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log"
@@ -86,6 +87,7 @@ if (cd "$root" && bash scripts/run-swing.sh --test) >"$scratch/desktop.log" 2>&1
     grep -E '^REPLAY (CONTROLLER|PRESENTATION) RESULT:' "$scratch/desktop.log"
     grep -E '^RELEASE CAMPAIGN RESULT:' "$scratch/desktop.log"
     grep -E '^LOCK OBSERVER RESULT:' "$scratch/desktop.log"
+    grep -E '^CONTROLLER BOUNDARY RESULT:' "$scratch/desktop.log"
     echo 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL'
 else
     echo 'DESKTOP_OR_VISUAL_ASSETS=FAILED'; tail -n 45 "$scratch/desktop.log"; failures=1

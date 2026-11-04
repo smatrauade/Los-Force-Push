@@ -54,6 +54,7 @@ public final class GameController implements AutoCloseable {
             startRecording();
             publish();
             lockChanges.publish(LockChangeSubject.Origin.LEVEL_CHANGE, null, game.currentState());
+            completeIfWon();
         } catch (IOException | IllegalArgumentException | SecurityException failure) {
             view.showLoadError("No se pudo cargar el TXT: " + failure.getMessage());
         }
@@ -94,7 +95,11 @@ public final class GameController implements AutoCloseable {
                 view.animateBox(animation);
             }
         }
-        if (game.victory().won()) {
+        completeIfWon();
+    }
+
+    private void completeIfWon() {
+        if (!game.isFinalized() && game.victory().won()) {
             game.finish().orElseThrow();
             GameSession.Metrics metrics = game.metrics();
             completedReplay = recorder.verified(game.currentState(), metrics.moves(),
@@ -173,6 +178,7 @@ public final class GameController implements AutoCloseable {
             startRecording();
             publish();
             lockChanges.publish(LockChangeSubject.Origin.LEVEL_CHANGE, null, game.currentState());
+            completeIfWon();
         } else if (result.status() == LevelProgression.AdvanceStatus.LOAD_FAILED) {
             view.showLoadError("No se pudo cargar el siguiente nivel: " + result.diagnostic());
         }

@@ -110,7 +110,7 @@ public final class ReplayControllerTest {
         require(view.replay == null && game.completedReplay().isEmpty(), "Next retained old replay");
         move(game, Direction.DOWN, Direction.RIGHT);
         require(view.replay != null && view.replay.levelContext().equals("ice")
-                && view.replay.initialState().equals(first.initialState()) == false
+                && !view.replay.initialState().equals(first.initialState())
                 && game.results().size() == 2 && new ReplayPlayer(first).verify(),
                 "level identity/history corrupted");
         passed++;
