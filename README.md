@@ -4,7 +4,7 @@ Los Force Push es un Sokoban 2D en **Java/Swing** para el TPO de Procesos de Des
 
 El juego incluye TXT externos, cinco niveles, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría técnica y pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
 
-La arquitectura cuenta con [nueve diagramas editables PlantUML y PNG](docs/architecture/uml/pr17-rc-ffa27f9/README.md), verificados con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
+La arquitectura cuenta con [nueve fuentes PlantUML editables y nueve imágenes PNG derivadas](docs/architecture/uml/pr17-rc-ffa27f9/README.md), verificados con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
 
 ## Inicio rápido
 
@@ -118,4 +118,4 @@ Sólo desktop headless: `bash scripts/run-swing.sh --test` o `powershell -NoProf
 
 ## Contexto académico
 
-Entrega informada: **18/11/2026**, demo 15–20 minutos. El software es candidato para revisión; RF-12/OQ-10 requiere confirmar la elegibilidad de selector + Replay. Los [43 assets](docs/punto5/ASSETS_REGISTRO_SHA256.csv) tienen integridad registrada, pero [titularidad/licencias](docs/assets/ASSET_POLICY.md) siguen pendientes. [StarUML](docs/architecture/uml/STARUML_STATUS.md), informe, video, declaración de IA y revisión/defensa del equipo requieren sus propios gates. El [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) fue fusionado; esto no declara cumplida la entrega ni la aceptación académica.
+Entrega informada: **18/11/2026**, demo 15–20 minutos. La versión integrada está disponible para la puesta en común; RF-12/OQ-10 requiere confirmar la elegibilidad de selector + Replay. Los [43 assets](docs/punto5/ASSETS_REGISTRO_SHA256.csv) tienen integridad registrada, pero [titularidad/licencias](docs/assets/ASSET_POLICY.md) siguen pendientes. [StarUML](docs/architecture/uml/STARUML_STATUS.md), informe, video, declaración de IA y revisión/defensa del equipo requieren sus propios gates. El [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) fue fusionado; esto no declara cumplida la entrega ni la aceptación académica.

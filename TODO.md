@@ -2,7 +2,7 @@
 
 `LAST_REVIEWED=2026-11-04` · `SCOPE=MAIN_POST_INTEGRATION`.
 
-El estado técnico del candidato y sus evidencias están en [auditoría PR17](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Consultar GitHub para el estado actual del PR y de `main`. Los checkpoints históricos permanecen en sus documentos fechados y el historial Git.
+El estado técnico de la versión integrada y sus evidencias están en [auditoría PR17](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Consultar GitHub para el estado actual del PR y de `main`. Los checkpoints históricos permanecen en sus documentos fechados y el historial Git.
 
 ## Software integrado en main
 

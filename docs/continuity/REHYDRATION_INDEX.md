@@ -45,7 +45,7 @@ Plan de TXT/niveles y promoción única, con checkpoints históricos separados d
 
 El código presente expone `LevelLoader.loadExperimentalFragile(Path)` para leer la definición con UTF-8 estricto y límite de bytes compartidos. Leer el [diseño G2 y estado G3](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026) y la [evidencia del incremento](../testing/TEST_STRATEGY.md#incremento-filesystem-fragile--29102026). No atribuir su publicación o integración a una fecha: comprobar Git/PR.
 
-El prototipo ExperimentalFragileParser representa atributos individuales en una definición inmutable separada; el C2 jugable acepta sólo las siete combinaciones actuales y rechaza atributos/especiales. El siguiente trabajo requiere contrastar el contrato con el consumidor real. E01/E02 no votaron sintaxis/rangos: fueron adoptados después por el responsable TXT en D-020. E04/E08 tienen regla TEAM decidida, con implementación/bordes ajenos pendientes. Java/build, varios contratos y TEAM_ACCEPTANCE del código siguen pendientes según sus fuentes canónicas.
+`ExperimentalFragileParser` conserva atributos individuales en una definición separada que el runtime integrado consume; C2 admite también ICE y existe una entrada explícita Key/Lock/Wall. E01/E02 no votaron sintaxis/rangos: D-020 adoptó después el subconjunto TXT indicado por el responsable. E04/E08 tienen regla TEAM decidida e implementación integrada; los bordes y Java/build mantienen el alcance de sus fuentes canónicas.
 
 ## Procedencia y evidencia histórica
 
@@ -62,11 +62,11 @@ Las cápsulas y checkpoints se consultan sólo para historia y procedencia; no f
 
 Consultar git status, git rev-parse HEAD, historial, HEAD remoto y PRs antes de actuar. Los commits citados identifican integraciones/pruebas históricas. Las ramas remotas fusionadas pueden desaparecer sin perder esos commits. El verificador documental requiere un checkout Git; no ejecutarlo desde una exportación sin .git.
 
-Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectados, ejecución nueva frente a histórica y siguiente gate. No crear otra cápsula ni reabrir acuerdos por defecto. StarUML final, licencias, mecánicas restantes y aceptación del equipo siguen pendientes.
+Aplicar [FRESHNESS_POLICY](FRESHNESS_POLICY.md): registrar cambios vivos afectados, ejecución nueva frente a histórica y siguiente gate. No crear otra cápsula ni reabrir acuerdos por defecto. StarUML final, licencias, elegibilidad de adicionales y demás entregables siguen en la agenda; consultar las preguntas abiertas y la guía del equipo para los detalles.
 
 ## Entrega y siguiente gate
 
-Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 completa; el alcance autónomo TXT de R7 ofrece carga de definición experimental y contrato, sin gameplay. Antes de integración runtime revisar contrato, dependencias OQ y autorización específica; este índice no es una orden de implementación.
+Para el **18/11/2026**, leer [entrega y aceptación docente](../requirements/REQUIREMENTS.md#entrega-y-aceptación-docente--29102026), [fuentes Teams/ASR](SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026), [prioridades por módulo](../../TODO.md#ruta-crítica-hacia-el-1811) y [patrones reales frente a candidatos](../architecture/ARCHITECTURE.md#patrones-y-brechas-de-defensa--29102026). Demo de 15–20 minutos; no mostrar diagramas no elimina StarUML. R6 y R7 describen cortes históricos; el runtime posterior está integrado en `main`. Consultar contratos y dependencias OQ antes de cambios futuros; este índice no es una orden de implementación.
 
 ## Rama de integración I0 — ruta adicional de rehidratación (03/11/2026)
 
