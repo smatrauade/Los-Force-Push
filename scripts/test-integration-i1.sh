@@ -63,16 +63,16 @@ run_core LOADING ar.edu.uade.sokoban.level.LevelLoadingTest 'RESULT: 40 PASS, 0 
 run_core MOVEMENT ar.edu.uade.sokoban.movement.MovementTest 'MOVEMENT RESULT: 37 PASS, 0 FAIL'
 run_core EXTENDED ar.edu.uade.sokoban.level.ExtendedLevelTest 'EXTENDED RESULT: 26 PASS, 0 FAIL'
 run_core DYNAMIC ar.edu.uade.sokoban.movement.DynamicWorldTest 'DYNAMIC WORLD RESULT: 6 PASS, 0 FAIL'
-run_core COMPLETION ar.edu.uade.sokoban.session.CompletionTest 'COMPLETION RESULT: 36 PASS, 0 FAIL'
+run_core COMPLETION ar.edu.uade.sokoban.session.CompletionTest 'COMPLETION RESULT: 38 PASS, 0 FAIL'
 run_core C2 ar.edu.uade.sokoban.level.C2LevelLoadingTest 'C2 RESULT: 36 PASS, 0 FAIL'
 run_core FRAGILE ar.edu.uade.sokoban.level.ExperimentalFragileParserTest 'FRAGILE RESULT: 41 PASS, 0 FAIL'
 run_core RUNTIME_I1C ar.edu.uade.sokoban.movement.RuntimeIceFragileTest 'RUNTIME ICE FRAGILE RESULT: 34 PASS, 0 FAIL'
 
 echo '=== DESKTOP ==='
 if (cd "$root" && bash scripts/run-swing.sh --test) >"$scratch/desktop.log" 2>&1 && \
-    grep -Fxq 'DESKTOP RESULT: 35 PASS, 0 FAIL' "$scratch/desktop.log" && \
+    grep -Fxq 'DESKTOP RESULT: 36 PASS, 0 FAIL' "$scratch/desktop.log" && \
     grep -Fxq 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL' "$scratch/desktop.log"; then
-    echo 'DESKTOP RESULT: 35 PASS, 0 FAIL'
+    echo 'DESKTOP RESULT: 36 PASS, 0 FAIL'
     echo 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL'
 else
     echo 'DESKTOP_OR_VISUAL_ASSETS=FAILED'; tail -n 45 "$scratch/desktop.log"; failures=1
@@ -91,7 +91,7 @@ if [[ "$failures" -ne 0 ]]; then
     echo 'RESULTADO_GLOBAL=I1C_TEST_FAILURES_IDENTIFIED'
     exit 1
 fi
-echo 'CORE_TOTAL=256/256'
-echo 'DESKTOP_TOTAL=35/35'
+echo 'CORE_TOTAL=258/258'
+echo 'DESKTOP_TOTAL=36/36'
 echo 'ASSET_TOTAL=44/44'
 echo 'RESULTADO_GLOBAL=PASS_I1_REGRESSION_I2_TREE'

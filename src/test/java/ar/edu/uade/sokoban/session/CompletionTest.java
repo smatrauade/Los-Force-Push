@@ -45,13 +45,19 @@ public final class CompletionTest {
         invalid(() -> new LevelCatalog(List.of(a, a)), "duplicate catalog id");
         invalid(() -> new LevelCatalog.Entry("BAD", Path.of("x"), LevelCatalog.Format.STANDARD), "invalid catalog id");
         invalid(() -> new LevelCatalog(List.of()), "empty catalog");
+        invalid(() -> new LevelProgression.CompletedLevel(EVAL.evaluate(solved), new GameSession.Metrics(1, 1), -1),
+                "negative undoUsesTotal rejected");
+        invalid(() -> new LevelProgression.CompletedLevel(
+                EVAL.evaluate(state(List.of("FF"), p(0, 0), List.of(RuntimeState.Box.normal(p(0, 1))))),
+                new GameSession.Metrics(1, 1), 0), "non-won victory rejected");
         LevelProgression game = new LevelProgression(catalog);
         check(!game.victory().won() && game.finish().isEmpty()
                 && game.advance().status() == LevelProgression.AdvanceStatus.NOT_FINALIZED,
                 "cannot finish or advance early");
         check(game.move(Direction.RIGHT).kind() == MoveResult.Kind.PUSHED && game.victory().won(), "fixture A solved");
         LevelProgression.CompletedLevel first = game.finish().orElseThrow();
-        check(first.metrics().moves() == 1 && first.metrics().pushes() == 1, "first result metrics");
+        check(first.metrics().moves() == 1 && first.metrics().pushes() == 1
+                && first.undoUsesTotal() == 0, "first result metrics");
         check(game.finish().orElseThrow() == first && game.results().size() == 1, "finish idempotent");
         invalidState(() -> game.move(Direction.LEFT), "move frozen after finish");
         invalidState(game::restart, "restart frozen after finish");
@@ -71,6 +77,7 @@ public final class CompletionTest {
                 "fixture B key reaches goal");
         LevelProgression.CompletedLevel second = game.finish().orElseThrow();
         check(second.metrics().moves() == 11 && second.metrics().pushes() == 3
+                && second.undoUsesTotal() == 0
                 && game.results().size() == 2 && game.campaignCompleted(), "second result and campaign");
         check(game.advance().status() == LevelProgression.AdvanceStatus.CAMPAIGN_COMPLETED
                 && game.results().size() == 2, "end idempotent");

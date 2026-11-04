@@ -22,10 +22,13 @@ public final class LevelProgression {
         }
     }
 
-    public record CompletedLevel(VictoryEvaluator.VictoryResult victory, GameSession.Metrics metrics) {
+    public record CompletedLevel(VictoryEvaluator.VictoryResult victory, GameSession.Metrics metrics, int undoUsesTotal) {
         public CompletedLevel {
             Objects.requireNonNull(victory, "victory");
             Objects.requireNonNull(metrics, "metrics");
+            if (undoUsesTotal < 0) {
+                throw new IllegalArgumentException("undoUsesTotal cannot be negative");
+            }
             if (!victory.won()) {
                 throw new IllegalArgumentException("Invalid completed result");
             }
@@ -133,7 +136,7 @@ public final class LevelProgression {
         if (!current.won()) {
             return Optional.empty();
         }
-        CompletedLevel result = new CompletedLevel(current, session.metrics());
+        CompletedLevel result = new CompletedLevel(current, session.metrics(), session.undoUsesTotal());
         results.add(result);
         finalized = result;
         return Optional.of(result);

@@ -22,6 +22,7 @@ public final class GameSessionUndoTest {
         testPushCountersAndRestart();
         testFragileIceSnapshot();
         testDynamicLockSnapshot();
+        testDynamicLockOpenRestoration();
         testChangeLevelBoundary();
         testInvalidInputsPreserveSession();
         testOverflowIsAtomic();
@@ -93,8 +94,15 @@ public final class GameSessionUndoTest {
         check(session.undo() && session.currentState() == initial
                 && session.metrics().equals(new GameSession.Metrics(0, 0)),
                 "Undo restores pushed box and all reversible metrics");
+        check(session.undoUsesTotal() == 1 && session.consecutiveUndoUses() == 1,
+                "Undo uses incremented");
+        check(session.move(Direction.RIGHT).kind() == MoveResult.Kind.PUSHED, "push after undo");
+        check(session.metrics().moves() > 0 && session.metrics().pushes() > 0
+                && session.undoUsesTotal() > 0 && session.consecutiveUndoUses() > 0,
+                "all four counters strictly positive before restart");
         session.restart();
         check(session.currentState() == initial && !session.canUndo()
+                && session.metrics().moves() == 0 && session.metrics().pushes() == 0
                 && session.undoUsesTotal() == 0 && session.consecutiveUndoUses() == 0,
                 "Restart clears history and all four counters");
     }
@@ -145,6 +153,45 @@ public final class GameSessionUndoTest {
                 && !session.currentState().lockActive("lock")
                 && session.currentState().boxAt(p(0, 1)).id().equals("key"),
                 "Lock associations and key ID preserved");
+    }
+
+    private static void testDynamicLockOpenRestoration() {
+        // Grid: 3 rows x 4 cols of FLOORs, Lock at (0,2), DynamicWall at (1,3)
+        List<List<RuntimeState.Ground>> terrain = List.of(
+                List.of(RuntimeState.Ground.FLOOR, RuntimeState.Ground.FLOOR, RuntimeState.Ground.LOCK, RuntimeState.Ground.FLOOR),
+                List.of(RuntimeState.Ground.FLOOR, RuntimeState.Ground.FLOOR, RuntimeState.Ground.FLOOR, RuntimeState.Ground.DYNAMIC_WALL),
+                List.of(RuntimeState.Ground.FLOOR, RuntimeState.Ground.FLOOR, RuntimeState.Ground.FLOOR, RuntimeState.Ground.FLOOR)
+        );
+        RuntimeState initial = new RuntimeState(terrain, p(0, 0),
+                List.of(RuntimeState.Box.key("key", p(0, 1))),
+                List.of(new RuntimeState.Lock("lock", p(0, 2))),
+                List.of(new RuntimeState.DynamicWall("wall", p(1, 3), Set.of("lock"))));
+        GameSession session = new GameSession(initial, "lock_open_undo");
+        // Push KeyBox onto Lock: wall opens!
+        check(session.move(Direction.RIGHT).kind() == MoveResult.Kind.PUSHED
+                && session.currentState().wallOpen(p(1, 3))
+                && session.currentState().lockActive("lock"),
+                "key lands on lock and opens dynamic wall");
+        RuntimeState openState = session.currentState();
+        // 5 successful moves without disturbing the KeyBox on the Lock
+        check(session.move(Direction.DOWN).kind() == MoveResult.Kind.MOVED, "move 1 down");
+        check(session.move(Direction.DOWN).kind() == MoveResult.Kind.MOVED, "move 2 down");
+        check(session.move(Direction.RIGHT).kind() == MoveResult.Kind.MOVED, "move 3 right");
+        check(session.move(Direction.UP).kind() == MoveResult.Kind.MOVED, "move 4 up");
+        check(session.move(Direction.LEFT).kind() == MoveResult.Kind.MOVED, "move 5 left");
+        check(session.canUndo(), "undo available after five subsequent moves");
+        check(session.undo(), "undo executes successfully");
+        // Verify restored state has DynamicWall OPEN and Lock ACTIVE!
+        check(session.currentState() == openState, "undo restores exact state with dynamic wall open");
+        check(session.currentState().wallOpen(p(1, 3)), "dynamic wall remains open after undo");
+        check(session.currentState().lockActive("lock"), "lock remains active after undo");
+        RuntimeState.Box restoredBox = session.currentState().boxAt(p(0, 2));
+        check(restoredBox != null && restoredBox.id().equals("key") && restoredBox.kind() == RuntimeState.BoxKind.KEY,
+                "key box preserved on lock with proper id and kind");
+        check(session.currentState().player().equals(p(0, 1)), "player position restored to (0,1)");
+        check(session.metrics().equals(new GameSession.Metrics(1, 1)), "metrics restored to 1 move and 1 push");
+        check(session.undoUsesTotal() == 1 && session.consecutiveUndoUses() == 1,
+                "undo usages incremented correctly");
     }
 
     private static void testChangeLevelBoundary() {

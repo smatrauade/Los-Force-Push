@@ -96,9 +96,20 @@ public final class GameController {
         return game == null ? 0 : game.consecutiveUndoUses();
     }
 
+    public List<LevelProgression.CompletedLevel> results() {
+        return game == null ? List.of() : game.results();
+    }
+
     public LevelResult getLevelResult() {
         if (game == null) {
             throw new IllegalStateException("No hay un nivel cargado");
+        }
+        if (game.isFinalized()) {
+            LevelProgression.CompletedLevel completed = game.finish().orElseThrow();
+            return new LevelResult(game.levelDisplayName(), completed.metrics().moves(),
+                    completed.metrics().pushes(), completed.undoUsesTotal(),
+                    scoreCalculator.calculate(completed.metrics().moves(), completed.metrics().pushes(),
+                            completed.undoUsesTotal()));
         }
         GameSession.Metrics metrics = game.metrics();
         int uses = game.undoUsesTotal();

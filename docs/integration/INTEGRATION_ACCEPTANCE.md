@@ -8,10 +8,10 @@
 | INT-02 | ICE leído de TXT atraviesa `LevelProgression` y se desliza o detiene según E03 sin `IllegalArgumentException` | `Terrain.ICE` y runtime | I1 |
 | INT-03 | Fragile resistencia 1 completa deslizamiento antes de romper, pierde 1 resistencia por empuje, nunca provoca reinicio automático no acordado | E04, eventos de animación | I1/I3 |
 | INT-04 | KeyBox activa/desactiva Lock y DynamicWalls; pared ocupada no deja transición parcial/inválida | E05/E06/OQ-07 | I1 |
-| INT-05 | Undo revierte cinco movimientos y restaura mundo completo (fragile, locks, paredes, jugador y métricas); límite de 15 y 3 usos | E07–E09 | I2 |
-| INT-06 | Restart restablece estado y contadores conforme al complemento TEAM con fuente registrada | fuente de ratificación, sesión | I2 |
+| INT-05 | Undo revierte cinco movimientos y restaura mundo completo (fragile, locks, paredes dinámicas abiertas/cerradas, jugador y métricas); límite de 15 y 3 usos | E07–E09 | I2 (EXECUTED_VERIFIED_LOCAL) |
+| INT-06 | Restart restablece estado y contadores desde cuatro métricas no nulas conforme al complemento TEAM con fuente registrada | fuente de ratificación, sesión | I2 (EXECUTED_VERIFIED_LOCAL) |
 | INT-07 | KeyBox ocupa Lock y Goal según E05; testigo de puzzle resoluble confirma criterio de victoria | E05, OQ-01 | I1/I3 |
-| INT-08 | Al finalizar, puntaje TEAM saturado se comunica a HUD y siguiente nivel; no queda estado histórico duplicado | ScoreCalculator, LevelProgression | I2/I3 |
+| INT-08 | Al finalizar, puntaje TEAM saturado se comunica a HUD y siguiente nivel; retención histórica de undoUsesTotal sin estado duplicado | ScoreCalculator, LevelProgression | I2 (EXECUTED_VERIFIED_LOCAL) |
 | INT-09 | Animación de Fragile sobre ICE representa trayectoria y destrucción aunque no exista en tablero final | BoardPanel, GameView, EDT | I3 |
 | INT-10 | Compilación real `--release 17` y regresión core+desktop combinada, scripts Windows/Bash, evidencia y `git diff --check` | I1-I3 completos | I4 |
 
@@ -43,4 +43,4 @@ INT-01 a INT-04: `EXECUTED_VERIFIED_PRECOMMIT` sobre el contenido que pasó al m
 
 ## I2 — avance local 04/11/2026
 
-Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `GameSession` conserva el mundo, historial y métricas; `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` permitiendo que el puntaje histórico persista tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada y `GameController` comunica el resultado a `SwingApplication`, cuyo HUD (`status`) y pantalla de victoria reciben el puntaje. Con JDK 17.0.20.1 se ejecutaron 58 comprobaciones Undo, 258 casos core I1, 36 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0. INT-05, INT-06 e INT-08 `PASS` verificados localmente. El reset de métricas al cambiar de nivel es provisional; no hay aceptación del código por el equipo (`TEAM_ACCEPTANCE=NOT_RECORDED`). Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

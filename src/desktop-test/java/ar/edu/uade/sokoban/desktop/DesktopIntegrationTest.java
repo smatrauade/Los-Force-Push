@@ -9,6 +9,7 @@ import ar.edu.uade.sokoban.level.Terrain;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MovementEngine;
 import ar.edu.uade.sokoban.session.LevelCatalog;
+import ar.edu.uade.sokoban.session.LevelProgression;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
@@ -248,6 +249,49 @@ public final class DesktopIntegrationTest {
                 view.commands.nextLevel().run();
                 check(view.state.levelName().equals("i2second.txt") && view.state.moves() == 0
                         && game.undoUsesTotal() == 0, "next level did not reset session");
+                check(game.results().size() == 1, "first completed level recorded");
+                LevelProgression.CompletedLevel firstHist = game.results().get(0);
+                check(firstHist.metrics().moves() == 1 && firstHist.metrics().pushes() == 1 && firstHist.undoUsesTotal() == 1,
+                        "first completed level retains undoUsesTotal 1");
+                ScoreCalculator calc = new ScoreCalculator();
+                check(calc.calculate(firstHist.metrics().moves(), firstHist.metrics().pushes(), firstHist.undoUsesTotal()) == 987,
+                        "retained historic score after advance is 987");
+                game.move(Direction.RIGHT);
+                game.restart();
+                check(game.results().size() == 1, "next level restart preserves completed results list");
+                check(calc.calculate(firstHist.metrics().moves(), firstHist.metrics().pushes(), firstHist.undoUsesTotal()) == 987,
+                        "retained historic score 987 persists after next level restart");
+            });
+            test("historic score control without undo yields 997 and persists across advance and restart", () -> {
+                Probe view = new Probe();
+                GameController game = controller(view);
+                Path first = write("ctrlfirst.txt", "#######\n# @$. #\n#     #\n#######\n");
+                Path second = write("ctrlsecond.txt", OPEN);
+                game.loadCatalog(new LevelCatalog(List.of(
+                        new LevelCatalog.Entry("cfirst", first, LevelCatalog.Format.STANDARD),
+                        new LevelCatalog.Entry("csecond", second, LevelCatalog.Format.STANDARD))));
+                // Solve level 1 with 1 move, 1 push, 0 undos:
+                game.move(Direction.RIGHT);
+                check(view.victory != null && view.victory.moves() == 1
+                        && view.victory.pushes() == 1 && view.victory.undoUses() == 0
+                        && view.victory.score() == 997, "control victory score must be 997");
+                check(game.results().size() == 1, "control level recorded in results");
+                LevelProgression.CompletedLevel completed = game.results().get(0);
+                ScoreCalculator calculator = new ScoreCalculator();
+                check(completed.undoUsesTotal() == 0, "control undoUsesTotal is zero");
+                check(calculator.calculate(completed.metrics().moves(), completed.metrics().pushes(), completed.undoUsesTotal()) == 997,
+                        "control completed level score is 997");
+                // Advance to level 2:
+                view.commands.nextLevel().run();
+                check(view.state.levelName().equals("ctrlsecond.txt"), "advanced to next level");
+                check(view.state.moves() == 0 && game.undoUsesTotal() == 0, "next level counters reset");
+                check(calculator.calculate(completed.metrics().moves(), completed.metrics().pushes(), completed.undoUsesTotal()) == 997,
+                        "control completed level score 997 preserved after advance");
+                // Restart level 2:
+                game.move(Direction.UP);
+                game.restart();
+                check(calculator.calculate(completed.metrics().moves(), completed.metrics().pushes(), completed.undoUsesTotal()) == 997,
+                        "control completed level score 997 preserved after next level restart");
             });
             test("UNDO restores state from five moves ago", () -> {
                 Probe view = new Probe();

@@ -603,6 +603,7 @@ public final class SwingApplication {
         @Override
         public void showVictory(LevelResult result) {
             Objects.requireNonNull(result, "result");
+            status.setText("PUNTAJE: " + result.score());
             victoryData.setText("<html><div style='text-align:center'>"
                     + "NIVEL: " + escapeHtml(result.levelName()) + "<br><br>"
                     + "MOVIMIENTOS: " + result.moves() + "<br>"
