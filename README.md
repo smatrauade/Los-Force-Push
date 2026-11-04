@@ -2,7 +2,7 @@
 
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
-**Estado:** se puede ejecutar una porción del juego con carga de niveles, movimiento, llaves/cerrojos/muros dinámicos, victoria y progresión de campaña. El TPO está incompleto. Hielo, Fragile jugable, Undo y puntaje oficial todavía no están implementados. La aceptación del código por el equipo no está registrada.
+**Estado:** se puede ejecutar una porción del juego con carga de niveles, movimiento, llaves/cerrojos/muros dinámicos, victoria y progresión de campaña. El TPO está incompleto. En esta rama Draft se incorporaron ICE y Fragile al runtime en I1; Undo, puntaje oficial y animación completa de Fragile siguen pendientes. La aceptación del código por el equipo no está registrada.
 
 ## Inicio rápido
 
@@ -127,8 +127,14 @@ La entrega informada es el **18/11/2026**, con demo en vivo de 15–20 minutos y
 
 <!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
 
-La propuesta de combinación se coordina mediante un **PR Draft** desde `integration/tpo-unificado-2026-11-03`, inicialmente basado en `victoria`, sin afirmar integración de `Objetivo2` o `feature/undo-restart-score` hasta futuros commits. Leer [el índice de integración](docs/integration/README.md), [la matriz de contratos y pruebas](docs/integration/INTEGRATION_ACCEPTANCE.md) y [el protocolo de frescura](docs/continuity/BRANCH_AWARE_FRESHNESS.md). Este apartado describe la **rama experimental de integración**; el README de `main` debe representar únicamente lo realmente fusionado allí.
+La propuesta de combinación se coordina mediante un **PR Draft** desde `integration/tpo-unificado-2026-11-03`, inicialmente basado en `victoria`, con `Objetivo2` ya integrado en I1 y `feature/undo-restart-score` todavía pendiente para I2. Leer [el índice de integración](docs/integration/README.md), [la matriz de contratos y pruebas](docs/integration/INTEGRATION_ACCEPTANCE.md) y [el protocolo de frescura](docs/continuity/BRANCH_AWARE_FRESHNESS.md). Este apartado describe la **rama experimental de integración**; el README de `main` debe representar únicamente lo realmente fusionado allí.
 
-## Seguimiento de I1 en el worktree auxiliar — 03/11/2026
+## I1 publicado en el PR Draft #17 — 03/11/2026
 
-La integración TXT/ICE/Fragile de `Objetivo2` está **validada localmente pero todavía sin commit de merge ni publicación en el PR #17**. Los resultados, pendientes y comandos autocontenidos de Java 17 están en [evidencia I1 local](docs/integration/I1_LOCAL_VALIDATION_2026-11-03.md). Para repetir las suites completas: `bash scripts/test-integration-i1.sh`. Ni el estado Draft ni los tests implican aceptación TEAM o incorporación a `main`.
+La integración TXT/ICE/Fragile de `Objetivo2` está **publicada en el PR #17**, en el merge de dos padres `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`, sin pasar a `main`. Los resultados, pendientes y comandos autocontenidos de Java 17 están en [evidencia I1 local](docs/integration/I1_LOCAL_VALIDATION_2026-11-03.md). Para repetir las suites completas: `bash scripts/test-integration-i1.sh`. Ni el estado Draft ni los tests implican aceptación TEAM o incorporación a `main`.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+### Alcance y siguiente fase
+
+El resultado previo de 316/316 pruebas corresponde al árbol combinado local verificado antes del commit, cuyos blobs fueron conservados en el merge; no hay nueva ejecución post-push. El PR conserva el estado Draft. I2: Undo/Restart/Score de Martina sin duplicar `GameSession`; I3: GUI/animación; I4: QA final y entrega. `TEAM_ACCEPTANCE=NOT_RECORDED`.

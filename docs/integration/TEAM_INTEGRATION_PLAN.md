@@ -58,6 +58,18 @@ La [matriz de aceptación](INTEGRATION_ACCEPTANCE.md) contiene oráculos, riesgo
 
 **Fuentes públicas y bibliografía:** [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md) (documentos docentes por procedencia, sin distribuir originales), [REQUISITOS](../requirements/REQUIREMENTS.md) (baseline), [ARCHITECTURE](../architecture/ARCHITECTURE.md) (MVC/GRASP/SOLID/GoF), [STARUML_STATUS](../architecture/uml/STARUML_STATUS.md) y fuentes Java. Se consultaron como *contexto privado* comunicaciones del equipo; no publicar su exportación, teléfonos, capturas o transcripciones completas.
 
-## Checkpoint local I1.C — aún sin merge commit
+## Checkpoint histórico local I1.C — anterior al merge commit
 
 I1.A resolvió texto Swing; I1.B0 protege la identidad TXT; I1.B1 añadió runtime ICE/Fragile y eventos de trayectoria. En el estado **local sin commit**, el usuario reportó 312/312 PASS con JDK 17 antes del ajuste I1.C. La suite I1.C especifica resistencias 2/3, varios empujes y validaciones de `LevelProgression`, sesión y muro ocupado. Su ejecución posterior con JDK17 local reportó **316/316 PASS** (256 core, 16 Desktop, 44 assets), más verificación documental y auditoría de contenido read-only PASS; el índice Git conserva tres rutas `UU` sin resolver formalmente. Ver [auditoría I1](I1_LOCAL_VALIDATION_2026-11-03.md) y [runner reproducible](../../scripts/test-integration-i1.sh). `I1=LOCAL_PENDING_REVIEW`; I2-I4 continúan pendientes; los commits fuente siguen sin integrarse en el PR hasta crear/promover un merge commit de dos padres supervisado.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Checkpoint vigente I1 — publicación comprobada (03/11/2026)
+
+- `SOURCE_HEAD=ac728a2241d2fae8c4c32b78e29fd4c9bc6228eb`; `INTEGRATION_HEAD=6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`; padres `5af4a586` y `ac728a22`.
+- PR #17 **open/Draft**, dirigido a `main@f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2`; autoría fuente preservada, sin force push ni aceptación del equipo.
+- `TESTS_EXECUTED=316/316_PASS_PRECOMMIT` en Ubuntu/JDK17 sobre el árbol después incorporado, verificación de 38 rutas/índice PASS. No se reejecutó Java tras la publicación.
+- `I1=PUBLISHED_IN_INTEGRATION_BRANCH`, `I2/I3/I4=NOT_RUN`, `IN_MAIN=NO`, `TEAM_ACCEPTANCE=NOT_RECORDED`.
+- Riesgos pendientes: historia Undo/Restart/Score de Martina, animación ICE/Fragile I3, pruebas de plataformas, licencias, StarUML y entrega. La sección anterior es un checkpoint histórico, no un gate activo.
+
+Siguiente gate: comparar el HEAD de `feature/undo-restart-score` y contratos de sesión con `RuntimeState`/`GameSession`; integrar I2 en un worktree nuevo o aislado, con pruebas antes de promover al mismo PR.

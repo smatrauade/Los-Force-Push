@@ -1,6 +1,6 @@
 # Matriz de riesgos y aceptación — integración grupal
 
-`LAST_REVIEWED=2026-11-03` · `TESTED_ON_COMBINED_BRANCH=NO` · `STATUS=TEST_DESIGN_ONLY` · `POLICY=NO_FALSE_POSITIVE`
+`LAST_REVIEWED=2026-11-03` · `TESTED_ON_COMBINED_TREE=YES_PRECOMMIT` · `STATUS=I1_INT01_04_EXECUTED_I2_04_PENDING` · `POLICY=NO_FALSE_POSITIVE`
 
 | ID | Criterio verificable | Dependencias | Fase |
 |---|---|---|---|
@@ -15,7 +15,7 @@
 | INT-09 | Animación de Fragile sobre ICE representa trayectoria y destrucción aunque no exista en tablero final | BoardPanel, GameView, EDT | I3 |
 | INT-10 | Compilación real `--release 17` y regresión core+desktop combinada, scripts Windows/Bash, evidencia y `git diff --check` | I1-I3 completos | I4 |
 
-**Estado:** estos casos **no** fueron ejecutados sobre la rama combinada. Su existencia documenta el oráculo, no un PASS. Cada resultado nuevo debe registrar SHA exacto, comando, JDK/SO, fixture, salida, exit code y responsable; actualizar [estrategia de tests](../testing/TEST_STRATEGY.md) y [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) según impacto.
+**Estado actual:** INT-01–04 se ejecutaron sobre el árbol combinado I1 antes del commit (blobs auditados), con 316/316 pruebas de regresión aprobadas; INT-05–10 no quedan acreditados por ello. No se reejecutó la suite después del push. Cada resultado nuevo debe registrar SHA exacto, comando, JDK/SO, fixture, salida, exit code y responsable; actualizar [estrategia de tests](../testing/TEST_STRATEGY.md) y [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) según impacto.
 
 ## Riesgos verificables
 
@@ -34,3 +34,9 @@
 ## Evidencia local previa a commit I1.C (03/11/2026)
 
 La matriz superior conserva los **oráculos**. En el worktree auxiliar `integration/i1-santino-stage-2026-11-03`, el usuario ejecutó con OpenJDK 17 las ocho suites core (252/252), Desktop (16/16) y Visual Assets (44/44), todas PASS en la versión **anterior a I1.C**; el postcheck preservó Git. En I1.C los casos INT-01..04 pasan a comprobar expresamente las resistencias **2 y 3**, varios empujes, ICE por `LevelProgression`, rotura sin reinicio y cierre ocupado. Tras I1.C, el usuario **ejecutó** el runner [test-integration-i1.sh](../../scripts/test-integration-i1.sh) con `java`/`javac 17.0.20.1`: core **256/256**, Desktop **16/16**, Visual Assets **44/44**, total **316/316**, exit 0 y `GIT_STATE_PRESERVED=YES`; el verificador documental también pasó (170 archivos, 541 enlaces, 43 assets). Evidencia local reportada, **no** HEAD remoto ni aceptación TEAM. Limitaciones: sin GUI interactiva, sin Windows nativo, sin commit de integración ni aceptación TEAM. [Registro técnico y fase siguiente](I1_LOCAL_VALIDATION_2026-11-03.md).
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Publicación I1 — estado verificable
+
+INT-01 a INT-04: `EXECUTED_VERIFIED_PRECOMMIT` sobre el contenido que pasó al merge `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2` en PR #17 Draft. Resultado reportado: **316/316 PASS**, Java 17.0.20.1 Ubuntu, sin ejecución postcommit adicional. INT-07 y INT-09 (campaña y frames Swing) quedan pendientes. No equivale a `TEAM_ACCEPTED`, `IN_MAIN` ni a completar I2/I3/I4. [Detalle](I1_LOCAL_VALIDATION_2026-11-03.md).

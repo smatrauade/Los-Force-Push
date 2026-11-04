@@ -1,6 +1,16 @@
 # I1 — Auditoría local previa al merge commit (03/11/2026)
 
-`DOMAIN=TXT_RUNTIME_MOVEMENT_INTEGRATION` · `STATE=LOCAL_STAGE_PENDING_REVIEW` · `AUTHORSHIP=GIT_ANCESTRY_TO_BE_PRESERVED` · `TEAM_ACCEPTANCE=NOT_RECORDED` · `IN_MAIN=NO`
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Estado posterior a esta auditoría — publicación verificada (03/11/2026)
+
+`PUBLICATION=PR17_OPEN_DRAFT` · `INTEGRATION_HEAD=6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2` · `IN_MAIN=NO` · `TEAM_ACCEPTANCE=NOT_RECORDED`.
+
+La auditoría local registrada debajo precede al commit y debe leerse como **histórica**: las rutas `UU` y `MERGE_HEAD` dejaron de estar pendientes. Se creó un merge real de **dos padres** (`5af4a586001ecd8da1856483da023ce15eeccfc1` y `ac728a2241d2fae8c4c32b78e29fd4c9bc6228eb`) que conserva los dos commits originales de `Objetivo2`; los **38 archivos** auditados entraron en `6abb8ad0` y se publicaron al mismo [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17). El avance local y el push sin fuerza fueron verificados; `main` no cambió.
+
+**Evidencia sin extrapolación:** `316/316 PASS` en el árbol local I1.C con OpenJDK 17.0.20.1, antes del commit; el postcommit auditó los blobs, pero **no hubo nueva ejecución Java sobre el SHA publicado**. Pendientes I2, I3, I4, GUI real, Windows y aceptación TEAM. Todo lo indicado a continuación como «pendiente» se refiere al checkpoint previo a esta publicación.
+
+`DOMAIN=TXT_RUNTIME_MOVEMENT_INTEGRATION` · `STATE=HISTORICAL_PRECOMMIT_WITH_PUBLISHED_CHECKPOINT` · `AUTHORSHIP=GIT_ANCESTRY_TO_BE_PRESERVED` · `TEAM_ACCEPTANCE=NOT_RECORDED` · `IN_MAIN=NO`
 
 ## Rama y procedencia
 

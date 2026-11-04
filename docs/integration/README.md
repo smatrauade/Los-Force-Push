@@ -1,6 +1,6 @@
-# Integración grupal — punto de entrada (I0)
+# Integración grupal — punto de entrada (I0 e I1)
 
-`DOMAIN=TEAM_INTEGRATION_AND_REPOSITORY_CONTINUITY` · `STATUS=I0_PUBLISHED_DRAFT_VERIFIED` · `CUT=2026-11-03`
+`DOMAIN=TEAM_INTEGRATION_AND_REPOSITORY_CONTINUITY` · `STATUS=I0_I1_PUBLISHED_DRAFT_VERIFIED` · `CUT=2026-11-03`
 
 **Primero leer [AGENTS.md](../../AGENTS.md), el [índice de rehidratación](../continuity/REHYDRATION_INDEX.md) y [CURRENT_STATE](../continuity/CURRENT_STATE.md).** Este directorio es una *capa de coordinación de ramas*, **no** la fuente normativa de reglas ni evidencia de integración funcional completa.
 
@@ -31,8 +31,14 @@ Los originales de cátedra y chats privados permanecen fuera de Git. La informac
 
 <!-- I0_PR17_PUBLICATION_VERIFIED_2026_11_03 -->
 
-[PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) abierto como **Draft** el 03/11/2026, `main` sin cambios al corte y HEAD inicial de integración `50a559a55e1d57afaad68e9f952e552228f45779`. El bloque `BRANCH_SNAPSHOT_2026-11-03.md` es histórico e inmutable, anterior a abrir el PR. I0 = completado; I1-I4 = pendientes. No fusionar el PR sin revisión y aceptación.
+[PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) abierto como **Draft** el 03/11/2026, `main` sin cambios al corte y HEAD inicial de integración `50a559a55e1d57afaad68e9f952e552228f45779`. El bloque `BRANCH_SNAPSHOT_2026-11-03.md` es histórico e inmutable, anterior a abrir el PR. I0 completado al corte histórico; I1 se publicó posteriormente, I2-I4 siguen pendientes. No fusionar el PR sin revisión y aceptación.
 
-## Gate local I1 — no publicado
+## I1 — publicado en el PR Draft #17
 
-La reconciliación I1.A/I1.B0/I1.B1 y el testigo I1.C están en el **worktree auxiliar local**, con el merge real pendiente de resolución formal en el índice. Consultar [evidencia y límites I1](I1_LOCAL_VALIDATION_2026-11-03.md), y ejecutar `bash scripts/test-integration-i1.sh` antes de cualquier commit. El PR #17 continúa siendo el único vehículo previsto para la integración grupal; este documento no autoriza promoverlo.
+La reconciliación I1.A/I1.B0/I1.B1 y el testigo I1.C quedaron incorporados mediante merge de dos padres `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2` y publicados en el **mismo PR #17 Draft**. Consultar [evidencia y límites I1](I1_LOCAL_VALIDATION_2026-11-03.md), y ejecutar `bash scripts/test-integration-i1.sh` antes de cualquier commit. El PR #17 continúa siendo el único vehículo previsto para la integración grupal; este documento no autoriza promoverlo.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+### Validación y límites actuales
+
+Pruebas locales previas al commit: **316/316 PASS** (JDK17, core 256, Desktop headless 16, assets 44), blobs auditados y ascendencia preservada. `main` permanece sin modificar. No se afirma reejecución tras la publicación, GUI interactiva ni aceptación TEAM. I2 Undo/Restart/Score, I3 GUI y I4 QA/entrega siguen abiertos. [Evidencia técnica](I1_LOCAL_VALIDATION_2026-11-03.md).

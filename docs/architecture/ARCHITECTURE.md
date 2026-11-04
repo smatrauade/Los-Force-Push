@@ -72,3 +72,9 @@ Cada patrón a defender necesita problema, intención, roles reales, variación,
 ## Frontera runtime I1 local — 03/11/2026
 
 En el worktree auxiliar I1, `LevelCatalog` diferencia explícitamente `STANDARD`, `EXTENDED` y `EXPERIMENTAL_FRAGILE`; `LevelLoader.load` rechaza la conversión Fragile sin ID, mientras `loadExperimentalFragile` y `RuntimeState.fromExperimentalFragile` conservan ID/resistencia (D-020). `RuntimeState` es el **único estado jugable**; `RuntimeMovementEngine` resuelve ICE/E03, Fragile/E04 y eventos Lock/Wall, emitiendo `RuntimeMoveResult.boxPath` y `boxShattered` como datos de transición. `GameSession`/`LevelProgression` coordinan juego y niveles; `Board` es una **proyección visual**, no segunda autoridad. El uso de trayectorias para animación EDT se conserva como pendiente de I3, sin certificarlo por pasar tests headless. Esta sección describe **solo la integración local aún no confirmada**, no `main` ni UML final. [Auditoría y evidencia](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Estado arquitectónico de I1 publicado — 03/11/2026
+
+El PR Draft #17 (`6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`) incorpora la reconciliación del runtime de `victoria` con ICE/Fragile de `Objetivo2`: `RuntimeState`/`RuntimeMovementEngine` mantienen una única autoridad de mundo; identidad y resistencia Fragile se conservan; `GameSession`/`LevelProgression` continúan como eje de sesión/campaña. El `Board` permanece como representación legacy/proyección, no estado paralelo de `GameController`. Las referencias de «pendiente» en secciones históricas superiores describen cortes anteriores. La integración de Undo/Restart/Score de Martina y la animación completa ICE/Fragile quedan para I2/I3. UML final y ratificación del equipo aún pendientes. [Evidencia del incremento](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).

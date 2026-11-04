@@ -7,9 +7,9 @@ Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CUR
 | Estado | Alcance | Evidencia y límite |
 |---|---|---|
 | IMPLEMENTED_VERIFIED / PARTIAL | UTF-8 externo, legacy/C2-L7, Board inmutable y LevelBuilder concreto | Código integrado; Loading 40/C2 32 históricos; especiales jugables rechazados |
-| IMPLEMENTED_PARTIAL | Movement cardinal, caja normal, KeyBox/Lock/muros y victoria | Movement 31 histórico más Extended/Dynamic/Completion de esta rama; hielo/Fragile jugable/Undo ausentes |
+| IMPLEMENTED_PARTIAL | Movement cardinal, caja normal, KeyBox/Lock/muros y victoria | Movement 31 histórico más Extended/Dynamic/Completion de esta rama; hielo/Fragile runtime incorporados en I1; Undo pendiente I2 |
 | IMPLEMENTED_VERIFIED / PARTIAL | Swing pixel art, menú/HUD/pausa/opciones/zoom, sprites/SFX | Desktop 16, Assets 44, UI 17 y CLI 18 históricos; callbacks pendientes no son servicios |
-| IMPLEMENTED / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET | Definición Fragile inmutable desde String/Path; contrato soportado D-020 | Fragile 41, sin gameplay; OQ-06 resuelta, OQ-08 extensiones pendientes |
+| IMPLEMENTED / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET | Definición Fragile inmutable desde String/Path; contrato soportado D-020 | Fragile 41 en parser; runtime I1 publicado; OQ-06 resuelta, OQ-08 extensiones pendientes |
 | PARTIAL | 31 PNG (29 base + dos opcionales) y 12 WAV versionados | Manifiesto disponible; revisión de derechos pendiente |
 
 IMPLEMENTED_VERIFIED describe presencia contrastada en código; no una nueva ejecución funcional. [Comandos, fechas y límites de QA](docs/testing/TEST_STRATEGY.md).
@@ -21,8 +21,8 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 | Prioridad / objetivo interno | Estado y trabajo | Responsable por módulo | Dependencia | Criterio de aceptación / siguiente prueba |
 |---|---|---|---|---|
 | P0 / 02/11 | OPEN_DEPENDENCY: extensiones TXT e integración; Java/build global | TXT + consumidores/integración | OQ-08 extensiones; OQ-07/11 | Subconjunto soportado ya decidido D-020; obtener contrato consumidor, preservar E01/E02 y legacy/C2 |
-| P0 / 02/11 | TEAM_DECIDED / IMPLEMENTATION_PENDING_OTHER_MODULE: Fragile/hielo y límite Undo | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
-| P0 / 06/11 | IMPLEMENTED_PARTIAL: KeyBox/Lock/muros, victoria y campaña; hielo/Fragile jugable siguen ausentes | Model/Movement + sesión | OQ-01/07 hipótesis individuales; OQ-02/08 abiertas | Preservar identidad/resistencia; casos de cierre ocupado y E05 ejecutados en esta rama |
+| P0 / 02/11 | I1_PUBLISHED_DRAFT: Fragile/hielo; límite Undo aún pendiente I2 | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
+| P0 / 06/11 | IMPLEMENTED_PARTIAL: KeyBox/Lock/muros, victoria y campaña; hielo/Fragile runtime incorporados en I1; GUI/animación pendientes I3 | Model/Movement + sesión | OQ-01/07 hipótesis individuales; OQ-02/08 abiertas | Preservar identidad/resistencia; casos de cierre ocupado y E05 ejecutados en esta rama |
 | P0 / 06/11 | PARTIAL: Lock abre muros asociados por consulta derivada, no Observer GoF | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración Undo pendientes |
 | P0 / 09/11 | PARTIAL: Restart de nivel implementado; Undo y métricas oficiales ausentes | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5; justificar Command o Memento |
 | P0 / 09/11 | PARTIAL: victoria/progresión implementadas; score oficial ausente (0 en pantalla) | Sesión/niveles/score | OQ-01 hipótesis; OQ-09 abierta | Goal/KeyBox y progresión probados; LevelResult aún no recibe fórmula TEAM |
@@ -82,17 +82,29 @@ El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece
 | Fase | Entrega | Criterio de cierre | Estado inicial |
 |---|---|---|---|
 | I0 | Rama compartida y PR Draft documentado | PR Draft con autoría, SHA, documentación viva y `main` intacta | DONE — PR #17 Draft publicado, `main` intacta al corte |
-| I1 | TXT/runtime/movimiento integrado | INT-01–04 (IDs Fragile, ICE, Lock/Wall) sobre HEAD combinado | NOT_RUN |
+| I1 | TXT/runtime/movimiento integrado | INT-01–04 (IDs Fragile, ICE, Lock/Wall) sobre árbol I1 auditado | PUBLISHED_DRAFT — `6abb8ad`, 316/316 pruebas precommit |
 | I2 | Sesión/Undo/Restart/Score | INT-05/06/08, fórmula ratificada y sin duplicidad | NOT_RUN |
 | I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | NOT_RUN |
 | I4 | QA/entregables y revisión TEAM | INT-01–10, Java17, derechos, StarUML del código integrado, informe/video | NOT_RUN |
 
 Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md). No duplicar el estado real de los commits en esta fotografía: actualizar este TODO **por impacto** al cerrar cada fase. Ningún PR Draft concede autorización de merge.
 
-## Checkpoint I1.C — staging local de `Objetivo2` (03/11/2026)
+## Checkpoint histórico I1.C — antes de la publicación (03/11/2026)
 
 - [x] Ejecutado `bash scripts/test-integration-i1.sh` tras I1.C: JDK 17.0.20.1, core **256/256**, Desktop **16/16**, Visual Assets **44/44**, exit 0 y `GIT_STATE_PRESERVED=YES`; evidencia reportada por el usuario (03/11/2026).
 - [ ] Auditar diff completo, tres resoluciones Swing, contratos TXT/Fragile, ausencia de estado duplicado y documentación viva. [Evidencia y fuentes](docs/integration/I1_LOCAL_VALIDATION_2026-11-03.md).
 - [ ] Resolver **con autorización** el índice `UU` de los tres archivos, crear el merge commit de **dos padres** preservando los dos commits originales `Objetivo2` y volver a probar contra el HEAD confirmado.
 - [ ] Promover sólo ese merge validado al **mismo PR Draft #17** tras verificar SHA remoto; nunca a `main` automáticamente ni sin revisión humana.
 - [ ] I2 (Undo/Restart/Score), I3 (GUI/animación), I4 (QA/entregables/TEAM) siguen sin cerrar.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Estado actual del backlog de integración (03/11/2026)
+
+- [x] I1: conflictos Swing reconciliados, 38 rutas auditadas, merge de dos padres `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2` incorporado al mismo PR #17 Draft; commits originales preservados.
+- [x] Validación previa al commit: JDK 17, 316/316 pruebas PASS y verificación documental; sin repetir tests post-push.
+- [ ] I2: reconciliar Undo 15/5/3, Restart y score de Martina con `GameSession`/`RuntimeState`, previa auditoría de fórmula y autoridad TEAM.
+- [ ] I3: animación ICE/Fragile, HUD, campaña y GUI interactiva.
+- [ ] I4: pruebas en HEAD final, Windows, licencias, StarUML, informe, video y aceptación del equipo.
+
+Las tareas sin marcar del checkpoint histórico anterior pertenecen a su corte anterior al merge; no son el estado actual. No fusionar PR #17 a `main` sin aceptación expresa.

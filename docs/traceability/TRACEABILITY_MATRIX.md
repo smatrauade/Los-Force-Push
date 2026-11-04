@@ -166,3 +166,9 @@ QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, s
 ## Traspaso I1 al runtime unificado — estado local 03/11/2026
 
 `INT-01`: D-020 Fragile con IDs y resistencias 2/3, 2 empujes y reinicio de sesión, test `RuntimeIceFragileTest.testIds`; `INT-02`: E03 ICE por `LevelProgression`/`GameSession` con bloqueo de salida, `testIce`; `INT-03`: E04 Fragile sobre piso que atraviesa ICE, pierde una resistencia por empuje y se destruye después del trayecto sin reinicio automático, `testFragileIce`/`testFailClose`; `INT-04`: E05/E06 KeyBox/Lock/DynamicWall, cierre ocupado bloqueado atómicamente, `testExistingKeyWall`. La gramática inicial Fragile en ICE sigue fuera de D-020. Evidencia anterior: **312/312** tests JDK17 reportados sobre tree local **antes de I1.C**. Evidencia posterior reportada: [runner versionado](../../scripts/test-integration-i1.sh) **316/316 PASS** (core 256, Desktop 16, Visual Assets 44), más auditoría read-only de **38 paths esperados**, sin rutas inesperadas. La ejecución no acredita GUI interactiva ni aceptación TEAM. [Matriz de aceptación y límites](../integration/INTEGRATION_ACCEPTANCE.md). `IN_MAIN=NO`, `TEAM_ACCEPTANCE=NOT_RECORDED`, `INT-09=NOT_RUN`.
+
+<!-- I1_PR17_PUBLICATION_2026_11_03 -->
+
+## Trazabilidad de publicación I1 — 03/11/2026
+
+`IN_INTEGRATION_BRANCH`: en PR #17 Draft, `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`, se incorporaron ICE/Fragile runtime con ID y resistencia (D-020, E03/E04) y compatibilidad KeyBox/Lock/Wall (E05/E06). INT-01–04 se cubrieron en el árbol local consolidado mediante `RuntimeIceFragileTest` y las regresiones (316/316 PASS, JDK17), con árbol y blobs verificados antes del commit. **No** se ejecutaron de nuevo tras el push; `IN_MAIN=NO`, aceptación TEAM pendiente. I2 (Undo/Restart/Score), I3 (frames GUI/HUD) e I4 (QA final/StarUML/entrega) continúan abiertos. [Registro](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
