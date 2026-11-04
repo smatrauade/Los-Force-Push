@@ -4,13 +4,13 @@ Los Force Push es un Sokoban 2D en **Java/Swing** para el TPO de Procesos de Des
 
 El juego incluye TXT externos, cinco niveles, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría técnica y pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
 
-La arquitectura cuenta con [nueve fuentes PlantUML editables y nueve imágenes PNG derivadas](docs/architecture/uml/pr17-rc-ffa27f9/README.md), verificados con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
+La arquitectura cuenta con [nueve fuentes PlantUML editables y nueve imágenes PNG derivadas](docs/architecture/uml/pr17-rc-ffa27f9/README.md), generadas con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
 
 ## Inicio rápido
 
 Se necesita un **JDK completo 17 o superior** con `java` y `javac` compatibles y un escritorio gráfico. Los scripts compilan con `--release 17`, UTF-8, `-Xlint:all -Werror`. La selección definitiva de toolchain sigue [OQ-11](docs/requirements/OPEN_QUESTIONS.md). No se necesitan Maven, Gradle ni bibliotecas externas; imágenes, WAV y niveles están en el clon. El audio depende del dispositivo disponible. Observer publica cambios Lock confirmados para avisos y SFX; los muros siguen derivados por el modelo.
 
-Para usar la versión consolidada después de integrar el PR, clonar la rama predeterminada:
+Para usar la versión integrada, clonar la rama predeterminada:
 
 ```bash
 git clone https://github.com/smatrauade/Los-Force-Push.git
