@@ -49,8 +49,6 @@ public final class GameController {
         if (game == null || game.isFinalized()) {
             return;
         }
-        // No animation is emitted until runtime supplies authoritative slide
-        // frames/path (I1.B/I3). The legacy Board path would lose Lock metadata.
         RuntimeMoveResult result = game.move(direction);
         view.onMove(result.kind());
         if (result.kind() == MoveResult.Kind.BLOCKED) {
@@ -60,12 +58,28 @@ public final class GameController {
             boolean opened = result.lockChanges().stream().anyMatch(RuntimeMoveResult.LockChange::active);
             view.playEffect(opened ? SoundManager.Effect.LOCK : SoundManager.Effect.GATE);
         }
+        // E03 only extends boxPath past its first destination on ICE, so a
+        // longer path is authoritative evidence of a slide.
+        boolean slidOnIce = result.boxPath().size() > 1;
+        if (slidOnIce) {
+            view.playEffect(SoundManager.Effect.ICE);
+        }
+        if (result.boxShattered()) {
+            view.playEffect(SoundManager.Effect.FRAGILE);
+        }
         if (result.boxDestination() != null && !result.boxShattered()
                 && result.state().terrain().get(result.boxDestination().row())
                 .get(result.boxDestination().column()) == RuntimeState.Ground.GOAL) {
             view.playEffect(SoundManager.Effect.GOAL);
         }
         publish();
+        // The final runtime is already visible; this only projects its path.
+        if (result.kind() == MoveResult.Kind.PUSHED) {
+            BoxAnimation animation = BoxAnimation.from(result);
+            if (animation.needsFrames()) {
+                view.animateBox(animation);
+            }
+        }
         if (game.victory().won()) {
             game.finish().orElseThrow();
             publishCommands();

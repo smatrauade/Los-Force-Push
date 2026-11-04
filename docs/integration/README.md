@@ -2,9 +2,9 @@
 
 `DOMAIN=TEAM_INTEGRATION_AND_REPOSITORY_CONTINUITY` · `STATUS=I0_I1_I2_PUBLISHED_PR17_DRAFT_I3_LOCAL` · `CUT=2026-11-04`
 
-## I3 local — niveles distribuidos y selector visual (04/11/2026)
+## I3 local — niveles distribuidos, selector visual y animación ICE/Fragile (04/11/2026)
 
-Además de I2 publicado, el árbol local incorpora I3.A (`ShippedLevelsIntegrationTest`, aceptación headless de `demo.txt`/`campaign-b.txt`, `fragile_demo.txt` e `ice_demo.txt`) e I3.B (selector `ORIGINAL COBRE`/`NOCTURNO`/`JADE` con Abstract Factory de vista, `VisualThemeTest` 7 escenarios). La regresión completa del árbol es Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS con `scripts/test-integration-i2.sh`. `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`; el selector es candidato a adicional RF-12/OQ-10 y no cierra su elegibilidad. Sin publicación ni merge.
+Además de I2 publicado, el árbol local incorpora I3.A (`ShippedLevelsIntegrationTest`, aceptación headless de `demo.txt`/`campaign-b.txt`, `fragile_demo.txt` e `ice_demo.txt`), I3.B (selector `ORIGINAL COBRE`/`NOCTURNO`/`JADE` con Abstract Factory de vista, `VisualThemeTest` 7 escenarios) e I3.C (animación de presentación desde `RuntimeMoveResult` con `BoxAnimation`, frames deterministas de ICE/Fragile, diferimiento de FINISH y cancelación segura, `AnimationPresentationTest` 14 escenarios). La regresión completa del árbol es Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS con `scripts/test-integration-i2.sh`. `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`; INT-09 cuenta solo con evidencia headless y el selector es candidato a adicional RF-12/OQ-10 sin cerrar su elegibilidad. Sin publicación ni merge.
 
 ## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
 

@@ -83,6 +83,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'UI asset tests failed.' }
         & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.VisualThemeTest' (Join-Path $root 'src/desktop/resources/assets/sprites') (Join-Path $root 'src/desktop/resources/levels')
         if ($LASTEXITCODE -ne 0) { throw 'Visual theme tests failed.' }
+        & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath 'ar.edu.uade.sokoban.desktop.AnimationPresentationTest' (Join-Path $root 'src/desktop/resources/levels') (Join-Path $root 'src/desktop/resources/assets/sprites')
+        if ($LASTEXITCODE -ne 0) { throw 'Animation presentation tests failed.' }
     }
     $exitCode = 0
 } catch {

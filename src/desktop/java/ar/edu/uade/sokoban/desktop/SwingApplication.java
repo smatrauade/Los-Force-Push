@@ -119,6 +119,7 @@ public final class SwingApplication {
         private final JComboBox<String> zoomSelector = new JComboBox<>(new String[]{
                 "1x  (32 px)", "2x  (64 px)", "3x  (96 px)"});
         private final transient GameController controller = new GameController(this);
+        private final transient VictoryGate victoryGate = new VictoryGate();
         private final transient Path defaultDemo;
         private transient Path currentLevel;
         private transient Path pendingLevel;
@@ -153,7 +154,13 @@ public final class SwingApplication {
             installKeys();
             addWindowListener(new WindowAdapter() {
                 @Override
+                public void windowClosing(WindowEvent event) {
+                    stopPresentation();
+                }
+
+                @Override
                 public void windowClosed(WindowEvent event) {
+                    stopPresentation();
                     audio.close();
                 }
             });
@@ -180,9 +187,29 @@ public final class SwingApplication {
         }
 
         private void showScreen(String name) {
+            if (!GAME.equals(name)) {
+                board.cancelAnimation();
+                victoryGate.clear();
+            }
             active = name;
             layout.show(cards, name);
             getRootPane().requestFocusInWindow();
+        }
+
+        private void stopPresentation() {
+            board.cancelAnimation();
+            victoryGate.clear();
+        }
+
+        /** ESC/pause must not leave a timer or a hidden final victory behind. */
+        private void pauseGame() {
+            LevelResult deferred = victoryGate.take();
+            if (deferred != null) {
+                board.cancelAnimation();
+                presentVictory(deferred);
+            } else {
+                showScreen(PAUSE);
+            }
         }
 
         private JPanel centerStack(String heading, String subheading) {
@@ -295,7 +322,7 @@ public final class SwingApplication {
             top.add(brand, BorderLayout.WEST);
             JButton menu = PixelTheme.button("ESC  PAUSA");
             menu.setPreferredSize(new Dimension(160, 38));
-            menu.addActionListener(event -> showScreen(PAUSE));
+            menu.addActionListener(event -> pauseGame());
             top.add(menu, BorderLayout.EAST);
             result.add(top, BorderLayout.NORTH);
 
@@ -461,6 +488,7 @@ public final class SwingApplication {
         }
 
         private void startDemo() {
+            stopPresentation();
             Path levels = defaultDemo.getParent();
             Path campaign = levels == null ? null : levels.resolve("campaign-b.txt");
             if (java.nio.file.Files.isRegularFile(defaultDemo)
@@ -478,6 +506,7 @@ public final class SwingApplication {
         }
 
         private void openLevel(Path path) {
+            stopPresentation();
             pendingLevel = Objects.requireNonNull(path, "path");
             controller.load(path);
             pendingLevel = null;
@@ -527,7 +556,7 @@ public final class SwingApplication {
             });
             bind("ESCAPE", "pause", () -> {
                 if (GAME.equals(active)) {
-                    showScreen(PAUSE);
+                    pauseGame();
                 } else if (PAUSE.equals(active)) {
                     showScreen(GAME);
                 } else if (OPTIONS.equals(active)) {
@@ -577,6 +606,7 @@ public final class SwingApplication {
 
         @Override
         public void render(GamePresentation presentation) {
+            victoryGate.clear();
             if (pendingLevel != null) {
                 currentLevel = pendingLevel;
                 board.setFacing(Direction.DOWN);
@@ -601,6 +631,18 @@ public final class SwingApplication {
         }
 
         @Override
+        public void animateBox(BoxAnimation animation) {
+            board.playBoxAnimation(animation, SLIDE_MILLIS_PER_CELL, this::animationFinished);
+        }
+
+        private void animationFinished() {
+            LevelResult deferred = victoryGate.take();
+            if (deferred != null) {
+                presentVictory(deferred);
+            }
+        }
+
+        @Override
         public void onMove(MoveResult.Kind kind) {
             switch (kind) {
                 case MOVED -> audio.play(SoundManager.Effect.STEP);
@@ -618,6 +660,13 @@ public final class SwingApplication {
         @Override
         public void showVictory(LevelResult result) {
             Objects.requireNonNull(result, "result");
+            if (victoryGate.defer(result, board.isAnimating())) {
+                return;
+            }
+            presentVictory(result);
+        }
+
+        private void presentVictory(LevelResult result) {
             status.setText("PUNTAJE: " + result.score());
             victoryData.setText("<html><div style='text-align:center'>"
                     + "NIVEL: " + escapeHtml(result.levelName()) + "<br><br>"

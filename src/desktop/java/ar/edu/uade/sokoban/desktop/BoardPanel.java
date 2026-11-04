@@ -10,7 +10,9 @@ import ar.edu.uade.sokoban.movement.RuntimeState;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -21,12 +23,25 @@ import javax.swing.Timer;
 public final class BoardPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final int MARGIN = 24;
+
+    /** One deterministic presentation frame; a null sprite means the box is gone. */
+    record BoxFrame(Position position, String sprite) {
+        BoxFrame {
+            Objects.requireNonNull(position, "position");
+        }
+    }
     private final transient PixelAssets sprites;
     private transient VisualThemeFactory theme = VisualThemes.original();
     private transient RuntimeState state;
     // Presentation-only frames: never used as the authoritative gameplay state.
     private transient Board overlay;
     private transient Timer slideTimer;
+    private transient BoxAnimation boxAnimation;
+    private transient List<BoxFrame> animationFrames = List.of();
+    private transient int animationFrame;
+    private transient Timer animationTimer;
+    private transient Runnable animationCompletion;
+    private transient long animationGeneration;
     private int scale = 2;
     private Direction facing = Direction.DOWN;
     private long appearanceTick;
@@ -57,10 +72,15 @@ public final class BoardPanel extends JPanel {
     }
 
     public void showState(RuntimeState next) {
-        stopSlide();
+        stopAnimations();
         state = Objects.requireNonNull(next, "state");
         updateSize();
         repaint();
+    }
+
+    /** Read-only identity check used by headless presentation tests. */
+    RuntimeState shownState() {
+        return state;
     }
 
     public void setScale(int next) {
@@ -84,7 +104,141 @@ public final class BoardPanel extends JPanel {
 
     /** The overlay is visual only; the session's RuntimeState remains authoritative. */
     public boolean isAnimating() {
-        return slideTimer != null && slideTimer.isRunning();
+        return boxAnimation != null || (slideTimer != null && slideTimer.isRunning());
+    }
+
+    /** Package-private frame accessors keep headless tests deterministic. */
+    List<BoxFrame> animationFrames() {
+        return List.copyOf(animationFrames);
+    }
+
+    int animationFrameIndex() {
+        return animationFrame;
+    }
+
+    BoxFrame projectedBoxFrame() {
+        return boxAnimation == null || animationFrame >= animationFrames.size()
+                ? null : animationFrames.get(animationFrame);
+    }
+
+    boolean hasAnimationCompletion() {
+        return animationCompletion != null;
+    }
+
+    Rectangle cellBounds(Position position) {
+        int tile = PixelAssets.NATIVE_SIZE * scale;
+        return new Rectangle(MARGIN + position.column() * tile,
+                MARGIN + position.row() * tile, tile, tile);
+    }
+
+    /**
+     * Starts one presentation-only trajectory. The final RuntimeState must
+     * already be published; only the moving box is drawn from these frames.
+     */
+    void playBoxAnimation(BoxAnimation animation, int millisPerCell, Runnable onComplete) {
+        Objects.requireNonNull(animation, "animation");
+        if (millisPerCell <= 0) {
+            throw new IllegalArgumentException("Intervalo de animacion invalido");
+        }
+        stopAnimations();
+        if (state == null) {
+            return;
+        }
+        List<BoxFrame> frames = planBoxAnimation(state, animation);
+        boxAnimation = animation;
+        animationFrames = frames;
+        animationFrame = 0;
+        animationCompletion = onComplete;
+        long generation = ++animationGeneration;
+        animationTimer = new Timer(millisPerCell, event -> {
+            if (generation != animationGeneration) {
+                return;
+            }
+            advanceAnimationFrame();
+        });
+        animationTimer.start();
+        repaint();
+    }
+
+    /** Advances one frame; false means the sequence is finished or cancelled. */
+    boolean advanceAnimationFrame() {
+        if (boxAnimation == null) {
+            return false;
+        }
+        animationFrame++;
+        if (animationFrame >= animationFrames.size()) {
+            finishAnimation();
+            return false;
+        }
+        repaint();
+        return true;
+    }
+
+    /** Cancels without completing: used by pause, close, load, restart and undo. */
+    boolean cancelAnimation() {
+        boolean active = isAnimating();
+        stopAnimations();
+        if (active) {
+            repaint();
+        }
+        return active;
+    }
+
+    static List<BoxFrame> planBoxAnimation(RuntimeState world, BoxAnimation animation) {
+        Objects.requireNonNull(world, "world");
+        Objects.requireNonNull(animation, "animation");
+        List<BoxFrame> frames = new ArrayList<>();
+        for (Position position : animation.path()) {
+            validatePosition(world, position);
+            frames.add(new BoxFrame(position, boxSprite(world, animation.box(), position)));
+        }
+        if (animation.shattered()) {
+            Position last = animation.path().get(animation.path().size() - 1);
+            frames.add(new BoxFrame(last, "box_broken"));
+            frames.add(new BoxFrame(last, null));
+        }
+        return List.copyOf(frames);
+    }
+
+    private static void validatePosition(RuntimeState world, Position position) {
+        if (position.row() < 0 || position.column() < 0
+                || position.row() >= world.height() || position.column() >= world.width()) {
+            throw new IllegalArgumentException("Posicion de animacion fuera del tablero");
+        }
+    }
+
+    private void finishAnimation() {
+        animationGeneration++;
+        if (animationTimer != null) {
+            animationTimer.stop();
+            animationTimer = null;
+        }
+        boxAnimation = null;
+        animationFrames = List.of();
+        animationFrame = 0;
+        Runnable completion = animationCompletion;
+        animationCompletion = null;
+        repaint();
+        if (completion != null) {
+            completion.run();
+        }
+    }
+
+    private void stopBoxAnimation() {
+        animationGeneration++;
+        if (animationTimer != null) {
+            animationTimer.stop();
+            animationTimer = null;
+        }
+        boxAnimation = null;
+        animationFrames = List.of();
+        animationFrame = 0;
+        animationCompletion = null;
+    }
+
+    private void stopAnimations() {
+        stopSlide();
+        stopBoxAnimation();
     }
 
     /**
@@ -93,7 +247,7 @@ public final class BoardPanel extends JPanel {
      * authoritative ICE/Fragile events belongs to I1.B/I3.
      */
     public void playSlide(List<Board> frames, int millisPerCell) {
-        stopSlide();
+        stopAnimations();
         if (state == null || frames == null || frames.size() < 2) {
             return;
         }
@@ -157,9 +311,13 @@ public final class BoardPanel extends JPanel {
 
     static String boxSprite(RuntimeState world, Position position) {
         RuntimeState.Box box = world.boxAt(position);
-        if (box == null) {
-            return null;
-        }
+        return box == null ? null : boxSprite(world, box, position);
+    }
+
+    /** Uses the animation's own box metadata, never the final world's replacement. */
+    static String boxSprite(RuntimeState world, RuntimeState.Box box, Position position) {
+        Objects.requireNonNull(world, "world");
+        Objects.requireNonNull(box, "box");
         return switch (box.kind()) {
             case NORMAL -> world.terrain().get(position.row()).get(position.column())
                     == RuntimeState.Ground.GOAL ? "box_goal" : "box";
@@ -208,37 +366,49 @@ public final class BoardPanel extends JPanel {
                 paintOverlay(g, overlay);
                 return;
             }
-            int tile = PixelAssets.NATIVE_SIZE * scale;
-            g.setColor(theme.palette().boardFrameOuter());
-            g.fillRect(MARGIN - 5, MARGIN - 5, state.width() * tile + 10, state.height() * tile + 10);
-            g.setColor(theme.palette().boardFrameInner());
-            g.fillRect(MARGIN - 3, MARGIN - 3, state.width() * tile + 6, state.height() * tile + 6);
-            for (int row = 0; row < state.height(); row++) {
-                for (int col = 0; col < state.width(); col++) {
-                    Position position = new Position(row, col);
-                    int x = MARGIN + col * tile;
-                    int y = MARGIN + row * tile;
-                    String terrain = terrainSprite(state, position);
-                    if (terrain.startsWith("wall_")) {
-                        draw(g, terrain, x, y, tile);
-                        continue;
-                    }
-                    draw(g, "floor_" + Math.floorMod(row * 11 + col * 7, 3), x, y, tile);
-                    if (!terrain.equals("floor")) {
-                        draw(g, terrain, x, y, tile);
-                    }
-                    String box = boxSprite(state, position);
-                    if (box != null) {
-                        draw(g, box, x, y, tile);
-                    }
-                    if (state.player().equals(position)) {
-                        draw(g, "player_" + facing.name().toLowerCase(Locale.ROOT)
-                                + ((appearanceTick % 2L == 1L) ? "_step" : ""), x, y, tile);
-                    }
-                }
-            }
+            BoxFrame frame = boxAnimation == null || animationFrame >= animationFrames.size()
+                    ? null : animationFrames.get(animationFrame);
+            Position suppressed = boxAnimation == null ? null : boxAnimation.destination();
+            paintRuntime(g, state, suppressed, frame);
         } finally {
             g.dispose();
+        }
+    }
+
+    private void paintRuntime(Graphics2D g, RuntimeState world, Position suppressedBox,
+                              BoxFrame animated) {
+        int tile = PixelAssets.NATIVE_SIZE * scale;
+        g.setColor(theme.palette().boardFrameOuter());
+        g.fillRect(MARGIN - 5, MARGIN - 5, world.width() * tile + 10, world.height() * tile + 10);
+        g.setColor(theme.palette().boardFrameInner());
+        g.fillRect(MARGIN - 3, MARGIN - 3, world.width() * tile + 6, world.height() * tile + 6);
+        for (int row = 0; row < world.height(); row++) {
+            for (int col = 0; col < world.width(); col++) {
+                Position position = new Position(row, col);
+                int x = MARGIN + col * tile;
+                int y = MARGIN + row * tile;
+                String terrain = terrainSprite(world, position);
+                if (terrain.startsWith("wall_")) {
+                    draw(g, terrain, x, y, tile);
+                    continue;
+                }
+                draw(g, "floor_" + Math.floorMod(row * 11 + col * 7, 3), x, y, tile);
+                if (!terrain.equals("floor")) {
+                    draw(g, terrain, x, y, tile);
+                }
+                String box = boxSprite(world, position);
+                if (box != null && !position.equals(suppressedBox)) {
+                    draw(g, box, x, y, tile);
+                }
+                if (animated != null && animated.position().equals(position)
+                        && animated.sprite() != null) {
+                    draw(g, animated.sprite(), x, y, tile);
+                }
+                if (world.player().equals(position)) {
+                    draw(g, "player_" + facing.name().toLowerCase(Locale.ROOT)
+                            + ((appearanceTick % 2L == 1L) ? "_step" : ""), x, y, tile);
+                }
+            }
         }
     }
 

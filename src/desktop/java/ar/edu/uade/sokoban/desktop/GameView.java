@@ -12,6 +12,9 @@ public interface GameView {
     /** Optional slide animation; headless probes keep the default no-op. */
     default void animateBoxSlide(List<Board> frames) { }
 
+    /** Optional authoritative ICE/Fragile trajectory; never recomputed by the view. */
+    default void animateBox(BoxAnimation animation) { }
+
     /** Optional event so SFX does not execute during paint/repaint. */
     default void onMove(MoveResult.Kind kind) { }
 

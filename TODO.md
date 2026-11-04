@@ -1,5 +1,11 @@
 # TODO — backlog vivo
 
+## I3.C — animación ICE/Fragile (04/11/2026)
+
+Se incorporó `BoxAnimation` como proyección inmutable de `RuntimeMoveResult`, el hook default `GameView.animateBox` y frames deterministas en `BoardPanel`: orden exacto del `boxPath`, supresión de la caja final durante la trayectoria y, para Fragile, última celda + `box_broken` + ausencia. `GameController` publica el runtime final, emite `ICE`/`FRAGILE` una vez y luego anima; `SwingApplication` difiere FINISH solo mientras el tablero anima. Undo, Restart, recarga, ESC/cierre y reemplazo de nivel cancelan sin callbacks obsoletos. La animación no muta `RuntimeState` ni recalcula física y conserva `BoxKind`, ID/resistencia Fragile y metadatos Lock/DynamicWall.
+
+`AnimationPresentationTest` aporta 14 escenarios headless y se ejecuta desde `scripts/run-swing.sh --test` y `scripts/test-integration-i2.sh`. Regresión: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS, runner exit 0. No se agregaron PNG ni se alteraron hashes. INT-09 queda con evidencia headless; `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`, `REMOTE_PUSH=NOT_RUN` e I4 pendiente. Siguiente gate: QA GUI nativa y revisión funcional del equipo. [Evidencia y límites](docs/testing/TEST_STRATEGY.md).
+
 ## I3.B — selector de estilo visual con Abstract Factory (04/11/2026)
 
 Se incorporó un selector de tres familias visuales en OPCIONES —`ORIGINAL COBRE`, `NOCTURNO` y `JADE`— sobre `VisualThemeFactory` (Abstract Factory de vista: `UiPalette` + `SpritePresentation`), catálogo inmutable en `VisualThemes`, coordinación única en `VisualThemeController` y restauración exacta de colores/bordes en `VisualThemeApplier`. Los PNG no se modifican: la familia original los devuelve intactos y las alternativas generan en memoria un tinte determinista 55/45 con alfa preservado; `PixelAssets` invalida la caché por familia. El cambio no altera `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score, TXT ni referencias Lock/DynamicWall. `VisualThemeTest` aporta 7 escenarios headless; la regresión completa queda en Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS con `bash scripts/test-integration-i2.sh` exit 0.
@@ -38,7 +44,7 @@ Entrega docente: **miércoles 18/11/2026**, demo en vivo **15–20 minutos** y c
 |---|---|---|---|---|
 | P0 / 02/11 | OPEN_DEPENDENCY: extensiones TXT e integración; Java/build global | TXT + consumidores/integración | OQ-08 extensiones; OQ-07/11 | Subconjunto soportado ya decidido D-020; obtener contrato consumidor, preservar E01/E02 y legacy/C2 |
 | P0 / 02/11 | I1_I2_PUBLISHED_DRAFT: Fragile/hielo y Undo/Restart/Score integrados; QA GUI posterior al hotfix pendiente | Model/Movement y sesión | E04/E08 resueltas; OQ-03/04 bordes operativos | Implementar y probar las reglas elegidas con casos antes/después; no reabrir encuestas ni rediseñar Undo desde TXT |
-| P0 / 06/11 | IMPLEMENTED_PARTIAL: KeyBox/Lock/muros, victoria y campaña; hielo/Fragile runtime incorporados en I1; GUI/animación pendientes I3 | Model/Movement + sesión | OQ-01/07 hipótesis individuales; OQ-02/08 abiertas | Preservar identidad/resistencia; casos de cierre ocupado y E05 ejecutados en esta rama |
+| P0 / 06/11 | IMPLEMENTED_PARTIAL: KeyBox/Lock/muros, victoria y campaña; hielo/Fragile runtime incorporados en I1; animación I3.C headless; QA GUI pendiente | Model/Movement + sesión | OQ-01/07 hipótesis individuales; OQ-02/08 abiertas | Preservar identidad/resistencia; casos de cierre ocupado y E05 ejecutados en esta rama |
 | P0 / 06/11 | PARTIAL: Lock abre muros asociados por consulta derivada, no Observer GoF | Model/arquitectura | Indicación ASR docente, D-010 y OQ-07 | Roles y notificaciones a asociados, aislamiento entre grupos y restauración Undo pendientes |
 | P0 / 09/11 | IN_PR17_DRAFT: Restart de nivel, Undo 15/5/3 y métricas oficiales | Sesión/score | OQ-04/05/09; estado especial | Historial 15, restaurar bloques 5, límites 3 y bordes 4/5 verificados localmente en GameSessionUndoTest (58 casos) |
 | P0 / 09/11 | IN_PR17_DRAFT: victoria/progresión integradas con score oficial y retención | Sesión/niveles/score | OQ-01 hipótesis; OQ-09 ratificada | Goal/KeyBox y progresión probados; CompletedLevel retiene undoUsesTotal y LevelResult comunica fórmula TEAM; 987 y 997 probados |
@@ -100,7 +106,7 @@ El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece
 | I0 | Rama compartida y PR Draft documentado | PR Draft con autoría, SHA, documentación viva y `main` intacta | DONE — PR #17 Draft publicado, `main` intacta al corte |
 | I1 | TXT/runtime/movimiento integrado | INT-01–04 (IDs Fragile, ICE, Lock/Wall) sobre árbol I1 auditado | PUBLISHED_DRAFT — `6abb8ad`, 316/316 pruebas precommit |
 | I2 | Sesión/Undo/Restart/Score | INT-05/06/08, fórmula ratificada y sin duplicidad | DONE_LOCAL — 58 Undo, 258 core, 36 desktop, 44 assets en JDK17; no publicado |
-| I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | PARTIAL_LOCAL — I3.A/I3.B headless; animación y QA GUI pendientes |
+| I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | PARTIAL_LOCAL — I3.A/I3.B/I3.C headless; QA GUI nativa pendiente |
 | I4 | QA/entregables y revisión TEAM | INT-01–10, Java17, derechos, StarUML del código integrado, informe/video | NOT_RUN |
 
 Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md). No duplicar el estado real de los commits en esta fotografía: actualizar este TODO **por impacto** al cerrar cada fase. Ningún PR Draft concede autorización de merge.
@@ -120,7 +126,7 @@ Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md).
 - [x] I1: conflictos Swing reconciliados, 38 rutas auditadas, merge de dos padres `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2` incorporado al mismo PR #17 Draft; commits originales preservados.
 - [x] Validación previa al commit: JDK 17, 316/316 pruebas PASS y verificación documental; sin repetir tests post-push.
 - [x] I2: reconciliado Undo 15/5/3, Restart y score de Martina en GameSession, LevelProgression, GameController y ScoreCalculator; INT-05, INT-06 e INT-08 corregidos y verificados localmente (58 Undo, 258 core, 36 desktop, 44 assets en JDK 17); no publicado.
-- [ ] I3: animación ICE/Fragile, HUD, campaña y GUI interactiva.
+- [ ] I3: HUD, campaña y GUI interactiva; animación ICE/Fragile cubierta localmente por I3.C.
 - [ ] I4: pruebas en HEAD final, Windows, licencias, StarUML, informe, video y aceptación del equipo.
 
 Las tareas sin marcar del checkpoint histórico anterior pertenecen a su corte anterior al merge; no son el estado actual. No fusionar PR #17 a `main` sin aceptación expresa.

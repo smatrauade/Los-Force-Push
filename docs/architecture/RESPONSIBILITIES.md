@@ -40,13 +40,13 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | ExperimentalFragileParser / ExperimentalFragileLevel | Prototipo aislado: definición inmutable con identidad, posición y resistencia; no es Level jugable |
 | LevelLoader / LevelFormatException | E/S externa limitada y UTF-8 estricto compartidos por `load` jugable y `loadExperimentalFragile` de definición experimental; errores explícitos, sin caché ni reglas runtime |
 | Direction / MovementEngine / MoveResult | Transición normal MOVED/PUSHED/BLOCKED; motor sin estado ni contadores |
-| GameController | Carga atómica y coordinación de movimiento, sesión, `undo()`, `restart()` y `getLevelResult()`; sin historial propio ni reglas/parser/pintura |
+| GameController | Carga atómica y coordinación de movimiento, sesión, `undo()`, `restart()`, `getLevelResult()` y solicitud de animación posterior a publicar; sin historial propio ni reglas/parser/pintura |
 | ScoreCalculator | Calcula el score del intento desde 1000 con penalidades incrementalmente aplicadas: −1 por movimiento, −2 por push y −10 por uso de Undo; evita overflow con `applyPenalty` y devuelve un mínimo de 0 |
 | GamePresentation | Proyección con referencia al Board inmutable, nombre y dos contadores fundamentales del intento (`moves`, `pushes`) |
-| GameView | Frontera render/error y hooks default de eventos, comandos y resultado final |
+| GameView | Frontera render/error y hooks default de eventos, animación de caja, comandos y resultado final |
 | SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT, selector de estilo visual y captura de acciones; `configureUiCommands` activa/desactiva Undo y Restart según callbacks disponibles |
 | ArrowBindings | Traduce flechas a Direction; la ventana controla la pantalla activa |
-| BoardPanel | Render por capas, orientación y escala; toma la paleta de la familia visual activa; no modifica el Board ni infiere resistencia |
+| BoardPanel | Render por capas, orientación y escala; proyecta frames de `BoxAnimation` desde el path autoritativo sin recalcular física; toma la paleta de la familia visual activa; no modifica el Board ni infiere resistencia |
 | PixelAssets | Carga y caché de PNG 32×32 por classpath; aplica la presentación de sprites de la familia activa e invalida la caché al cambiarla, sin escribir archivos |
 | PixelTheme | Paleta, tipografía y widgets Swing; `Surface` lee la paleta de la familia activa |
 | VisualThemeFactory | Abstract Factory de vista: contrato de `UiPalette` y `SpritePresentation`; no expone estado de juego |

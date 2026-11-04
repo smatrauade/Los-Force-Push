@@ -1,5 +1,19 @@
 # Matriz viva de trazabilidad
 
+## I3.C — animación ICE/Fragile, 04/11/2026
+
+Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03`; no está en `main` ni acredita aceptación TEAM. `BoxAnimation` es una proyección inmutable de `RuntimeMoveResult`; `GameController` publica el runtime final antes de solicitar frames y emite `ICE`/`FRAGILE` fuera de `paintComponent`; `BoardPanel` sólo dibuja el `boxPath` autoritativo y `SwingApplication` difiere FINISH mientras anima. No se duplica física, estado ni assets.
+
+| Requisito / alcance | Implementación | Casos reales / evidencia del incremento | Brecha restante |
+|---|---|---|---|
+| INT-09, trayectoria ICE | `BoxAnimation`, `GameView.animateBox`, `GameController`, `BoardPanel.planBoxAnimation` | `AnimationPresentationTest`: orden exacto `(2,3)…(2,7)`, frames deterministas y ausencia de caja fantasma en el destino | QA GUI nativa y percepción visual NOT_RUN |
+| INT-03/INT-09, rotura Fragile | Frames última celda + `box_broken` + ausencia; identidad/resistencia conservadas | Fragile 1 sobre ICE, Fragile 1 de una celda, Fragile 2 no roto; rotura sólo tras la trayectoria | Igual limitación: evidencia headless, no ventana interactiva |
+| E05/E06, metadatos especiales | `BoxAnimation` conserva `BoxKind`; `BoardPanel` no muta `RuntimeState` | KeyBox sobre ICE con Lock/DynamicWall y resistencia intactos; tema/zoom durante animación | Sin nivel jugable que combine ICE y Lock en un mismo TXT |
+| RF-11/audio, no interferencia | SFX desde controller; un timer EDT cancelable por generación | `ICE`/`FRAGILE` una vez, sin duplicar `PUSH`/`GOAL`; Undo/Restart/recarga/ESC/cierre cancelan | Audio audible, Windows/macOS y QA nativa NOT_RUN |
+| Assets | Sólo sprites existentes (`box`, `box_key`, `box_fragile_*`, `box_broken`, `ice`) | Hashes SHA-256 de PNG antes/después iguales; 44 assets de regresión PASS | Derechos/licencias siguen pendientes |
+
+La regresión del mismo árbol fue Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS (`bash scripts/test-integration-i2.sh`, exit 0, OpenJDK 17.0.20.1, `--release 17`, UTF-8, `-Xlint:all -Werror`). `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`, `REMOTE_PUSH=NOT_RUN`; I4 pendiente. [Comandos y límites](../testing/TEST_STRATEGY.md).
+
 ## I3.B — selector de estilo visual, 04/11/2026
 
 Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03`; no está en `main` ni acredita aceptación TEAM. Justificación del patrón: existe una familia real de productos coordinados (paleta Swing + presentación de sprites) y dos variantes concretas con consumidores efectivos (`SwingApplication`, `BoardPanel`, `PixelAssets`, `PixelTheme.Surface`), por lo que Abstract Factory evita condicionales por tema y mantiene el conmutador en un único punto. La alternativa simple —un `enum` con `if/switch` en cada widget— se descartó porque duplicaría la tabla de colores y arriesgaría restauraciones parciales al volver al original.
@@ -9,7 +23,7 @@ Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03
 | RF-11, presentación conmutable por familia | `VisualThemeFactory`, `VisualThemes`, `VisualThemeController`, `VisualThemeApplier`; selector en OPCIONES | `VisualThemeTest` 7/7 PASS headless; Desktop 40, Campaña 41 y Assets 44 conservan sus conteos | QA GUI nativa, percepción visual y audio audible NOT_RUN |
 | RF-11, identidad y reversibilidad del aspecto previo | Familia original con `SpritePresentation` identidad y restauración de colores/bordes guardados | Sprites originales idénticos al PNG; vuelta al original restaura tablero, controles y superficie | No se compara contra captura histórica externa; sólo contra los PNG y la paleta previa en código |
 | RF-11, assets y caché | `PixelAssets` transforma en memoria, invalida caché por familia y nunca escribe archivos | Hashes SHA-256 de todos los PNG antes/después iguales; alfa intacto y salida determinista | Derechos/licencias de assets siguen pendientes y no se modifican por este incremento |
-| RF-03/04/05/06, no interferencia con gameplay | `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score y referencias Lock/DynamicWall no se tocan | Tableros ICE/Fragile/Lock conservan mundo, movimientos, pushes, Undo y zoom tras cambiar de tema | Animación ICE/Fragile (INT-09) continúa abierta |
+| RF-03/04/05/06, no interferencia con gameplay | `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score y referencias Lock/DynamicWall no se tocan | Tableros ICE/Fragile/Lock conservan mundo, movimientos, pushes, Undo y zoom tras cambiar de tema | La animación ICE/Fragile se cubre después en I3.C (headless); la QA nativa sigue abierta |
 | RF-12 / OQ-10, adicionales | Selector funcional y probado | Candidato con implementación verificada localmente | Elegibilidad y segunda funcionalidad `OPEN`; no computar como adicional aceptada |
 
 La regresión completa del mismo árbol fue Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS (`bash scripts/test-integration-i2.sh`, exit 0, OpenJDK 17.0.20.1, `--release 17`, UTF-8, `-Xlint:all -Werror`). [Comandos y límites](../testing/TEST_STRATEGY.md).

@@ -1,5 +1,13 @@
 # Matriz de riesgos y aceptación — integración grupal
 
+## I3.C — animación ICE/Fragile (04/11/2026)
+
+Se incorporó `BoxAnimation` como proyección de presentación de `RuntimeMoveResult` y `GameView.animateBox` como hook default. `GameController` publica primero el runtime final, emite como máximo un `ICE` por deslizamiento E03 y un `FRAGILE` por rotura, y luego anima; no recalcula física ni usa `Board` para el movimiento. `BoardPanel` sigue el `boxPath` autoritativo, suprime la caja final durante la trayectoria, representa la última celda de Fragile seguida de `box_broken` y ausencia, y usa un `javax.swing.Timer` no bloqueante con cancelación por generación. `SwingApplication` difiere FINISH solo mientras el tablero anima; las sondas headless reciben `showVictory` y el score exacto al volver de `move`.
+
+`AnimationPresentationTest` aporta 14 escenarios headless, incluidos trayectoria ICE, Fragile sobre ICE y de una celda, ausencia de caja fantasma, metadatos Key/Fragile/Lock/DynamicWall, SFX sin duplicados, orden publicación→animación→victoria, cancelación por Undo/Restart/recarga y cancelación explícita usada por pausa/cierre, un solo timer en EDT y tema/zoom sin mutar el mundo. Regresión: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS; `bash scripts/test-integration-i2.sh` exit 0. No se agregaron PNG ni se alteraron hashes.
+
+`GUI_NATIVE_QA=NOT_RUN`; la evidencia es headless y no cierra INT-09 por interacción nativa. `TEAM_ACCEPTANCE=NOT_RECORDED`, `REMOTE_PUSH=NOT_RUN`, I4 pendiente; sin publicación ni merge. [Comandos y límites](../testing/TEST_STRATEGY.md).
+
 ## I3.B — selector de estilo visual con Abstract Factory (04/11/2026)
 
 Se incorporó un selector de tres familias de presentación en OPCIONES (`ORIGINAL COBRE`, `NOCTURNO`, `JADE`) detrás de `VisualThemeFactory`. La fábrica entrega dos productos coordinados: `UiPalette` (colores de superficie, texto, acento, estado, grilla y marco del tablero) y `SpritePresentation` (transformación de imagen). `VisualThemes` es el catálogo inmutable con las tres familias; `VisualThemeController` concentra el cambio de tema y `VisualThemeApplier` restaura colores y bordes originales al volver al tema base. La familia original usa presentación identidad y conserva los pixeles previos; las alternativas aplican un tinte 55/45 determinista en memoria con alfa intacto. `PixelAssets` invalida su caché al cambiar de familia y nunca escribe los PNG.
@@ -16,7 +24,7 @@ Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --t
 
 I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
 
-INT-05/06/08 tienen evidencia de pruebas locales reportadas; INT-09/10 siguen abiertos. El hotfix Fragile cubre TXT válido/renombrado, rechazo sin mutar estado y regresión de otros formatos; falta repetir GUI nativa después de publicarlo. No confundir pruebas headless con aceptación TEAM.
+INT-05/06/08 tienen evidencia de pruebas locales reportadas; INT-09 cuenta con evidencia headless I3.C pero la QA nativa sigue pendiente e INT-10 permanece abierto. El hotfix Fragile cubre TXT válido/renombrado, rechazo sin mutar estado y regresión de otros formatos; falta repetir GUI nativa después de publicarlo. No confundir pruebas headless con aceptación TEAM.
 
 `LAST_REVIEWED=2026-11-04` · `TESTED_ON_COMBINED_TREE=YES_LOCAL_REPORTED` · `STATUS=I1_I2_IN_PR17_DRAFT_GUI_RETEST_PENDING` · `POLICY=NO_FALSE_POSITIVE`
 
@@ -30,7 +38,7 @@ INT-05/06/08 tienen evidencia de pruebas locales reportadas; INT-09/10 siguen ab
 | INT-06 | Restart restablece estado y contadores desde cuatro métricas no nulas conforme al complemento TEAM con fuente registrada | fuente de ratificación, sesión | I2 (EXECUTED_VERIFIED_LOCAL) |
 | INT-07 | KeyBox ocupa Lock y Goal según E05; testigo de puzzle resoluble confirma criterio de victoria | E05, OQ-01 | I1/I3 |
 | INT-08 | Al finalizar, puntaje TEAM saturado se comunica a HUD y siguiente nivel; retención histórica de undoUsesTotal sin estado duplicado | ScoreCalculator, LevelProgression | I2 (EXECUTED_VERIFIED_LOCAL) |
-| INT-09 | Animación de Fragile sobre ICE representa trayectoria y destrucción aunque no exista en tablero final | BoardPanel, GameView, EDT | I3 |
+| INT-09 | Animación de Fragile sobre ICE representa trayectoria y destrucción aunque no exista en tablero final | BoardPanel, GameView, EDT | I3 (EXECUTED_VERIFIED_LOCAL_HEADLESS) |
 | INT-10 | Compilación real `--release 17` y regresión core+desktop combinada, scripts Windows/Bash, evidencia y `git diff --check` | I1-I3 completos | I4 |
 
 **Corte histórico I1:** INT-01–04 se ejecutaron sobre el árbol combinado I1 antes del commit (blobs auditados), con 316/316 pruebas de regresión aprobadas; INT-05–10 no quedan acreditados por ello. No se reejecutó la suite después del push. Cada resultado nuevo debe registrar SHA exacto, comando, JDK/SO, fixture, salida, exit code y responsable; actualizar [estrategia de tests](../testing/TEST_STRATEGY.md) y [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) según impacto.
