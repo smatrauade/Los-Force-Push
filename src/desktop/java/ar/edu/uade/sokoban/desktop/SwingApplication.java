@@ -108,6 +108,7 @@ public final class SwingApplication {
         private final JLabel pushesText = label("0000", PixelTheme.TITLE);
         private final JLabel scoreText = label("PUNTAJE: 1000", PixelTheme.BODY);
         private final JLabel undoText = label("USOS UNDO: 0 / 3", PixelTheme.SMALL);
+        private final JLabel lockText = label("", PixelTheme.SMALL);
         private final JLabel status = label("LISTO PARA JUGAR", PixelTheme.SMALL);
         private final JLabel victoryData = label("", PixelTheme.BODY);
         private final JButton continueButton = PixelTheme.button("CONTINUAR");
@@ -170,6 +171,7 @@ public final class SwingApplication {
                 @Override
                 public void windowClosed(WindowEvent event) {
                     stopPresentation();
+                    controller.close();
                     audio.close();
                 }
             });
@@ -369,6 +371,7 @@ public final class SwingApplication {
             hud.add(Box.createVerticalStrut(12));
             hud.add(scoreText);
             hud.add(undoText);
+            hud.add(lockText);
             hud.add(Box.createVerticalStrut(25));
             undoButton.addActionListener(event -> runCommand(commands.undo()));
             addHudButton(hud, undoButton);
@@ -460,6 +463,7 @@ public final class SwingApplication {
         private JPanel buildHelp() {
             JPanel card = centerStack("COMO JUGAR", "REGLAS BASICAS");
             JPanel stack = stackOf(card);
+            stack.setPreferredSize(new Dimension(570, 620));
             for (String text : new String[]{
                     "FLECHAS: CAMINAR Y EMPUJAR",
                     "LAS CAJAS NO SE PUEDEN TIRAR",
@@ -657,6 +661,7 @@ public final class SwingApplication {
             LevelResult attempt = controller.getLevelResult();
             scoreText.setText("PUNTAJE: " + attempt.score());
             undoText.setText("USOS UNDO: " + attempt.undoUses() + " / 3");
+            lockText.setText("");
             board.showState(presentation.state());
             continueButton.setEnabled(true);
             configureUiCommands(commands);
@@ -688,6 +693,14 @@ public final class SwingApplication {
                 case MOVED -> audio.play(SoundManager.Effect.STEP);
                 case PUSHED -> audio.play(SoundManager.Effect.PUSH);
                 case BLOCKED -> audio.play(SoundManager.Effect.BLOCKED);
+            }
+        }
+
+        @Override
+        public void onLockChange(LockChangeSubject.Event event) {
+            if (!event.locks().isEmpty()) {
+                LockChangeSubject.Delta change = event.locks().get(event.locks().size() - 1);
+                lockText.setText("CERROJO " + change.lockId() + (change.after() ? " ACTIVO" : " INACTIVO"));
             }
         }
 

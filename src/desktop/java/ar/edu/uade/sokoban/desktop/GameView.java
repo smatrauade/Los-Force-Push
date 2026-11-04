@@ -28,6 +28,9 @@ public interface GameView {
     /** Null clears availability; only complete, verified attempts may be offered. */
     default void configureReplay(ReplayTrace trace) { }
 
+    /** Confirmed facts for presentation; subscribers never control dynamic walls. */
+    default void onLockChange(LockChangeSubject.Event event) { }
+
     /** Allows future gameplay events to request sound without owning audio devices. */
     default void playEffect(SoundManager.Effect effect) { }
 }

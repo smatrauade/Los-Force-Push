@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## Observer de presentación — 04/11/2026
+
+`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## Campaña y navegación RC — 04/11/2026
 
 `DemoCampaign` comparte entre menú y pruebas cinco TXT, incluidos ICE/Fragile y el nuevo testigo de rotura tras ICE. `ReleaseCampaignTest` 6 escenarios PASS y smoke nativo automatizado `ReleaseUiSmokeTest` 7 PASS en Linux, además de UI Smoke 17 y regresión previa conservados. Continuar vuelve a FINISH cuando corresponde; carga inválida durante victoria animada conserva el resultado. HUD muestra score y usos Undo permanentes. [Auditoría y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

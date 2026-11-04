@@ -1,5 +1,9 @@
 # Arquitectura: implementación y candidato
 
+## Observer de presentación — 04/11/2026
+
+`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+
 ## Replay integrado — 04/11/2026
 
 El Command existente se coordina con `GameController`: `ReplayRecorder` conserva acciones exitosas y `ReplayTrace` se ofrece sólo tras verificar estado final y métricas. No es autoridad del mundo. `ReplayPanel` invoca `ReplayPlayer` sobre un tablero independiente; no recibe controlador ni sesión. Play/Pause/Step/Reset/Back y navegación invalidan callbacks obsoletos por generación. El mismo coordinador de Abstract Factory aplica temas a ambos tableros. Alternativa descartada: reproducir sobre `GameSession`, que alteraría score/historial/progresión. Coste: verificación O(n), límite 10.000; overflow deshabilita sólo Replay. [Pruebas y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

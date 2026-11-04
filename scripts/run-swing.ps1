@@ -93,7 +93,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'ReplayPresentationTest failed.' }
     }
     if ($Test) {
-        foreach ($suite in @('ShippedLevelsIntegrationTest', 'ReleaseCampaignTest')) {
+        foreach ($suite in @('ShippedLevelsIntegrationTest', 'ReleaseCampaignTest', 'LockObserverTest')) {
             & $runtime '-Dfile.encoding=UTF-8' '--limit-modules' 'java.base,java.desktop' '-Djava.awt.headless=true' '-cp' $classPath ('ar.edu.uade.sokoban.desktop.' + $suite) (Join-Path $root 'src/desktop/resources/levels')
             if ($LASTEXITCODE -ne 0) { throw ($suite + ' failed.') }
         }

@@ -20,15 +20,23 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** EDT coordinator; progression owns world state, victory and catalog advance. */
-public final class GameController {
+public final class GameController implements AutoCloseable {
     private final GameView view;
     private final ScoreCalculator scoreCalculator = new ScoreCalculator();
     private LevelProgression game;
     private ReplayRecorder recorder;
     private ReplayTrace completedReplay;
+    private final LockChangeSubject lockChanges = new LockChangeSubject();
 
     public GameController(GameView view) {
         this.view = Objects.requireNonNull(view, "view");
+        lockChanges.subscribe(view::onLockChange);
+        lockChanges.subscribe(event -> {
+            if (event.origin() == LockChangeSubject.Origin.MOVE) {
+                boolean activated = event.locks().stream().anyMatch(LockChangeSubject.Delta::after);
+                view.playEffect(activated ? SoundManager.Effect.LOCK : SoundManager.Effect.GATE);
+            }
+        });
     }
 
     public void load(Path path) {
@@ -45,6 +53,7 @@ public final class GameController {
             game = new LevelProgression(catalog);
             startRecording();
             publish();
+            lockChanges.publish(LockChangeSubject.Origin.LEVEL_CHANGE, null, game.currentState());
         } catch (IOException | IllegalArgumentException | SecurityException failure) {
             view.showLoadError("No se pudo cargar el TXT: " + failure.getMessage());
         }
@@ -55,16 +64,13 @@ public final class GameController {
         if (game == null || game.isFinalized()) {
             return;
         }
+        RuntimeState before = game.currentState();
         RuntimeMoveResult result = game.move(direction);
         view.onMove(result.kind());
         if (result.kind() == MoveResult.Kind.BLOCKED) {
             return;
         }
         recorder.record(direction, result);
-        if (!result.lockChanges().isEmpty()) {
-            boolean opened = result.lockChanges().stream().anyMatch(RuntimeMoveResult.LockChange::active);
-            view.playEffect(opened ? SoundManager.Effect.LOCK : SoundManager.Effect.GATE);
-        }
         // E03 only extends boxPath past its first destination on ICE, so a
         // longer path is authoritative evidence of a slide.
         boolean slidOnIce = result.boxPath().size() > 1;
@@ -80,6 +86,7 @@ public final class GameController {
             view.playEffect(SoundManager.Effect.GOAL);
         }
         publish();
+        lockChanges.publish(LockChangeSubject.Origin.MOVE, before, result.state());
         // The final runtime is already visible; this only projects its path.
         if (result.kind() == MoveResult.Kind.PUSHED) {
             BoxAnimation animation = BoxAnimation.from(result);
@@ -99,17 +106,21 @@ public final class GameController {
 
     public void restart() {
         if (game != null && !game.isFinalized()) {
+            RuntimeState before = game.currentState();
             game.restart();
             startRecording();
             publish();
+            lockChanges.publish(LockChangeSubject.Origin.RESTART, before, game.currentState());
             view.playEffect(SoundManager.Effect.RESTART);
         }
     }
 
     public void undo() {
+        RuntimeState before = game == null ? null : game.currentState();
         if (game != null && game.canUndo() && game.undo()) {
             recorder.undoFive();
             publish();
+            lockChanges.publish(LockChangeSubject.Origin.UNDO, before, game.currentState());
             view.playEffect(SoundManager.Effect.UNDO);
         }
     }
@@ -161,6 +172,7 @@ public final class GameController {
         if (result.status() == LevelProgression.AdvanceStatus.ADVANCED) {
             startRecording();
             publish();
+            lockChanges.publish(LockChangeSubject.Origin.LEVEL_CHANGE, null, game.currentState());
         } else if (result.status() == LevelProgression.AdvanceStatus.LOAD_FAILED) {
             view.showLoadError("No se pudo cargar el siguiente nivel: " + result.diagnostic());
         }
@@ -179,6 +191,11 @@ public final class GameController {
                 game != null && !game.isFinalized() ? this::restart : null,
                 null, null,
                 game != null && game.isFinalized() && game.hasNext() ? this::nextLevel : null));
+    }
+
+    /** Releases window-scoped presentation subscribers. No domain state is changed. */
+    @Override public void close() {
+        lockChanges.close();
     }
 
     private static LevelCatalog singleEntry(Path path, LevelCatalog.Format format) {
