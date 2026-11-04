@@ -1,5 +1,13 @@
 # Estado vivo — Los Force Push
 
+## I3.D.1 — Núcleo aislado Replay/Command (04/11/2026)
+
+Este incremento incorpora `ar.edu.uade.sokoban.replay` en `src/main/java` con `MoveCommand`, `ReplayRecorder`, `ReplayTrace` y `ReplayPlayer`. Es una adaptación revisada de la **implementación individual** de `impaciencia`, no una contribución TEAM ratificada ni una fusión de esa rama. Encapsula direcciones exitosas en comandos inmutables y los reproduce con una instancia independiente de `RuntimeMovementEngine` desde `RuntimeState` inicial. No cambia `GameSession`, Undo 15/5/3, el score acordado, `GameController`, `GameView` ni Swing. No hay nuevo botón de Replay en I3.D.1.
+
+`ReplayRecorder` invalida la reproducción si la trayectoria supera 10.000 operaciones o se detecta incoherencia al reconciliar Undo; un Replay parcial nunca se ofrece como completo. Antes de usar una traza se comprueban estado final **y** movimientos/empujes. Fuente de verdad: `src/main/java/ar/edu/uade/sokoban/replay/`; pruebas: `src/test/java/ar/edu/uade/sokoban/replay/ReplayIntegrationTest.java`, runner `scripts/test-replay-i3d1.sh`. El estado **publicado** se determina comparando HEAD/PR #17 en Git, no por la presencia del texto de este checkpoint.
+
+Pendientes: I3.D.2 coordinación de registro en `GameController`, I3.D.3 pantalla Swing y timers, I3.D.4 cierre de regresión/documentación y revisión; elegibilidad RF-12/OQ-10 y aceptación TEAM **no acreditadas**. Mantener PR Draft y `main` sin merge.
+
 ## I3.C — animación ICE/Fragile desde RuntimeMoveResult (04/11/2026)
 
 Se incorporó `BoxAnimation` como proyección inmutable de `RuntimeMoveResult`: conserva `BoxKind`, identidad y resistencia Fragile y el `boxPath` autoritativo. `GameView.animateBox` es un hook default de presentación; `GameController` publica primero el `RuntimeState` final, emite `ICE` una vez cuando `boxPath` supera una celda (evidencia E03 de deslizamiento) y `FRAGILE` una vez al romper, y recién después solicita la animación. `BoardPanel` calcula frames deterministas: orden exacto del path, supresión de la caja final mientras la trayectoria está en curso, última celda + `box_broken` + ausencia para Fragile, y un único `javax.swing.Timer` no bloqueante con generación que invalida callbacks obsoletos. `SwingApplication` difiere la pantalla FINISH solo mientras el tablero anima; las sondas headless siguen recibiendo `showVictory` y el score exacto al volver de `move`. Undo, Restart, carga, pausa/ESC, reemplazo de nivel y cierre cancelan la animación sin mutar el mundo.

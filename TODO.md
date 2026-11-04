@@ -1,5 +1,13 @@
 # TODO — backlog vivo
 
+## I3.D — Replay/Command (implementación individual adaptada)
+
+- I3.D.1: núcleo Replay/Command puro en `src/main/java/ar/edu/uade/sokoban/replay` y suite propia; confirmar gate JDK17 + regresión total y estado Git antes de publicación.
+- I3.D.2: conectar únicamente movimientos exitosos en `GameController`; reconciliar Undo de cinco, Restart, carga válida y cambio de nivel. No duplicar `GameSession` ni modificar score.
+- I3.D.3: pantalla Replay independiente en Swing (Play/Pause/Step/Reset, temporizador EDT, temas/zoom y navegación) compatible con I3.C `VictoryGate`.
+- I3.D.4/I3.D.5: pruebas de integración/UI y continuidad, auditoría/promo al mismo PR Draft bajo gate independiente. `impaciencia` es implementación individual de origen, no decisión/aceptación TEAM.
+- RF-12/OQ-10: Replay/Command permanece **candidato**; solicitar confirmación académica y del equipo antes de contarlo como segunda funcionalidad. No sustituye los entregables ni la QA humana.
+
 ## I3.C — animación ICE/Fragile (04/11/2026)
 
 Se incorporó `BoxAnimation` como proyección inmutable de `RuntimeMoveResult`, el hook default `GameView.animateBox` y frames deterministas en `BoardPanel`: orden exacto del `boxPath`, supresión de la caja final durante la trayectoria y, para Fragile, última celda + `box_broken` + ausencia. `GameController` publica el runtime final, emite `ICE`/`FRAGILE` una vez y luego anima; `SwingApplication` difiere FINISH solo mientras el tablero anima. Undo, Restart, recarga, ESC/cierre y reemplazo de nivel cancelan sin callbacks obsoletos. La animación no muta `RuntimeState` ni recalcula física y conserva `BoxKind`, ID/resistencia Fragile y metadatos Lock/DynamicWall.

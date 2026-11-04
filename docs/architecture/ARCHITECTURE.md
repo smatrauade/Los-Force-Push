@@ -1,5 +1,13 @@
 # Arquitectura: implementación y candidato
 
+## I3.D.1 — Command de reproducción determinista (04/11/2026)
+
+**Problema:** preservar una secuencia reproducible sin mutar la sesión oficial ni tratar Undo/Memento como una inversión física de movimientos. **Elección individual adaptada:** `MoveCommand` encapsula una `Direction` y su operación `execute(engine, state)`; `ReplayRecorder` almacena comandos exitosos, `ReplayTrace` congela el intento y `ReplayPlayer` invoca esas acciones sobre su **propio** `RuntimeMovementEngine` y `RuntimeState` inmutable. Es un Command concreto sin interfaz ceremonial cuando existe un solo tipo de acción. El receptor se suministra por contexto de reproducción, nunca se captura la `GameSession` real. No hay listener Observer, reloj Swing, persistencia, score alternativo ni motor de movimiento duplicado.
+
+**Alternativas descartadas para este corte:** almacenar snapshots completos de cada paso (duplica Memento y memoria); modificar sesión para observar replay (segunda autoridad); trasplantar `GameController` de `impaciencia` (contratos y score incompatibles); añadir `ReplayCommand` abstracto sin un segundo comando real (indirección sin variación). **Consecuencias:** verificación de trayectoria O(n) y memoria O(n), límite de 10.000 movimientos; estados y métricas completos verificados antes de habilitar reproducción; un desajuste deshabilita solo Replay. SRP/GRASP: modelo sigue en motor/sesión, Replay conserva su historial, Swing únicamente proyectará un cursor independiente en un incremento posterior.
+
+**Autoría/procedencia:** idea y componentes iniciales `MoveCommand`, `ReplayRecorder`, `ReplayTrace`, `ReplayPlayer` provienen de la rama **personal** `impaciencia`; el diseño adaptado al PR #17 es código revisado, no fusión de la rama ni aceptación TEAM. OQ-10 queda OPEN; `src/test/java/ar/edu/uade/sokoban/replay/ReplayIntegrationTest.java` especifica los oráculos de este incremento.
+
 Revisado 29/10/2026: contrato TXT soportado adoptado por su responsable; historia de PR #8/#9 preservada. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
 
 ## Flujo histórico inicial
