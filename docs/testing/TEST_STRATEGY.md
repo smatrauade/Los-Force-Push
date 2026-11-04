@@ -2,7 +2,7 @@
 
 ## I3.D.1 — Replay/Command puro, sin GUI (04/11/2026)
 
-Ejecutar `bash scripts/test-replay-i3d1.sh` desde el repositorio con OpenJDK 17. El runner compila el **core completo** y la nueva prueba con `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`, luego ejecuta `ReplayIntegrationTest`. Suite propia: **20 comprobaciones** (Command, bloqueo, ICE, Fragile, KeyBox/Lock/DynamicWall, Undo 5, Restart, 10.001 operaciones, trazas divergentes/alteradas, métricas, inmutabilidad, cursor aislado y reset). Exigir `REPLAY RESULT: 18 PASS, 0 FAIL`, exit 0 y preservar HEAD/worktree.
+Ejecutar `bash scripts/test-replay-i3d1.sh` desde el repositorio con OpenJDK 17. El runner compila el **core completo** y la nueva prueba con `--release 17 --limit-modules java.base -encoding UTF-8 -Xlint:all -Werror`, luego ejecuta `ReplayIntegrationTest`. Suite propia: **20 comprobaciones** (Command, bloqueo, ICE, Fragile, KeyBox/Lock/DynamicWall, Undo 5, Restart, 10.001 operaciones, trazas divergentes/alteradas, métricas, inmutabilidad, cursor aislado y reset). Exigir `REPLAY RESULT: 20 PASS, 0 FAIL`, exit 0 y preservar HEAD/worktree.
 
 Al cerrar el candidato en la notebook, volver a ejecutar `bash scripts/test-integration-i2.sh` (Undo/Core/Desktop/Campaña/Temas/Animación/Assets) y `bash scripts/verify-repo-readonly.sh --require-clean` sobre el commit candidato; en sandbox sin remoto, el verificador precisa un overlay temporal de configuración Git de **solo lectura**. No declarar nuevas cifras ni QA gráfica/Windows/TEAM hasta ejecutar esos controles sobre el commit exacto y registrar SHA, actor, JDK, exit y logs. La compilación aislada del sandbox de ChatGPT con contratos auxiliares no acredita el árbol integrado completo.
 
