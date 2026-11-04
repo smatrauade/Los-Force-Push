@@ -4,7 +4,7 @@ Este árbol reúne la integración del [PR #17](https://github.com/smatrauade/Lo
 
 ## Ejecutar y recorrer la campaña
 
-Después de fusionar el PR a `main`, clonar el repositorio por defecto. Se requiere un JDK completo 17 o superior; los runners compilan con `--release 17`, UTF-8 y lint estricto. No se necesitan Maven ni Gradle.
+El PR #17 está fusionado a `main`; clonar el repositorio por defecto. Se requiere un JDK completo 17 o superior; los runners compilan con `--release 17`, UTF-8 y lint estricto. No se necesitan Maven ni Gradle.
 
 ```bash
 git clone https://github.com/smatrauade/Los-Force-Push.git

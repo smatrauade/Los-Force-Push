@@ -2,7 +2,7 @@
 
 ## UML PR #17 — PlantUML verificado (04/11/2026)
 
-Las nueve vistas vigentes del congelamiento funcional `ffa27f9` están en [PlantUML RC](pr17-rc-ffa27f9/README.md), con fuentes `.puml`, PNG generados con PlantUML 1.2026.9 y trazabilidad verificable. Las cuatro vistas `.puml` anteriores permanecen como **históricas/candidatas** y no se deben citar como UML integral del RC. **Requisito literal StarUML: pendiente de aceptación formal**; el `.mdj` nativo de QA existe fuera de Git y no se presenta como aprobado. El PR sigue Draft y no se modifica `main`.
+Las nueve vistas vigentes del congelamiento funcional `ffa27f9` están en [PlantUML RC](pr17-rc-ffa27f9/README.md), con fuentes `.puml`, PNG generados con PlantUML 1.2026.9 y trazabilidad verificable. Las cuatro vistas `.puml` anteriores permanecen como **históricas/candidatas** y no se deben citar como UML integral del RC. **Requisito literal StarUML: pendiente de aceptación formal**; el `.mdj` nativo de QA existe fuera de Git y no se presenta como aprobado. El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD actual.
 
 ## Freeze funcional RC PR17 — 04/11/2026
 
