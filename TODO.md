@@ -1,5 +1,11 @@
 # TODO — backlog vivo
 
+## I3.B — selector de estilo visual con Abstract Factory (04/11/2026)
+
+Se incorporó un selector de tres familias visuales en OPCIONES —`ORIGINAL COBRE`, `NOCTURNO` y `JADE`— sobre `VisualThemeFactory` (Abstract Factory de vista: `UiPalette` + `SpritePresentation`), catálogo inmutable en `VisualThemes`, coordinación única en `VisualThemeController` y restauración exacta de colores/bordes en `VisualThemeApplier`. Los PNG no se modifican: la familia original los devuelve intactos y las alternativas generan en memoria un tinte determinista 55/45 con alfa preservado; `PixelAssets` invalida la caché por familia. El cambio no altera `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score, TXT ni referencias Lock/DynamicWall. `VisualThemeTest` aporta 7 escenarios headless; la regresión completa queda en Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS con `bash scripts/test-integration-i2.sh` exit 0.
+
+El selector es un candidato a adicional RF-12/OQ-10: su elegibilidad, la segunda funcionalidad y la aceptación TEAM siguen `OPEN`/`NOT_RECORDED`. `GUI_NATIVE_QA=NOT_RUN`, sin publicación ni merge. Siguiente gate: revisión funcional del equipo y QA GUI nativa. [Evidencia y límites](docs/testing/TEST_STRATEGY.md).
+
 ## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
 
 Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
@@ -94,7 +100,7 @@ El parcial no tiene fecha exacta confirmada aquí. La pregunta sobre 1/11 carece
 | I0 | Rama compartida y PR Draft documentado | PR Draft con autoría, SHA, documentación viva y `main` intacta | DONE — PR #17 Draft publicado, `main` intacta al corte |
 | I1 | TXT/runtime/movimiento integrado | INT-01–04 (IDs Fragile, ICE, Lock/Wall) sobre árbol I1 auditado | PUBLISHED_DRAFT — `6abb8ad`, 316/316 pruebas precommit |
 | I2 | Sesión/Undo/Restart/Score | INT-05/06/08, fórmula ratificada y sin duplicidad | DONE_LOCAL — 58 Undo, 258 core, 36 desktop, 44 assets en JDK17; no publicado |
-| I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | NOT_RUN |
+| I3 | Swing/campaña/animación | INT-09, controles, HUD, victoria y audio | PARTIAL_LOCAL — I3.A/I3.B headless; animación y QA GUI pendientes |
 | I4 | QA/entregables y revisión TEAM | INT-01–10, Java17, derechos, StarUML del código integrado, informe/video | NOT_RUN |
 
 Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md). No duplicar el estado real de los commits en esta fotografía: actualizar este TODO **por impacto** al cerrar cada fase. Ningún PR Draft concede autorización de merge.

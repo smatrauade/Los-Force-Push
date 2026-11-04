@@ -7,7 +7,6 @@ import ar.edu.uade.sokoban.level.Position;
 import ar.edu.uade.sokoban.level.Terrain;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.RuntimeState;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,6 +22,7 @@ public final class BoardPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final int MARGIN = 24;
     private final transient PixelAssets sprites;
+    private transient VisualThemeFactory theme = VisualThemes.original();
     private transient RuntimeState state;
     // Presentation-only frames: never used as the authoritative gameplay state.
     private transient Board overlay;
@@ -37,10 +37,19 @@ public final class BoardPanel extends JPanel {
 
     BoardPanel(PixelAssets assets) {
         sprites = Objects.requireNonNull(assets, "assets");
-        setBackground(new Color(42, 33, 36));
+        setBackground(theme.palette().boardBackground());
         setPreferredSize(new Dimension(560, 380));
         setFocusable(false);
         setOpaque(true);
+    }
+
+    /** Presentation-only family change; the runtime state and zoom are untouched. */
+    void setTheme(VisualThemeFactory next) {
+        Objects.requireNonNull(next, "theme");
+        theme = next;
+        sprites.setTheme(next);
+        setBackground(theme.palette().boardBackground());
+        repaint();
     }
 
     public void showBoard(Board board) {
@@ -200,9 +209,9 @@ public final class BoardPanel extends JPanel {
                 return;
             }
             int tile = PixelAssets.NATIVE_SIZE * scale;
-            g.setColor(new Color(104, 75, 64));
+            g.setColor(theme.palette().boardFrameOuter());
             g.fillRect(MARGIN - 5, MARGIN - 5, state.width() * tile + 10, state.height() * tile + 10);
-            g.setColor(new Color(228, 168, 111));
+            g.setColor(theme.palette().boardFrameInner());
             g.fillRect(MARGIN - 3, MARGIN - 3, state.width() * tile + 6, state.height() * tile + 6);
             for (int row = 0; row < state.height(); row++) {
                 for (int col = 0; col < state.width(); col++) {
@@ -236,10 +245,10 @@ public final class BoardPanel extends JPanel {
     /** Renders legacy frames without publishing or mutating the runtime. */
     private void paintOverlay(Graphics2D g, Board frame) {
         int tile = PixelAssets.NATIVE_SIZE * scale;
-        g.setColor(new Color(104, 75, 64));
+        g.setColor(theme.palette().boardFrameOuter());
         g.fillRect(MARGIN - 5, MARGIN - 5, frame.width() * tile + 10,
                 frame.height() * tile + 10);
-        g.setColor(new Color(228, 168, 111));
+        g.setColor(theme.palette().boardFrameInner());
         g.fillRect(MARGIN - 3, MARGIN - 3, frame.width() * tile + 6,
                 frame.height() * tile + 6);
         for (int row = 0; row < frame.height(); row++) {

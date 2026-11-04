@@ -1,5 +1,13 @@
 # Estrategia de pruebas y evidencia experimental
 
+## I3.B — selector de estilo visual (04/11/2026)
+
+Nueva suite headless [VisualThemeTest](../../src/desktop-test/java/ar/edu/uade/sokoban/desktop/VisualThemeTest.java), ejecutada por `bash scripts/run-swing.sh --test` y por transitividad por `bash scripts/test-integration-i1.sh`/`test-integration-i2.sh`. Cubre siete escenarios: tres familias estables y diferenciadas; sprites alternativos deterministas de 32×32 con canal alfa idéntico al PNG; tema original idéntico byte a byte al PNG y reversible tras alternar; cambio de familia sobre tableros ICE, Fragile y Lock conservando `RuntimeState`, movimientos, pushes, Undo y zoom; selección Swing aplicada en EDT sobre tablero, botones, etiquetas y `PixelTheme.Surface`; rechazo de entradas nulas sin estado a medias ni caché invalidada; y comparación de hashes SHA-256 de los PNG antes/después, que deben permanecer iguales.
+
+La suite no reemplaza las suites existentes: `DesktopIntegrationTest` continúa en 40 casos, `ShippedLevelsIntegrationTest` en 41 y `DesktopVisualAssetsTest` en 44. Evidencia local con OpenJDK 17.0.20.1, release 17, UTF-8, `-Xlint:all -Werror`, `java.awt.headless=true`: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS; `bash scripts/test-integration-i2.sh` exit 0 y `GIT_STATE_PRESERVED=YES`. Los umbrales de los runners exigen `THEME RESULT: [1-9][0-9]* PASS, 0 FAIL`, de modo que una suite vacía o fallida rompe el gate.
+
+Límites: la suite pinta componentes en `BufferedImage`, no abre una ventana interactiva; no acredita percepción visual, audio, Windows/macOS ni aceptación TEAM. El selector es candidato a adicional RF-12/OQ-10 y no cierra la elegibilidad de extras. `GUI_NATIVE_QA=NOT_RUN`. [Aceptación y riesgos](../integration/INTEGRATION_ACCEPTANCE.md).
+
 ## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
 
 Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.

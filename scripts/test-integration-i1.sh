@@ -72,9 +72,11 @@ echo '=== DESKTOP ==='
 if (cd "$root" && bash scripts/run-swing.sh --test) >"$scratch/desktop.log" 2>&1 && \
     grep -Fxq 'DESKTOP RESULT: 40 PASS, 0 FAIL' "$scratch/desktop.log" && \
     grep -Eq '^CAMPAIGN RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log" && \
+    grep -Eq '^THEME RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log" && \
     grep -Fxq 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL' "$scratch/desktop.log"; then
     echo 'DESKTOP RESULT: 40 PASS, 0 FAIL'
     grep -E '^CAMPAIGN RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log"
+    grep -E '^THEME RESULT: [1-9][0-9]* PASS, 0 FAIL$' "$scratch/desktop.log"
     echo 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL'
 else
     echo 'DESKTOP_OR_VISUAL_ASSETS=FAILED'; tail -n 45 "$scratch/desktop.log"; failures=1
@@ -96,5 +98,6 @@ fi
 echo 'CORE_TOTAL=258/258'
 echo 'DESKTOP_TOTAL=40/40'
 echo 'SHIPPED_CAMPAIGN_SUITE=PASS'
+echo 'THEME_SUITE=PASS'
 echo 'ASSET_TOTAL=44/44'
 echo 'RESULTADO_GLOBAL=PASS_I1_REGRESSION_I2_TREE'

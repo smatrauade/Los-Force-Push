@@ -25,7 +25,7 @@ La consigna exige Java/Swing 2D, TXT externos, Undo 15/5/3, Restart, KeyBox/Lock
 | **I0** | Coordinación Git + continuidad | branch remota, PR Draft, docs versionados, SHA remoto, main intacta | PUBLISHED_DRAFT_VERIFIED — PR #17; `main` intacta al corte |
 | **I1** | TXT + `RuntimeState` + movimiento | INT-01 a INT-04, identidad Fragile, terreno ICE, E03/E04/Lock; 0 regresiones | NOT_RUN |
 | **I2** | Sesión + Undo + Restart + score | INT-05/06/08, Undo 15/5/3, contadores, fórmula TEAM saturada, no duplicidad | IN_PR17_DRAFT; LOCAL_TESTS_PASS |
-| **I3** | Swing + campaña + presentación | INT-09, GUI/EDT, HUD, audio, fin y Next, animación de rotura | NOT_RUN |
+| **I3** | Swing + campaña + presentación | INT-09, GUI/EDT, HUD, audio, fin y Next, animación de rotura | PARTIAL_LOCAL — I3.A/I3.B headless; animación y QA GUI pendientes |
 | **I4** | QA de release y entregables | INT-01–10 ejecutados sobre HEAD combinado, Java 17, Windows/PowerShell, StarUML final, derechos, video, informe, revisión | NOT_RUN |
 
 La [matriz de aceptación](INTEGRATION_ACCEPTANCE.md) contiene oráculos, riesgos y pruebas. Cada avance produce `SOURCE_HEAD`, `CHANGED_FILES`, `TESTS_EXECUTED`, `DECISIONS_AFFECTED`, `DOCS_REFRESHED`, `UNVERIFIED` y `NEXT_GATE`. El historial previo es `REPORTED_QA` hasta ejecutarse en el SHA combinado.
@@ -81,3 +81,7 @@ I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresió
 ## I2 — avance local 04/11/2026
 
 Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+
+## I3 — avance local 04/11/2026
+
+I3.A incorporó `ShippedLevelsIntegrationTest` al runner desktop y por transitividad al I2: `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención), `fragile_demo.txt` (ID/resistencia, tres empujes, score 991 y fallo atómico) e `ice_demo.txt` (deslizamiento a Goal, score 996). I3.B incorporó el selector real `ORIGINAL COBRE`/`NOCTURNO`/`JADE` sobre `VisualThemeFactory` (Abstract Factory de vista), con restauración exacta del tema original, sprites tintados en memoria con alfa preservado, caché invalidada por familia y `VisualThemeTest` de 7 escenarios headless. Regresión del árbol local: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS (`scripts/test-integration-i2.sh`, exit 0, JDK 17). Quedan abiertos INT-09 (animación de rotura), la QA GUI nativa y la elegibilidad del selector como adicional RF-12/OQ-10. `TEAM_ACCEPTANCE=NOT_RECORDED`; no hay publicación ni merge por este hito.

@@ -44,11 +44,15 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | ScoreCalculator | Calcula el score del intento desde 1000 con penalidades incrementalmente aplicadas: −1 por movimiento, −2 por push y −10 por uso de Undo; evita overflow con `applyPenalty` y devuelve un mínimo de 0 |
 | GamePresentation | Proyección con referencia al Board inmutable, nombre y dos contadores fundamentales del intento (`moves`, `pushes`) |
 | GameView | Frontera render/error y hooks default de eventos, comandos y resultado final |
-| SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT y captura de acciones; `configureUiCommands` activa/desactiva Undo y Restart según callbacks disponibles |
+| SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT, selector de estilo visual y captura de acciones; `configureUiCommands` activa/desactiva Undo y Restart según callbacks disponibles |
 | ArrowBindings | Traduce flechas a Direction; la ventana controla la pantalla activa |
-| BoardPanel | Render por capas, orientación y escala; no modifica el Board ni infiere resistencia |
-| PixelAssets | Carga y caché de PNG 32×32 por classpath |
-| PixelTheme | Paleta, tipografía y widgets Swing |
+| BoardPanel | Render por capas, orientación y escala; toma la paleta de la familia visual activa; no modifica el Board ni infiere resistencia |
+| PixelAssets | Carga y caché de PNG 32×32 por classpath; aplica la presentación de sprites de la familia activa e invalida la caché al cambiarla, sin escribir archivos |
+| PixelTheme | Paleta, tipografía y widgets Swing; `Surface` lee la paleta de la familia activa |
+| VisualThemeFactory | Abstract Factory de vista: contrato de `UiPalette` y `SpritePresentation`; no expone estado de juego |
+| VisualThemes | Catálogo inmutable de las familias `ORIGINAL COBRE`, `NOCTURNO` y `JADE`, con tinte determinista que preserva alfa |
+| VisualThemeController | Único punto de cambio de familia: actualiza tablero, arte de menú y árbol Swing; rechaza nulos |
+| VisualThemeApplier | Aplica la paleta y restaura colores/bordes Swing originales al volver al tema base; no toca `BoardPanel` |
 | SoundManager / Effect | Clips y reproducción opcional por ventana, mute y fallo de dispositivo controlado; sin Singleton/core global |
 | UiCommands | Callbacks opcionales de servicios externos; `undo`, `restart` y `nextLevel` se habilitan según sesión; `save` y `loadSaved` siguen pendientes |
 | LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados; transporta el resumen final del nivel y se usa para la vista |

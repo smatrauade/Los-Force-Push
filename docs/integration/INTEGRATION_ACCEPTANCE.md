@@ -1,5 +1,13 @@
 # Matriz de riesgos y aceptación — integración grupal
 
+## I3.B — selector de estilo visual con Abstract Factory (04/11/2026)
+
+Se incorporó un selector de tres familias de presentación en OPCIONES (`ORIGINAL COBRE`, `NOCTURNO`, `JADE`) detrás de `VisualThemeFactory`. La fábrica entrega dos productos coordinados: `UiPalette` (colores de superficie, texto, acento, estado, grilla y marco del tablero) y `SpritePresentation` (transformación de imagen). `VisualThemes` es el catálogo inmutable con las tres familias; `VisualThemeController` concentra el cambio de tema y `VisualThemeApplier` restaura colores y bordes originales al volver al tema base. La familia original usa presentación identidad y conserva los pixeles previos; las alternativas aplican un tinte 55/45 determinista en memoria con alfa intacto. `PixelAssets` invalida su caché al cambiar de familia y nunca escribe los PNG.
+
+La selección es exclusivamente de vista: no altera `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score, TXT ni referencias Lock/DynamicWall, y se aplica en EDT sin recargar imágenes durante `paintComponent`. `VisualThemeTest` aporta 7 escenarios headless (catálogo, sprites, identidad/reversibilidad, ICE/Fragile/Lock, EDT, nulos y hashes de PNG). Regresión: Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS, `bash scripts/test-integration-i2.sh` exit 0.
+
+`GUI_NATIVE_QA=NOT_RUN`; el selector es candidato a adicional RF-12/OQ-10 y no cierra esa elegibilidad ni la segunda funcionalidad. `TEAM_ACCEPTANCE=NOT_RECORDED`, sin publicación ni merge. [Comandos y límites](../testing/TEST_STRATEGY.md).
+
 ## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
 
 Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
@@ -36,6 +44,7 @@ INT-05/06/08 tienen evidencia de pruebas locales reportadas; INT-09/10 siguen ab
 | `R-UNDO-DUPLICATE` | Martina: `GameController.history`; Juan: `GameSession` | Un único origen de verdad; INT-05/06 |
 | `R-SCORE-COUPLING` | `ScoreCalculator` desktop sin ciclo completo de `LevelProgression` | Exponer resultado completado desde core/adaptador; INT-08 |
 | `R-GUI-FRAMES` | Render de animación depende de estado final al romperse Fragile | Testigos de frames intermedios; INT-09 |
+| `R-THEME-EXTRA` | Selector visual implementado y probado, pero su elegibilidad como adicional RF-12/OQ-10 sigue abierta y no hay aceptación TEAM | No computar como extra cerrada; revisar elegibilidad y segunda funcionalidad antes de la entrega |
 | `R-UML` | R10 `.mdj` en `impaciencia` es DRAFT, no diagrama del árbol unificado | Nuevo diagrama basado en HEAD de integración, validación nativa StarUML |
 | `R-EXTRAS-RIGHTS` | RF-12 y licencias requieren aceptación/atribución | Validar funcionalidades y derechos individuales antes de entrega |
 

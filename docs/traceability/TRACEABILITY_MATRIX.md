@@ -1,5 +1,19 @@
 # Matriz viva de trazabilidad
 
+## I3.B — selector de estilo visual, 04/11/2026
+
+Incremento local de presentación sobre `integration/i2-martina-stage-2026-11-03`; no está en `main` ni acredita aceptación TEAM. Justificación del patrón: existe una familia real de productos coordinados (paleta Swing + presentación de sprites) y dos variantes concretas con consumidores efectivos (`SwingApplication`, `BoardPanel`, `PixelAssets`, `PixelTheme.Surface`), por lo que Abstract Factory evita condicionales por tema y mantiene el conmutador en un único punto. La alternativa simple —un `enum` con `if/switch` en cada widget— se descartó porque duplicaría la tabla de colores y arriesgaría restauraciones parciales al volver al original.
+
+| Requisito / alcance | Implementación | Casos reales / evidencia del incremento | Brecha restante |
+|---|---|---|---|
+| RF-11, presentación conmutable por familia | `VisualThemeFactory`, `VisualThemes`, `VisualThemeController`, `VisualThemeApplier`; selector en OPCIONES | `VisualThemeTest` 7/7 PASS headless; Desktop 40, Campaña 41 y Assets 44 conservan sus conteos | QA GUI nativa, percepción visual y audio audible NOT_RUN |
+| RF-11, identidad y reversibilidad del aspecto previo | Familia original con `SpritePresentation` identidad y restauración de colores/bordes guardados | Sprites originales idénticos al PNG; vuelta al original restaura tablero, controles y superficie | No se compara contra captura histórica externa; sólo contra los PNG y la paleta previa en código |
+| RF-11, assets y caché | `PixelAssets` transforma en memoria, invalida caché por familia y nunca escribe archivos | Hashes SHA-256 de todos los PNG antes/después iguales; alfa intacto y salida determinista | Derechos/licencias de assets siguen pendientes y no se modifican por este incremento |
+| RF-03/04/05/06, no interferencia con gameplay | `RuntimeState`, `GameSession`, `LevelProgression`, Undo, score y referencias Lock/DynamicWall no se tocan | Tableros ICE/Fragile/Lock conservan mundo, movimientos, pushes, Undo y zoom tras cambiar de tema | Animación ICE/Fragile (INT-09) continúa abierta |
+| RF-12 / OQ-10, adicionales | Selector funcional y probado | Candidato con implementación verificada localmente | Elegibilidad y segunda funcionalidad `OPEN`; no computar como adicional aceptada |
+
+La regresión completa del mismo árbol fue Undo 58, core 258, Desktop 40, Campaña 41, Tema 7 y Assets 44 PASS (`bash scripts/test-integration-i2.sh`, exit 0, OpenJDK 17.0.20.1, `--release 17`, UTF-8, `-Xlint:all -Werror`). [Comandos y límites](../testing/TEST_STRATEGY.md).
+
 ## Cobertura integrada tras PR 8 y PR 9 — 2026-10-28
 
 [CURRENT_STATE](../continuity/CURRENT_STATE.md) identifica los merges; [TEST_STRATEGY](../testing/TEST_STRATEGY.md#qa-combinado-pr-8-y-pr-9--2026-10-28) registra el árbol probado y la QA anterior a este mantenimiento. La tabla de plan/candidato y las evidencias fechadas que siguen no niegan las capacidades actuales. Sus OQ abiertas describen aquellos cortes; el cierre posterior del subconjunto soportado se registra al final, sin reatribuir QA.

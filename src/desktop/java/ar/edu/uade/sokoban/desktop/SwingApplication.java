@@ -97,6 +97,9 @@ public final class SwingApplication {
         private final JPanel cards = new JPanel(layout);
         private static final int SLIDE_MILLIS_PER_CELL = 240;
         private final BoardPanel board = new BoardPanel();
+        private final transient PixelAssets menuArt = new PixelAssets();
+        private final transient VisualThemeController visualThemes =
+                new VisualThemeController(cards, board, menuArt);
         private final transient SoundManager audio = new SoundManager();
         private final JLabel levelText = label("SIN NIVEL", PixelTheme.BODY);
         private final JLabel movesText = label("0000", PixelTheme.TITLE);
@@ -110,6 +113,8 @@ public final class SwingApplication {
         private final JButton saveButton = PixelTheme.button("GUARDAR PARTIDA");
         private final JButton loadSaveButton = PixelTheme.button("CARGAR PARTIDA");
         private final JButton nextButton = PixelTheme.button("SIGUIENTE NIVEL");
+        private final JComboBox<VisualThemeFactory> themeSelector =
+                new JComboBox<>(VisualThemes.all().toArray(VisualThemeFactory[]::new));
         private final JCheckBox soundToggle = new JCheckBox("ACTIVAR EFECTOS DE SONIDO", true);
         private final JComboBox<String> zoomSelector = new JComboBox<>(new String[]{
                 "1x  (32 px)", "2x  (64 px)", "3x  (96 px)"});
@@ -223,7 +228,6 @@ public final class SwingApplication {
             stack.setPreferredSize(new Dimension(500, 620));
             JPanel illustration = new JPanel() {
                 private static final long serialVersionUID = 1L;
-                private final transient PixelAssets art = new PixelAssets();
                 @Override
                 protected void paintComponent(java.awt.Graphics graphics) {
                     super.paintComponent(graphics);
@@ -235,9 +239,9 @@ public final class SwingApplication {
                         int start = (getWidth() - side * 3) / 2;
                         String[] icons = {"player_down", "box", "goal"};
                         for (int i = 0; i < icons.length; i++) {
-                            g.drawImage(art.image("floor_" + i), start + i * side, 0,
+                            g.drawImage(menuArt.image("floor_" + i), start + i * side, 0,
                                     side, side, null);
-                            g.drawImage(art.image(icons[i]), start + i * side, 0,
+                            g.drawImage(menuArt.image(icons[i]), start + i * side, 0,
                                     side, side, null);
                         }
                     } finally {
@@ -391,7 +395,18 @@ public final class SwingApplication {
             zoomSelector.setFont(PixelTheme.BODY);
             zoomSelector.addActionListener(event -> board.setScale(zoomSelector.getSelectedIndex() + 1));
             stack.add(zoomSelector);
-            stack.add(Box.createVerticalStrut(28));
+            stack.add(Box.createVerticalStrut(16));
+            JLabel themeLabel = label("ESTILO VISUAL", PixelTheme.BODY);
+            themeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            stack.add(themeLabel);
+            stack.add(Box.createVerticalStrut(9));
+            themeSelector.setSelectedIndex(0);
+            themeSelector.setMaximumSize(new Dimension(320, 35));
+            themeSelector.setFont(PixelTheme.BODY);
+            themeSelector.addActionListener(event ->
+                    visualThemes.select((VisualThemeFactory) themeSelector.getSelectedItem()));
+            stack.add(themeSelector);
+            stack.add(Box.createVerticalStrut(20));
             JButton back = PixelTheme.button("VOLVER");
             back.addActionListener(event -> navigate(optionsReturn));
             addStackButton(stack, back);
