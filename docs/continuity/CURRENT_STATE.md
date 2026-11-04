@@ -1,5 +1,7 @@
 # Estado vivo — Los Force Push
 
+**Estado actual:** el PR #17 y el cierre documental posterior están integrados en `main`. El equipo dispone de la versión común para recorrerla, preparar la defensa y decidir eventuales ajustes. Las decisiones grupales documentadas mantienen su alcance. Los apartados fechados siguientes son checkpoints históricos; consultar GitHub para el HEAD actual y [TODO](../../TODO.md) para pendientes.
+
 ## UML PR #17 — PlantUML verificado (04/11/2026)
 
 Diagramación del candidato funcional congelado `ffa27f9`: [nueve fuentes PlantUML y PNG oficiales](../architecture/uml/pr17-rc-ffa27f9/README.md). Validación del motor PlantUML registrada en `RENDER_GATE.json`; este incremento solo documenta UML, no vuelve a ejecutar las pruebas Java ni modifica reglas TEAM. El formato StarUML exigido en la consigna conserva gate académico pendiente.
@@ -47,6 +49,8 @@ Se incorporó un selector real de tres familias de presentación en OPCIONES: `O
 ## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
 
 Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
+
+**El siguiente título conserva su ancla histórica:** el checkpoint corresponde al PR Draft de ese momento; el PR #17 fue fusionado posteriormente.
 
 ## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
 

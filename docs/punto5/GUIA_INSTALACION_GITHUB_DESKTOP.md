@@ -31,13 +31,13 @@ powershell -NoProfile -File ./scripts/run-swing.ps1 -UiTest
 
 Puede usarse pwsh. El runner compila en un temporal propio con release 17 y UTF-8, agrega src/desktop/resources al classpath y limpia al terminar. C2 tiene suite independiente: [TEST_STRATEGY](../testing/TEST_STRATEGY.md). -Test ejecuta Desktop y VisualAssets; -UiTest necesita escritorio y es automatizado, no QA manual.
 
-El menú permite cargar demo.txt o un TXT externo legacy/C2 compatible. Flechas para caminar/empujar, ESC pausa, M audio, +/- zoom. Undo, Restart, guardar/cargar y siguiente nivel siguen deshabilitados sin callbacks reales. La pantalla final está preparada para LevelResult; el core no infiere victoria ni score.
+El menú inicia una campaña de cinco niveles o carga un TXT externo compatible. Flechas mueven; Z activa Undo, R reinicia, ESC pausa, M cambia audio y +/- ajusta zoom. Victoria, score y siguiente nivel están integrados; guardar/cargar partida permanecen deshabilitados. Consultar [README](../../README.md) para controles y formatos soportados.
 
 Los 31 PNG y 12 WAV ya están en Git: no descargar ZIP, copiar .git ni regenerar imágenes. Los 29 sprites base y dos variantes opcionales se describen en el [manifiesto](ASSETS_REGISTRO_SHA256.csv). Sus derechos siguen pendientes según [IA/licencias](USO_IA_Y_LICENCIAS.md).
 
 ## Integrar módulos y colaborar
 
-[INTEGRACION_EQUIPO](INTEGRACION_EQUIPO.md) localiza UiCommands, GameView, LevelResult y los puntos de adaptación visual. El módulo de lógica entrega resultados y disponibilidad; Swing sólo representa/invoca. C2-L7 aún rechaza atributos y entidades especiales.
+[INTEGRACION_EQUIPO](INTEGRACION_EQUIPO.md) localiza UiCommands, GameView, LevelResult y los puntos de adaptación visual. El módulo de lógica entrega resultados y disponibilidad; Swing sólo representa/invoca. La carga actual ofrece rutas explícitas para Fragile y KeyBox/Lock/muros, además de C2 ordinario e ICE; consultar el contrato integrado para sus límites.
 
 Para mantenimiento nuevo crear una rama desde la base acordada, con el checkout limpio y PR acotado según [CONTRIBUTING](../../CONTRIBUTING.md). No volver a publicar los archivos del Punto 5 como un incremento nuevo.
 

@@ -1,5 +1,7 @@
 # Matriz de riesgos y aceptación — integración grupal
 
+El PR #17 está integrado en `main`. Las evidencias y estados fechados siguientes describen sus respectivos cortes; consultar [TODO](../../TODO.md) para la agenda posterior y [decisiones](../decisions/DECISION_LOG.md) para los acuerdos registrados.
+
 ## Observer de presentación — 04/11/2026
 
 `LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](PR17_FUNCTIONAL_RC_2026-11-04.md).
@@ -31,6 +33,8 @@ La selección es exclusivamente de vista: no altera `RuntimeState`, `GameSession
 ## I3.A — aceptación headless de niveles distribuidos (04/11/2026)
 
 Se incorporó `ShippedLevelsIntegrationTest` al runner `scripts/run-swing.sh --test`, y por transitividad al runner I2. Prueba mediante `GameController` real el circuito `demo.txt` → `campaign-b.txt` (victoria, score 993/983, reset y retención histórica), `fragile_demo.txt` (ID/resistencia, solución de tres empujes, score 991 y carga fallida atómica) e `ice_demo.txt` (deslizamiento a Goal, un empuje, score 996). Regresión Java 17 y verificador documental son gates obligatorios antes del commit. Las pruebas son headless: no acreditan animación, interacción visual nativa, derechos de assets ni aceptación TEAM. I3/I4 siguen abiertos y `main` no queda fusionado.
+
+**El siguiente título conserva su ancla histórica:** el checkpoint corresponde al PR Draft de ese momento; el PR #17 fue fusionado posteriormente.
 
 ## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
 

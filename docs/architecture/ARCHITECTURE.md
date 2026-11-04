@@ -1,4 +1,6 @@
-# Arquitectura: implementación y candidato
+# Arquitectura del juego integrado
+
+Las secciones del 04/11 describen componentes integrados en `main`; las propuestas y cortes anteriores conservan su fecha y alcance como historia del diseño.
 
 ## Observer de presentación — 04/11/2026
 
@@ -36,6 +38,8 @@ El core no importa Swing ni audio. GameController coordina y conserva una proyec
 
 ## Loading y C2-L7
 
+**Corte histórico:** el siguiente resumen describe C2-L7 y la carga de definición previa a la integración runtime. La carga integrada actual incluye ICE y rutas especiales descritas en el [contrato entre módulos](../punto5/INTEGRACION_EQUIPO.md).
+
 [LevelLoader](../../src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java) limita lectura a 65.536 bytes y decodifica UTF-8 estricto. [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) selecciona legacy o el helper interno sin estado [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java) mediante el prefijo reservado. Las firmas públicas LevelLoader.load(Path), LevelParser.parse(String) y Level(Board) no cambian. El código expone `LevelLoader.loadExperimentalFragile(Path) → ExperimentalFragileLevel`: un método privado `readText` centraliza la política de bytes/UTF-8 de ambas entradas; el parser experimental interpreta y el agregado existente valida la definición. No se agrega clase, interfaz, estado compartido ni patrón GoF. [Comparación con alternativas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026).
 
 C2 valida header/secciones, tokens ASCII (cuota del subconjunto soportado de 128 caracteres), dimensiones lógicas hasta 100×100 y [attributes] vacía. Sólo ofrece las siete combinaciones existentes; rechaza atributos/especiales. parse(String) no impone el techo de bytes de Loader. No hay caché compartida, fallback ante header inválido ni Level parcial.
@@ -46,7 +50,7 @@ LevelBuilder es concreto, interno y por carga; Board protege también la constru
 
 MovementEngine es un servicio sin estado: Board + Direction → MoveResult. MOVED/PUSHED crean un Board validado nuevo; BLOCKED conserva la misma instancia. Mantiene terreno/cajas/jugador e inmutabilidad de estados anteriores. Sólo piso, destino, pared, límites y caja normal. Copiar/validar cuesta O(alto×ancho) por éxito; no es Memento ni una decisión definitiva sobre el modelo futuro. [UML](uml/movement-core-spike-v1.puml).
 
-El incremento de victoria añade `RuntimeMovementEngine` sobre `RuntimeState`: KeyBox, Lock y muros dinámicos. Un Lock se activa sólo con KeyBox; los muros asociados abren si al menos un Lock referenciado está activo y vuelven a cerrarse al retirar la llave. Un intento que dejaría ocupado un muro que cierra se bloquea y conserva el estado. `VictoryEvaluator` consulta destinos `GOAL`; Lock no es destino. `LevelProgression` congela el nivel al finalizar y avanza un `LevelCatalog` de formato explícito. No implementa hielo, Fragile jugable ni Undo.
+En el corte de la rama `victoria`, el incremento añade `RuntimeMovementEngine` sobre `RuntimeState`: KeyBox, Lock y muros dinámicos. Un Lock se activa sólo con KeyBox; los muros asociados abren si al menos un Lock referenciado está activo y vuelven a cerrarse al retirar la llave. Un intento que dejaría ocupado un muro que cierra se bloquea y conserva el estado. `VictoryEvaluator` consulta destinos `GOAL`; Lock no es destino. `LevelProgression` congela el nivel al finalizar y avanza un `LevelCatalog` de formato explícito. En ese corte todavía no implementaba hielo, Fragile jugable ni Undo; se integraron después.
 
 ## Swing y recursos — Punto 5
 

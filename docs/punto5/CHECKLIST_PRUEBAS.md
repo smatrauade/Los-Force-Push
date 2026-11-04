@@ -26,6 +26,8 @@ Los 44 casos de VisualAssets cubren 29 sprites, 12 WAV y tres controles de panel
 
 ## Manual Windows actual (marcar solo despues de ejecutarlo)
 
+**Actualización posterior:** la siguiente lista conserva el checklist del Punto 5 previo a la integración. Sus expectativas de controles deshabilitados y callbacks no describen `main`; para el recorrido y las capacidades actuales usar [README](../../README.md) y [TODO](../../TODO.md). No marcar pruebas sin ejecutarlas.
+
 - [ ] `run-swing.ps1` abre el menu; `NUEVA PARTIDA / DEMO` carga `demo.txt`.
 - [ ] El tablero usa sprites en lugar de formas Swing.
 - [ ] Flechas funcionan tambien despues de pulsar botones/HUD.
@@ -49,6 +51,8 @@ Los 44 casos de VisualAssets cubren 29 sprites, 12 WAV y tres controles de panel
       cuando el equipo apruebe el diseño final.
 
 ## Regresion y colaboracion
+
+**Contexto histórico:** estas indicaciones corresponden al incremento de presentación del 28/10; Undo, Restart, fragilidad, progresión y score se integraron posteriormente.
 
 No alterar `src/main/java` del motor en una tarea exclusiva de presentacion. Los ultimos acuerdos de reglas
 pueden quedar abiertos; este incremento no debe crear nuevos contratos normativos.

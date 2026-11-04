@@ -10,7 +10,7 @@
 | RF-02 | Niveles iniciales desde diferentes `.txt` con caracteres | Cargar distintos archivos externos; no hardcodear niveles |
 | RF-03 | Flechas; empujar, no tirar; máximo una caja simultáneamente; no atravesar paredes, cajas ni muros cerrados | Casos positivos, bloqueos y estado preservado ante intento inválido |
 | RF-04 | Caja normal desplazada por empuje; deslizamiento en terreno resbaladizo | Empuje y deslizamiento conforme aclaración docente |
-| RF-05 | Fragile pierde resistencia en cada empuje y se rompe al llegar a cero | Decremento/rotura; definición inicial TXT según D-020/OQ-06 resuelta; regla hielo E04 decidida, implementación pendiente |
+| RF-05 | Fragile pierde resistencia en cada empuje y se rompe al llegar a cero | Decremento/rotura; definición inicial TXT según D-020/OQ-06 resuelta; regla hielo E04 decidida e implementada en el runtime integrado |
 | RF-06 | KeyBox sobre cerrojo abre muros correspondientes | Activación; asociación/cierre dependen de OQ-07 |
 | RF-07 | Historial de 15 movimientos, retroceso de 5 por pulsación Undo, hasta 3 usos consecutivos | Restaurar N-5/N-10/N-15; aplicar E07/E08 y la ratificación complementaria del 01/11: Undo restaura tablero, movimientos y empujes; sólo Restart o cambio de nivel reinician el límite de tres usos. Restart inicia un intento nuevo y reinicia las cuatro métricas. |
 | RF-08 | Victoria cuando todas las cajas están en destinos; avanzar al siguiente nivel | Victoria/progresión tras cerrar OQ-01 |
@@ -53,10 +53,10 @@ Este apartado es un mapa hacia la autoridad canónica, no otra definición norma
 |---|---|---|
 | RF-01 / RF-02 / RF-05 | Disposición TXT y resistencia individual: [E01 / D-020](../decisions/DECISION_LOG.md#e01), [E02 / D-005/D-020](../decisions/DECISION_LOG.md#e02) | [OQ-06/OQ-08](OPEN_QUESTIONS.md): esquema soportado decidido por MODULE_OWNER, extensiones futuras abiertas |
 | RF-03 / RF-04 | Resultado contra pared: [E03 / D-005](../decisions/DECISION_LOG.md#e03) | [OQ-02](OPEN_QUESTIONS.md): bordes y otras obstrucciones pendientes |
-| RF-05 | Regla Fragile/hielo: [E04 / D-005](../decisions/DECISION_LOG.md#e04) | [OQ-03](OPEN_QUESTIONS.md): TEAM_RULE_DECIDED; completar deslizamiento y luego romper; implementación pendiente en otro módulo |
+| RF-05 | Regla Fragile/hielo: [E04 / D-005](../decisions/DECISION_LOG.md#e04) | [OQ-03](OPEN_QUESTIONS.md): TEAM_RULE_DECIDED; completar deslizamiento y luego romper; implementación integrada y bordes en OQ-03 |
 | RF-06 / RF-08 | Objetivo KeyBox y cierre: [E05 / D-019](../decisions/DECISION_LOG.md#e05), [E06 / D-010](../decisions/DECISION_LOG.md#e06) | [OQ-01/OQ-07](OPEN_QUESTIONS.md): ocupación, IDs y puzzles pendientes |
 | RF-07 / RF-10 | Umbral y reinicio de límite: [E07 / D-007](../decisions/DECISION_LOG.md#e07), [E08 / D-008](../decisions/DECISION_LOG.md#e08) | [OQ-05/OQ-04](OPEN_QUESTIONS.md): umbral y evento de reinicio decididos, bordes operativos pendientes en sesión/Undo |
-| RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y resets pendientes; [ratificación complementaria 2026-11-01](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta la fórmula y el comportamiento de Restart |
+| RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y Restart ratificados e implementados; métricas al cambiar de nivel pendientes; [ratificación complementaria 2026-11-01](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta la fórmula y el comportamiento de Restart |
 | RF-12 | Preferencia TEAM histórica: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026): elegibilidad de guardar cuestionada por reporte indirecto; cómputo de dos adicionales, contratos y GoF pendientes |
 
 La revisión del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`. OQ-11 no tuvo encuesta: los comandos actuales y release 17 no ratifican Java/build final. Los estados técnicos de arquitectura/UML y patrones se conservan.
@@ -69,7 +69,7 @@ Un integrante envía a **jpepe@uade.edu.ar**, con copia a los demás, nombre del
 
 **Indicación oral resumida / AUDIO_NOT_VERIFIED:** para RF-02 el docente puede crear un TXT compatible o editar válidamente uno del equipo, por ejemplo cambiar pared por caja. Aceptación: archivo externo → Loader/Parser → Board → interfaz debe reflejar el cambio, sin hardcode. Una entrada inválida debe producir error y conservar el nivel previo; no se promete aceptar cualquier edición. Para RF-01/02/05 los niveles elaborados por el equipo deben ser resolubles y su resistencia Fragile coherente con el puzzle; no se prescribe solver automático ni máximo numérico oficial. [Fuentes y timestamps](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026).
 
-Estos criterios son objetivos de aceptación, no resultados nuevos. Fragile jugable y las demás entidades especiales siguen pendientes; la definición experimental no satisface por sí sola RF-05. OQ-03/OQ-04 conservan sólo implementación/bordes ajenos pendientes; E04/E08 tienen elección resuelta. La consigna oficial permanece por encima de TEAM, sin una aprobación docente de secuenciación inventada.
+Estos criterios son objetivos de aceptación, no resultados nuevos. En el corte del 29/10 Fragile jugable y las demás entidades especiales seguían pendientes; fueron integrados después. OQ-03/OQ-04 conservan detalles de borde; E04/E08 tienen elección resuelta. La consigna oficial permanece por encima de TEAM, sin una aprobación docente de secuenciación inventada.
 
 ## Alcance de RF-07 y RF-12 — complemento 29/10/2026
 
