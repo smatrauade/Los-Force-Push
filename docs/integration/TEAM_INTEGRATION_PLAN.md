@@ -73,3 +73,7 @@ I1.A resolvió texto Swing; I1.B0 protege la identidad TXT; I1.B1 añadió runti
 - Riesgos pendientes: historia Undo/Restart/Score de Martina, animación ICE/Fragile I3, pruebas de plataformas, licencias, StarUML y entrega. La sección anterior es un checkpoint histórico, no un gate activo.
 
 Siguiente gate: comparar el HEAD de `feature/undo-restart-score` y contratos de sesión con `RuntimeState`/`GameSession`; integrar I2 en un worktree nuevo o aislado, con pruebas antes de promover al mismo PR.
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

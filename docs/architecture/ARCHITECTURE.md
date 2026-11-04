@@ -2,7 +2,9 @@
 
 Revisado 29/10/2026: contrato TXT soportado adoptado por su responsable; historia de PR #8/#9 preservada. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
 
-## Flujo implementado
+## Flujo histórico inicial
+
+El flujo siguiente describe el corte anterior a I1/I2; el runtime integrado y la sesión actual se detallan al final.
 
 ~~~text
 SwingApplication / GameWindow (EDT, GameView)
@@ -32,11 +34,11 @@ El incremento de victoria añade `RuntimeMovementEngine` sobre `RuntimeState`: K
 
 ## Swing y recursos — Punto 5
 
-[GameView](../../src/desktop/java/ar/edu/uade/sokoban/desktop/GameView.java) permite sondas sin JFrame. Conserva render/showLoadError y ofrece métodos default onMove, showVictory, configureUiCommands y playEffect. GameController publica onMove para MOVED/PUSHED/BLOCKED; los bloqueos no cambian proyección ni contadores.
+[GameView](../../src/desktop/java/ar/edu/uade/sokoban/desktop/GameView.java) permite sondas sin JFrame. Conserva render/showLoadError y ofrece métodos default onMove, showVictory, configureUiCommands y playEffect. GameController publica onMove para MOVED/PUSHED/BLOCKED; los bloqueos no cambian proyección ni contadores. Además delega Undo y Restart en `GameSession` y calcula el resultado mediante `ScoreCalculator`.
 
 GameWindow representa MENU/GAME/PAUSE/OPTIONS/HELP/FINISH. ArrowBindings entrega Direction; sólo GAME permite mover. BoardPanel representa Board y escala 1x/2x/3x con nearest-neighbor. PixelAssets carga/cacha PNG desde classpath; SoundManager posee clips por ventana, mute y degradación ante dispositivo ausente. No es Singleton ni servicio global del core.
 
-UiCommands contiene callbacks opcionales de Undo/Restart/Save/Load/Next: null mantiene controles deshabilitados. LevelResult sólo transporta datos finales; showVictory muestra esa información sin calcular score ni detectar victoria. Los nombres futuros contemplados por el renderer son pistas de adaptación, no especificaciones del dominio.
+UiCommands contiene callbacks opcionales de Undo/Restart/Save/Load/Next. En I2, `undo`, `restart` y `nextLevel` se habilitan según el estado de sesión; `save` y `loadSaved` siguen deshabilitados. `LevelResult` transporta el resultado final del intento: nivel, movimientos, pushes, usos de Undo y score calculado; `showVictory` muestra esa información sin detectar victoria ni calcular score en la vista. Los nombres futuros contemplados por el renderer son pistas de adaptación, no especificaciones del dominio.
 
 [INTEGRACION_EQUIPO](../punto5/INTEGRACION_EQUIPO.md) es el contrato entre módulos; [UML desktop implementado](uml/swing-playable-spike-v1.puml). Los [43 recursos](../punto5/ASSETS_REGISTRO_SHA256.csv) están versionados y el runner agrega src/desktop/resources al classpath; licencias pendientes según [ASSET_POLICY](../assets/ASSET_POLICY.md).
 
@@ -56,6 +58,8 @@ ExperimentalFragileParser y ExperimentalFragileLevel representan atributos indiv
 
 ## Patrones y brechas de defensa — 29/10/2026
 
+La tabla describe ese corte histórico; la sesión I2 actual se identifica al final.
+
 Revisión documental contra el código integrado por PR #11/#12; [evidencia docente](../decisions/DECISION_LOG.md#evidencia-docente-adicional--29102026). AS_IMPLEMENTED no implica aceptación TEAM.
 
 | Problema | Implementación real | Candidato / brecha de defensa |
@@ -64,7 +68,7 @@ Revisión documental contra el código integrado por PR #11/#12; [evidencia doce
 | Separar UI de reglas | GameController delega a Loader/MovementEngine y publica GamePresentation; GameView permite sondas | MVC verificable por dependencias; no transferir reglas al renderer |
 | Identidad/resistencia inicial Fragile | ExperimentalFragileLevel separado del Level jugable | Integración runtime pendiente; no duplicar este agregado en R7 |
 | Notificar cambios de Lock a muros asociados | No implementado | Observer indicado por docente según ASR; candidato Lock→Walls depende de OQ-07 |
-| Deshacer y calcular score | No implementado; UiCommands son callbacks y LevelResult es DTO | Command/Memento a comparar; Strategy depende de fórmula OQ-09 y Undo de OQ-04/05 |
+| Deshacer y calcular score | `GameSession` mantiene un historial de snapshots con `undo()`, limita cinco movimientos por uso, 15 snapshots y tres usos consecutivos; `restart()` restaura el estado inicial y reinicia métricas. `ScoreCalculator` aplica penalidades incrementalmente con `applyPenalty` desde 1000, con −1 por movimiento, −2 adicionales por push y −10 por uso de Undo; `LevelResult` expone el resumen final. | `Command`/`Memento` y `Strategy` son candidatos de diseño si se formalizan con un problema real y no se sostienen por la implementación actual; la fórmula y los límites están documentados, pero no se debe afirmar una clase de patrón sin su evidencia en código. |
 | Audio y adicionales | SoundManager por ventana; sin persistencia operativa | No Singleton GoF; State/Factory/Decorator no están acreditados por ejemplos o nombres |
 
 Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. Esa reconciliación no ejecutó R7. El incremento posterior 5ac2bba implementó la entrada filesystem de definición experimental; gameplay e integración runtime siguen pendientes.
@@ -78,3 +82,7 @@ En el worktree auxiliar I1, `LevelCatalog` diferencia explícitamente `STANDARD`
 ## Estado arquitectónico de I1 publicado — 03/11/2026
 
 El PR Draft #17 (`6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`) incorpora la reconciliación del runtime de `victoria` con ICE/Fragile de `Objetivo2`: `RuntimeState`/`RuntimeMovementEngine` mantienen una única autoridad de mundo; identidad y resistencia Fragile se conservan; `GameSession`/`LevelProgression` continúan como eje de sesión/campaña. El `Board` permanece como representación legacy/proyección, no estado paralelo de `GameController`. Las referencias de «pendiente» en secciones históricas superiores describen cortes anteriores. La integración de Undo/Restart/Score de Martina y la animación completa ICE/Fragile quedan para I2/I3. UML final y ratificación del equipo aún pendientes. [Evidencia del incremento](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

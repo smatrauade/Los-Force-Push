@@ -172,3 +172,9 @@ QA anterior sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, s
 ## Trazabilidad de publicación I1 — 03/11/2026
 
 `IN_INTEGRATION_BRANCH`: en PR #17 Draft, `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`, se incorporaron ICE/Fragile runtime con ID y resistencia (D-020, E03/E04) y compatibilidad KeyBox/Lock/Wall (E05/E06). INT-01–04 se cubrieron en el árbol local consolidado mediante `RuntimeIceFragileTest` y las regresiones (316/316 PASS, JDK17), con árbol y blobs verificados antes del commit. **No** se ejecutaron de nuevo tras el push; `IN_MAIN=NO`, aceptación TEAM pendiente. I2 (Undo/Restart/Score), I3 (frames GUI/HUD) e I4 (QA final/StarUML/entrega) continúan abiertos. [Registro](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
+
+El aporte de Martina sobre Undo/Restart/score y sus casos se integra en I2 sobre `GameSession` y `LevelProgression`; la procedencia del complemento del 01/11 consta en DECISION_LOG. Consultar el checkpoint I2 para evidencia local y límites.
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

@@ -11,6 +11,8 @@ Revisado 29/10/2026. [Estado integrado y registro de merges](docs/continuity/CUR
 | IMPLEMENTED_VERIFIED / PARTIAL | Swing pixel art, menú/HUD/pausa/opciones/zoom, sprites/SFX | Desktop 16, Assets 44, UI 17 y CLI 18 históricos; callbacks pendientes no son servicios |
 | IMPLEMENTED / MODULE_OWNER_DECIDED_SUPPORTED_SUBSET | Definición Fragile inmutable desde String/Path; contrato soportado D-020 | Fragile 41 en parser; runtime I1 publicado; OQ-06 resuelta, OQ-08 extensiones pendientes |
 | PARTIAL | 31 PNG (29 base + dos opcionales) y 12 WAV versionados | Manifiesto disponible; revisión de derechos pendiente |
+| SOURCE_BRANCH_ONLY / HISTORICAL | Undo y Restart en GameController de Martina | Historial limitado a 15 snapshots; cada uso de Undo retrocede 5 movimientos exitosos, se permiten hasta 3 usos consecutivos, restaura el tablero, `moves` y `pushes`, y acumula `undoUsesTotal`; `Restart` restaura el estado inicial y reinicia las métricas del intento; la carga de un nivel nuevo también reinicia el contador de usos consecutivos |
+| SOURCE_BRANCH_ONLY / HISTORICAL | Cálculo de score por intento | Puntaje inicial 1000; −1 por movimiento, −2 adicionales por cada push, −10 por cada uso de Undo; puntaje mínimo 0; fórmula `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`; `ScoreCalculator` realiza el cálculo y `LevelResult` expone las estadísticas y el puntaje; `Restart` reinicia los contadores sin aplicar penalizaciones |
 
 IMPLEMENTED_VERIFIED describe presencia contrastada en código; no una nueva ejecución funcional. [Comandos, fechas y límites de QA](docs/testing/TEST_STRATEGY.md).
 
@@ -60,7 +62,7 @@ Siguiente integración segura: revisar el constructor real del consumidor y el n
 
 ## Decisiones y mantenimiento
 
-E01–E11 se conservan únicamente en [DECISION_LOG](docs/decisions/DECISION_LOG.md); pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). No reabrir acuerdos por defecto. E04/E08 son TEAM_DECIDED, sin implementación por este cierre. OQ-06 = MODULE_OWNER_DECIDED; OQ-08 = MODULE_OWNER_DECIDED parcial, extensiones abiertas. Java/build global sigue OPEN. Revisar patrones por intención, roles reales y alternativa; SoundManager no es Singleton, callbacks no acreditan Command y el DTO LevelResult no calcula score.
+E01–E11 se conservan únicamente en [DECISION_LOG](docs/decisions/DECISION_LOG.md); pendientes en [OPEN_QUESTIONS](docs/requirements/OPEN_QUESTIONS.md). No reabrir acuerdos por defecto. E04 permanece TEAM_DECIDED, con implementación pendiente en Model/Movement. E08 está implementada en el módulo de Undo/Restart, conforme a las reglas ratificadas. OQ-06 = MODULE_OWNER_DECIDED; OQ-08 = MODULE_OWNER_DECIDED parcial, extensiones abiertas. Java/build global sigue OPEN. Revisar patrones por intención, roles reales y alternativa; SoundManager no es Singleton, callbacks no acreditan Command y el DTO LevelResult no calcula score.
 
 Mantener [arquitectura](docs/architecture/ARCHITECTURE.md), UML implementado y candidato separados; actualizar diagramas en misión autorizada, sin convertirlos en evidencia de clases ausentes. [Derechos y assets](docs/assets/ASSET_POLICY.md), [contratos Punto 5](docs/punto5/INTEGRACION_EQUIPO.md) y [FRESHNESS_POLICY](docs/continuity/FRESHNESS_POLICY.md) siguen vigentes. Revisar humanos/código, pruebas y documentos en cada incremento; conservar cápsulas y checkpoints históricos. Este backlog no concede permiso de implementación o publicación.
 
@@ -108,3 +110,7 @@ Detalle: [plan vivo de integración](docs/integration/TEAM_INTEGRATION_PLAN.md).
 - [ ] I4: pruebas en HEAD final, Windows, licencias, StarUML, informe, video y aceptación del equipo.
 
 Las tareas sin marcar del checkpoint histórico anterior pertenecen a su corte anterior al merge; no son el estado actual. No fusionar PR #17 a `main` sin aceptación expresa.
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

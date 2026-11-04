@@ -40,3 +40,7 @@ La matriz superior conserva los **oráculos**. En el worktree auxiliar `integrat
 ## Publicación I1 — estado verificable
 
 INT-01 a INT-04: `EXECUTED_VERIFIED_PRECOMMIT` sobre el contenido que pasó al merge `6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2` en PR #17 Draft. Resultado reportado: **316/316 PASS**, Java 17.0.20.1 Ubuntu, sin ejecución postcommit adicional. INT-07 y INT-09 (campaña y frames Swing) quedan pendientes. No equivale a `TEAM_ACCEPTED`, `IN_MAIN` ni a completar I2/I3/I4. [Detalle](I1_LOCAL_VALIDATION_2026-11-03.md).
+
+## I2 — avance local 04/11/2026
+
+Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, sin publicación. `GameSession` conserva el mundo, historial y métricas; `LevelProgression` coordina finalización y nivel; `GameController` conecta Undo y el resultado calculado por `ScoreCalculator`. Con JDK 17 se ejecutaron 40 comprobaciones Undo, 256 casos core I1, 35 casos desktop y 44 assets: `bash scripts/test-integration-i2.sh` exit 0; JDK 17.0.20.1. La primera ejecución terminó exit 1 por whitespace en el índice y fue corregida. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo. Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.

@@ -19,6 +19,7 @@ import java.util.Objects;
 /** EDT coordinator; progression owns world state, victory and catalog advance. */
 public final class GameController {
     private final GameView view;
+    private final ScoreCalculator scoreCalculator = new ScoreCalculator();
     private LevelProgression game;
 
     public GameController(GameView view) {
@@ -66,10 +67,9 @@ public final class GameController {
         }
         publish();
         if (game.victory().won()) {
-            LevelProgression.CompletedLevel completed = game.finish().orElseThrow();
+            game.finish().orElseThrow();
             publishCommands();
-            GameSession.Metrics metrics = completed.metrics();
-            view.showVictory(new LevelResult(game.levelDisplayName(), metrics.moves(), metrics.pushes(), 0, 0));
+            view.showVictory(getLevelResult());
         }
     }
 
@@ -79,6 +79,31 @@ public final class GameController {
             publish();
             view.playEffect(SoundManager.Effect.RESTART);
         }
+    }
+
+    public void undo() {
+        if (game != null && game.canUndo() && game.undo()) {
+            publish();
+            view.playEffect(SoundManager.Effect.UNDO);
+        }
+    }
+
+    int undoUsesTotal() {
+        return game == null ? 0 : game.undoUsesTotal();
+    }
+
+    int consecutiveUndoUses() {
+        return game == null ? 0 : game.consecutiveUndoUses();
+    }
+
+    public LevelResult getLevelResult() {
+        if (game == null) {
+            throw new IllegalStateException("No hay un nivel cargado");
+        }
+        GameSession.Metrics metrics = game.metrics();
+        int uses = game.undoUsesTotal();
+        return new LevelResult(game.levelDisplayName(), metrics.moves(), metrics.pushes(), uses,
+                scoreCalculator.calculate(metrics.moves(), metrics.pushes(), uses));
     }
 
     public void nextLevel() {
@@ -101,7 +126,7 @@ public final class GameController {
     }
 
     private void publishCommands() {
-        view.configureUiCommands(new UiCommands(null,
+        view.configureUiCommands(new UiCommands(game != null && game.canUndo() ? this::undo : null,
                 game != null && !game.isFinalized() ? this::restart : null,
                 null, null,
                 game != null && game.isFinalized() && game.hasNext() ? this::nextLevel : null));

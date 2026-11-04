@@ -2,7 +2,7 @@
 
 Prototipo de Sokoban en **Java y Swing**, desarrollado para el trabajo integrador de Procesos de Desarrollo de Software de UADE. El jugador recorre un tablero 2D y empuja cajas normales hacia destinos. El proyecto explora SOLID, GRASP, MVC y patrones GoF.
 
-**Estado:** se puede ejecutar una porción del juego con carga de niveles, movimiento, llaves/cerrojos/muros dinámicos, victoria y progresión de campaña. El TPO está incompleto. En esta rama Draft se incorporaron ICE y Fragile al runtime en I1; Undo, puntaje oficial y animación completa de Fragile siguen pendientes. La aceptación del código por el equipo no está registrada.
+**Estado:** la rama auxiliar I2 combina ICE/Fragile, KeyBox/Lock, victoria y progresión con Undo, Restart y score; está en integración local y requiere validación y revisión. El TPO está incompleto y la aceptación del código por el equipo no está registrada.
 
 ## Inicio rápido
 
@@ -58,7 +58,7 @@ El runner Swing Bash no entrecomilla las rutas de fuentes en el archivo de argum
 
 ## Uso del juego
 
-En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir la campaña: el [nivel incluido](src/desktop/resources/levels/demo.txt) y luego [campaign-b](src/desktop/resources/levels/campaign-b.txt) con llave, cerrojo y muro. **ABRIR NIVEL TXT** acepta legacy/C2 ordinario o la extensión explícita de llaves. Las flechas mueven al jugador y empujan una caja; `Esc` pausa, `R` reinicia el nivel, `M` controla el sonido y `+`/`-` cambian el zoom. Al cubrir todos los destinos se muestra victoria; **SIGUIENTE NIVEL** avanza si el catálogo tiene otro archivo. Undo, guardar/cargar y fórmula de score siguen pendientes; el puntaje de la pantalla final permanece en 0.
+En el menú, elegir **NUEVA PARTIDA / DEMO** para abrir la campaña con [demo](src/desktop/resources/levels/demo.txt) y [campaign-b](src/desktop/resources/levels/campaign-b.txt). Las flechas mueven; `Z` deshace cinco movimientos exitosos, hasta tres veces por intento; `R` reinicia, `Esc` pausa, `M` controla sonido y `+`/`-` el zoom. Al ganar se muestra el resultado y **SIGUIENTE NIVEL** avanza en la campaña. Guardar/cargar permanece pendiente.
 
 También se puede iniciar con un nivel externo como argumento, reemplazando la ruta por un archivo propio:
 
@@ -85,7 +85,7 @@ La sección `[attributes]` debe estar vacía en la ruta jugable; se rechazan ent
 
 ## Capacidades y pruebas
 
-El core implementa carga legacy/C2-L7, tablero inmutable, movimiento cardinal y un runtime separado para KeyBox, Lock y muros dinámicos. La victoria exige todas las cajas —incluida la llave— sobre destinos normales; un Lock no cuenta (E05). Retirar la llave cierra los muros asociados (E06). Swing representa esos estados, detecta victoria y avanza de nivel. La definición Fragile descrita abajo **no** habilita cajas frágiles jugables. Quedan pendientes hielo, Fragile jugable, Undo y score.
+El runtime integra ICE, Fragile con identidad, KeyBox, Lock y muros; la victoria y progresión pertenecen a `LevelProgression`. `GameSession` conserva el historial Undo y las métricas; `ScoreCalculator` calcula `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)` sin overflow. Los estados especiales y el resultado se representan en Swing; la animación completa de Fragile sigue pendiente de I3.
 
 Para comprobar el runner de escritorio sin abrir ventana, desde la raíz:
 
@@ -127,7 +127,7 @@ La entrega informada es el **18/11/2026**, con demo en vivo de 15–20 minutos y
 
 <!-- I0_BRANCH_AWARE_CONTEXT_2026_11_03 -->
 
-La propuesta de combinación se coordina mediante un **PR Draft** desde `integration/tpo-unificado-2026-11-03`, inicialmente basado en `victoria`, con `Objetivo2` ya integrado en I1 y `feature/undo-restart-score` todavía pendiente para I2. Leer [el índice de integración](docs/integration/README.md), [la matriz de contratos y pruebas](docs/integration/INTEGRATION_ACCEPTANCE.md) y [el protocolo de frescura](docs/continuity/BRANCH_AWARE_FRESHNESS.md). Este apartado describe la **rama experimental de integración**; el README de `main` debe representar únicamente lo realmente fusionado allí.
+La propuesta de combinación se coordina mediante un **PR Draft** desde `integration/tpo-unificado-2026-11-03`, inicialmente basado en `victoria`, con `Objetivo2` integrado en I1; el aporte `feature/undo-restart-score` está en integración local I2, no publicado en ese PR. Leer [el índice de integración](docs/integration/README.md), [la matriz de contratos y pruebas](docs/integration/INTEGRATION_ACCEPTANCE.md) y [el protocolo de frescura](docs/continuity/BRANCH_AWARE_FRESHNESS.md). Este apartado describe la **rama experimental de integración**; el README de `main` debe representar únicamente lo realmente fusionado allí.
 
 ## I1 publicado en el PR Draft #17 — 03/11/2026
 
@@ -137,4 +137,4 @@ La integración TXT/ICE/Fragile de `Objetivo2` está **publicada en el PR #17**,
 
 ### Alcance y siguiente fase
 
-El resultado previo de 316/316 pruebas corresponde al árbol combinado local verificado antes del commit, cuyos blobs fueron conservados en el merge; no hay nueva ejecución post-push. El PR conserva el estado Draft. I2: Undo/Restart/Score de Martina sin duplicar `GameSession`; I3: GUI/animación; I4: QA final y entrega. `TEAM_ACCEPTANCE=NOT_RECORDED`.
+El resultado previo de 316/316 pruebas corresponde al árbol combinado local verificado antes del commit, cuyos blobs fueron conservados en el merge; no hay nueva ejecución post-push. Al corte I1 el PR era Draft. I2 quedó validado localmente en el auxiliar sin publicación; I3: GUI/animación; I4: QA final y entrega. `TEAM_ACCEPTANCE=NOT_RECORDED`.

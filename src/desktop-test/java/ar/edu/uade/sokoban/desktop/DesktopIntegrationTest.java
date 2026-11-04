@@ -8,6 +8,7 @@ import ar.edu.uade.sokoban.level.Position;
 import ar.edu.uade.sokoban.level.Terrain;
 import ar.edu.uade.sokoban.movement.Direction;
 import ar.edu.uade.sokoban.movement.MovementEngine;
+import ar.edu.uade.sokoban.session.LevelCatalog;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.swing.JComponent;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -37,6 +39,8 @@ public final class DesktopIntegrationTest {
         private GamePresentation state;
         private int renders;
         private String error;
+        private UiCommands commands = UiCommands.EMPTY;
+        private LevelResult victory;
         @Override
         public void render(GamePresentation value) {
             state = value;
@@ -44,6 +48,10 @@ public final class DesktopIntegrationTest {
         }
         @Override
         public void showLoadError(String value) { error = value; }
+        @Override
+        public void configureUiCommands(UiCommands value) { commands = value; }
+        @Override
+        public void showVictory(LevelResult value) { victory = value; }
     }
 
     public static void main(String[] args) throws Exception {
@@ -137,6 +145,26 @@ public final class DesktopIntegrationTest {
                     check(seen.equals(List.of(Direction.values())), "wrong directional mapping");
                 });
             });
+            test("Undo button and Z key use the same enabled action on EDT", () -> {
+                SwingUtilities.invokeAndWait(() -> {
+                    JPanel target = new JPanel();
+                    JButton button = new JButton();
+                    int[] calls = new int[2];
+                    button.addActionListener(event -> calls[0]++);
+                    SwingApplication.installUndoKey(target, button, () -> true, () -> calls[1]++);
+                    Object key = target.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                            .get(KeyStroke.getKeyStroke("Z"));
+                    check(key != null, "missing Z binding");
+                    button.doClick();
+                    target.getActionMap().get(key).actionPerformed(
+                            new ActionEvent(target, ActionEvent.ACTION_PERFORMED, "test"));
+                    check(calls[0] == 2, "button and Z did not dispatch Undo");
+                    button.setEnabled(false);
+                    target.getActionMap().get(key).actionPerformed(
+                            new ActionEvent(target, ActionEvent.ACTION_PERFORMED, "test"));
+                    check(calls[0] == 2 && calls[1] == 1, "disabled Undo was dispatched");
+                });
+            });
             test("view projection matches immutable core transition", () -> {
                 Probe view = new Probe();
                 GameController game = loaded(view, OPEN);
@@ -188,6 +216,291 @@ public final class DesktopIntegrationTest {
                     check(panel.getWidth() > 0 && panel.getHeight() > 0, "invalid drawing extent");
                 });
             });
+
+            test("undo commands, victory score, freeze and next level", () -> {
+                Probe view = new Probe();
+                GameController game = controller(view);
+                Path first = write("i2first.txt", "#######\n# @$. #\n#     #\n#######\n");
+                Path second = write("i2second.txt", OPEN);
+                game.loadCatalog(new LevelCatalog(List.of(
+                        new LevelCatalog.Entry("first", first, LevelCatalog.Format.STANDARD),
+                        new LevelCatalog.Entry("second", second, LevelCatalog.Format.STANDARD))));
+                check(view.commands.undo() == null, "undo enabled too early");
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                check(view.state.moves() == 5 && view.commands.undo() != null, "undo unavailable");
+                view.commands.undo().run();
+                check(view.state.moves() == 0 && game.undoUsesTotal() == 1, "undo not reflected in HUD");
+                game.move(Direction.RIGHT);
+                check(view.victory != null && view.victory.moves() == 1
+                        && view.victory.pushes() == 1 && view.victory.undoUses() == 1
+                        && view.victory.score() == 987, "wrong victory result");
+                check(view.commands.undo() == null && view.commands.restart() == null
+                        && view.commands.nextLevel() != null, "finalized controls");
+                GamePresentation frozen = view.state;
+                game.move(Direction.LEFT);
+                game.undo();
+                game.restart();
+                check(view.state == frozen, "finalized level changed");
+                view.commands.nextLevel().run();
+                check(view.state.levelName().equals("i2second.txt") && view.state.moves() == 0
+                        && game.undoUsesTotal() == 0, "next level did not reset session");
+            });
+            test("UNDO restores state from five moves ago", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+
+                check(view.state.moves() == 5, "expected five moves");
+
+                game.undo();
+
+                check(view.state.moves() == 0, "moves not restored");
+                check(view.state.pushes() == 0, "pushes not restored");
+                check(view.state.board().playerPosition().equals(new Position(2, 2)),
+                        "player position not restored");
+            });
+            test("UNDO restores pushes counter", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, "######\n#@$  #\n#    #\n######\n");
+
+                game.move(Direction.RIGHT); // Empuja la caja.
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP);
+                game.move(Direction.RIGHT);
+
+                check(view.state.moves() == 5, "expected five moves");
+                check(view.state.pushes() == 1, "expected one push");
+
+                game.undo();
+
+                check(view.state.moves() == 0, "moves not restored");
+                check(view.state.pushes() == 0, "pushes not restored");
+                check(view.state.board().playerPosition().equals(new Position(1, 1)),
+                        "player position not restored");
+            });
+            test("UNDO can be used only three times", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                // Primer bloque de cinco movimientos.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.undo();
+
+                // Segundo bloque de cinco movimientos.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.undo();
+
+                // Tercer bloque de cinco movimientos.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+                game.undo();
+
+                check(game.undoUsesTotal() == 3, "expected three undo uses");
+                check(view.state.moves() == 0, "third undo did not restore initial state");
+
+                // Hacemos otros cinco movimientos normales.
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+
+                // El cuarto Undo no debería funcionar.
+                game.undo();
+
+                check(game.undoUsesTotal() == 3, "undo count should remain three");
+                check(view.state.moves() == 5, "fourth undo should not restore state");
+            });
+            test("RESTART restores initial state and resets counters", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, "######\n#@$  #\n#    #\n######\n");
+
+                Board initialBoard = view.state.board();
+
+                // Hacemos cinco movimientos, incluyendo un empuje.
+                game.move(Direction.RIGHT);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP);
+                game.move(Direction.RIGHT);
+
+                check(view.state.moves() == 5, "expected five moves");
+                check(view.state.pushes() == 1, "expected one push");
+
+                // Reiniciamos el nivel.
+                game.restart();
+
+                check(view.state.board().equals(initialBoard), "board not restored");
+                check(view.state.moves() == 0, "moves not reset");
+                check(view.state.pushes() == 0, "pushes not reset");
+                check(game.undoUsesTotal() == 0, "undo total not reset");
+                check(game.consecutiveUndoUses() == 0, "consecutive undo uses not reset");
+                check(game.getLevelResult().score() == 1000, "restart added a score penalty");
+            });
+            test("UNDO is unavailable with fewer than five moves", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                game.move(Direction.UP);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.RIGHT);
+
+                game.undo();
+
+                check(view.state.moves() == 4, "undo should not have been executed");
+                check(game.undoUsesTotal() == 0, "undo count should remain zero");
+            });
+            test("BLOCKED movement is not added to undo history", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(view, OPEN);
+
+                game.move(Direction.UP);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP); // Bloqueado contra la pared.
+                game.move(Direction.DOWN);
+                game.move(Direction.RIGHT);
+                game.move(Direction.UP);
+
+                check(view.state.moves() == 5, "blocked movement counted as a move");
+
+                game.undo();
+
+                check(view.state.moves() == 0, "undo did not restore initial state");
+                check(view.state.board().playerPosition().equals(new Position(2, 2)),
+                        "player position not restored");
+            });
+
+            test("SCORE starts at 1000 points", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(0, 0, 0) == 1000,
+                        "initial score should be 1000");
+            });
+
+            test("SCORE penalizes each move", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(10, 0, 0) == 990,
+                        "expected 990 points after ten moves");
+            });
+
+            test("SCORE applies additional penalty for pushes", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(10, 2, 0) == 986,
+                        "expected 986 points after ten moves and two pushes");
+            });
+
+            test("SCORE penalizes Undo uses", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(10, 2, 1) == 976,
+                        "expected 976 points after one Undo");
+            });
+
+            test("SCORE never goes below zero", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(calculator.calculate(2000, 0, 0) == 0,
+                        "score should not be negative");
+            });
+
+            test("SCORE handles maximum moves without overflow", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(
+                        calculator.calculate(Long.MAX_VALUE, 0, 0) == 0,
+                        "score should be zero with maximum moves"
+                );
+            });
+
+            test("SCORE handles maximum pushes without overflow", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(
+                        calculator.calculate(0, Long.MAX_VALUE, 0) == 0,
+                        "score should be zero with maximum pushes"
+                );
+            });
+
+            test("SCORE handles maximum Undo uses without overflow", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                check(
+                        calculator.calculate(0, 0, Integer.MAX_VALUE) == 0,
+                        "score should be zero with maximum Undo uses"
+                );
+            });
+
+            test("SCORE rejects negative statistics", () -> {
+                ScoreCalculator calculator = new ScoreCalculator();
+
+                expectIllegalArgument(() -> calculator.calculate(-1, 0, 0));
+                expectIllegalArgument(() -> calculator.calculate(0, -1, 0));
+                expectIllegalArgument(() -> calculator.calculate(0, 0, -1));
+            });
+
+            test("GameController exposes current statistics and score", () -> {
+                Probe view = new Probe();
+                GameController game = loaded(
+                        view, "######\n#@$  #\n#    #\n######\n");
+
+                game.move(Direction.RIGHT);
+                game.move(Direction.DOWN);
+                game.move(Direction.LEFT);
+                game.move(Direction.UP);
+                game.move(Direction.RIGHT);
+
+                LevelResult result = game.getLevelResult();
+
+                check(result.moves() == 5, "incorrect move count");
+                check(result.pushes() == 1, "incorrect push count");
+                check(result.undoUses() == 0, "incorrect Undo count");
+                check(result.score() == 993, "incorrect score");
+
+                game.undo();
+
+                result = game.getLevelResult();
+
+                check(result.moves() == 0, "Undo did not restore moves");
+                check(result.pushes() == 0, "Undo did not restore pushes");
+                check(result.undoUses() == 1, "Undo use was not accumulated");
+                check(result.score() == 990, "Undo penalty was not applied");
+            });
+
+            test("GameController rejects result when no level is loaded", () -> {
+                Probe view = new Probe();
+                GameController game = controller(view);
+
+                try {
+                    game.getLevelResult();
+                    throw new AssertionError("expected IllegalStateException");
+                } catch (IllegalStateException expected) {
+                    check(true, "result should not exist without a loaded level");
+                }
+            });
         } finally {
             try (var paths = Files.walk(directory)) {
                 for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
@@ -228,6 +541,15 @@ public final class DesktopIntegrationTest {
         } catch (Exception | AssertionError failure) {
             failed++;
             System.err.println("FAIL " + name + ": " + failure);
+        }
+    }
+
+        private static void expectIllegalArgument(Runnable action) {
+        try {
+            action.run();
+            throw new AssertionError("expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            // Expected exception.
         }
     }
 }

@@ -5,18 +5,34 @@ import ar.edu.uade.sokoban.movement.MoveResult;
 import ar.edu.uade.sokoban.movement.RuntimeMoveResult;
 import ar.edu.uade.sokoban.movement.RuntimeMovementEngine;
 import ar.edu.uade.sokoban.movement.RuntimeState;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Objects;
 
-/** Mutable coordinator over immutable world values. Undo remains out of this increment. */
+/** Owns the runtime world, bounded Undo history and per-attempt counters. */
 public final class GameSession {
+    private static final int HISTORY_LIMIT = 15;
+    private static final int MOVES_PER_UNDO = 5;
+    private static final int UNDO_LIMIT = 3;
+
     public record Metrics(long moves, long pushes) { }
 
+    /** Only reversible metrics belong in a snapshot; Undo usage is not reversible. */
+    private record Snapshot(RuntimeState state, long moves, long pushes) {
+        private Snapshot {
+            Objects.requireNonNull(state, "state");
+        }
+    }
+
     private final RuntimeMovementEngine engine = new RuntimeMovementEngine();
+    private final Deque<Snapshot> history = new ArrayDeque<>();
     private RuntimeState initial;
     private RuntimeState current;
     private String levelContext;
     private long moves;
     private long pushes;
+    private int undoUsesTotal;
+    private int consecutiveUndoUses;
 
     public GameSession(RuntimeState initial, String levelContext) {
         changeLevel(initial, levelContext);
@@ -31,8 +47,7 @@ public final class GameSession {
         initial = next;
         current = next;
         levelContext = context;
-        moves = 0;
-        pushes = 0;
+        resetAttempt();
     }
 
     public RuntimeMoveResult move(Direction direction) {
@@ -41,18 +56,64 @@ public final class GameSession {
         if (result.kind() == MoveResult.Kind.BLOCKED) {
             return result;
         }
-        current = result.state();
-        moves = Math.addExact(moves, 1);
+        // Perform all potentially throwing arithmetic BEFORE changing session state.
+        long nextMoves = Math.addExact(moves, 1);
+        long nextPushes = pushes;
         if (result.kind() == MoveResult.Kind.PUSHED) {
-            pushes = Math.addExact(pushes, 1);
+            nextPushes = Math.addExact(pushes, 1);
         }
+        history.addLast(new Snapshot(current, moves, pushes));
+        if (history.size() > HISTORY_LIMIT) {
+            history.removeFirst();
+        }
+        current = result.state();
+        moves = nextMoves;
+        pushes = nextPushes;
         return result;
+    }
+
+    /** Restores the state preceding five successful moves; false means no state change. */
+    public boolean undo() {
+        if (!canUndo()) {
+            return false;
+        }
+        Snapshot restored = null;
+        for (int i = 0; i < MOVES_PER_UNDO; i++) {
+            restored = history.removeLast();
+        }
+        // canUndo guarantees the loop removed exactly five non-null snapshots.
+        Snapshot snapshot = Objects.requireNonNull(restored, "undo snapshot");
+        current = snapshot.state();
+        moves = snapshot.moves();
+        pushes = snapshot.pushes();
+        undoUsesTotal++;
+        consecutiveUndoUses++;
+        return true;
+    }
+
+    public boolean canUndo() {
+        return history.size() >= MOVES_PER_UNDO && consecutiveUndoUses < UNDO_LIMIT;
+    }
+
+    public int undoUsesTotal() {
+        return undoUsesTotal;
+    }
+
+    public int consecutiveUndoUses() {
+        return consecutiveUndoUses;
     }
 
     public void restart() {
         current = initial;
+        resetAttempt();
+    }
+
+    private void resetAttempt() {
         moves = 0;
         pushes = 0;
+        undoUsesTotal = 0;
+        consecutiveUndoUses = 0;
+        history.clear();
     }
 
     public RuntimeState currentState() {

@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## I2 — integración local verificada (04/11/2026)
+
+Rama auxiliar `integration/i2-martina-stage-2026-11-03`; base `9aebe52501bb25d2ccf39781eb515c178dc11983`, fuente Martina `efd0fcd2a1423bd1d5b064458671ec9b149fd054`. Merge local preparado; consultar HEAD de Git para el commit, no publicado. P2c: 40/40 comprobaciones, core I1: 256/256, desktop 35/35 y assets 44/44 en JDK 17; `bash scripts/test-integration-i2.sh` terminó exit 0; el primer intento falló por whitespace en el índice y fue corregido. La verificación documental pasó; la revisión y aceptación del equipo siguen pendientes. `TEAM_ACCEPTANCE=NOT_RECORDED`; cambio de nivel reinicia métricas como comportamiento provisional, no ratificación adicional. Próximo gate: revisión funcional y nueva verificación remota antes de cualquier publicación.
+
 AS_OF = 2026-11-01. Git/GitHub prevalece para el HEAD y los PR actuales. Este documento registra eventos y capacidades; no fija un HEAD permanente ni concede permisos de ejecución.
 
 ## Incremento victoria — llaves, cerrojos, muros y progresión — 01/11/2026
@@ -8,7 +12,7 @@ En la rama `victoria` se implementó un runtime explícito, separado del Board j
 
 ## Cierre semántico y contractual — 29/10/2026
 
-[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. Gameplay especial, Undo y aceptación del código continúan NOT_IMPLEMENTED / NOT_RECORDED según corresponda.
+[D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026) adopta el subconjunto TXT probado por autoridad expresa del responsable: OQ-06 `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. E01/E02 se preservan, sin nuevo voto TEAM. [E04](../decisions/DECISION_LOG.md#e04) y E08 tienen regla TEAM elegida; el recuento E04 corregido procede del usuario, sin reinspección de capturas. En aquel corte, gameplay especial y Undo seguían sin implementarse; el estado actual de I1/I2 figura en los checkpoints de esta rama. La aceptación formal del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`.
 
 Este hito sólo cambia Markdown. QA Java previa por Codex sobre `38e5a2e0ce4dd4688c4eb903dea93a2a3bf54bd6`: 160 PASS/exit 0, con src/scripts idénticos a 5ac2bba; no reejecutada en este cierre. [Comandos, entorno y límites](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). La [matriz de frescura](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#cierre-semántico-del-contrato-soportado--29102026) identifica los documentos revisados y las excepciones conservadas. PR/reviews/HEAD se consultan dinámicamente; no hay permiso de Ready/merge ni SHA de squash predicho.
 
@@ -50,9 +54,9 @@ Los PR #8, #9, #10, #11, #12 y #13 están MERGED; los SHA de la tabla identifica
 
 - [LevelLoader / LevelParser / C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level): lectura externa UTF-8 estricta, máximo 65.536 bytes, legacy y C2 opt-in; Board inmutable, grillas hasta 100×100, exactamente un jugador.
 - [MovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/MovementEngine.java): movimiento cardinal y empuje de una caja normal. MOVED/PUSHED producen Board nuevo; BLOCKED conserva la misma instancia.
-- [RuntimeState](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeState.java) / [RuntimeMovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeMovementEngine.java): KeyBox, Lock y muros dinámicos; victoria y campaña en [session](../../src/main/java/ar/edu/uade/sokoban/session).
-- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop): menú, juego, HUD, pausa, opciones, ayuda, zoom, sprites y audio. GameController coordina carga, movimiento, victoria y siguiente nivel; BoardPanel representa RuntimeState; PixelAssets y SoundManager cargan desde classpath.
-- [UiCommands](../../src/desktop/java/ar/edu/uade/sokoban/desktop/UiCommands.java) habilita Restart y Next cuando hay sesión; Undo, persistencia y score oficial siguen ausentes.
+- [RuntimeState](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeState.java) / [RuntimeMovementEngine](../../src/main/java/ar/edu/uade/sokoban/movement/RuntimeMovementEngine.java): ICE, Fragile, KeyBox, Lock y muros dinámicos.
+- [GameSession](../../src/main/java/ar/edu/uade/sokoban/session/GameSession.java) concentra Undo/Restart y métricas; `LevelProgression` coordina victoria y campaña.
+- [Desktop](../../src/desktop/java/ar/edu/uade/sokoban/desktop) conecta presentación, Undo/Restart, resultado y siguiente nivel; `ScoreCalculator` calcula score saturado.
 - [Recursos](../../src/desktop/resources/assets): 31 PNG, incluidos 29 base y dos variantes opcionales; 12 WAV. [Manifiesto](../punto5/ASSETS_REGISTRO_SHA256.csv), [contrato entre módulos](../punto5/INTEGRACION_EQUIPO.md) y [derechos pendientes](../punto5/USO_IA_Y_LICENCIAS.md).
 
 ## Spike local C2-L7 — 2026-10-24
@@ -79,7 +83,7 @@ El merge de #5 y su QA previa son historia: [checkpoint Windows](checkpoints/WIN
 
 [README](../../README.md) contiene ejecución desde clon; [TEST_STRATEGY](../testing/TEST_STRATEGY.md), suites y regresión del verificador. No se requieren ZIP de instalación ni assets externos. Java/build definitivo sigue OQ-11 OPEN; los runners provisionales compilan a release 17. [Arquitectura](../architecture/ARCHITECTURE.md) y [UML](../architecture/uml/STARUML_STATUS.md) separan implementación de candidato.
 
-Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. Siguen pendientes hielo, Fragile/KeyBox/Lock, Undo/Restart, score, victoria/progresión, persistencia y segunda adicional. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
+Próximo trabajo TXT/niveles: verificar el contrato soportado frente al consumidor real y especificar extensiones necesarias, respetando E01/E02 y compatibilidad legacy/C2. Requiere especificación y autorización propias; no habilitar especiales por inferencia. En el corte de esta sección quedaban pendientes hielo, Fragile/KeyBox/Lock y victoria/progresión; el estado I1/I2 actual se registra arriba. Persistencia y segunda adicional siguen pendientes. [TODO](../../TODO.md) reúne tareas funcionales y entregables.
 
 ## Historia y fuentes
 

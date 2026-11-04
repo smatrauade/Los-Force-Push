@@ -1,0 +1,43 @@
+package ar.edu.uade.sokoban.desktop;
+
+/**
+ * Calculates the final score obtained during a level.
+ */
+public final class ScoreCalculator {
+
+    private static final long INITIAL_SCORE = 1000;
+    private static final long MOVE_PENALTY = 1;
+    private static final long PUSH_PENALTY = 2;
+    private static final long UNDO_PENALTY = 10;
+
+    public long calculate(long moves, long pushes, int undoUses) {
+
+        if (moves < 0 || pushes < 0 || undoUses < 0) {
+            throw new IllegalArgumentException(
+                    "Las estadisticas no pueden ser negativas"
+            );
+        }
+
+        long score = INITIAL_SCORE;
+
+        score = applyPenalty(score, moves, MOVE_PENALTY);
+        score = applyPenalty(score, pushes, PUSH_PENALTY);
+        score = applyPenalty(score, undoUses, UNDO_PENALTY);
+
+        return score;
+    }
+
+    private long applyPenalty(long score, long count, long penalty) {
+        if (score == 0) {
+            return 0;
+        }
+
+        long countToReachZero = (score + penalty - 1) / penalty;
+
+        if (count >= countToReachZero) {
+            return 0;
+        }
+
+        return score - count * penalty;
+    }
+}

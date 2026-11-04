@@ -64,6 +64,23 @@ public final class LevelProgression {
         return session.metrics();
     }
 
+    public int undoUsesTotal() {
+        return session.undoUsesTotal();
+    }
+
+    public int consecutiveUndoUses() {
+        return session.consecutiveUndoUses();
+    }
+
+    public boolean canUndo() {
+        return finalized == null && session.canUndo();
+    }
+
+    public boolean undo() {
+        requireUnfinished();
+        return session.undo();
+    }
+
     public String levelId() {
         return session.levelContext();
     }

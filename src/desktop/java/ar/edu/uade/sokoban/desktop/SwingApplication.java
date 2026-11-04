@@ -17,12 +17,14 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BooleanSupplier;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,6 +40,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /** Desktop pixel UI. Model and rules remain in the existing core/controller. */
 public final class SwingApplication {
     private SwingApplication() { }
+
+    static void installUndoKey(JComponent target, JButton button, BooleanSupplier gameActive,
+                               Runnable unavailable) {
+        target.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("Z"), "undo");
+        target.getActionMap().put("undo", new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                if (gameActive.getAsBoolean()) {
+                    if (button.isEnabled()) {
+                        button.doClick();
+                    } else {
+                        unavailable.run();
+                    }
+                }
+            }
+        });
+    }
 
     public static void main(String[] args) {
         if (args.length > 1) {
@@ -121,7 +141,7 @@ public final class SwingApplication {
             continueButton.setEnabled(false);
             restartButton.setEnabled(false);
             pauseRestartButton.setEnabled(false);
-            pending(undoButton, "El Undo de 5 movimientos requiere el modulo del punto 4");
+            pending(undoButton, "Disponible tras cinco movimientos exitosos");
             pending(saveButton, "Guardar partida requiere la funcionalidad adicional");
             pending(loadSaveButton, "Cargar partida guardada requiere la funcionalidad adicional");
             pending(nextButton, "Disponible al completar un nivel con siguiente en el catalogo");
@@ -319,7 +339,7 @@ public final class SwingApplication {
             status.setForeground(PixelTheme.AQUA);
             hud.add(status);
             result.add(hud, BorderLayout.EAST);
-            JLabel footer = label(" FLECHAS MOVER     ESC PAUSA     Z UNDO*     R REINICIAR*     M SONIDO     +/- ZOOM",
+            JLabel footer = label(" FLECHAS MOVER     ESC PAUSA     Z UNDO     R REINICIAR     M SONIDO     +/- ZOOM",
                     PixelTheme.SMALL);
             footer.setForeground(PixelTheme.MUTED);
             footer.setBorder(BorderFactory.createEmptyBorder(7, 17, 12, 0));
@@ -388,11 +408,11 @@ public final class SwingApplication {
                     "COLOCA CADA CAJA EN UN DESTINO",
                     "ESC: PAUSAR / CONTINUAR",
                     "R: REINICIAR EL NIVEL ACTUAL",
+                    "Z: DESHACER (5 MOVIMIENTOS; HASTA 3 USOS)",
                     "LA CAJA LLAVE SOBRE CERROJO ABRE MUROS",
                     "EL CERROJO NO CUENTA COMO DESTINO",
                     "M: ACTIVAR O DESACTIVAR AUDIO",
-                    "ZOOM: + Y -",
-                    "UNDO / SCORE: PENDIENTE"}) {
+                    "ZOOM: + Y -"}) {
                 JLabel row = label(text, PixelTheme.SMALL);
                 row.setAlignmentX(Component.CENTER_ALIGNMENT);
                 stack.add(row);
@@ -513,15 +533,8 @@ public final class SwingApplication {
                     status.setText(audio.isEnabled() ? "SONIDO ACTIVADO" : "SONIDO SILENCIADO");
                 }
             });
-            bind("Z", "undo-pending", () -> {
-                if (GAME.equals(active)) {
-                    if (undoButton.isEnabled()) {
-                        runCommand(commands.undo());
-                    } else {
-                        status.setText("UNDO: PENDIENTE DEL PUNTO 4");
-                    }
-                }
-            });
+            installUndoKey(getRootPane(), undoButton, () -> GAME.equals(active),
+                    () -> status.setText("UNDO NO DISPONIBLE"));
             bind("PLUS", "zoom-in", () -> changeZoom(1));
             bind("EQUALS", "zoom-in-equals", () -> changeZoom(1));
             bind("MINUS", "zoom-out", () -> changeZoom(-1));

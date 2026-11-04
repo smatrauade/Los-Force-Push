@@ -40,19 +40,20 @@ Los roles de la tabla superior son CANDIDATE. La lista siguiente corresponde al 
 | ExperimentalFragileParser / ExperimentalFragileLevel | Prototipo aislado: definición inmutable con identidad, posición y resistencia; no es Level jugable |
 | LevelLoader / LevelFormatException | E/S externa limitada y UTF-8 estricto compartidos por `load` jugable y `loadExperimentalFragile` de definición experimental; errores explícitos, sin caché ni reglas runtime |
 | Direction / MovementEngine / MoveResult | Transición normal MOVED/PUSHED/BLOCKED; motor sin estado ni contadores |
-| GameController | Carga atómica, delegación de movimiento, GamePresentation y eventos onMove; sin reglas/parser/pintura |
-| GamePresentation | Proyección con referencia al Board inmutable, nombre y dos contadores demostrativos |
+| GameController | Carga atómica y coordinación de movimiento, sesión, `undo()`, `restart()` y `getLevelResult()`; sin historial propio ni reglas/parser/pintura |
+| ScoreCalculator | Calcula el score del intento desde 1000 con penalidades incrementalmente aplicadas: −1 por movimiento, −2 por push y −10 por uso de Undo; evita overflow con `applyPenalty` y devuelve un mínimo de 0 |
+| GamePresentation | Proyección con referencia al Board inmutable, nombre y dos contadores fundamentales del intento (`moves`, `pushes`) |
 | GameView | Frontera render/error y hooks default de eventos, comandos y resultado final |
-| SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT y captura de acciones; sin score/victoria automática |
+| SwingApplication / GameWindow | Composición EDT, tarjetas, HUD, selector TXT y captura de acciones; `configureUiCommands` activa/desactiva Undo y Restart según callbacks disponibles |
 | ArrowBindings | Traduce flechas a Direction; la ventana controla la pantalla activa |
 | BoardPanel | Render por capas, orientación y escala; no modifica el Board ni infiere resistencia |
 | PixelAssets | Carga y caché de PNG 32×32 por classpath |
 | PixelTheme | Paleta, tipografía y widgets Swing |
 | SoundManager / Effect | Clips y reproducción opcional por ventana, mute y fallo de dispositivo controlado; sin Singleton/core global |
-| UiCommands | Callbacks opcionales de servicios externos; null indica no disponible |
-| LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados, sólo para presentación |
+| UiCommands | Callbacks opcionales de servicios externos; `undo`, `restart` y `nextLevel` se habilitan según sesión; `save` y `loadSaved` siguen pendientes |
+| LevelResult | DTO de nivel/moves/pushes/undoUses/score ya calculados; transporta el resumen final del nivel y se usa para la vista |
 
-`RuntimeState` / `RuntimeMovementEngine` administran KeyBox, Lock y muros. `VictoryEvaluator` y `LevelCatalog` / `LevelProgression` coordinan victoria y avance. GameSession en este incremento sólo cuenta movimientos/empujes y reinicia el nivel; no hay Undo/Memento ni ScoreStrategy. Persistencia, hielo y Fragile jugable siguen ausentes. Las interfaces y la jerarquía integral no se adoptan por existir hooks visuales. Requisitos/decisiones y evidencia de ejecución se consultan por separado.
+`RuntimeState` / `RuntimeMovementEngine` administran el mundo y las transiciones. `GameSession` concentra historial Undo y métricas; `LevelProgression` coordina victoria y avance; `GameController` conecta presentación y `ScoreCalculator`. Persistencia, arquitectura final y aceptación del equipo permanecen pendientes.
 
 ## Responsables de cierre por módulo — 29/10/2026
 
@@ -60,6 +61,6 @@ Son roles de planificación, no asignaciones personales ni arquitectura ratifica
 
 - TXT/niveles: contrato externo, errores atómicos, definición inicial e invariantes; preservar identidad/resistencia antes de integración runtime.
 - Model/Movement: reglas, estado de cajas y asociaciones; candidato Observer para Lock→Walls pendiente de OQ-07. No delegar esos efectos a Swing.
-- Sesión/score/persistencia: Undo/Restart, métricas, victoria/progresión y guardado; justificar Command/Memento/Strategy cuando exista contrato.
-- Swing: representar DTO/Board y conectar servicios realmente disponibles. Los callbacks UiCommands no son el patrón Command demostrado.
+- Sesión/score: `GameSession` administra Undo/Restart e historial; `LevelProgression` coordina victoria/progresión y `GameController` usa `ScoreCalculator`. Persistencia sigue pendiente.
+- Swing: representar DTO/Board y conectar servicios realmente disponibles. `UiCommands` habilita callbacks concretos cuando el módulo los entrega; no debe asumirse un patrón Command sin evidencia.
 - Integración/entrega: coordinar compatibilidad, pruebas, licencias, StarUML, informe, video y defensa. Evaluar LevelBuilder por intención y consecuencias, no por nombre.

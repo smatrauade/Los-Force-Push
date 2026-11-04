@@ -70,9 +70,9 @@ run_core RUNTIME_I1C ar.edu.uade.sokoban.movement.RuntimeIceFragileTest 'RUNTIME
 
 echo '=== DESKTOP ==='
 if (cd "$root" && bash scripts/run-swing.sh --test) >"$scratch/desktop.log" 2>&1 && \
-    grep -Fxq 'DESKTOP RESULT: 16 PASS, 0 FAIL' "$scratch/desktop.log" && \
+    grep -Fxq 'DESKTOP RESULT: 35 PASS, 0 FAIL' "$scratch/desktop.log" && \
     grep -Fxq 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL' "$scratch/desktop.log"; then
-    echo 'DESKTOP RESULT: 16 PASS, 0 FAIL'
+    echo 'DESKTOP RESULT: 35 PASS, 0 FAIL'
     echo 'VISUAL ASSETS RESULT: 44 PASS, 0 FAIL'
 else
     echo 'DESKTOP_OR_VISUAL_ASSETS=FAILED'; tail -n 45 "$scratch/desktop.log"; failures=1
@@ -92,6 +92,6 @@ if [[ "$failures" -ne 0 ]]; then
     exit 1
 fi
 echo 'CORE_TOTAL=256/256'
-echo 'DESKTOP_TOTAL=16/16'
+echo 'DESKTOP_TOTAL=35/35'
 echo 'ASSET_TOTAL=44/44'
-echo 'RESULTADO_GLOBAL=PASS_I1C_LOCAL_TESTS_316'
+echo 'RESULTADO_GLOBAL=PASS_I1_REGRESSION_I2_TREE'
