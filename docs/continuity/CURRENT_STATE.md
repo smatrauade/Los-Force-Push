@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## UML PR #17 — PlantUML verificado (04/11/2026)
+
+Diagramación del candidato funcional congelado `ffa27f9`: [nueve fuentes PlantUML y PNG oficiales](../architecture/uml/pr17-rc-ffa27f9/README.md). Validación del motor PlantUML registrada en `RENDER_GATE.json`; este incremento solo documenta UML, no vuelve a ejecutar las pruebas Java ni modifica reglas TEAM. El formato StarUML exigido en la consigna conserva gate académico pendiente.
+
 ## Candidato funcional estabilizado — 04/11/2026
 
 El código congelado `0bbc60e381c0666e4c5f2803bcf469ff23830267` integra Replay, catálogo de cinco TXT, navegación corregida, Observer de hechos Lock y victoria inicial. JDK17: Replay 20, Undo 58, core 258, Desktop 40, campaña previa 41, temas 7, animación 14 y assets 44 preservados; nuevas suites 8/8/6/6/3 PASS, runner exit 0. Ventana Linux automatizada 17 + 7 PASS y audio por dispositivo 12 PASS; escucha y evaluación visual humana, Windows/macOS y TEAM no acreditados. [Matriz completa, commits y gates externos](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Las secciones fechadas siguientes son evolución histórica; PR sigue Draft, main sin merge.

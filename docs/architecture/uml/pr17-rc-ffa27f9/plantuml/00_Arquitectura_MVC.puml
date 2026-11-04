@@ -1,0 +1,36 @@
+@startuml
+' Declaraciones basadas en el PR #17 @ ffa27f9. Vista de alto nivel; detalles en 01..08.
+title Sokoban PR #17 - MVC y colaboraciones centrales
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam backgroundColor white
+skinparam classBackgroundColor #F8FAFC
+skinparam classBorderColor #334155
+skinparam ArrowColor #475569
+hide empty members
+class "SwingApplication.GameWindow" as Window <<View>>
+interface "GameView" as View
+class "GameController" as Controller <<Controller>>
+class "BoardPanel" as Board <<View>>
+class "ReplayPanel" as ReplayPanel <<View>>
+class "LevelProgression" as Progression <<Model>>
+class "GameSession" as Session <<Model>>
+class "RuntimeState" as State <<record>>
+class "RuntimeMovementEngine" as Engine <<Model>>
+Window ..|> View : implements
+Window --> Controller : delega eventos
+Window --> Board : muestra tablero
+Window --> ReplayPanel : muestra Replay
+Controller --> View : publica resultados
+Controller --> Progression : coordina campaña
+Progression --> Session : sesión activa
+Session --> State : estado e historial
+Session --> Engine : delega movimiento
+ReplayPanel --> Board : tablero propio
+note bottom of Session
+  Fuente autoritativa de estado y Undo.
+  La vista no implementa reglas.
+end note
+@enduml

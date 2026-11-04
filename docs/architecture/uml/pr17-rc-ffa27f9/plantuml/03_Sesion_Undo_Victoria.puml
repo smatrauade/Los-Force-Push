@@ -1,0 +1,27 @@
+@startuml
+title Sokoban - Sesion Undo Victoria
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+skinparam classAttributeIconSize 0
+left to right direction
+class "session.GameSession" as N39113f65725
+class "session.GameSession.Metrics" as Nbc8a972a170 <<record>>
+class "session.GameSession.Snapshot" as N052d9b62b8e <<record>>
+class "session.LevelProgression" as Na267c7efd13
+class "session.LevelCatalog" as N2791bd26db7 <<record>>
+class "session.VictoryEvaluator" as Nb2a5893921a
+class "movement.RuntimeState" as Nf3d3f105568 <<record>>
+class "movement.RuntimeMovementEngine" as N273caf2d77d
+class "desktop.ScoreCalculator" as N12c2ada0f45
+class "desktop.LevelResult" as N27b142a3443 <<record>>
+N273caf2d77d ..> Nf3d3f105568
+N39113f65725 --> N273caf2d77d
+N39113f65725 --> Nf3d3f105568
+N39113f65725 --> N052d9b62b8e
+Na267c7efd13 --> N39113f65725
+Na267c7efd13 --> N2791bd26db7
+Na267c7efd13 --> Nb2a5893921a
+Nb2a5893921a ..> Nf3d3f105568
+@enduml

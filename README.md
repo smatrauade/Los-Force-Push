@@ -1,5 +1,9 @@
 # Los Force Push — Sokoban
 
+## UML PR #17 — PlantUML verificado (04/11/2026)
+
+La arquitectura del candidato está documentada en [nueve diagramas editables PlantUML y PNG](docs/architecture/uml/pr17-rc-ffa27f9/README.md). Se verificó la generación PNG con el motor oficial PlantUML 1.2026.9. Esto facilita revisión y presentación, pero **no acredita automáticamente** el archivo StarUML solicitado por la consigna.
+
 Sokoban 2D en **Java/Swing** para el TPO de Procesos de Desarrollo de Software (UADE). Esta rama integra los aportes de movimiento, cajas especiales, cerrojos, sesión y presentación del equipo. El [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) continúa **Draft**; estas capacidades todavía no están fusionadas a `main` ni aprobadas por el equipo.
 
 El candidato incluye TXT externos, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score TEAM, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría y gates pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).

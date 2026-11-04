@@ -1,0 +1,33 @@
+@startuml
+title Sokoban - Campana y Flujo
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+skinparam classAttributeIconSize 0
+left to right direction
+class "desktop.DemoCampaign" as N31bb61fed6d
+class "session.LevelCatalog" as N2791bd26db7 <<record>>
+class "session.LevelProgression" as Na267c7efd13
+class "session.GameSession" as N39113f65725
+class "session.VictoryEvaluator" as Nb2a5893921a
+class "desktop.GameController" as Ncb44d9b59d2
+interface "desktop.GameView" as N0cda4e12dfe
+class "desktop.SwingApplication.GameWindow" as Nffd4ac7ef5e
+class "desktop.VictoryGate" as Ndb987af3151
+class "desktop.ReplayPanel" as N053bb8b526c
+class "replay.ReplayTrace" as N7dc2cf53e40 <<record>>
+Na267c7efd13 --> N39113f65725
+Na267c7efd13 --> N2791bd26db7
+Na267c7efd13 --> Nb2a5893921a
+Ncb44d9b59d2 --> N0cda4e12dfe
+Ncb44d9b59d2 --> Na267c7efd13
+Ncb44d9b59d2 ..> N7dc2cf53e40
+Nffd4ac7ef5e ..|> N0cda4e12dfe
+Nffd4ac7ef5e --> Ncb44d9b59d2
+Nffd4ac7ef5e --> N053bb8b526c
+Nffd4ac7ef5e --> Ndb987af3151
+N0cda4e12dfe ..> N7dc2cf53e40
+N053bb8b526c --> N7dc2cf53e40
+N31bb61fed6d ..> N2791bd26db7
+@enduml

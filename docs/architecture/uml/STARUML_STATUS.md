@@ -1,5 +1,9 @@
 # Estado de UML y StarUML
 
+## UML PR #17 — PlantUML verificado (04/11/2026)
+
+Las nueve vistas vigentes del congelamiento funcional `ffa27f9` están en [PlantUML RC](pr17-rc-ffa27f9/README.md), con fuentes `.puml`, PNG generados con PlantUML 1.2026.9 y trazabilidad verificable. Las cuatro vistas `.puml` anteriores permanecen como **históricas/candidatas** y no se deben citar como UML integral del RC. **Requisito literal StarUML: pendiente de aceptación formal**; el `.mdj` nativo de QA existe fuera de Git y no se presenta como aprobado. El PR sigue Draft y no se modifica `main`.
+
 ## Freeze funcional RC PR17 — 04/11/2026
 
 Los `.puml` siguientes representan subconjuntos históricos y el candidato v0.5; no representan el runtime/sesión/Replay/Observer integrados actuales. El `.mdj` R10 DRAFT existe sólo en `impaciencia@b2c6332`, corresponde a otro HEAD/score y no tiene QA nativa acreditada. No se importó ni se modificó UML en esta misión. Próximo gate separado: actualizar desde el freeze de [auditoría RC](../../integration/PR17_FUNCTIONAL_RC_2026-11-04.md) y abrir/guardar/reabrir en StarUML nativo, con revisión del equipo. `STARUML_DELIVERABLE=PENDING`.
