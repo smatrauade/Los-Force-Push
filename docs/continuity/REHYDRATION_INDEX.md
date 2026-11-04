@@ -1,5 +1,7 @@
 # Índice de rehidratación
 
+El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD vigente. Los cortes I0–I3 siguientes son históricos. TEAM_ACCEPTANCE=NOT_RECORDED.
+
 [Guía de transferencia al equipo](../integration/PR17_TEAM_HANDOFF.md): ejecución, arquitectura, patrones y próximos pasos.
 
 ## Continuidad del freeze RC — 04/11/2026
@@ -10,7 +12,7 @@ Para el estado vigente del software usar [auditoría RC PR17](../integration/PR1
 
 Tras las lecturas obligatorias, consultar [auditoría y gates del candidato funcional](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Replay ya incluye coordinación y pantalla Swing; los apartados fechados previos describen sus cortes. El estado Git remoto se revalida antes de publicar; consultar GitHub para el estado actual del PR y de `main`.
 
-## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+## Checkpoint histórico — I2 publicado en PR #17 Draft (04/11/2026)
 
 I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
 

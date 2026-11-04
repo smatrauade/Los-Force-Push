@@ -1,5 +1,7 @@
 # Integración grupal — punto de entrada (I0, I1, I2 e I3 local)
 
+El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; consultar GitHub para el HEAD vigente. Los cortes I0–I3 siguientes son históricos. TEAM_ACCEPTANCE=NOT_RECORDED.
+
 [Guía vigente para el equipo](PR17_TEAM_HANDOFF.md). Los checkpoints y planes fechados de este documento describen su momento; consultar GitHub para el estado actual del PR y main.
 
 ## Freeze funcional RC PR17 — 04/11/2026
@@ -16,7 +18,7 @@
 
 Además de I2 publicado, el árbol local incorpora I3.A (`ShippedLevelsIntegrationTest`, aceptación headless de `demo.txt`/`campaign-b.txt`, `fragile_demo.txt` e `ice_demo.txt`), I3.B (selector `ORIGINAL COBRE`/`NOCTURNO`/`JADE` con Abstract Factory de vista, `VisualThemeTest` 7 escenarios) e I3.C (animación de presentación desde `RuntimeMoveResult` con `BoxAnimation`, frames deterministas de ICE/Fragile, diferimiento de FINISH y cancelación segura, `AnimationPresentationTest` 14 escenarios). La regresión completa del árbol es Undo 58, core 258, Desktop 40, Campaña 41, Tema 7, Animación 14 y Assets 44 PASS con `scripts/test-integration-i2.sh`. `GUI_NATIVE_QA=NOT_RUN`, `TEAM_ACCEPTANCE=NOT_RECORDED`; INT-09 cuenta solo con evidencia headless y el selector es candidato a adicional RF-12/OQ-10 sin cerrar su elegibilidad. Sin publicación ni merge.
 
-## Checkpoint vigente — I2 publicado en PR #17 Draft (04/11/2026)
+## Checkpoint histórico — I2 publicado en PR #17 Draft (04/11/2026)
 
 I1 + I2 (ICE/Fragile, KeyBox/Lock/Wall, Undo 15/5/3, Restart, score y progresión) y el hotfix de carga `EXPERIMENTAL_FRAGILE` están en `integration/tpo-unificado-2026-11-03` (hito publicado `4d6cb612b38e5ebdb6869bb990301045044e863f`, no SHA permanente; verificar GitHub). Evidencia local reportada: Ubuntu OpenJDK 17.0.20.1, `scripts/test-integration-i2.sh` exit 0; Undo 58, core 258/258, Desktop 40/40, assets 44/44; verificador documental PASS. Sin CI registrada ni retest nativo manual posterior al hotfix. PR Draft, sin merge a `main` ni revisión TEAM (`TEAM_ACCEPTANCE=NOT_RECORDED`). Pendientes: QA GUI, I3/I4, StarUML, licencias, extras RF-12 y entrega. El reset al cambiar de nivel sigue provisional. Los estados «local», «sin publicar» y conteos antiguos de los apartados fechados posteriores son históricos.
 

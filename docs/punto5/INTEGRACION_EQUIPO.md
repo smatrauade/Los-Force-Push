@@ -1,6 +1,6 @@
 # Contrato de integración entre presentación y dominio
 
-`LAST_REVIEWED=2026-11-04` · `BRANCH_SCOPE=PR17_DRAFT`. Este contrato vivo refleja el candidato integrado; los cortes Punto 5 previos se conservan en Git. No acredita incorporación a `main`, revisión TEAM ni derechos.
+`LAST_REVIEWED=2026-11-04` · `SCOPE=MAIN_POST_PR17`. El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fda`; los cortes Punto 5 previos se conservan en Git. La integración no acredita revisión TEAM ni derechos.
 
 ## Autoridad y flujo
 
