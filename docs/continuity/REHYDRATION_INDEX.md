@@ -4,6 +4,10 @@ El PR #17 se fusionó a `main` mediante `6e884226054284981486efb6bef65c43bc5c9fd
 
 [Guía de transferencia al equipo](../integration/PR17_TEAM_HANDOFF.md): ejecución, arquitectura, patrones y próximos pasos.
 
+## Entregables R10 — 13/11/2026
+
+Consultar el [paquete académico](../../entregables/r10-20261113/README.md) y la [QA Windows del código grabado](../../entregables/r10-20261113/VALIDACION_WINDOWS.md). Los artefactos están en una rama de entrega; su presencia no modifica las decisiones históricas ni acredita correo enviado, escucha humana, StarUML nativo o licencias pendientes. El usuario completará nómina y CC manualmente.
+
 ## Continuidad del freeze RC — 04/11/2026
 
 Para el estado vigente del software usar [auditoría RC PR17](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md), [README](../../README.md) y [TODO](../../TODO.md). Replay controlador/Swing, campaña y Observer ya están implementados; las frases pendientes de los hitos posteriores conservados son históricas. Consigna/votos siguen en sus registros canónicos; elegibilidad RF-12, derechos, revisión TEAM y StarUML requieren gates separados. Consultar GitHub para publicación/HEAD actual.

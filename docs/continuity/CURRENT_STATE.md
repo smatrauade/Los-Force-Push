@@ -1,5 +1,9 @@
 # Estado vivo — Los Force Push
 
+## Entrega R10 preparada — 13/11/2026
+
+La [carpeta de entrega](../../entregables/r10-20261113/README.md) conserva informe PDF/Word, video auténtico Windows de 7:56.8, nueve PNG y sus fuentes PlantUML, guion, borrador sin enviar y SHA-256. Es una publicación de artefactos en rama de entrega: el código grabado corresponde a `main@ee2681148f8dde7425968b61b19b631e5532bb04`. [QA nueva y límites](../../entregables/r10-20261113/VALIDACION_WINDOWS.md): core 147, desktop 177 y ventana 24 PASS/exit 0; campaña cinco niveles operada y grabada. Audio con señal, sin escucha humana acreditada. Nómina/CC a completar por el usuario; no se afirma aprobación formal de StarUML o de derechos. No se cambiaron reglas, Java ni scripts.
+
 **Estado actual:** el PR #17 y el cierre documental posterior están integrados en `main`. El equipo dispone de la versión común para recorrerla, preparar la defensa y decidir eventuales ajustes. Las decisiones grupales documentadas mantienen su alcance. Los apartados fechados siguientes son checkpoints históricos; consultar GitHub para el HEAD actual y [TODO](../../TODO.md) para pendientes.
 
 ## UML PR #17 — PlantUML verificado (04/11/2026)

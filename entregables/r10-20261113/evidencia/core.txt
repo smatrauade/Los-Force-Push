@@ -1,0 +1,156 @@
+javac 26.0.1
+java version "26.0.1" 2026-04-21
+Java(TM) SE Runtime Environment (build 26.0.1+8-34)
+Java HotSpot(TM) 64-Bit Server VM (build 26.0.1+8-34, mixed mode, sharing)
+PASS 01 valid external TXT, dimensions and exact cells
+PASS 02 different external file produces different board
+PASS 03 edit TXT and reload; previous Level unchanged
+PASS 04 player on goal
+PASS 05 box on goal
+PASS 06 missing file
+PASS 07 empty file
+PASS 08 unknown symbol includes row and column
+PASS 09 no player
+PASS 10 multiple players including overlay
+PASS 11 inconsistent rows
+PASS 12 failure cannot replace published Level; next load recovers
+PASS 13 UTF-8 LF, CRLF, mixed endings and absent final newline
+PASS 14 deterministic independent loads
+PASS 15 executes with java.base only; java.desktop absent
+PASS 16 malformed UTF-8 rejected before parsing
+PASS 17 valid UTF-8 nonalphabet character rejected explicitly
+PASS 18 BOM rejected
+PASS 19 isolated CR rejected
+PASS 20 blank interior row rejected
+PASS 21 second final newline rejected
+PASS 22 leading/trailing floor spaces preserved
+PASS 23 tab rejected
+PASS 24 dimensional boundaries and empty aggregate
+PASS 25 oversized file rejected specifically by byte ceiling
+PASS 26 immutable Board isolates source collections
+PASS 27 cell occupancy and coordinate bounds
+PASS 28 direct construction shares Board invariants
+PASS 29 builder publishes once and isolates rows
+PASS 30 no unstated box/goal or enclosure rule
+PASS 31 exact byte ceiling reaches structural validation
+PASS 32 width rejected before decoding a large unknown-symbol row
+PASS 33 height rejected before decoding row 101
+PASS 34 rectangularity rejected before decoding malformed short row
+PASS 35 public reference parameters reject null
+PASS 36 nested null rows and cells rejected
+PASS 37 negative column rejected
+PASS 38 byte ceiling counts UTF-8 bytes, not characters
+PASS 39 external filename with spaces and Unicode; repeated load
+PASS 40 diagnostics independent of default formatting locale
+RESULT: 40 PASS, 0 FAIL
+MOVEMENT PASS 01 UP onto floor
+MOVEMENT PASS 02 DOWN onto floor
+MOVEMENT PASS 03 LEFT onto floor
+MOVEMENT PASS 04 RIGHT onto floor
+MOVEMENT PASS 05 enter free goal
+MOVEMENT PASS 06 walls block every direction
+MOVEMENT PASS 07 single-cell edges block every direction
+MOVEMENT PASS 08 push RIGHT onto floor
+MOVEMENT PASS 09 push onto goal
+MOVEMENT PASS 10 push LEFT onto floor
+MOVEMENT PASS 11 push UP onto floor
+MOVEMENT PASS 12 push DOWN onto floor
+MOVEMENT PASS 13 push against wall blocked in every direction
+MOVEMENT PASS 14 push beyond edge blocked in every direction
+MOVEMENT PASS 15 cannot push two boxes
+MOVEMENT PASS 16 walking away does not pull a box
+MOVEMENT PASS 17 player leaves goal without erasing it
+MOVEMENT PASS 18 box leaves goal; player occupies that goal
+MOVEMENT PASS 19 leave and reenter a goal previously occupied by a box
+MOVEMENT PASS 20 push across occupied and free goals
+MOVEMENT PASS 21 transition never changes the previous state or loaded Level
+MOVEMENT PASS 22 independent sequences from a shared initial state
+MOVEMENT PASS 23 repeated sequence is deterministic with exact outcomes
+MOVEMENT PASS 24 external fixture -> Level -> initial Board -> movement
+MOVEMENT PASS 25 edit external UTF-8 file before moving; no hardcoded state
+MOVEMENT PASS 26 blocked transition reuses identical Board and rows
+MOVEMENT PASS 27 successful result remains deeply immutable
+MOVEMENT PASS 28 null API inputs are rejected
+MOVEMENT PASS 29 movement runs without java.desktop or Swing
+MOVEMENT PASS 30 invariants across 2664 bounded transitions
+MOVEMENT PASS 31 maximum board dimensions remain intact
+MOVEMENT PASS 32 a pushed box crosses the ice strip and stops on the first normal cell
+MOVEMENT PASS 33 a blocked exit leaves the box standing on the ice
+MOVEMENT PASS 34 landing on normal floor never starts a slide
+MOVEMENT PASS 35 a pushed fragile box loses exactly one resistance point
+MOVEMENT PASS 36 a fragile box shatters at zero and frees its cell
+MOVEMENT PASS 37 one push costs one point however far the box slides
+MOVEMENT RESULT: 37 PASS, 0 FAIL
+PASS complete external state
+PASS key activates lock
+PASS key leaves lock and closes wall
+PASS blocked and past states unchanged
+PASS ordinary external
+PASS deterministic reload
+PASS reload equal
+PASS goal key and two walls open
+PASS two locks one wall
+PASS definition immutable
+PASS header
+PASS missing section
+PASS BOM
+PASS invalid id
+PASS missing lock reference
+PASS missing wall metadata
+PASS duplicate wall metadata
+PASS unknown metadata
+PASS duplicate key
+PASS closed occupied wall
+PASS closed occupied box
+PASS duplicate lock association
+PASS ice rejected
+PASS fragile rejected
+PASS historical ordinary rejects extension
+PASS historical fragile rejects extension
+EXTENDED RESULT: 26 PASS, 0 FAIL
+PASS empty lock starts closed
+PASS player can stand on lock
+PASS push key onto lock
+PASS E06 wall closes
+PASS closed wall blocks
+PASS normal box does not open
+DYNAMIC WORLD RESULT: 6 PASS, 0 FAIL
+PASS ordinary win
+PASS no goals
+PASS extra goal
+PASS extra box
+PASS key goal
+PASS E05 lock does not satisfy goal
+PASS no boxes cannot win
+PASS ordered catalog
+PASS unknown catalog id
+PASS duplicate catalog id
+PASS invalid catalog id
+PASS empty catalog
+PASS negative undoUsesTotal rejected
+PASS non-won victory rejected
+PASS cannot finish or advance early
+PASS fixture A solved
+PASS first result metrics
+PASS finish idempotent
+PASS move frozen after finish
+PASS restart frozen after finish
+PASS advance resets session
+PASS fixture B initial
+PASS key activates lock but is not winner
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B valid step
+PASS fixture B key reaches goal
+PASS second result and campaign
+PASS end idempotent
+PASS missing next atomic
+PASS repair next and preserve results
+COMPLETION RESULT: 38 PASS, 0 FAIL

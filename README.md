@@ -6,6 +6,10 @@ El juego incluye TXT externos, cinco niveles, movimiento cardinal, cajas normale
 
 La arquitectura cuenta con [nueve fuentes PlantUML editables y nueve imágenes PNG derivadas](docs/architecture/uml/pr17-rc-ffa27f9/README.md), generadas con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
 
+## Entregables Windows — 13/11/2026
+
+El [paquete R10](entregables/r10-20261113/README.md) contiene informe PDF/Word, video auténtico de cinco niveles, nueve PNG/PlantUML, guion, borrador de correo y hashes. Código ejecutado: `ee2681148f8dde7425968b61b19b631e5532bb04` de `main`; los entregables se publican en una rama separada sin modificar el juego. [Validación Windows y límites](entregables/r10-20261113/VALIDACION_WINDOWS.md). Integrantes y CC serán completados manualmente; el correo no fue enviado. PlantUML no se presenta como StarUML y los derechos de assets conservan su estado documentado.
+
 ## Inicio rápido
 
 Se necesita un **JDK completo 17 o superior** con `java` y `javac` compatibles y un escritorio gráfico. Los scripts compilan con `--release 17`, UTF-8, `-Xlint:all -Werror`. La selección definitiva de toolchain sigue [OQ-11](docs/requirements/OPEN_QUESTIONS.md). No se necesitan Maven, Gradle ni bibliotecas externas; imágenes, WAV y niveles están en el clon. El audio depende del dispositivo disponible. Observer publica cambios Lock confirmados para avisos y SFX; los muros siguen derivados por el modelo.

@@ -1,0 +1,16 @@
+Para: jpepe@uade.edu.ar
+CC: [completar direcciones reales de los demás integrantes]
+Asunto: Entrega Trabajo Integrador – Los Force Push – Procesos de Desarrollo de Software
+
+Profesor Jonathan Leonel Pepe:
+Adjuntamos el paquete del Trabajo Integrador del equipo Los Force Push. Incluye informe técnico PDF y Word, video de gameplay, diagramas PNG, fuentes PlantUML, README y manifiesto de integridad. Los diagramas fueron generados con PlantUML; no se atribuyen a StarUML.
+
+Repositorio: https://github.com/smatrauade/Los-Force-Push
+Commit: ee2681148f8dde7425968b61b19b631e5532bb04
+
+Integrantes: [completar apellido y nombre de cada desarrollador, sin omisiones]
+
+Saludos cordiales,
+Equipo Los Force Push
+
+BORRADOR NO ENVIADO. Completar nómina y CC antes de enviar.
