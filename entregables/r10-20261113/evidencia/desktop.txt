@@ -1,0 +1,76 @@
+javac 26.0.1
+java version "26.0.1" 2026-04-21
+Java(TM) SE Runtime Environment (build 26.0.1+8-34)
+Java HotSpot(TM) 64-Bit Server VM (build 26.0.1+8-34, mixed mode, sharing)
+PASS load versioned demo TXT
+PASS Fragile fixture loads with ID and resistance
+PASS Fragile external name is loaded by grammar
+PASS Invalid Fragile leaves active game and metrics intact
+PASS Standard ICE and Extended loading remain available
+PASS external TXT reload reads changed bytes
+PASS MOVED UP
+PASS MOVED DOWN
+PASS MOVED LEFT
+PASS MOVED RIGHT
+PASS PUSHED onto floor
+PASS PUSHED onto goal preserves terrain
+PASS BLOCKED wall preserves state counters and view
+PASS BLOCKED two boxes preserves model
+PASS actual Swing key bindings route four directions on EDT
+PASS Undo button and Z key use the same enabled action on EDT
+PASS view projection matches immutable core transition
+PASS demo counters reset only on successful load
+PASS missing initial file is controlled; arrows have no state
+PASS unsupported entity rejects load and preserves previous level
+PASS Swing panel paints current projection headlessly on EDT
+PASS undo commands, victory score, freeze and next level
+PASS historic score control without undo yields 997 and persists across advance and restart
+PASS UNDO restores state from five moves ago
+PASS UNDO restores pushes counter
+PASS UNDO can be used only three times
+PASS RESTART restores initial state and resets counters
+PASS UNDO is unavailable with fewer than five moves
+PASS BLOCKED movement is not added to undo history
+PASS SCORE starts at 1000 points
+PASS SCORE penalizes each move
+PASS SCORE applies additional penalty for pushes
+PASS SCORE penalizes Undo uses
+PASS SCORE never goes below zero
+PASS SCORE handles maximum moves without overflow
+PASS SCORE handles maximum pushes without overflow
+PASS SCORE handles maximum Undo uses without overflow
+PASS SCORE rejects negative statistics
+PASS GameController exposes current statistics and score
+PASS GameController rejects result when no level is loaded
+DESKTOP RESULT: 40 PASS, 0 FAIL
+VISUAL ASSETS RESULT: 44 PASS, 0 FAIL
+PASS tres familias visuales distintas y estables
+PASS sprites alternativos deterministas y con alfa intacto
+PASS tema original identico al PNG y reversible
+PASS tablero ICE Fragile y Lock conserva mundo metricas y zoom
+PASS seleccion Swing en EDT cambia tablero y controles
+PASS entrada nula no deja estado a medias
+PASS archivos de sprites intactos en disco
+THEME RESULT: 7 PASS, 0 FAIL
+PASS trayectoria ICE exacta sin caja fantasma
+PASS Fragile 1 sobre ICE rompe tras la ultima celda
+PASS Fragile 1 sin hielo anima una celda antes de romper
+PASS Fragile 2 conserva ID y resistencia durante el deslizamiento
+PASS KeyBox con Lock y muro dinamico conserva metadatos
+PASS bloqueo o movimiento sin empuje no anima
+PASS ICE y FRAGILE suenan una vez sin duplicar PUSH o GOAL
+PASS publica el runtime final antes de animar y victoria headless inmediata
+PASS la victoria final espera el fin de la animacion
+PASS Undo Reiniciar y recarga cancelan la animacion
+PASS pausa cierre y reemplazo no dejan callbacks obsoletos
+PASS una sola animacion y temporizador no bloqueante en EDT
+PASS tema y zoom durante animacion conservan mundo y restauran original
+PASS sprites existentes sin PNG nuevos ni cambios de hash
+ANIMATION RESULT: 14 PASS, 0 FAIL
+REPLAY CONTROLLER RESULT: 8 PASS, 0 FAIL
+REPLAY PRESENTATION RESULT: 8 PASS, 0 FAIL
+CAMPAIGN RESULT: 41 PASS, 0 FAIL
+RELEASE CAMPAIGN RESULT: 6 PASS, 0 FAIL
+No se pudo notificar un cambio de cerrojo
+LOCK OBSERVER RESULT: 6 PASS, 0 FAIL
+CONTROLLER BOUNDARY RESULT: 3 PASS, 0 FAIL

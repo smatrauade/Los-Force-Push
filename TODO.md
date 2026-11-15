@@ -17,6 +17,10 @@ El estado técnico de la versión integrada y sus evidencias están en [auditor�
 
 Los controles de guardado/recuperación siguen deshabilitados. No implementar persistencia por inferencia ni declarar RF-12 aprobado.
 
+## Artefactos preparados en R10 — 13/11/2026
+
+La [rama de entrega](entregables/r10-20261113/README.md) contiene informe PDF/Word, gameplay auténtico de cinco niveles, nueve PNG/PlantUML, guion, borrador sin enviar y manifiesto. El usuario completará integrantes/CC y realizará el envío. QA Windows y límites en [el registro ejecutado](entregables/r10-20261113/VALIDACION_WINDOWS.md). La preparación de archivos no cierra automáticamente los gates académicos/de derechos enumerados abajo; no se creó un `.mdj` ficticio ni se alteraron decisiones históricas.
+
 ## Ruta crítica hacia el 18/11
 
 Entrega informada: **18/11/2026**, demo de **15–20 minutos**. Las acciones siguientes son gates externos/separados, sin nueva fecha interna ni asignación nominal inventada:

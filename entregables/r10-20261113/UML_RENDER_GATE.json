@@ -1,0 +1,70 @@
+{
+  "base_main": "f4a28fd6c1d869fcd6f6189e5cbc2da49bb2f7a2",
+  "diagrams": {
+    "00_Arquitectura_MVC.png": {
+      "height": 325,
+      "puml_sha256": "7de74cb07b44a2fea9ce5a7c183394d7daf7d59a932808463a862d513ade101f",
+      "sha256": "a7ed5f29c05cd1b2bbaecb01db344706e8dc0ffdf9ee53ba90707c989586056a",
+      "width": 1239
+    },
+    "01_Carga_TXT.png": {
+      "height": 418,
+      "puml_sha256": "a983ea7cfb8b431ff49b5d474e0d39f47aa912745dc5ed269084332e201c2c0f",
+      "sha256": "075eb21d0b744ca85660f02dd28527ca2598de437ffc92d8e1ce2d39b50bf795",
+      "width": 1726
+    },
+    "02_Motor_y_Mundo_Inmutable.png": {
+      "height": 497,
+      "puml_sha256": "1aba04f109da028ee385e8b1bd43a1790a017a657ee5c5cb975e6eb45ba6f557",
+      "sha256": "361451c004126926211c62e0fcde3932f36ac16a5c8eaba66b9da8611be6af2c",
+      "width": 1492
+    },
+    "03_Sesion_Undo_Victoria.png": {
+      "height": 471,
+      "puml_sha256": "705161135225d9f08f33c18585be87d82b82033a9456a5e1b5ce11ac7088cb96",
+      "sha256": "45e6651db0b4447be5f8dc0bda2cb2508380d03e17b3eced87f9b6ccf780dd1a",
+      "width": 1074
+    },
+    "04_Swing_Presentacion.png": {
+      "height": 506,
+      "puml_sha256": "b351ece7d6a51d6c16e6c59c6704ecaa015595a69edb0110f904cb41d2e02f4e",
+      "sha256": "8a143e1923fbe0885426ba9f8ee1de16698c25fb4d920667a500b47c6316ea9d",
+      "width": 1141
+    },
+    "05_Abstract_Factory_Temas.png": {
+      "height": 336,
+      "puml_sha256": "d05133d8e933c3ae20054172bb6e3ded53936287f821e9b038fc680af2383ba2",
+      "sha256": "cf493fee2137c71627d6b523ef9bdfd4be5780016158ed4c35698a9b7d013d62",
+      "width": 1217
+    },
+    "06_Command_Replay.png": {
+      "height": 584,
+      "puml_sha256": "02da756a918f08bdc350dba093d90bad5f6661c9cddaed7ab4981cd8bdc4774d",
+      "sha256": "71ed1cda4bc0498136424a465dfb1a3f7649a8170c6201cf468ae13ebe9bc4ca",
+      "width": 1902
+    },
+    "07_Observer_Cerrojos.png": {
+      "height": 395,
+      "puml_sha256": "712a075bb01b29a39dde3fe047c4df6c9994ae646450e69371c50e530729d274",
+      "sha256": "8dacd16fc0c11a3fefb7b13a26bd3a7c63dd9059bbd949279b54f4d79aa57c0e",
+      "width": 1481
+    },
+    "08_Campana_y_Flujo.png": {
+      "height": 449,
+      "puml_sha256": "5cf1bd156e30bbbec4d9989ac9cedf36312592147a768a687625e533cc6dd6e8",
+      "sha256": "e2501f5ee995af6dad19876ad576d7b24f3285a46b400fb6c085fcd0dcded5a1",
+      "width": 1082
+    }
+  },
+  "formal_staruml_requirement": "OPEN",
+  "generator": {
+    "jar_sha256": "aa4a1d06f8911c4b842beff4828dd955be431692b631a312d04c0e9fab9581de",
+    "name": "PlantUML",
+    "version": "1.2026.9"
+  },
+  "inventory_sha256": "2198920f8bf45aa37bec35580e9838ee4f8c65088822ae77848520637b10f6b5",
+  "scope": "UML_ONLY_PLANTUML_PNG",
+  "source_branch": "integration/tpo-unificado-2026-11-03",
+  "source_head": "ffa27f9d8c72bd204db76f887b2ca0cd8e6f454c",
+  "traceability_sha256": "9104db5eb97fd91281daf60073edea5a32f953be57e5373a313ed83d33413017"
+}

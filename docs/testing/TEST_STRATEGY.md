@@ -2,6 +2,10 @@
 
 Las ejecuciones fechadas documentan evidencia histórica sobre los commits indicados; no implican una ejecución nueva. El juego auditado fue integrado en `main`; la QA humana y de plataformas indicada sigue siendo una actividad separada.
 
+## Windows R10 — 13/11/2026
+
+Ejecución nueva sobre `main@ee2681148f8dde7425968b61b19b631e5532bb04`, Windows 11 x64/build 26200, Oracle JDK 26.0.1 compilando a release 17/UTF-8/lint estricto. Runners PowerShell existentes: core `-IncludeMovement` 147, desktop `-Test` 177 y UI `-UiTest` 24 comprobaciones PASS, exit 0 por runner. No se ejecutaron `-Full`/`-Extended` inexistentes en este commit ni todas las suites Java disponibles. [Comandos, desglose, salidas y límites](../../entregables/r10-20261113/VALIDACION_WINDOWS.md). Campaña de cinco niveles completada por automatización gráfica nativa y grabada con OBS, incluidos temas, Replay, Undo/Restart y selector TXT real. La señal AAC no demuestra escucha humana; JDK17 nativo y verificador Bash NOT_RUN en R10. Las evidencias Linux/Windows fechadas siguientes mantienen sus propios SHA y no se reasignan a esta ejecución.
+
 ## Regresión del freeze RC — 04/11/2026
 
 Ejecución Codex sobre `0bbc60e381c0666e4c5f2803bcf469ff23830267`, Ubuntu 26.04.1/Linux x86_64, java/javac 17.0.20.1. `bash scripts/test-replay-i3d1.sh` exit 0: 20 PASS. `bash scripts/test-integration-i2.sh` exit 0: Undo 58/core 258/Desktop 40/campaña previa 41/temas 7/animación 14/assets 44; nuevas ReplayController 8/ReplayPresentation 8/ReleaseCampaign 6/LockObserver 6/ControllerBoundary 3 PASS. Core java.base; desktop java.base,java.desktop; release 17, UTF-8 y lint estricto. Las repeticiones no agregan casos únicos. [Registro por comando, fallos intermedios y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md). Ventana Linux automatizada y dispositivo de audio tienen evidencia propia; escucha humana y Windows/PowerShell/macOS NOT_RUN.

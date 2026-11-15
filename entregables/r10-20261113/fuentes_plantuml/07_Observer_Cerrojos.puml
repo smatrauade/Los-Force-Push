@@ -1,0 +1,30 @@
+@startuml
+title Sokoban - Observer para cerrojos confirmados
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+skinparam classAttributeIconSize 0
+left to right direction
+class "desktop.LockChangeSubject" as Nfeffccd19b7 {
+  +subscribe(observer: Observer): void
+  +unsubscribe(observer: Observer): void
+  +subscriberCount(): int
+  +publish(origin: Origin, before: RuntimeState, after: RuntimeState): void
+}
+interface "desktop.LockChangeSubject.Observer" as Nc94b08efa65
+class "desktop.LockChangeSubject.Event" as Nc4c79ff75df <<record>>
+class "desktop.LockChangeSubject.Delta" as N79180f160e0 <<record>>
+class "desktop.GameController" as Ncb44d9b59d2
+interface "desktop.GameView" as N0cda4e12dfe
+class "desktop.SoundManager" as Na358dff4914
+class "movement.RuntimeState" as Nf3d3f105568 <<record>>
+class "movement.RuntimeMovementEngine" as N273caf2d77d
+N273caf2d77d ..> Nf3d3f105568
+Ncb44d9b59d2 --> N0cda4e12dfe
+Ncb44d9b59d2 --> Nfeffccd19b7
+Nfeffccd19b7 --> Nc94b08efa65
+Nfeffccd19b7 ..> Nc4c79ff75df
+Nc4c79ff75df --> N79180f160e0
+Ncb44d9b59d2 ..> Nc94b08efa65
+@enduml

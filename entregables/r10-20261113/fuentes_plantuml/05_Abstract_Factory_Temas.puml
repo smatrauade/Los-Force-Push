@@ -1,0 +1,35 @@
+@startuml
+title Sokoban - Abstract Factory de temas
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+skinparam classAttributeIconSize 0
+left to right direction
+interface "desktop.VisualThemeFactory" as N0e98372a18e {
+  +id(): String
+  +displayName(): String
+  +palette(): UiPalette
+  +sprites(): SpritePresentation
+}
+class "desktop.VisualThemeFactory.UiPalette" as N12c90449a94 <<record>>
+interface "desktop.VisualThemeFactory.SpritePresentation" as Ne9547eea0ee {
+  +apply(source: BufferedImage): BufferedImage
+}
+class "desktop.VisualThemes.Family" as N766ef98d96b
+class "desktop.VisualThemes.Copper" as N7274bc7bb5e
+class "desktop.VisualThemes.Night" as Na9b2ef94dab
+class "desktop.VisualThemes.Jade" as Nbd3437c8e14
+class "desktop.VisualThemeController" as N1e9f756402c
+class "desktop.VisualThemeApplier" as Nd454fb63e0b
+class "desktop.BoardPanel" as Nafb21fc3a58
+N1e9f756402c --> N0e98372a18e
+N1e9f756402c --> Nd454fb63e0b
+N1e9f756402c --> Nafb21fc3a58
+N766ef98d96b ..|> N0e98372a18e
+N7274bc7bb5e --|> N766ef98d96b
+Na9b2ef94dab --|> N766ef98d96b
+Nbd3437c8e14 --|> N766ef98d96b
+N0e98372a18e ..> N12c90449a94
+N0e98372a18e ..> Ne9547eea0ee
+@enduml

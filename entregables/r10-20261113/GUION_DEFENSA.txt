@@ -1,0 +1,11 @@
+LOS FORCE PUSH — Defensa de 18 minutos
+0–2: objetivo Sokoban y recorrido de requisitos. Presentar versión main y ejecución Java/Swing.
+2–5: demo normal, HUD, victoria y score 993; explicar carga TXT y atomicidad.
+5–8: KeyBox/Lock/muros, Undo de cinco y Restart; distinguir snapshots de Replay.
+8–10: hielo, resistencia individual y rotura después del deslizamiento.
+10–12: tres temas, Abstract Factory, familia de paleta y sprites, alternativa de condicionales.
+12–14: Replay Step/Reset/Play/Back; MoveCommand, receptor motor, estado independiente y límite de traza.
+14–16: MVC, SOLID y GRASP; Observer notifica cambios confirmados, no controla física.
+16–18: pruebas Windows, TXT externo, uso de IA, preguntas y cierre.
+Preparar respuestas: por qué RuntimeState es autoridad; cómo se conserva identidad Fragile; qué cambia Undo y qué conserva Replay; cómo se evita doble estado; qué comprueban hashes y qué no acreditan sobre derechos.
+No es necesario mostrar código o diagramas durante la exposición; deben estar disponibles como entregables.

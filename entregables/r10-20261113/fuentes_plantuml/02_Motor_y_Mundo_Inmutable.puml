@@ -1,0 +1,31 @@
+@startuml
+title Sokoban - Motor y Mundo Inmutable
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+skinparam classAttributeIconSize 0
+left to right direction
+class "movement.RuntimeState" as Nf3d3f105568 <<record>>
+class "movement.RuntimeState.Box" as Nda7498c771b <<record>>
+class "movement.RuntimeState.Lock" as N6d726545746 <<record>>
+class "movement.RuntimeState.DynamicWall" as N614c547d988 <<record>>
+class "movement.RuntimeMovementEngine" as N273caf2d77d
+class "movement.RuntimeMoveResult" as Neb9b6657ae7 <<record>>
+enum "movement.Direction" as N22fd134434c
+class "level.Position" as N6498dda9be5 <<record>>
+class "level.Level" as N9879f7989af <<record>>
+class "level.ExperimentalFragileLevel" as N465dd3cf25b <<record>>
+class "level.ExtendedLevelDefinition" as N21838391249 <<record>>
+N21838391249 --> N465dd3cf25b
+Nf3d3f105568 ..> N9879f7989af
+Nf3d3f105568 ..> N465dd3cf25b
+Nf3d3f105568 ..> N21838391249
+Nf3d3f105568 --> Nda7498c771b
+Nf3d3f105568 --> N6d726545746
+Nf3d3f105568 --> N614c547d988
+N273caf2d77d ..> Nf3d3f105568
+N273caf2d77d ..> Neb9b6657ae7
+Neb9b6657ae7 --> Nf3d3f105568
+Neb9b6657ae7 --> N6498dda9be5
+@enduml

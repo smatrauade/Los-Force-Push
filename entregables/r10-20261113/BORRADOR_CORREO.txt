@@ -1,0 +1,20 @@
+Para: jpepe@uade.edu.ar
+CC: [completar las direcciones de los otros cuatro integrantes]
+Asunto: Entrega del Trabajo Integrador - Sokoban - Los Force Push
+
+Profesor Pepe:
+
+Adjuntamos el trabajo integrador de Procesos de Desarrollo de Software del equipo Los Force Push. El material publicado incluye la portada, el informe técnico, el video del juego, los diagramas de clases y la documentación del proyecto.
+
+Integrantes:
+Juan Ignacio Antonini - 1155532
+Lucas Capatti - 1109648
+Santino Matra - 1190926
+Martina García Rios - 1128267
+Giuliano Calicchia - 1187567
+
+Repositorio: https://github.com/smatrauade/Los-Force-Push
+Material publicado: https://github.com/smatrauade/Los-Force-Push/tree/docs/r10-entrega-20261113/entregables/r10-20261113
+
+Saludos cordiales,
+Equipo Los Force Push

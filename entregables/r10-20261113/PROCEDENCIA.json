@@ -1,0 +1,23 @@
+{
+  "repository": "smatrauade/Los-Force-Push",
+  "branch": "main",
+  "executed_sha": "ee2681148f8dde7425968b61b19b631e5532bb04",
+  "date": "2026-11-13",
+  "jdk": "26.0.1 --release 17",
+  "video": "OBS 33.0.1 window capture + application audio",
+  "video_duration_seconds": 476.766666,
+  "video_format": "H264 AAC stereo 1280x720 30fps",
+  "scenes": "five levels; three themes; Replay Step Reset Play Back; Undo; Restart; HUD score; external TXT loaded",
+  "modal_chooser_in_video": true,
+  "modal_chooser_operated": true,
+  "audio_human_listening": "NOT_VERIFIED",
+  "uml_png": 9,
+  "uml_puml": 9,
+  "uml_hashes": "18/18 Git blob bytes",
+  "uml_java_pinned": "50/50",
+  "uml_checkout_verifier": "failed from CRLF conversion of puml; exact Git blobs verified and packaged",
+  "email_sent": false,
+  "capture_github_mutations": 0,
+  "delivery_branch": "docs/r10-entrega-20261113",
+  "video_postprocessing": "Two authentic OBS takes concatenated; H264 CRF18 recompression, AAC stream copied; full decode exit 0"
+}
