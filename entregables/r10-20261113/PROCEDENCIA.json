@@ -15,9 +15,8 @@
   "uml_puml": 9,
   "uml_hashes": "18/18 Git blob bytes",
   "uml_java_pinned": "50/50",
-  "uml_checkout_verifier": "failed from CRLF conversion of puml; exact Git blobs verified and packaged",
   "email_sent": false,
-  "capture_github_mutations": 0,
-  "delivery_branch": "docs/r10-entrega-20261113",
-  "video_postprocessing": "Two authentic OBS takes concatenated; H264 CRF18 recompression, AAC stream copied; full decode exit 0"
+  "video_postprocessing": "Two authentic OBS takes concatenated; H264 CRF18 recompression, AAC stream copied; full decode exit 0",
+  "evidence_kind": "Historical Windows execution and recording on 2026-11-13",
+  "published_materials_url": "https://github.com/smatrauade/Los-Force-Push/tree/main/entregables/r10-20261113"
 }

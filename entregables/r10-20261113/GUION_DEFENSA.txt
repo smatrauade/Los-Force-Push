@@ -1,11 +1,12 @@
-LOS FORCE PUSH — Defensa de 18 minutos
-0–2: objetivo Sokoban y recorrido de requisitos. Presentar versión main y ejecución Java/Swing.
-2–5: demo normal, HUD, victoria y score 993; explicar carga TXT y atomicidad.
-5–8: KeyBox/Lock/muros, Undo de cinco y Restart; distinguir snapshots de Replay.
-8–10: hielo, resistencia individual y rotura después del deslizamiento.
-10–12: tres temas, Abstract Factory, familia de paleta y sprites, alternativa de condicionales.
-12–14: Replay Step/Reset/Play/Back; MoveCommand, receptor motor, estado independiente y límite de traza.
-14–16: MVC, SOLID y GRASP; Observer notifica cambios confirmados, no controla física.
-16–18: pruebas Windows, TXT externo, uso de IA, preguntas y cierre.
-Preparar respuestas: por qué RuntimeState es autoridad; cómo se conserva identidad Fragile; qué cambia Undo y qué conserva Replay; cómo se evita doble estado; qué comprueban hashes y qué no acreditan sobre derechos.
-No es necesario mostrar código o diagramas durante la exposición; deben estar disponibles como entregables.
+LOS FORCE PUSH — Guion de defensa de 18 minutos
+
+0–2: presentar Sokoban, equipo y objetivo; iniciar desde el README con un JDK completo.
+2–5: mostrar movimiento/empuje, HUD, victoria y score 993 del primer nivel; abrir un TXT externo y explicar validación sin pérdida de sesión.
+5–8: mostrar KeyBox, Lock y muros; Undo de cinco movimientos y Restart. Explicar historial 15/5/3 y métricas.
+8–10: mostrar hielo, resistencia individual y rotura Fragile al terminar el deslizamiento.
+10–12: recorrer los tres temas; explicar Abstract Factory como familia de paleta y sprites y la alternativa de condiciones por widget.
+12–14: mostrar Replay Step/Reset/Play/Back; explicar MoveCommand, motor receptor y estado aislado. Diferenciar Replay de snapshots de Undo.
+14–16: explicar MVC, SOLID y GRASP mediante responsabilidades; Observer comunica hechos confirmados a interfaz y sonido, mientras el modelo decide los muros.
+16–18: señalar evidencia histórica, informe, diagramas y declaración de IA; responder preguntas y cerrar.
+
+Ensayar transiciones y disponibilidad de archivos antes de la demo. Cada integrante debe poder explicar las colaboraciones y los límites de la implementación. No hace falta mostrar código ni diagramas durante la exposición; deben estar disponibles como archivos de entrega.

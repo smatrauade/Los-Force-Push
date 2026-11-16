@@ -1,21 +1,19 @@
-LOS FORCE PUSH — Entrega académica
+LOS FORCE PUSH — Trabajo Integrador
+Procesos de Desarrollo de Software — UADE
+Docente: Jonathan Leonel Pepe
 Repositorio: https://github.com/smatrauade/Los-Force-Push
-Carpeta publicada: https://github.com/smatrauade/Los-Force-Push/tree/docs/r10-entrega-20261113/entregables/r10-20261113
-Rama del código grabado: main
-Commit ejecutado: ee2681148f8dde7425968b61b19b631e5532bb04
-Captura y QA original: 13/11/2026. Revisión de portada e informe: 15/11/2026.
+Material: https://github.com/smatrauade/Los-Force-Push/tree/main/entregables/r10-20261113
 
-PORTADA_EQUIPO.pdf y .docx: nómina completa y legajos.
-INFORME_TECNICO.pdf y .docx: producto, arquitectura, patrones, resultados e IA; metadatos es-AR.
-VIDEO_GAMEPLAY.mp4: captura auténtica OBS, 7:56.8, H264/AAC, 1280x720, 30 FPS; sin cambios.
-diagramas_png y fuentes_plantuml: nueve vistas cada una, conservadas desde Git; no son exportaciones StarUML.
-GUION_DEFENSA.txt: exposición de 18 minutos. BORRADOR_CORREO.txt: completar CC reales; no enviado.
-PROCEDENCIA.json y VALIDACION_WINDOWS.md: evidencia histórica y límites. SHA256SUMS.txt: hashes de los archivos actuales de esta carpeta, excepto el propio manifiesto.
+PORTADA_EQUIPO.pdf y .docx: integrantes y legajos.
+INFORME_TECNICO.pdf y .docx: funcionalidades, MVC, SOLID, GRASP, patrones, pruebas y uso de IA.
+VIDEO_GAMEPLAY.mp4: captura real de cinco niveles, 7:56.8, H.264/AAC, 1280×720, 30 FPS.
+diagramas_png/ y fuentes_plantuml/: nueve vistas en sus formatos PNG y PlantUML.
+VALIDACION_WINDOWS.md y evidencia/: ejecución histórica del 13/11/2026; Core 147, Desktop 177 y UI 24 comprobaciones aprobadas. No son pruebas repetidas en la revisión editorial.
+PROCEDENCIA.json, UML_RENDER_GATE.json y SHA256SUMS.txt: identificación e integridad de los archivos. El manifiesto excluye solo a sí mismo.
+GUION_DEFENSA.txt: recorrido de 18 minutos. BORRADOR_CORREO.txt: texto sin enviar; completar las direcciones institucionales de CC.
 
-El ZIP antiguo fue retirado del repositorio. No se publica otro ZIP; los entregables están disponibles individualmente.
+Para jugar se necesita un JDK completo 17+ con java y javac y escritorio gráfico. Swing está incluido; no se usan Maven, Gradle ni librerías externas. Clonar el repositorio, entrar en su raíz y seguir README.md. En Windows: powershell -NoProfile -File .scripts
+un-swing.ps1. Si JAVA_HOME apunta a un JRE, seleccionar un JDK completo mediante SPIKE_JDK_HOME para esa sesión. En Linux, usar una ruta sin espacios y bash scripts/run-swing.sh.
 
-Ejecución Windows: clonar en carpeta nueva, comprobar java y javac del JDK completo y ejecutar powershell.exe -NoProfile -File .\scripts\run-swing.ps1 desde la raíz del clon. La QA R10 utilizó JDK 26.0.1 con --release 17: core 147, desktop 177 y UI 24 PASS. Son resultados históricos, no pruebas repetidas en esta revisión documental; no se acredita runtime 17 nativo.
-
-Audio humano y evidencia de derechos de assets pendientes. El video conserva el recorrido principal y el complemento auténtico del selector TXT; no se generó gameplay nuevo.
-
-StarUML: pendiente de recepción y validación del archivo .mdj real, sus métodos, referencias y diagramas. El enlace al editor compartido no demuestra una exportación válida. Las fuentes e imágenes PlantUML se conservan como tales.
+ABRIR NIVEL TXT carga un nivel externo; no restaura una partida guardada. Los controles de guardar/cargar partidas están deshabilitados.
+Los archivos se consultan o descargan individualmente, sin ZIP académico versionado.

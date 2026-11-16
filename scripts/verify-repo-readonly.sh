@@ -2,13 +2,11 @@
 # Local inspection only: no fetch, writes, builds or network.
 set -euo pipefail
 export GIT_OPTIONAL_LOCKS=0
-bootstrap=0
 require_clean=0
 for arg in "$@"; do
     case "$arg" in
-        --bootstrap) bootstrap=1 ;;
         --require-clean) require_clean=1 ;;
-        *) printf 'Usage: bash scripts/verify-repo-readonly.sh [--bootstrap] [--require-clean]\n' >&2; exit 2 ;;
+        *) printf 'Usage: bash scripts/verify-repo-readonly.sh [--require-clean]\n' >&2; exit 2 ;;
     esac
 done
 command -v git >/dev/null
@@ -31,34 +29,27 @@ case "$origin" in
     *) printf 'FAIL: unexpected origin (value withheld)\n' >&2; exit 1 ;;
 esac
 branch="$(git branch --show-current)"
-if (( bootstrap )) && [[ "$branch" != docs/bootstrap-sokoban-autocontenido-v1 ]]; then
-    printf 'FAIL: unexpected bootstrap branch\n' >&2; exit 1
-fi
 if (( require_clean )) && [[ -n "$(git status --porcelain=v1)" ]]; then
     printf 'FAIL: dirty worktree\n' >&2; exit 1
 fi
 git diff --check
 git diff --cached --check
-"$python_command" -B - "$bootstrap" <<'PY'
-import csv, hashlib, io, pathlib, re, struct, subprocess, sys, wave, zlib, json
+"$python_command" -B - <<'PY'
+import csv, hashlib, io, pathlib, re, struct, subprocess, sys, wave, zlib, json, zipfile
 from urllib.parse import unquote
+from pathlib import Path
 root=pathlib.Path.cwd()
-bootstrap=sys.argv[1]=='1'
-required='''README.md AGENTS.md CONTRIBUTING.md TODO.md .gitignore .editorconfig .gitattributes
-docs/README.md docs/requirements/REQUIREMENTS.md docs/requirements/OPEN_QUESTIONS.md
+required="""README.md CONTRIBUTING.md .gitignore .editorconfig .gitattributes
+docs/README.md docs/requirements/REQUIREMENTS.md docs/requirements/TXT_FORMAT.md
 docs/architecture/ARCHITECTURE.md docs/architecture/RESPONSIBILITIES.md
-docs/architecture/uml/sokoban-candidate.puml docs/architecture/uml/STARUML_STATUS.md
+docs/architecture/uml/pr17-rc-ffa27f9/README.md
 docs/decisions/DECISION_LOG.md docs/traceability/TRACEABILITY_MATRIX.md
-docs/testing/TEST_STRATEGY.md docs/testing/HISTORICAL_EVIDENCE.md
-docs/references/BIBLIOGRAPHY.md docs/references/GITHUB_REFERENCES.md docs/assets/ASSET_POLICY.md
-docs/continuity/CURRENT_STATE.md docs/continuity/FRESHNESS_POLICY.md docs/continuity/SOURCE_REGISTRY.md
-docs/continuity/BOOTSTRAP_PREFLIGHT.md docs/continuity/capsules/BOOTSTRAP_2026-10-08.md
-scripts/verify-repo-readonly.sh'''.split()
-historical='docs/continuity/capsules/SOKOBAN_CAPSULA_EQUIPO_AUTOCONTENIDA_SCHEMA9_v4.0_2026-10-07.md'
-expected={historical:'4250c89752214242f35203237539024cbad54423054ccd0387263100fee61859',
-'docs/architecture/uml/sokoban-candidate.puml':'07e86f32bc2ea5c7091508698b415efbf18e9bce45464bb477cb154e5a268901'}
+docs/testing/TEST_STRATEGY.md docs/references/BIBLIOGRAPHY.md
+docs/assets/ASSET_POLICY.md docs/punto5/USO_IA_Y_LICENCIAS.md
+scripts/check-repo-context.py scripts/verify-repo-readonly.sh
+scripts/verify-uml-pr17-readonly.py entregables/r10-20261113/README.md""".split()
 errors=[]
-for name in required+[historical]:
+for name in required:
     if not (root/name).is_file(): errors.append('Missing: '+name)
 # Include ignored untracked files too: .gitignore must not hide build residues.
 # Git enumerates the worktree; never inspect .git internals.
@@ -66,27 +57,33 @@ result=subprocess.run(['git','ls-files','-z','--cached','--others','--exclude-st
 paths=sorted(set(result.stdout.decode().split('\0'))-{''})
 ignored=subprocess.run(['git','ls-files','-z','--others','--ignored','--exclude-standard'],capture_output=True,check=True)
 paths=sorted(set(paths+ignored.stdout.decode().split('\0'))-{''})
+# Reject symlinked leaves and parents before opening registered content.
+for name in paths:
+    parts=pathlib.PurePosixPath(name).parts
+    if any((root/pathlib.Path(*parts[:i])).is_symlink() for i in range(1,len(parts)+1)):
+        print('FAIL: Symlink: '+name); sys.exit(1)
+    if (root/name).is_file() and (root/name).stat().st_size>10*1024*1024:
+        print('FAIL: Large file: '+name); sys.exit(1)
 manifest_name='docs/punto5/ASSETS_REGISTRO_SHA256.csv'
 asset_pattern=re.compile(r'src/desktop/resources/assets/(?:sprites/[a-z0-9_]+\.png|sfx/[a-z0-9_]+\.wav)')
 manifest={}
-if not bootstrap or (root/manifest_name).exists():
-    try:
-        with (root/manifest_name).open(encoding='utf-8', newline='') as source:
-            reader=csv.DictReader(source, strict=True)
-            if reader.fieldnames!=['path','sha256','origin','license_status','usage']:
-                errors.append('Invalid asset manifest columns')
-            for row in reader:
-                name=row.get('path') or ''
-                digest=row.get('sha256') or ''
-                if None in row or any(value is None for value in row.values()):
-                    errors.append('Invalid asset manifest row'); continue
-                if not asset_pattern.fullmatch(name) or not re.fullmatch(r'[0-9a-f]{64}',digest):
-                    errors.append('Invalid asset manifest path/hash'); continue
-                if name in manifest: errors.append('Duplicate asset manifest entry: '+name)
-                manifest[name]=digest
-    except (OSError, UnicodeError, csv.Error):
-        errors.append('Missing/unreadable UTF-8 asset manifest')
-    if not manifest: errors.append('Empty asset manifest')
+try:
+    with (root/manifest_name).open(encoding='utf-8', newline='') as source:
+        reader=csv.DictReader(source, strict=True)
+        if reader.fieldnames!=['path','sha256','origin','license_status','usage']:
+            errors.append('Invalid asset manifest columns')
+        for row in reader:
+            name=row.get('path') or ''
+            digest=row.get('sha256') or ''
+            if None in row or any(value is None for value in row.values()):
+                errors.append('Invalid asset manifest row'); continue
+            if not asset_pattern.fullmatch(name) or not re.fullmatch(r'[0-9a-f]{64}',digest):
+                errors.append('Invalid asset manifest path/hash'); continue
+            if name in manifest: errors.append('Duplicate asset manifest entry: '+name)
+            manifest[name]=digest
+except (OSError, UnicodeError, csv.Error):
+    errors.append('Missing/unreadable UTF-8 asset manifest')
+if len(manifest)!=43: errors.append('Asset manifest must contain exactly 43 entries')
 for name in manifest:
     if name not in paths or not (root/name).is_file():
         errors.append('Missing asset: '+name)
@@ -150,16 +147,78 @@ if uml_registry.is_file():
     except (OSError,UnicodeError,KeyError,TypeError,ValueError,OverflowError):
         errors.append('Invalid pinned UML PNG registry')
 # UML_PR17_PINNED_PNG_REGISTRY_END
+# Delivery formats are accepted only at their exact manifested paths. Game
+# asset rules remain unchanged; copied UML bytes must match the pinned registry.
+delivery = root/'entregables/r10-20261113'
+delivery_prefix = 'entregables/r10-20261113/'
+delivery_base = {'.gitattributes','BORRADOR_CORREO.txt','GUION_DEFENSA.txt',
+    'INFORME_TECNICO.docx','INFORME_TECNICO.pdf','PORTADA_EQUIPO.docx',
+    'PORTADA_EQUIPO.pdf','PROCEDENCIA.json','README.md','README_ENTREGA.txt',
+    'UML_RENDER_GATE.json','VALIDACION_WINDOWS.md','VIDEO_GAMEPLAY.mp4',
+    'evidencia/core.txt','evidencia/desktop.txt','evidencia/ui.txt'}
+delivery_names = delivery_base | { 'diagramas_png/'+Path(n).name for n in uml_images } | {
+    'fuentes_plantuml/'+Path(n).stem+'.puml' for n in uml_images }
+delivery_hashes = {}
+try:
+    for line in (delivery/'SHA256SUMS.txt').read_text(encoding='utf-8').splitlines():
+        match=re.fullmatch(r'([0-9a-f]{64})  (.+)',line)
+        if not match: raise ValueError('Invalid delivery checksum line')
+        digest,name=match.groups()
+        if name not in delivery_names or name in delivery_hashes:
+            raise ValueError('Unknown/duplicate delivery checksum path')
+        delivery_hashes[name]=digest
+    if set(delivery_hashes)!=delivery_names or len(delivery_hashes)!=34:
+        raise ValueError('Incomplete delivery manifest')
+    actual={n[len(delivery_prefix):] for n in paths if n.startswith(delivery_prefix)}
+    if actual != delivery_names | {'SHA256SUMS.txt'}:
+        raise ValueError('Delivery file set differs from manifest')
+    for name,digest in delivery_hashes.items():
+        path=delivery/name
+        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=digest:
+            errors.append('Delivery hash mismatch: '+name)
+    if hashlib.sha256((delivery/'VIDEO_GAMEPLAY.mp4').read_bytes()).hexdigest() != '108e904e0c236fc4e48920b9de3ea9be9b206ad2b28a507ed2ad00df05bf0596':
+        errors.append('Video hash mismatch')
+    if (delivery/'UML_RENDER_GATE.json').read_bytes()!=uml_registry.read_bytes():
+        errors.append('Delivery UML registry mismatch')
+    for name in uml_images:
+        filename=Path(name).name
+        if (delivery/'diagramas_png'/filename).read_bytes()!=(root/name).read_bytes():
+            errors.append('Delivery UML PNG mismatch: '+filename)
+        puml=filename.replace('.png','.puml')
+        if (delivery/'fuentes_plantuml'/puml).read_bytes()!=(uml_registry.parent/'plantuml'/puml).read_bytes():
+            errors.append('Delivery UML PUML mismatch: '+puml)
+except (OSError,UnicodeError,ValueError) as failure:
+    errors.append('Invalid delivery manifest: '+str(failure))
+
 link_count=0
 for name in paths:
     p=root/name
     if p.is_symlink(): errors.append('Symlink: '+name); continue
     if not p.is_file(): errors.append('Absent indexed file: '+name); continue
-    if '.github/workflows/' in name or p.suffix.lower() in {'.class','.log','.tmp','.zip','.pdf','.jar','.pyc'}:
+    if '.github/workflows/' in name or p.suffix.lower() in {'.class','.log','.tmp','.zip','.jar','.pyc'}:
         errors.append('Forbidden/residue path: '+name)
     data=p.read_bytes()
     if len(data)>10*1024*1024:
         errors.append('Large file: '+name); continue
+    if name.startswith(delivery_prefix) and p.suffix.lower() in {'.pdf','.docx','.mp4','.png'}:
+        relative=name[len(delivery_prefix):]
+        if relative not in delivery_hashes:
+            errors.append('Unauthorized delivery binary: '+name); continue
+        if p.suffix=='.pdf' and (not data.startswith(b'%PDF-') or b'%%EOF' not in data[-1024:]):
+            errors.append('Invalid delivery PDF: '+name)
+        elif p.suffix=='.docx':
+            try:
+                with zipfile.ZipFile(io.BytesIO(data)) as package:
+                    members=package.infolist()
+                    if (sum(m.file_size for m in members)>20*1024*1024 or
+                        any(Path(m.filename).is_absolute() or '..' in Path(m.filename).parts for m in members) or
+                        'word/document.xml' not in package.namelist() or package.testzip() is not None):
+                        raise ValueError('Invalid package')
+            except (ValueError,zipfile.BadZipFile): errors.append('Invalid delivery DOCX: '+name)
+        elif p.suffix=='.mp4' and (len(data)<12 or data[4:8]!=b'ftyp'):
+            errors.append('Invalid delivery MP4: '+name)
+        # Copied PNG format/dimensions are checked against the identical source.
+        continue
     if p.suffix.lower() in {'.png','.wav'}:
         if name in uml_images:
             record=uml_images[name]
@@ -206,31 +265,14 @@ for name in paths:
                 if not resolved.is_relative_to(root.resolve()) or not resolved.exists():
                     errors.append(f'Broken/escaping link: {name}:{lineno}')
                 link_count+=1
-if bootstrap:
-    allowed=set(required+[historical]+['src/main/java/.gitkeep','src/test/java/.gitkeep',
-        'src/main/resources/levels/.gitkeep','src/main/resources/assets/.gitkeep'])
-    for name in paths:
-        if name not in allowed: errors.append('Outside bootstrap scope: '+name)
-    for name,digest in expected.items():
-        if (root/name).is_file() and hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:
-            errors.append('Historical bytes modified: '+name)
-    if (root/'docs/architecture/uml/sokoban-candidate.puml').is_file():
-        uml=(root/'docs/architecture/uml/sokoban-candidate.puml').read_text(encoding='utf-8')
-        if uml.count('@startuml')!=1 or uml.count('@enduml')!=1: errors.append('Invalid UML boundaries')
-        capsule=(root/historical).read_text(encoding='utf-8')
-        embedded=re.search(r'```plantuml\n(.*?)\n```',capsule,re.S)
-        if not embedded or embedded.group(1).strip()!=uml.strip(): errors.append('UML/capsule mismatch')
-    oq=(root/'docs/requirements/OPEN_QUESTIONS.md').read_text(encoding='utf-8')
-    for number in range(1,12):
-        if f'OQ-{number:02}' not in oq: errors.append('Missing open question')
-    if 'REPRODUCIBILITY_IN_CURRENT_REPOSITORY = NOT_VERIFIED' not in (root/'docs/testing/HISTORICAL_EVIDENCE.md').read_text(encoding='utf-8'):
-        errors.append('Historical reproducibility label missing')
 if errors:
     for error in errors: print('FAIL:',error)
     sys.exit(1)
 print(f'PASS: {len(paths)} files; {link_count} relative links; required docs, paths and secret-pattern scan')
 if manifest: print(f'PASS: {len(manifest)} registered PNG/WAV assets; format and SHA-256')
-if bootstrap: print('PASS: bootstrap allowlist, immutable source hashes, UML boundaries/source and open questions')
+print(f'PASS: {len(delivery_hashes)} delivery hashes; exact file set, formats and video')
 print('NOTE: no Java tests, UML compiler, remote permission audit or manual authority review performed by this script')
 PY
+"$python_command" -B scripts/check-repo-context.py --local
+"$python_command" -B scripts/verify-uml-pr17-readonly.py --root "$root" --verify-java
 printf 'HEAD=%s\nBRANCH=%s\nRESULT=PASS\n' "$(git rev-parse HEAD)" "$branch"

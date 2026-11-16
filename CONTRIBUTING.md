@@ -1,21 +1,16 @@
-# Contribuir
+# Contribuciones
 
-Una rama contiene un objetivo técnico principal. Antes de escribir, realizar el preflight de [AGENTS.md](AGENTS.md), inspeccionar cambios de compañeros y PRs equivalentes, y partir de un HEAD actualizado sin modificar directamente `main`.
+Trabajar en una rama propia y proponer cambios mediante pull request a `main`. Mantener el modelo independiente de Swing, una sola autoridad de estado y responsabilidades concretas; justificar patrones por el problema que resuelven.
 
-Tras confirmar permisos, identidad y worktree limpio:
+Antes de publicar documentación, revisar rutas y enlaces y ejecutar:
 
 ```bash
-git fetch origin
-# Revisar origin/main y su SHA antes de crear la rama.
-git switch -c <rama-de-alcance-unico> origin/main
+git diff --check
+git diff --cached --check
+bash scripts/verify-repo-readonly.sh
+python -B scripts/verify-uml-pr17-readonly.py --root . --verify-java
 ```
 
-No ejecutar este ejemplo ciegamente si hay trabajo pendiente o una rama equivalente. Usar commits pequeños y explicables (`docs:`, `feat:`, `test:`, `fix:`). No force-push, acciones CI nuevas, pagos ni cambios globales de Git.
+Los cambios funcionales requieren las pruebas pertinentes descritas en [la estrategia](docs/testing/TEST_STRATEGY.md). No reatribuir resultados históricos a ejecuciones nuevas. Registrar la procedencia y los derechos de cualquier recurso incorporado y declarar asistencia de IA en la documentación académica.
 
-Cada PR explica problema, comportamiento resultante, alcance, decisiones, alternativas, pruebas ejecutadas, documentos afectados y riesgos. Para **solo documentación** y sin alteraciones normativas, no exigir revisión externa si hay autorización vigente, gates y validación reproducible; puede integrarse sin una aprobación ceremonial, respetando las reglas de rama GitHub. Para **código, recursos, contratos funcionales o nuevas decisiones TEAM**, exigir la revisión/ratificación pertinente; no autoaprobar cambios de riesgo. La IA debe declararse y su resultado debe comprenderse.
-
-Antes del PR, revisar `git diff --check`, diff completo y verificaciones pertinentes. Para documentación ejecutar `bash scripts/verify-repo-readonly.sh`; para código, las pruebas definidas cuando exista toolchain. Las reglas del core se probarán sin Swing. Un resultado histórico no cuenta como ejecución actual.
-
-Actualizar [política de frescura](docs/continuity/FRESHNESS_POLICY.md), decisiones, arquitectura/UML y trazabilidad cuando corresponda. No editar cápsulas antiguas. No agregar una dependencia sin justificar problema, alternativa estándar, coste y decisión. No implementar una regla abierta sin registrar su cierre.
-
-El merge requiere una autorización vigente específica para el alcance de la misión y un gate de SHA/estado, no necesariamente una revisión ajena en mantenimiento documental. Cambiar visibilidad o permisos requiere autorización específica; nunca inferirla de este texto.
+El README contiene los requisitos para jugar; las herramientas de QA son opcionales para quien solo ejecuta el juego. El [índice documental](docs/README.md) organiza la arquitectura y los entregables.

@@ -1,91 +1,40 @@
-# Requisitos normalizados
+# Requisitos del Trabajo Integrador
 
-`LAST_REVIEWED = 2026-11-01` (refinamientos TEAM separados; baseline oficial normalizado del 08/10 preservado y aclaración de procedencia documental). Esta redacción propia usa la descripción normalizada del prompt autorizado y contrasta la cápsula recibida. No es transcripción literal del PDF `PDS - TI - Prof Pepe.pdf`; el original no forma parte del clon ni se redistribuye; fue recibido y su SHA-256 verificado en una revisión externa del 21/10/2026, como consta en SOURCE_REGISTRY. Un agente nuevo con solo el repositorio tiene la normalización y la procedencia, no el PDF original. Autoridad y disponibilidad se registran en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md).
+Procesos de Desarrollo de Software, UADE. Docente: Jonathan Leonel Pepe. Esta síntesis distingue las exigencias académicas del comportamiento concreto del programa. La consigna original de cátedra no se redistribuye en el repositorio.
 
-## Baseline oficial
+## Consigna académica
 
-| ID | Requisito `OFFICIAL` | Aceptación futura |
+Desarrollar un Sokoban 2D en Java y Swing, aplicando MVC, SOLID, GRASP y patrones GoF. Se requieren niveles externos TXT, movimiento por flechas y empuje, cajas normales/frágiles/llave, hielo, cerrojos y muros, Undo, Restart, victoria, puntaje, HUD, imágenes y sonidos. Se solicitan dos funcionalidades adicionales vinculadas a patrones de diseño.
+
+La entrega exige repositorio público y README de ejecución, video de gameplay, diagrama de clases en StarUML, informe técnico con decisiones justificadas y declaración de IA. Los recursos visuales y sonoros deben satisfacer la condición de dominio público de la consigna. Estos requisitos de formato y derechos no se sustituyen por una comprobación de hashes.
+
+Un integrante envía el material desde su correo institucional a `jpepe@uade.edu.ar`, con copia al resto e identificación de todos los desarrolladores. La presentación del 18/11/2026 es una demo de 15–20 minutos con explicación de patrones. No es obligatorio mostrar código o diagramas durante la exposición; los archivos siguen formando parte de la entrega. Cada integrante debe comprender y defender el trabajo.
+
+## Comportamiento de la versión implementada
+
+| ID | Requisito funcional | Implementación concreta |
 |---|---|---|
-| RF-01 | Tablero con paredes, espacios vacíos, cajas normales/frágiles/llave, destinos, terrenos resbaladizos, casilleros cerrojo, muros abiertos/cerrados y jugador Sokoban | Todos los elementos representables y cargables |
-| RF-02 | Niveles iniciales desde diferentes `.txt` con caracteres | Cargar distintos archivos externos; no hardcodear niveles |
-| RF-03 | Flechas; empujar, no tirar; máximo una caja simultáneamente; no atravesar paredes, cajas ni muros cerrados | Casos positivos, bloqueos y estado preservado ante intento inválido |
-| RF-04 | Caja normal desplazada por empuje; deslizamiento en terreno resbaladizo | Empuje y deslizamiento conforme aclaración docente |
-| RF-05 | Fragile pierde resistencia en cada empuje y se rompe al llegar a cero | Decremento/rotura; definición inicial TXT según D-020/OQ-06 resuelta; regla hielo E04 decidida e implementada en el runtime integrado |
-| RF-06 | KeyBox sobre cerrojo abre muros correspondientes | Activación; asociación/cierre dependen de OQ-07 |
-| RF-07 | Historial de 15 movimientos, retroceso de 5 por pulsación Undo, hasta 3 usos consecutivos | Restaurar N-5/N-10/N-15; aplicar E07/E08 y la ratificación complementaria del 01/11: Undo restaura tablero, movimientos y empujes; sólo Restart o cambio de nivel reinician el límite de tres usos. Restart inicia un intento nuevo y reinicia las cuatro métricas. |
-| RF-08 | Victoria cuando todas las cajas están en destinos; avanzar al siguiente nivel | Victoria/progresión tras cerrar OQ-01 |
-| RF-09 | Resumen con movimientos, empujes, usos de Undo y puntaje final; fórmula ratificada por TEAM | `Score = max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. Base 1000; −1 por movimiento, −2 adicionales por empuje y −10 por uso de Undo; mínimo cero. Restart reinicia las métricas del intento y no tiene penalización adicional. |
-| RF-10 | HUD con movimientos, empujes y nivel actual; botones visibles Undo y Restart | Verificación de presentación e interacción |
-| RF-11 | Todos los elementos del tablero mediante imágenes; acciones con efectos sonoros apropiados; assets de dominio público | Cobertura visual/sonora y registro individual de licencias |
-| RF-12 | Dos funcionalidades adicionales que impliquen patrones de diseño | Selección OQ-10; no contar automáticamente requisitos obligatorios |
-| RT-01 | Java + Swing + GUI 2D | Build/ejecución reproducibles tras OQ-11 |
-| RT-02 | Repo GitHub público, README de ejecución, video gameplay, clases en StarUML, informe con decisiones/justificaciones y envío institucional con integrantes en copia | Entregables auditables; visibilidad pública verificada por API el 2026-10-21, demás entregables pendientes |
-| RT-03 | SOLID, GRASP, MVC, GoF, calidad de diseño, creatividad y documentación; defensa individual | Diseño/código/evidencia coherentes y explicación por cada integrante |
-| RT-04 | IA como apoyo declarada; equipo comprende, valida, adapta y defiende el resultado | Declaración y revisión humana |
+| RF-01 | Tablero con terrenos y entidades especiales | Piso, pared, destino, hielo, jugador, cajas normales/frágiles/llave, cerrojos y muros dinámicos |
+| RF-02 | Carga desde TXT | Lectura externa UTF-8 estricta, validación completa y reemplazo de sesión solo tras éxito |
+| RF-03 | Movimiento y empuje | Flechas cardinales, una caja por empuje, sin tirar; intentos bloqueados no cambian mundo ni métricas |
+| RF-04 | Hielo | Las cajas atraviesan la franja hasta la primera celda normal libre o se detienen ante un obstáculo; el jugador no se desliza |
+| RF-05 | Caja frágil | Resistencia individual en TXT; pierde una unidad por empuje, completa el trayecto y se retira si llega a cero |
+| RF-06 | Caja llave, cerrojos y muros | Solo KeyBox activa Lock. Los muros abren con al menos un cerrojo asociado activo; retirar la llave vuelve a cerrarlos. Se bloquea una transición que cerraría un muro ocupado |
+| RF-07 | Undo | Historial de 15 movimientos exitosos; retroceso exacto de cinco; hasta tres usos por intento; sin retroceso parcial |
+| RF-08 | Victoria y avance | Al menos un destino y una caja; igual número de cajas y destinos, todos cubiertos. Lock no cuenta como destino. Avance disponible si queda otro nivel |
+| RF-09 | Resumen y puntaje | Movimientos, empujes, usos de Undo y `max(0, 1000 - moves - 2*pushes - 10*undoUsesTotal)` |
+| RF-10 | HUD y controles | Nivel, métricas y puntaje; botones y atajos para Undo y Restart |
+| RF-11 | Presentación visual y sonora | 31 sprites y 12 efectos; inventario individual de procedencia y hashes |
+| RF-12 | Dos adicionales con patrones | Selector de tres temas con Abstract Factory y Replay con Command |
 
-## Aclaraciones posteriores y recomendaciones
+Undo restaura el mundo, los movimientos y los empujes; el total de usos de Undo no se revierte. Un nuevo movimiento no recupera usos. Restart y cambio de nivel reinician historial y métricas del intento. `LevelProgression` conserva los resultados de niveles terminados.
 
-`TEACHER-EXPLICIT` según prompt normalizado: el equipo documenta el formato TXT; el profesor podría modificarlo o construir uno compatible para verificar carga externa. La consigna no fija el alfabeto: el subconjunto soportado está adoptado por el responsable TXT en [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026); [OQ-08](OPEN_QUESTIONS.md) conserva sólo extensiones no soportadas. Esa decisión técnica no amplía lo votado por TEAM.
+Estas descripciones documentan el programa entregado; no atribuyen una aprobación docente particular a cada decisión de implementación. Las decisiones técnicas y sus alternativas están en [diseño](../decisions/DECISION_LOG.md), y el contrato de entradas en [TXT](TXT_FORMAT.md).
 
-En el ejemplo de hielo, la caja atraviesa la franja y llega al primer espacio normal libre posterior; el jugador no se desliza. Aquella aclaración no resolvía la salida inmediatamente bloqueada; el alcance TEAM posterior y sus bordes pendientes están en [OQ-02](OPEN_QUESTIONS.md) y [E03 / D-005](../decisions/DECISION_LOG.md#e03).
+## Alcance de las adicionales
 
-No hace falta medir tiempo ni implementar animaciones. Kenney y Pixabay fueron recomendados como fuentes posibles, sin garantía automática de dominio público para cada recurso.
+El selector cambia familias visuales completas sin modificar las reglas. Replay vuelve a ejecutar la secuencia exitosa de una partida terminada en otro estado; no reemplaza a Undo. Observer comunica hechos confirmados de cerrojos a la interfaz y al sonido, como colaboración de una mecánica obligatoria.
 
-Builder fue mencionado como alternativa válida y opcional para construir el nivel leyendo TXT. La nueva evidencia ASR del 21/10 indica incorporar Observer en alguna parte del TPO, con Lock→Walls como ejemplo. Registrar esa fuerza docente no ratifica arquitectura TEAM ni demuestra implementación; ver [procedencia](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026).
+No se implementó persistencia de partidas: los controles de guardar/cargar están deshabilitados. Abrir un nivel TXT crea una partida nueva. No se agregan requisitos de guardado por asociar Undo con snapshots.
 
-La cápsula histórica reporta además guía sobre interacción por eventos sin game loop continuo, Memento para recuperar estados y Strategy como política de cálculo. Su procedencia es indirecta; no se agregan requisitos oficiales por esas menciones.
-
-## Propuestas y límites
-
-La discusión del 30/09 proponía separar métricas. E09 establece que Undo restaura movimientos y empujes, mientras que sus usos se acumulan durante el intento. La ratificación complementaria TEAM del 01/11 define `undoUsesTotal`, `consecutiveUndoUses` y el efecto de Restart: inicia un intento nuevo y reinicia `moves`, `pushes`, `undoUsesTotal` y `consecutiveUndoUses`. E08 conserva su regla: sólo Restart o cambio de nivel reinician el límite de tres usos.
-
-La fórmula de score también quedó ratificada el 01/11: `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. No existe penalización adicional por Restart. El tratamiento de las métricas al cambiar de nivel sigue pendiente.
-
-Estas definiciones no ratifican por sí mismas la clase SessionMetrics ni los patrones Memento/Strategy. `ScoreStrategy` continúa siendo una alternativa PREFERRED, no una obligación de diseño. Ver [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) y [OPEN_QUESTIONS](OPEN_QUESTIONS.md).
-
-Sintaxis/rango/validación de resistencia inicial TXT soportados fueron adoptados por el responsable en D-020. Siguen sin fijarse extensiones especiales del formato, asociación/ocupación cerrojos-muros, segunda adicional, contratos técnicos de persistencia y Java/build. Ver [OPEN_QUESTIONS](OPEN_QUESTIONS.md). Los refinamientos siguientes no cambian el parser experimental ni constituyen pruebas o aceptación productiva.
-
-## Refinamientos TEAM del 2026-10-23
-
-Este apartado es un mapa hacia la autoridad canónica, no otra definición normativa de las reglas. Los acuerdos mayoritarios están sólo en [DECISION_LOG](../decisions/DECISION_LOG.md#ratificación-por-mayoría--2026-10-23); los pendientes sólo en [OPEN_QUESTIONS](OPEN_QUESTIONS.md). No se eleva TEAM a OFFICIAL ni se sustituye la consigna; E04/E08 son elecciones resueltas, sin aprobación docente específica ni implementación atribuida por este registro.
-
-| Requisito afectado | Aspecto y fuente TEAM / decisión | Inventario de alcance y límites |
-|---|---|---|
-| RF-01 / RF-02 / RF-05 | Disposición TXT y resistencia individual: [E01 / D-020](../decisions/DECISION_LOG.md#e01), [E02 / D-005/D-020](../decisions/DECISION_LOG.md#e02) | [OQ-06/OQ-08](OPEN_QUESTIONS.md): esquema soportado decidido por MODULE_OWNER, extensiones futuras abiertas |
-| RF-03 / RF-04 | Resultado contra pared: [E03 / D-005](../decisions/DECISION_LOG.md#e03) | [OQ-02](OPEN_QUESTIONS.md): bordes y otras obstrucciones pendientes |
-| RF-05 | Regla Fragile/hielo: [E04 / D-005](../decisions/DECISION_LOG.md#e04) | [OQ-03](OPEN_QUESTIONS.md): TEAM_RULE_DECIDED; completar deslizamiento y luego romper; implementación integrada y bordes en OQ-03 |
-| RF-06 / RF-08 | Objetivo KeyBox y cierre: [E05 / D-019](../decisions/DECISION_LOG.md#e05), [E06 / D-010](../decisions/DECISION_LOG.md#e06) | [OQ-01/OQ-07](OPEN_QUESTIONS.md): ocupación, IDs y puzzles pendientes |
-| RF-07 / RF-10 | Umbral y reinicio de límite: [E07 / D-007](../decisions/DECISION_LOG.md#e07), [E08 / D-008](../decisions/DECISION_LOG.md#e08) | [OQ-05/OQ-04](OPEN_QUESTIONS.md): umbral y evento de reinicio decididos, bordes operativos pendientes en sesión/Undo |
-| RF-09 | Métricas y variables penalizadas: [E09 / D-008](../decisions/DECISION_LOG.md#e09), [E10 / D-009](../decisions/DECISION_LOG.md#e10) | [OQ-09](OPEN_QUESTIONS.md): fórmula y Restart ratificados e implementados; métricas al cambiar de nivel pendientes; [ratificación complementaria 2026-11-01](../decisions/DECISION_LOG.md#ratificación-complementaria--undo-restart-y-score--2026-11-01) concreta la fórmula y el comportamiento de Restart |
-| RF-12 | Preferencia TEAM histórica: [E11 / D-022](../decisions/DECISION_LOG.md#e11) | [OQ-10](OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026): elegibilidad de guardar cuestionada por reporte indirecto; cómputo de dos adicionales, contratos y GoF pendientes |
-
-La revisión del código sigue `TEAM_ACCEPTANCE = NOT_RECORDED`. OQ-11 no tuvo encuesta: los comandos actuales y release 17 no ratifican Java/build final. Los estados técnicos de arquitectura/UML y patrones se conservan.
-
-## Entrega y aceptación docente — 29/10/2026
-
-**TEACHER-EXPLICIT / USER_SUPPLIED_TEAMS_TEXT:** el miércoles **18 de noviembre de 2026** se presenta y entrega el TI. Demo en vivo de **15–20 minutos**, mostrando lo implementado y explicando detalladamente los patrones aplicados. No se exige mostrar código ni diagramas en la exposición; **no se elimina StarUML de RT-02**.
-
-Un integrante envía a **jpepe@uade.edu.ar**, con copia a los demás, nombre del equipo, apellido y nombre de cada desarrollador, todos los entregables y enlace al repositorio público. Checklist RT-02: repositorio público, README reproducible, video, archivo StarUML e informe técnico con decisiones y justificaciones. RT-04 exige declarar IA y comprensión/defensa individual; no afirmar revisión grupal inexistente.
-
-**Indicación oral resumida / AUDIO_NOT_VERIFIED:** para RF-02 el docente puede crear un TXT compatible o editar válidamente uno del equipo, por ejemplo cambiar pared por caja. Aceptación: archivo externo → Loader/Parser → Board → interfaz debe reflejar el cambio, sin hardcode. Una entrada inválida debe producir error y conservar el nivel previo; no se promete aceptar cualquier edición. Para RF-01/02/05 los niveles elaborados por el equipo deben ser resolubles y su resistencia Fragile coherente con el puzzle; no se prescribe solver automático ni máximo numérico oficial. [Fuentes y timestamps](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026).
-
-Estos criterios son objetivos de aceptación, no resultados nuevos. En el corte del 29/10 Fragile jugable y las demás entidades especiales seguían pendientes; fueron integrados después. OQ-03/OQ-04 conservan detalles de borde; E04/E08 tienen elección resuelta. La consigna oficial permanece por encima de TEAM, sin una aprobación docente de secuenciación inventada.
-
-## Alcance de RF-07 y RF-12 — complemento 29/10/2026
-
-RF-07 exige Undo con historial 15, bloques 5 y hasta 3 usos consecutivos; la consigna escrita no exige textualmente persistencia en disco. Memento representa estado para restaurar, sin implicar guardar archivos o sobrevivir al cierre del juego. No resolver por esa asociación la ambigüedad del [reporte grupal](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026).
-
-RF-12 sigue exigiendo **dos adicionales académicamente válidas con patrones vistos en clase**. Guardar/recuperar no se computa automáticamente: su exclusión y la elegibilidad del selector fueron atribuidas al docente por un tercero, sin respuesta original verificada. El selector permanece candidato y requiere evidencia de comportamiento y patrón justificado; el cómputo final y la segunda selección siguen pendientes en OQ-10. No se alteran E11 ni la entrega oficial del 18/11/2026.
-
-## Refinamientos TEAM del 2026-11-01
-
-La ratificación complementaria del 01/11 concreta las reglas de Undo, Restart y score. No modifica el baseline oficial de la consigna ni los recuentos históricos E08, E09 y E10.
-
-| Requisito | Aspecto ratificado | Alcance y límites |
-|---|---|---|
-| RF-07 | Undo restaura tablero, `moves` y `pushes`; `undoUsesTotal` acumula usos dentro del intento; `consecutiveUndoUses` controla el límite de tres. | Sólo Restart o cambio de nivel reinician el límite. Un movimiento normal no recupera usos. Restart inicia un intento nuevo y reinicia las cuatro métricas. |
-| RF-09 | Fórmula: `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. | Base 1000; −1 por movimiento; −2 adicionales por empuje; −10 por Undo; mínimo cero. Restart no tiene penalización adicional y el score corresponde al intento actual. |
-
-El cambio de nivel reinicia `consecutiveUndoUses`, pero no se ha ratificado el efecto sobre las demás métricas. En el corte histórico I2 anterior a la publicación, en la rama auxiliar, `GameSession` implementa Undo y Restart, coordinados por `GameController`, `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` asegurando la persistencia del puntaje histórico, y `ScoreCalculator` implementa el cálculo del score acordado. `UiCommands` conecta Undo y Restart; la implementación contempla la restauración de `moves` y `pushes` al deshacer, la acumulación de usos de Undo, el reinicio de las cuatro métricas con Restart y la fórmula de score ratificada. Las pruebas registradas en esta integración local incluyen `CORE_TOTAL: 258 PASS, 0 FAIL`, `SESSION UNDO: 58 PASS, 0 FAIL`, `DESKTOP RESULT: 36 PASS, 0 FAIL` y `VISUAL ASSETS RESULT: 44 PASS, 0 FAIL`. `TEAM_ACCEPTANCE = NOT_RECORDED` para el código; la ratificación no equivale a aceptación formal del equipo sobre la implementación actual. La elección de Memento, SessionMetrics o ScoreStrategy conserva su estado técnico y no queda ratificada por estas reglas.
-
-**Estado de implementación posterior (04/11/2026):** I1+I2 y hotfix TXT Fragile publicados en PR #17 Draft (hito `4d6cb612b38e5ebdb6869bb990301045044e863f`). Tests locales JDK17 reportados: Undo 58, core 258, Desktop 40, assets 44, todos PASS; GUI nativa post-hotfix y aceptación TEAM pendientes. Esto no modifica reglas OFFICIAL, E01–E11 ni preguntas abiertas; consultar [CURRENT_STATE](../continuity/CURRENT_STATE.md).
+La [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) relaciona cada requisito con sus clases y pruebas. Los [entregables publicados](../../entregables/r10-20261113/README.md) identifican los formatos disponibles sin atribuir a PlantUML otro formato de origen.

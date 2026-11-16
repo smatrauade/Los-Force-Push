@@ -1,23 +1,15 @@
-# Política de assets
+# Recursos visuales y sonoros
 
-Revisado 28/10/2026. La consigna exige imágenes para el tablero, SFX apropiados y recursos de dominio público. La comprobación de integridad técnica no acredita derechos.
+El juego distribuye **31 sprites PNG RGBA de 32×32** y **12 efectos WAV PCM mono de 16 bits a 22050 Hz**. `PixelAssets` y `SoundManager` los leen del classpath. Los temas modifican la presentación en memoria; no reemplazan archivos. Python y las herramientas de generación no son dependencias para jugar.
 
-## Recursos presentes
+El [registro individual](../punto5/ASSETS_REGISTRO_SHA256.csv) identifica ruta, SHA-256, procedencia declarada, estado de licencia y uso de cada recurso. Se conserva como fuente de identificación de los 43 archivos, sin crear un registro paralelo. La [declaración de uso de IA y procedencia](../punto5/USO_IA_Y_LICENCIAS.md) amplía el proceso de producción.
 
-El PR #9 incorporó [src/desktop/resources/assets](../../src/desktop/resources/assets): **31 PNG RGBA de 32×32 y 12 WAV PCM mono de 16 bits/22050 Hz**. Son 29 sprites base y dos variantes opcionales de cajas. Los recursos para hielo, fragilidad, cerrojos y victoria no implementan sus reglas.
+La procedencia registrada es generación original/programática con asistencia de IA; no se reporta descarga de sprites de terceros. Este dato describe origen y no constituye por sí solo una licencia o dedicación jurídica. La exigencia académica de dominio público está en [requisitos](../requirements/REQUIREMENTS.md); los hashes acreditan integridad, no derechos.
 
-El único registro individual es [ASSETS_REGISTRO_SHA256.csv](../punto5/ASSETS_REGISTRO_SHA256.csv): 43 rutas, hashes, procedencia, uso y estado de licencia. No duplicar esa tabla aquí. PixelAssets y SoundManager cargan desde classpath; Python/Pillow y los ZIP originales no son dependencias del runtime.
+El generador [generar_assets.py](../punto5/generar_assets.py) produce SFX y no sobrescribe los PNG finales. No hace falta ejecutarlo para descargar o jugar. Los créditos corresponden al equipo Los Force Push; la asistencia utilizada se declara en el informe técnico.
 
-## Derechos pendientes
+## Verificación técnica
 
-[USO_IA_Y_LICENCIAS](../punto5/USO_IA_Y_LICENCIAS.md) declara origen programático/asistido por IA, sin material de terceros reportado, y conserva PENDIENTE_VERIFICACION_CC0_EQUIPO. No existe una dedicación CC0 ni una verificación de titularidad inferida de esos orígenes. El equipo debe documentar autoría/titularidad, decisión/licencia, fecha y responsable antes de afirmar cumplimiento del requisito. El uso de IA debe declararse y revisarse para la defensa.
+El [verificador documental](../../scripts/verify-repo-readonly.sh) comprueba registro completo, rutas, duplicados, faltantes, hashes y formato de PNG/WAV. Limita la descompresión de sprites a la dimensión esperada y conserva el máximo de 10 MiB por archivo. Los renders UML y los documentos de entrega tienen listas controladas distintas de los assets del juego.
 
-Kenney y Pixabay son recomendaciones históricas del profesor, no fuentes de estos archivos ni garantía automática de dominio público.
-
-## Incorporaciones y validación
-
-Cada nuevo recurso necesita ruta/nombre, tipo/uso, hash, autor/origen, evidencia y términos de licencia, fecha y responsable. No copiar activos de terceros sin verificar el recurso individual y permiso suficiente.
-
-El [verificador](../../scripts/verify-repo-readonly.sh) sólo acepta PNG bajo assets/sprites y WAV bajo assets/sfx, con nombres explícitos registrados en el manifiesto. Comprueba firma/formato, SHA-256, duplicados, faltantes y archivos no registrados; conserva el límite de 10 MiB por archivo y limita la descompresión PNG a los scanlines de 32×32 RGBA. No descarga ni escribe archivos y no valida licencias por consultar el CSV.
-
-La [regresión](../../scripts/test-verify-repo-readonly.py) altera únicamente copias temporales. [TEST_STRATEGY](../testing/TEST_STRATEGY.md) documenta comandos y evidencia. Al ampliar formatos o dimensiones, revisar contrato, cuotas, pruebas y manifiesto conjuntamente; no desactivar el control binario.
+Cualquier incorporación de un recurso debe registrar origen, autor/titular cuando corresponda, términos comprobables y hash, además de mantener formatos y pruebas. La [regresión](../../scripts/test-verify-repo-readonly.py) prueba los rechazos en copias temporales, sin alterar los archivos del juego.

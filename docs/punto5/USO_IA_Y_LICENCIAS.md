@@ -1,43 +1,13 @@
-# Recursos, procedencia, licencia e IA
+# Uso de IA y procedencia de recursos
 
-## Procedencia real
+Se utilizaron ChatGPT y Codex como apoyo para analizar alternativas de diseño, revisar código, preparar pruebas y documentación y producir parte de los recursos visuales. El uso se declara también en el informe técnico. Las decisiones y la defensa de la solución corresponden al equipo; la asistencia no sustituye la comprensión del programa.
 
-El paquete contiene **31 sprites PNG RGBA de 32x32**: 29 nombres compatibles
-con la version original y 2 variantes opcionales de cajas. Los ladrillos,
-pisos y sprites auxiliares conservan los mismos pixeles originales. Las
-cajas, los destinos y el operario de casco amarillo son la version final
-redisenada mediante un proceso iterativo de pixel art asistido por IA.
-No se incluyen sprites descargados de terceros.
+## Producción de imágenes y sonidos
 
-Los **12 WAV** son los efectos originales del Punto 5 (PCM 16 bits / 22050 Hz).
-`docs/punto5/generar_assets.py` ahora **solo regenera efectos de sonido**;
-no pisa los PNG finales. El runtime Java no requiere Python ni Pillow.
+Los 31 sprites incluidos son pixel art RGBA de 32×32. La procedencia registrada describe generación propia/programática y un proceso iterativo con asistencia de IA para cajas, destinos y personaje. No se reportan sprites descargados de terceros. Los 12 WAV son efectos sintetizados programáticamente; su generador está conservado y no modifica los PNG finales.
 
-Las imagenes de `PREVIAS` pertenecen a los ZIP historicos externos, no al clon; son muestras visuales, no archivos necesarios
-para ejecutar el juego. `PANTALLA_JUEGO.png` y `PANTALLA_MENU.png` son vistas
-actualizadas sobre las capturas de la interfaz original; no son evidencia
-de una nueva ejecucion fisica de Swing.
+El [inventario individual](ASSETS_REGISTRO_SHA256.csv) registra los bytes y la procedencia declarada de cada archivo. No se incorpora una licencia de terceros por recomendación de un sitio ni se infiere una dedicación a dominio público del uso de IA. La [política de recursos](../assets/ASSET_POLICY.md) distingue origen, integridad técnica y derechos.
 
-## Estado de derechos / requisito UADE
+## Responsabilidad sobre el trabajo
 
-La consigna exige **recursos de dominio publico**. El origen original y la ausencia
-de material de terceros reducen problemas de atribucion, pero **no constituyen
-por si solos una comprobacion juridica de dominio publico o CC0** en toda
-jurisdiccion. El equipo debe revisar la titularidad y documentar la licencia
-antes de la entrega. Si son titulares de estos recursos, pueden formalizar una
-renuncia/dedicacion compatible con CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
-El documento `ASSETS_REGISTRO_SHA256.csv` identifica cada archivo y su hash.
-La decision y declaracion final deben ser hechas por el equipo, no se inventa
-firma ni autorizacion de miembros.
-
-## Uso de IA para el informe tecnico
-
-> Se uso ChatGPT (OpenAI) como apoyo en el diseno de la interfaz Swing,
-> generacion programatica de sprites y efectos de sonido originales,
-> documentacion, scripts de instalacion y revision automatizada. El equipo
-> reviso y adapto el resultado, realizo sus propias pruebas y es responsable
-> de comprender y defender cada decision de diseno y linea de codigo utilizada.
-
-El ultimo renglon (revision/pruebas del equipo) debe afirmarse **solo despues** de
-que efectivamente lo realicen. Registrar evidencia en el PR. La consigna exige
-explicitar IA en el informe tecnico.
+El informe explica las colaboraciones implementadas y sus alternativas. La evidencia de pruebas identifica comandos y fechas reales; no se afirma una revisión humana colectiva distinta de la documentada. Cada integrante debe poder explicar las reglas, los patrones y los límites de las funciones que presenta.

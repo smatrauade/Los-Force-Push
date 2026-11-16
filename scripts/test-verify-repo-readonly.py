@@ -3,13 +3,11 @@
 import argparse
 import csv
 import hashlib
-import io
 import os
 from pathlib import Path
 import shutil
 import subprocess
 import tempfile
-import zipfile
 
 
 def main():
@@ -78,8 +76,18 @@ def main():
             with path.open('w', encoding='utf-8', newline='') as stream:
                 stream.write('\n'.join(lines + [lines[1]]) + '\n')
 
+        def corrupt_delivery(directory, name, data):
+            write(directory, 'entregables/r10-20261113/'+name, data)
+            manifest=directory/'entregables/r10-20261113/SHA256SUMS.txt'
+            lines=manifest.read_text(encoding='utf-8').splitlines()
+            digest=hashlib.sha256(data).hexdigest()
+            with manifest.open('w',encoding='utf-8',newline='\n') as stream:
+                stream.write('\n'.join(digest+'  '+name if x.endswith('  '+name) else x for x in lines)+'\n')
+
         cases = [
             ('valid repository', None, None),
+            ('invalid PDF with updated hash', lambda d: corrupt_delivery(d, 'INFORME_TECNICO.pdf', b'not PDF'), 'Invalid delivery PDF:'),
+            ('invalid DOCX with updated hash', lambda d: corrupt_delivery(d, 'INFORME_TECNICO.docx', b'not DOCX'), 'Invalid delivery DOCX:'),
             ('truncated PNG', lambda d: corrupt(d, png, (d / png).read_bytes()[:40]), 'Invalid asset format:'),
             ('PNG CRC corruption', lambda d: corrupt(d, png, (d / png).read_bytes()[:-1] + b'X'), 'Invalid asset format:'),
             ('invalid WAV', lambda d: corrupt(d, wav, b'RIFF\x04\x00\x00\x00WAVE'), 'Invalid asset format:'),
@@ -92,6 +100,17 @@ def main():
             ('invalid UTF-8 text', lambda d: write(d, 'invalid.txt', b'\xff'), 'Non UTF-8/binary:'),
             ('broken relative link', lambda d: write(d, 'broken.md', b'[missing](no-such-document.md)\n'), 'Broken/escaping link:'),
             ('prohibited residue', lambda d: write(d, 'residue.class', b'test fixture'), 'Forbidden/residue path:'),
+            ('oversized file', lambda d: write(d, 'oversized.txt', b'x' * (10*1024*1024+1)), 'Large file:'),
+            ('missing public document', lambda d: (d / 'docs/architecture/ARCHITECTURE.md').unlink(), 'Missing: docs/architecture/ARCHITECTURE.md'),
+            ('broken anchor', lambda d: write(d, 'anchor.md', b'[readme](README.md#does-not-exist)\n'), 'BROKEN_ANCHOR'),
+            ('escaping link', lambda d: write(d, 'escape.md', b'[outside](../outside.md)\n'), 'Broken/escaping link:'),
+            ('copied UML altered', lambda d: write(d, 'entregables/r10-20261113/fuentes_plantuml/00_Arquitectura_MVC.puml', b'altered'), 'Delivery hash mismatch:'),
+            ('pinned UML source altered', lambda d: write(d, 'docs/architecture/uml/pr17-rc-ffa27f9/plantuml/00_Arquitectura_MVC.puml', b'altered'), 'Delivery UML PUML mismatch:'),
+            ('pinned Java altered', lambda d: write(d, 'src/main/java/ar/edu/uade/sokoban/replay/MoveCommand.java', b'altered'), 'BLOCKED_UML_JAVA_BLOB_'),
+            ('delivery PDF altered', lambda d: write(d, 'entregables/r10-20261113/INFORME_TECNICO.pdf', b'altered'), 'Delivery hash mismatch:'),
+            ('video altered', lambda d: write(d, 'entregables/r10-20261113/VIDEO_GAMEPLAY.mp4', b'altered'), 'Video hash mismatch'),
+            ('unlisted delivery binary', lambda d: write(d, 'entregables/r10-20261113/unlisted.pdf', b'%PDF-fixture'), 'Invalid delivery manifest:'),
+            ('academic ZIP rejected', lambda d: write(d, 'entregables/academic.zip', b'fixture'), 'Forbidden/residue path:'),
             ('synthetic secret', lambda d: write(d, 'synthetic.txt', (('gh' + 'p_') + 'A' * 30).encode()), 'Possible secret:'),
         ]
         passed = 0
@@ -114,19 +133,6 @@ def main():
                 mutate(directory)
             check(directory, name, expected)
 
-        # Exercise the immutable bootstrap layout with the current verifier transplanted.
-        bootstrap = parent / 'bootstrap'
-        bootstrap.mkdir()
-        archive = git(root, 'archive', '--format=zip', 'ff6fbf170bd9782fb703e1ab4fa1e811ec0782ed')
-        with zipfile.ZipFile(io.BytesIO(archive)) as bundle:
-            if any(not (bootstrap / name).resolve().is_relative_to(bootstrap.resolve()) for name in bundle.namelist()):
-                raise RuntimeError('Unsafe archive path')
-            bundle.extractall(bootstrap)
-        shutil.copyfile(root / verifier, bootstrap / verifier)
-        initialize(bootstrap, 'docs/bootstrap-sokoban-autocontenido-v1')
-        check(bootstrap, 'historical bootstrap', None, '--bootstrap')
-        write(bootstrap, 'outside-bootstrap.txt', b'untracked fixture\n')
-        check(bootstrap, 'bootstrap scope rejection', 'Outside bootstrap scope:', '--bootstrap')
         print(f'VERIFIER TEST RESULT: {passed} PASS, 0 FAIL')
 
 

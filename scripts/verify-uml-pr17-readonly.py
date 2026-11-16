@@ -39,9 +39,8 @@ def main():
             if not file.is_file() or file.is_symlink():stop('JAVA_SOURCE_'+p)
             actual=run(['git','hash-object','--',p],root)
             if actual!=blob:stop('JAVA_BLOB_'+p)
-    print('RESULT=PASS_PLANTUML_RC_READONLY')
+    print('RESULT=PASS_PLANTUML_READONLY')
     print('PNG=9; PUML=9; JAVA_PINNED='+('50/50' if args.verify_java else 'NOT_CHECKED'))
-    print('STARUML_FORMAT_REQUIREMENT=OPEN; TEAM_APPROVAL=NOT_RECORDED')
 if __name__=='__main__':
     try:main()
     except (KeyError,ValueError,OSError,subprocess.TimeoutExpired) as e:stop(type(e).__name__)
