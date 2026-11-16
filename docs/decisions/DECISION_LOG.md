@@ -1,215 +1,33 @@
-# Registro vivo de decisiones
+# Decisiones del diseño implementado
 
-`LAST_REVIEWED = 2026-10-29` (corrección de procedencia E04 y decisión delegada TXT). La autoridad se separa del estado. [Ratificación por mayoría — 2026-10-23](#ratificación-por-mayoría--2026-10-23) es el registro canónico de E01–E11; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) mantiene los pendientes. `ACCEPTED_SCOPE` significa `TEAM_MAJORITY_ACCEPTED_SCOPE` sólo en la dimensión votada. La [decisión del responsable TXT](#d-020--decisión-del-responsable-txt--29102026) tiene autoridad `MODULE_OWNER_DECISION`, sin voto TEAM nuevo. Los patrones PREFERRED conservan el estado indicado en cada registro. La revisión del código y los merges tienen un alcance diferente del de las decisiones y conversaciones del equipo; las pruebas y merges no ratifican decisiones adicionales.
+Este documento explica las decisiones de la versión entregada a partir de sus clases y contratos. Las justificaciones describen el diseño existente; no registran nuevas votaciones ni alteran las reglas del programa.
 
-| ID | Problema / opción | Alternativa y estado | Justificación y consecuencias |
+| Problema | Elección | Alternativa y motivo | Consecuencia verificable |
 |---|---|---|---|
-| D-001 | Stack 2D | Java/Swing `OFFICIAL`; versiones/build OQ-11 `OPEN` | Permite GUI exigida; no elegir versión por spikes Java 21 |
-| D-002 | Core testeable y MVC | Independencia de Swing `PREFERRED`; lógica UI descartada | Reglas en Model, pruebas sin GUI; exige frontera de presentación |
-| D-003 | Interacción discreta | Eventos `PREFERRED`, guiado por relato docente; loop continuo no justificado | Evita actualización permanente sin necesidad; reconsiderar sólo ante requisito real |
-| D-004 | Estado de celda | Terrain + Occupant `PREFERRED`; clases combinatorias descartadas | Evita BoxOnGoal/PlayerOnIce; separa espacio y ocupación |
-| D-005 | Variaciones de caja | Polimorfismo `PREFERRED`; checks distribuidos por tipo descartados | LSP y variación real sin ratificación nueva; reglas en [E02](#e02), [E03](#e03) y [E04](#e04); E04 decidida, implementación pendiente en Model/Movement |
-| D-006 | Implementar variantes | Herencia frente a composición `OPEN` | UML usa jerarquía ilustrativa; comparar claridad y extensibilidad real |
-| D-007 | Revertir estado complejo | Memento `PREFERRED`; operaciones inversas como alternativa | Diseño de snapshots sin ratificar; [E07](#e07) acepta sólo el umbral de disponibilidad Undo, no Memento |
-| D-008 | No borrar coste de Undo | Comportamiento de métricas [E09](#e09) `ACCEPTED_SCOPE`; métricas de Undo fuera del snapshot como definición de sesión | E09 establece que Undo restaura movimientos/empujes y acumula sus usos dentro del intento. [E08](#e08) establece que sólo Restart/cambio de nivel reinician el límite de tres usos. La ratificación complementaria del 01/11 define que Restart inicia un intento nuevo y reinicia las cuatro métricas. Ver [ratificación complementaria](#ratificación-complementaria--undo-restart-y-score--2026-11-01) y [OQ-04/OQ-09](../requirements/OPEN_QUESTIONS.md). |
-| D-009 | Puntaje | `ScoreStrategy` `PREFERRED`; fórmula y métricas penalizadas ratificadas por TEAM el 01/11/2026 | El score penaliza movimientos, empujes y usos de Undo. Fórmula: `max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`. Base 1000; −1 por movimiento, −2 adicionales por empuje y −10 por Undo. Mínimo cero. Restart no tiene penalización adicional. El score corresponde al intento actual. Ver [ratificación complementaria](#ratificación-complementaria--undo-restart-y-score--2026-11-01) y [OQ-09](../requirements/OPEN_QUESTIONS.md). |
-| D-010 | Lock notifica muros | Observer `PREFERRED`, con indicación oral de incorporación según ASR del 21/10; conducta de cierre [E06](#e06) `ACCEPTED_SCOPE` | IDs, cardinalidad, ocupación al cerrar y restauración siguen pendientes en [OQ-07](../requirements/OPEN_QUESTIONS.md); no ratifica Observer |
-| D-011 | Armar nivel de TXT | Builder `PREFERRED`, construcción directa alternativa pendiente | Sugerido como válido por profesor; separar sintaxis/ensamblado sólo si spike aporta claridad |
-| D-012 | Coordinar construcción | Parser como Director opcional `PREFERRED` | Puede dirigir pasos sin clase extra; operaciones dependen de TXT ratificado |
-| D-013 | Loader con clones | Prototype `REJECTED-FOR-NOW` | No hay creación costosa/clonación demostrada; reconsiderar si cambia el problema |
-| D-014 | Loader con fábrica GoF | Factory Method `REJECTED-FOR-NOW` como mecanismo principal | No surge jerarquía Creator; helper con new no es Factory Method |
-| D-015 | Familias de productos | Abstract Factory `REJECTED-FOR-NOW` para loader | No hay familias coherentes intercambiables; no inventarlas |
-| D-016 | Sonido global | Singleton `OPEN`, propuesto; AudioService frontera `PREFERRED` | Ejemplo didáctico no obligación; dependencia explícita facilita test y evita global en dominio |
-| D-017 | Interfaz incompatible | Adapter `REJECTED-FOR-NOW` en baseline | No hay interfaz externa/legada incompatible identificada |
-| D-018 | Combinación de extras | Decorator `OPEN` como candidato futuro | Sin funcionalidad seleccionada no hay justificación; no forzar en cajas base |
-| D-019 | Progreso de niveles | LevelCatalog `PREFERRED`; simplificar interfaz como alternativa | El aspecto de victoria [E05](#e05) es `ACCEPTED_SCOPE`; validación de puzzle y combinación con E06 pendientes en [OQ-01](../requirements/OPEN_QUESTIONS.md) |
-| D-020 | Contrato TXT externo | Carga externa `TEACHER-EXPLICIT`; [E01](#e01)/[E02](#e02) `TEAM_DECIDED`; subconjunto soportado `MODULE_OWNER_DECIDED` | [Decisión del 29/10](#d-020--decisión-del-responsable-txt--29102026): OQ-06 resuelta en TXT, OQ-08 parcialmente resuelta; extensiones abiertas; D-011/D-012 siguen PREFERRED |
-| D-021 | Licencias | Dominio público `OFFICIAL`; Kenney/Pixabay fuentes sugeridas | Verificar recurso individual; recomendación del sitio no prueba licencia |
-| D-022 | Adicionales | Dos exigidas `OFFICIAL`; preferencia histórica [E11](#e11) `ACCEPTED_SCOPE`; elegibilidad cuestionada, ver [nota de compatibilidad](#compatibilidad-académica-de-e11--complemento-29102026); cómputo final `OPEN` | Pistas 2/5 `NOT_APPROVED`; patrón y criterios de persistencia pendientes en [OQ-10](../requirements/OPEN_QUESTIONS.md); guardar/recuperar es una sola propuesta; no acredita cómputo RF-12 |
-| D-023 | Diseño antes de código | Revisión UML/responsabilidades `PREFERRED`, criterio docente | Evita primer output IA sin revisión; UML candidato no basta como evidencia de ejecución |
-| D-024 | Abstracciones y datos | Fuente única de estado y variación real `PREFERRED`, criterio COURSE | Evitar interfaces ceremoniales, redundancia, Controller monolítico y violaciones LSP |
-| D-025 | Historial documental | Archivos vivos + cápsulas inmutables | Contrato de bootstrap; esta integración corrige vivos y conserva bytes históricos |
+| Probar reglas sin abrir Swing | Modelo separado y frontera `GameView` | Poner movimiento en listeners acoplaría reglas a ventanas | Tests core sin `java.desktop`; sondas de controlador sin JFrame |
+| Mantener una sola verdad espacial | `RuntimeState` inmutable y `Board` como proyección | Dos grillas mutables exigirían sincronización | Motor y sesión son autoridad; vista/animación solo proyectan |
+| Publicar niveles completos | Lectura acotada, parsers estrictos y `LevelBuilder` concreto | Construcción directa sería válida, pero dispersaría acumulación/validación | Entrada inválida no reemplaza sesión; sin Director ni fábrica abstracta para el loader |
+| Preservar atributos de cajas | Identidad y resistencia por ID en la definición Fragile | Posición como identidad cambiaría al mover; un valor global perdería individualidad | `fromExperimentalFragile` consume plantilla y metadatos |
+| Deshacer transiciones complejas | Snapshots acotados en `GameSession` | Invertir un movimiento no reconstruye fácilmente fragilidad, hielo y cerrojos | Undo restaura mundo y métricas reversibles; usos permanecen acumulados |
+| Cambiar todo el aspecto | Abstract Factory para paleta y sprites | Condiciones por tema en cada widget dispersarían reglas visuales | Tres familias; vuelta al original y alfa cubiertos por `VisualThemeTest` |
+| Repetir una partida sin cambiarla | Command y estado propio de Replay | Reutilizar sesión alteraría historial/score; snapshots duplicarían almacenamiento | Comandos se verifican y ejecutan en otro mundo; límite de 10.000 |
+| Avisar cambios de cerrojos | Observer de hechos confirmados | Acoplar el motor a avisos/sonido impediría pruebas independientes | Suscriptores aislados; muros siguen derivados en el modelo |
+| Puntuar con una sola fórmula | `ScoreCalculator` puro | Strategy no aporta variación mientras existe una política única | Saturación en cero y métricas de Undo explícitas |
+| Gestionar audio | `SoundManager` por ventana | Singleton introduciría estado global y dificultaría aislamiento | Clips se cierran con la ventana; ausencia de dispositivo no bloquea reglas |
+| Mostrar deslizamientos | Trayectoria emitida por el motor | Recalcular física en el panel duplicaría reglas | Animación cancelable y victoria después del recorrido visual |
 
-## Evolución y ratificación
+## Reglas y límites de las elecciones
 
-El relato histórico pasó de fábrica probable a Builder preferido tras Clase 9; Prototype dejó de ser sólo pendiente para ser descartado provisionalmente. La idea de métricas Undo dentro del snapshot fue desplazada **como propuesta** por separación de SessionMetrics. El comportamiento de métricas se ratifica ahora sólo en el alcance de E09; la elección de SessionMetrics y el resto de la arquitectura siguen sin ratificación.
+El formato usa una grilla de tokens combinados, con atributos por ID para cajas frágiles y asociaciones de muros. La sintaxis soportada se documenta en [TXT](../requirements/TXT_FORMAT.md); una entrada válida no garantiza que cualquier puzzle tenga solución. Los cinco niveles distribuidos tienen recorridos de solución cubiertos por pruebas.
 
-Los IDs D-* de la cápsula anterior tienen otra asignación: mapear por tema, no inferir identidad sólo por número. La evidencia `E3` de allí se reexpresa como `HISTORICAL_EXTERNAL_EVIDENCE` en documentos vivos.
+En hielo, el motor completa el desplazamiento posible y después resuelve la rotura de Fragile si agotó su resistencia. Una caja llave sobre Lock abre muros pero no completa un Goal; retirar la llave puede cerrar el muro, y se rechaza atómicamente el cierre sobre una celda ocupada. Con múltiples cerrojos asociados, basta uno activo para abrir.
 
-Para cada nueva decisión registrar problema, opciones, estado, autoridad/fuente, fecha, participantes que ratifican, justificación, consecuencias, pruebas y documentos afectados. Una supersesión referencia la decisión anterior; no borra historia ni reescribe cápsulas.
+Undo requiere cinco movimientos exitosos y no recupera usos al mover de nuevo. Restart y cambio de nivel inician otro intento; los resultados ya terminados permanecen en la progresión. La fórmula resta movimientos, empujes y total de Undo, sin penalización extra por Restart. Son los comportamientos concretos de sesión/motor, no una atribución de aprobación docente particular.
 
-Los apartados experimentales siguientes conservan el estado y la evidencia de sus fechas; la ratificación del 23/10 está en la sección posterior. No leer sus antiguas OQ OPEN como negación de acuerdos posteriores.
+## Costes asumidos
 
-## Seguimiento experimental R1 — 2026-10-14
+La inmutabilidad copia datos del mundo; Replay usa memoria y validación lineales sobre la secuencia. La lectura local se ejecuta en EDT y puede demorar en filesystems lentos. Hay un solo comando reproducible y una sola política de score, por lo que no se agregan interfaces o patrones para variaciones inexistentes.
 
-D-011/D-012 permanecen PREFERRED: [comparación Builder/directa](../experiments/LEVEL_LOADING_R1.md) sobre el mismo contrato e invariantes. Se ensaya un Builder concreto interno por carga, sin interfaz/Director adicional; encapsula acumulación y publicación a coste de una clase. La alternativa directa puede satisfacer las mismas garantías. 30 casos PASS no equivalen a ratificación del equipo.
+Undo usa snapshots internos, pero no se presenta como un Memento GoF completo. Command corresponde a Replay. Observer desacopla avisos y audio, sin decidir muros. No se atribuyen Strategy, Singleton, Factory Method o Facade por analogía de nombres.
 
-El formato referido por D-020 y OQ-08 sigue OPEN: una capa provisional limitada a siete símbolos, sin resolver resistencia, IDs ni entidades fuera del alcance. Java target/build (OQ-11, dentro de D-001) siguen OPEN; Java/Swing permanece OFFICIAL: release 17 con compilador/runtime 26.0.2 es un entorno experimental, no target/build aceptado. Autoridad de esta ejecución: solicitud del usuario del 2026-10-14; hipótesis y análisis propios, sin nuevas aclaraciones docentes ni decisiones grupales. No se cierran otras preguntas ni se adoptan jerarquías de cajas a partir de enums temporales.
-
-## Seguimiento de validación R3 — 2026-10-14
-
-Correcciones del diagnóstico de tamaño y validación temprana, 38 casos PASS con compilación/ejecución real en JDK 17 y JDK 26, contrafactual detectado y UML experimental compilado/renderizado. Son controles del incremento, no decisiones del equipo: D-011/D-012 continúan PREFERRED, OQ-08/OQ-11 OPEN. [Detalle reproducible](../experiments/LEVEL_LOADING_R1.md).
-
-## Hipótesis experimental de movimiento R1 — 2026-10-14
-
-Por solicitud del usuario se ensaya transición funcional `Board + Direction → MoveResult + Board`, frente a agregado runtime encapsulado. Se reutiliza Board inmutable de Level Loading sin modificarlo ni duplicar posiciones. El coste de copia/validación y la alternativa futura quedan en [MOVEMENT_R1](../experiments/MOVEMENT_R1.md). Alcance: piso/destino/pared/borde/jugador/caja normal; no Memento ni otras mecánicas. Estado EXPERIMENTAL, sin ratificación del equipo ni nueva autoridad docente. D-001/002/003/004/005/006/007/011/012 y OQ-01…OQ-11 mantienen sus estados anteriores; los PASS sólo validan este subconjunto.
-
-## Ensayo Swing autorizado — 2026-10-15
-
-Procedencia: solicitud directa del usuario para SOKOBAN_SWING_UI_INTEGRATION; implementación EXPERIMENTAL, sin ratificación TEAM. Se ensayan D-002/D-003 con eventos discretos y separación MVC. GameView permite pruebas sin pantalla frente a acoplar el controlador a JFrame. GamePresentation comparte el Board inmutable; copiar una grilla mutable introduciría otra autoridad espacial sin necesidad. En el baseline del 15/10, las fuentes desktop separadas mantenían el límite java.base del core frente a runners que recorrían raíces completas. El PR #4 posteriormente restringió core a los paquetes level/movement. La recuperación del 21/10 conserva ambos mecanismos, sin cambiar el estado de estas decisiones.
-
-[Implementación, consecuencias, pruebas y límites](../experiments/SWING_VERTICAL_SLICE_V1.md). Contadores sólo demostrativos, sin adoptar semántica Undo/score. La lectura local acotada en EDT evita concurrencia adicional en este spike, con riesgo explícito de demora en filesystems lentos. No se modifican estados de las decisiones, no se cierra OQ-01…OQ-11 y no se agregan patrones para mecánicas pendientes.
-
-## Ratificación por mayoría — 2026-10-23
-
-Autoridad **TEAM**, subordinada al enunciado y aclaraciones documentadas de cátedra. El solicitante confirmó mayoría absoluta de **cinco integrantes**, umbral **3/5** personas por opción. Participación y número de selecciones son magnitudes distintas: el ausente no se cuenta como voto y el denominador sigue siendo cinco. No se repetirán las encuestas para reabrir lo ya mayoritario.
-
-```text
-SOURCE = USER_SUPPLIED_SCREENSHOT_TRANSCRIPTION
-RAW_SCREENSHOTS = EXTERNAL_PRIVATE
-RAW_VERIFICATION = NOT_PERFORMED_BY_THIS_AGENT
-GAME_RULE_DECISIONS = MAJORITY_ACCEPTED_PARTIAL
-TEAM_ACCEPTANCE = NOT_RECORDED
-```
-
-Fuente: transcripción de once capturas del 23/10 aportada y revisada por el solicitante, con método confirmado, no lectura independiente de originales en esta ejecución. La exportación de WhatsApp contiene preguntas/discusiones, **no votos**. Capturas, nombres, teléfonos, fotos e IDs particulares no se publican; no se inventan hashes ni participantes. [Disponibilidad](../continuity/SOURCE_REGISTRY.md#encuestas-del-equipo--2026-10-23). Las encuestas no son una aprobación del profesor, de patrones, UML, implementación o funcionamiento.
-
-### Recuentos y alcance canónico
-
-Los IDs E01–E11 siguientes localizan las decisiones dentro de este registro, no crean otro catálogo D. `ACCEPTED_SCOPE` acepta exactamente la dimensión indicada; `OPEN_DETAILS` conserva las especificaciones no votadas. `CONFLICT_REVIEW_REQUIRED` conserva el resultado mayoritario pero impide afirmar compatibilidad normativa o cerrar toda la OQ.
-
-| Encuesta | Participaron | Alternativa ganadora literal | Votos ganadora | Resto de selecciones | Estado y alcance / trazabilidad |
-|---|---|---|---|---|---|
-| <a name="e01"></a>E01 | 5/5 | Una capa con símbolos combinados | 4/5 | Dos capas: 1; otra: 0 | `TEAM_DECIDED / ACCEPTED_SCOPE`; disposición, sin voto sobre alfabeto/metadata. Detalles soportados adoptados después por MODULE_OWNER; D-020 / OQ-08 |
-| <a name="e02"></a>E02 | 5/5 | Resistencia configurable por cada caja frágil en TXT | 4/5 | Valor fijo: 1; por nivel: 0 | `TEAM_DECIDED / ACCEPTED_SCOPE`; individualidad, sin voto sobre sintaxis/rango/errores. Esos detalles TXT se cierran después por MODULE_OWNER; D-005/D-020 / OQ-06/OQ-08 |
-| <a name="e03"></a>E03 | 4/5 | Hielo contra pared: detenerse en última casilla libre | 4/5 | Cancelar empuje: 0 | `ACCEPTED_SCOPE`; sólo el comportamiento votado. `OPEN_DETAILS` para bordes y otras obstrucciones; D-005 / OQ-02 |
-| <a name="e04"></a>E04 | 5/5 reportado | Fragile que llega a cero al entrar en hielo: terminar deslizamiento y romperse después | 4/5 | Rotura inmediata: 3, corrección directa del usuario 29/10; antecedente transcrito: 2 | `TEAM_DECIDED / TEAM_RULE_DECIDED`; implementación pendiente en otro módulo. Procedencia y supersesión debajo; D-005 / OQ-03 |
-| <a name="e05"></a>E05 | 5/5 | KeyBox en Lock NO cuenta como destino final: también debe llegar a Goal normal | 5/5 | Lock sí cuenta como destino: 1 | `ACCEPTED_SCOPE`; seis selecciones, una persona eligió ambas: no unanimidad exclusiva. `OPEN_DETAILS` de victoria/puzzle; D-019 / OQ-01 |
-| <a name="e06"></a>E06 | 4/5 | Al retirar KeyBox del Lock, los muros vuelven a cerrarse | 3/5 | Permanecen abiertos: 1 | `ACCEPTED_SCOPE`; retorno a cerrado, sin decidir IDs/cardinalidad/ocupación. `OPEN_DETAILS`; D-010 / OQ-07 |
-| <a name="e07"></a>E07 | 4/5 | Undo no procede con menos de cinco movimientos disponibles | 4/5 | Deshacer parcialmente: 0 | `ACCEPTED_SCOPE`; umbral resuelto, no interfaz ni pruebas de borde. `OPEN_DETAILS`; D-007 / OQ-05 |
-| <a name="e08"></a>E08 | 5/5 | Sólo Restart o cambio de nivel reinician el límite de tres Undo | 5/5 | Movimiento válido: 0; cualquier intento: 0 | `TEAM_DECIDED / TEAM_RULE_DECIDED`; movimiento posterior no recupera usos. Implementación y bordes pertenecen a sesión/Undo; D-008 / OQ-04 |
-| <a name="e09"></a>E09 | 4/5 | Undo revierte movimientos/empujes; total de usos de Undo se acumula | 3/5 | Todas las métricas acumuladas: 1 | `ACCEPTED_SCOPE`; contadores restaurables frente a total acumulado, no efectos de Restart. `OPEN_DETAILS`; D-008/D-009 / OQ-09 |
-| <a name="e10"></a>E10 | 5/5 | Score penaliza movimientos, empujes y Undo | 5/5 | Otras dos opciones: 0 y 0 (textos no aportados) | `ACCEPTED_SCOPE`; variables, no fórmula, base, coeficientes ni normalización. `OPEN_DETAILS`; D-009 / OQ-09 |
-| <a name="e11"></a>E11 (múltiple) | 5/5 | Guardar y recuperar partidas | 4/5 | Pistas: 2; otra propuesta: 1; resto: 0 | `ACCEPTED_SCOPE` como primera adicional. Pistas 2/5 y propuesta sin descripción aprobada 1/5: `NOT_APPROVED`; segunda, contratos y GoF `OPEN_DETAILS`; D-022 / OQ-10 |
-
-E01–E10 alcanzan el umbral de al menos 3/5 en la alternativa mayoritaria. En E03/E06/E07/E09 participaron cuatro personas; no representan «4/4 del equipo». No sumar selecciones como personas, ni llamar a E05 unanimidad exclusiva. No se deduce identidad de votantes ni se completa el voto ausente.
-
-**Corrección E04 — 29/10/2026:** `USER_DIRECT_CORRECTION_2026-10-29 / ORIGINAL_SCREENSHOTS_NOT_REVERIFIED`. El informante corrige 4/2 a **4/3**; el ganador de cuatro votos no cambia. El registro introducido en `e9b2b2a` transcribía 4/2 y afirmaba «seis selecciones: una persona eligió ambas». Se conserva ese antecedente como **HISTORICAL / SUPERSEDED**, sin mantener su deducción como dato actual. No se infiere cuántas personas marcaron ambas opciones ni sus identidades. No hubo nueva inspección de capturas; la exportación de chat no aporta votos. [Fuente y disponibilidad](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-corrección-e04--29102026).
-
-### Compatibilidad y especificación pendiente
-
-1. **E01/E02 — TXT:** una sola grilla con tokens combinados y atributos individuales. El subconjunto implementado queda adoptado por el responsable TXT en D-020, sin segunda capa ni nueva votación. Extensiones todavía no soportadas permanecen abiertas.
-2. **E04 — Fragile/hielo:** la consigna normalizada conserva «se rompe al llegar a cero»; la decisión operativa TEAM particular es **completar el deslizamiento del empuje y después retirar la caja**. No se atribuye al profesor aprobación de esa secuenciación ni se cambia el requisito oficial. La anterior etiqueta de conflicto no acreditaba una prohibición docente específica de ese orden y queda supersedida como bloqueo de la elección. Regla decidida; implementación y casos límite son de Model/Movement. Una contradicción superior concreta posterior se registrará con fuente y texto, sin reabrir por inferencia el ganador.
-3. **E05/E06 — victoria y cierre:** no asumir resolubilidad de niveles ni que sea válido cerrar un muro sobre jugador/caja. Ocupación, múltiples cerrojos, IDs, Undo y validación de puzzle son pendientes; no inventar una solución al cierre.
-4. **E07/E08/E09 — Undo:** el umbral aprobado no redefine historial 15 ni retroceso exacto 5. E08 decide que sólo Restart/cambio de nivel reinician el límite; no reinterpretar un movimiento nuevo como reinicio. Se conserva «consecutivos» en RF-07 con su procedencia oficial, sin presentar la alternativa TEAM como sin elegir. OQ-04 conserva bordes operativos de sesión, no una encuesta pendiente. E09 no fija qué ocurre con cada métrica en Restart/cambio de nivel. Este cierre no especifica ni modifica Undo.
-5. **E10 — score:** no elegir base, pesos, límites, signo final o normalización por inferencia. D-009 conserva la fórmula abierta y ScoreStrategy PREFERRED.
-6. **E11 — persistencia:** guardar/recuperar es una sola funcionalidad, no dos. Formato, validación/seguridad, estado de Undo, compatibilidad y patrón GoF real siguen pendientes. Pistas no está aprobada; otra confirmación de al menos 3/5 o una alternativa con mayoría es necesaria para la segunda, sin repetir la elección de la primera.
-
-### Límites de la ratificación
-
-Sin encuesta: OQ-11 Java/build permanece OPEN; `--release 17` y los comandos actuales son experimentales. D-011/D-012, D-016 y demás patrones, herencia/composición, UML y código mantienen sus estados técnicos. No hay nueva prueba ejecutada ni aceptación académica global. [REQUIREMENTS](../requirements/REQUIREMENTS.md) conserva el texto normativo normalizado y separa los refinamientos TEAM; [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md) es el único inventario canónico de deuda.
-
-Siguiente gate: revisión del incremento funcional y contrato real del consumidor Model/Movement; las extensiones especiales requieren alcance propio. No otra ronda general para volver a votar aspectos ya mayoritarios; sin permiso de merge ni implementación por este registro.
-
-## D-020 — decisión del responsable TXT — 29/10/2026
-
-**Autoridad:** `MODULE_OWNER_DECISION`; responsable por rol: propietario TXT/niveles, solicitante que delega expresamente esta adopción. **Estado:** `MODULE_OWNER_DECIDED`, no TEAM_MAJORITY ni aprobación docente del formato. Fuente directa normalizada en [SOURCE_REGISTRY](../continuity/SOURCE_REGISTRY.md#cierre-semántico-txt-y-corrección-e04--29102026). Consigna y aclaraciones docentes prevalecen; E01/E02 se preservan. No hay aceptación del código por esta decisión.
-
-**Elección:** consolidar como contrato soportado el comportamiento ya implementado y probado. OQ-06 = `RESOLVED_TXT_SCHEMA_BY_MODULE_OWNER`; OQ-08 = `PARTIAL_RESOLVED_TXT_SUPPORTED_SUBSET / FUTURE_ENTITIES_OPEN`. La gramática, límites, errores, APIs y ejemplos se mantienen en una única [especificación de contrato](../requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md#2-contrato-experimental-existente-comportamiento-implementado); el nombre histórico del archivo no implica que todo su contenido siga propuesto.
-
-- Envoltura C2 exacta y una grilla; siete estados ordinarios, más Fragile en piso/Goal por referencia a ID ASCII `[a-z][a-z0-9_]{0,31}` único por definición. Una declaración obligatoria por ID, sin defaults ni sobrescritura y orden de atributos irrelevante.
-- Resistencia inicial decimal canónica `[1-9][0-9]*`, representable en `int`: **1..2147483647**. Es dominio de representación/validación TXT; no garantiza tantos empujes, resolubilidad ni máximo de diseño. Resistencia remanente y rotura son del motor.
-- Rechazo estricto de formato, referencias incoherentes y atributos desconocidos; publicación sólo tras validar. Ambas entradas de archivo: UTF-8 estricto y 65.536 bytes; parser Fragile String: 65.536 caracteres Java. Categorías actuales de excepción, sin prometer códigos o textos estables nuevos.
-
-**Alternativas descartadas:** coordenadas como identidad (acoplarían atributo y posición); ID Unicode (sin necesidad de consumidor demostrada); valor fijo/default o máximo 3 (no respeta E02 o carece de fundamento); máximo mecánico inventado o tipo numérico nuevo (reglas ajenas y coste sin problema demostrado); modificar `load` para devolver especiales (perdería metadatos en el modelo actual); gramática completa especulativa (no hay contrato consumidor). Se adopta el subconjunto probado: coste de documentación, compatibilidad legacy/C2 intacta y ninguna clase/parser duplicados. SRP/GRASP: lector valida definición; Model administra estado; Swing representa. D-011/D-012 y patrones no cambian.
-
-**Casos verificables existentes:** F01–F14 del contrato; Fragile 1–3/11/15/17/23–31 para identidad/rango/invariantes y 32–41 para filesystem, edición externa, UTF-8/bytes y atomicidad; C2 1–32 y Loading 1–40 para compatibilidad. Fixture automático de dos cajas 3/12 con Goal, separado de la demo. [QA por contenido/SHA y reproducción](../testing/TEST_STRATEGY.md#cierre-semántico-documental--29102026). No hay Java nuevo ejecutado en esta adopción.
-
-**Consecuencias y límites:** contrato inicial estable del subconjunto; la salida sigue siendo una definición especial **no jugable**. Extender la misma grilla de tokens combinados versionados y conservar atributos para relaciones es `TEAM-PROPOSAL` futura, sin sintaxis nueva adoptada. Hielo, combinaciones con Goal, KeyBox/Lock/muros, catálogo y asociaciones dependen del consumidor real (OQ-07/OQ-08). OQ-11 sigue abierta globalmente; Java 17 es baseline local de QA TXT. Cualquier extensión requiere contrato/casos/regresión propios; no reabre OQ-06 del lector actual ni impone una interfaz runtime.
-
-## Evidencia docente adicional — 29/10/2026
-
-Checkpoint de reconciliación `2dad014`, anterior a la corrección E04 y a la decisión delegada D-020 registradas arriba; conserva el alcance de aquella revisión.
-
-[Procedencia y timestamps](../continuity/SOURCE_REGISTRY.md#fuentes-académicas-aportadas--29102026): USER_SUPPLIED_TRANSCRIPT_SUMMARY / AUDIO_NOT_VERIFIED. Esta revisión agrega evidencia; conserva íntegros los recuentos E01–E11 y sus estados. TEAM_ACCEPTANCE = NOT_RECORDED.
-
-- D-010: según ASR del 21/10, Observer debe incorporarse en alguna parte del TPO. Lock→Walls es el ejemplo docente concreto, pendiente de OQ-07 e implementación. Es una indicación docente más fuerte que la sugerencia registrada antes; no es ratificación TEAM del diseño ni código existente.
-- D-011/D-012: Builder es opcional con alternativa justificada; el LevelBuilder concreto ensaya ensamblado incremental. Defender intención, alternativa y consecuencias antes de atribuir Builder GoF completo. Considerar creación/factorías no impone Factory Method ni Abstract Factory; D-014/D-015 no cambian.
-- D-007: comparar Command (acciones) y Memento (estados) para Undo; no exigir ambos ni presentar Board inmutable como Memento implementado.
-- D-009: Strategy es candidato para score; E10 no fija fórmula. D-018: Decorator/power-up sigue ejemplo posible, sin aprobar segunda adicional.
-- D-013/D-016: no hay justificación actual de Prototype; audio no obliga Singleton. MVC se defiende por reglas del Model, coordinación del Controller y presentación Swing, según el código; no se reconstruyen frases docentes ausentes.
-
-## Compatibilidad académica de E11 — complemento 29/10/2026
-
-Checkpoint del complemento `0b18866`: la conservación de recuentos mencionada en esta nota refiere a ese hito, anterior a la corrección E04. E11 permanece sin cambios.
-
-La tabla E01–E11, sus recuentos y el estado original de E11 permanecen intactos como registro histórico de la preferencia del equipo. Esta nota califica su elegibilidad académica, sin anular ni repetir la votación.
-
-- **Preferencia TEAM:** E11 escogió guardar/recuperar; el voto no garantiza que pueda computarse para RF-12.
-- **OFFICIAL escrito:** RF-12 exige dos adicionales con patrones; RF-07 exige Undo 15/5/3. El texto normalizado no exige persistencia en disco. Un snapshot Memento para Undo no equivale a guardar y reabrir una partida tras cerrar el juego.
-- **Reporte posterior:** el [mensaje grupal del 28/10](../continuity/SOURCE_REGISTRY.md#contexto-grupal-privado--complemento-29102026) atribuye al docente la exclusión de guardar como adicional y la elegibilidad del selector. TEAM_MESSAGE_REPORTING_TEACHER / SECONDHAND / ORIGINAL_TEACHER_RESPONSE_NOT_VERIFIED; no respuesta docente verificada.
-- **Cómputo pendiente:** no contar automáticamente guardar/recuperar como una de las dos adicionales; confirmar la aclaración y registrar cuáles dos son académicamente válidas. El selector es TEAM_PROPOSAL / TEACHER_REPORTED_ELIGIBILITY / IMPLEMENTATION_NOT_VERIFIED, sin nueva mayoría acreditada ni segunda adicional ratificada.
-- **Diseño pendiente:** Strategy o Abstract Factory son alternativas para el selector sólo si su intención y estructura reales se justifican. Las sugerencias del 29/10 de Factory Method/Abstract Factory para entidades/niveles tampoco ratifican arquitectura ni cambian D-014/D-015.
-
-[OQ-10](../requirements/OPEN_QUESTIONS.md#elegibilidad-de-adicionales--complemento-29102026) mantiene el inventario residual. No se transforma persistencia en obligación académica por inferencia. TEAM_ACCEPTANCE = NOT_RECORDED; la defensa sigue exigiendo explicar patrones efectivamente aplicados.
-
-
-## Ratificación complementaria — Undo, Restart y score — 2026-11-01
-
-**Autoridad:** `TEAM`. **Fecha:** 2026-11-01. **Procedencia:** ratificación del equipo comunicada directamente por la responsable de la tarea. Esta sección complementa E08, E09 y E10, cuyos resultados históricos del 23/10 se conservan sin modificación. No se incorporan recuentos de votos porque no fueron consignados en esta actualización documental.
-
-### 1. Undo y métricas
-
-Se ratifican las siguientes definiciones:
-
-- Undo restaura el tablero, el contador `moves` y el contador `pushes` al estado anterior correspondiente.
-- `undoUsesTotal` acumula los usos válidos de Undo durante el intento actual. No se restaura al ejecutar Undo.
-- `consecutiveUndoUses` cuenta los usos de Undo consumidos desde el último Restart o cambio de nivel.
-- El límite es de tres usos. Un movimiento normal no recupera usos disponibles.
-- Al consumir los tres usos, no se permite otro Undo hasta que ocurra un Restart o cambio de nivel.
-
-### 2. Restart
-
-Restart inicia un intento completamente nuevo del nivel actual.
-
-Al ejecutarlo, se restaura el tablero inicial del nivel y se reinician a cero las cuatro métricas:
-
-- `moves`
-- `pushes`
-- `undoUsesTotal`
-- `consecutiveUndoUses`
-
-También se descarta el historial de Undo del intento anterior.
-
-Restart no agrega una penalización adicional al score. El puntaje se calcula sobre las métricas del intento actual.
-
-### 3. Fórmula de score
-
-Se ratifica la siguiente fórmula:
-
-`Score = max(0, 1000 - moves - 2 * pushes - 10 * undoUsesTotal)`
-
-- Puntaje inicial: 1000.
-- Cada movimiento descuenta 1 punto.
-- Cada empuje descuenta 2 puntos adicionales, además del punto correspondiente al movimiento.
-- Cada uso válido de Undo descuenta 10 puntos.
-- El resultado no puede ser inferior a cero.
-
-Ejemplos:
-
-| Moves | Pushes | Undo | Score |
-|---:|---:|---:|---:|
-| 40 | 10 | 0 | 940 |
-| 60 | 15 | 2 | 890 |
-
-### 4. Alcance y límites
-
-Esta ratificación concreta el comportamiento de Restart y la fórmula del score sin modificar los resultados originales de E08, E09 y E10.
-
-El cambio de nivel reinicia `consecutiveUndoUses`, conforme E08. No se extrapola que reinicie las demás métricas: el tratamiento de `moves`, `pushes` y `undoUsesTotal` al cambiar de nivel debe definirse en el contrato de progresión si resulta necesario para la implementación.
-
-La elección de `ScoreStrategy` continúa siendo `PREFERRED`: la ratificación de la fórmula no obliga a utilizar ese patrón ni ratifica una arquitectura concreta.
-
-**Estado:** reglas funcionales ratificadas por TEAM; `GameSession` implementa Undo y Restart, coordinados por `GameController`, y `ScoreCalculator` implementa el cálculo del score acordado. La implementación contempla la restauración de `moves` y `pushes` al deshacer, la acumulación de usos de Undo, el reinicio de las cuatro métricas con Restart y la fórmula de score ratificada. `TEAM_ACCEPTANCE = NOT_RECORDED` para el código; la ratificación se refiere a las reglas funcionales, no a la aceptación formal del equipo sobre la implementación actual.
-
-**Documentos afectados:** [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md), [REQUIREMENTS](../requirements/REQUIREMENTS.md) y [TRACEABILITY_MATRIX](../traceability/TRACEABILITY_MATRIX.md).
+Véanse [responsabilidades y principios](../architecture/RESPONSIBILITIES.md), [diagramas](../architecture/uml/pr17-rc-ffa27f9/README.md) y [pruebas](../testing/TEST_STRATEGY.md).

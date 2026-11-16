@@ -1,12 +1,8 @@
-# UML de clases AS_IMPLEMENTED — PR #17 (04/11/2026)
+# Diagramas de clases
 
-**Referencia congelada:** `ffa27f9d8c72bd204db76f887b2ca0cd8e6f454c` (no equivale al HEAD futuro).
+Nueve vistas de las colaboraciones implementadas, con fuentes **PlantUML** editables e imágenes PNG generadas con PlantUML 1.2026.9. El índice separa los formatos por su nombre real.
 
-Nueve diagramas editables `.puml` y nueve imágenes PNG auténticas generadas con **PlantUML 1.2026.9**. El registro de hashes, dimensiones, versión y procedencia está en [`RENDER_GATE.json`](RENDER_GATE.json). El inventario de 50 archivos Java y la trazabilidad de tipos están en los TSV/CSV de esta carpeta. `scripts/verify-uml-pr17-readonly.py` comprueba su integridad frente a las fuentes congeladas.
-
-## Vistas
-
-| Vista | Fuente | PNG |
+| Vista | Fuente editable | Imagen |
 |---|---|---|
 | 00 Arquitectura MVC | [PlantUML](plantuml/00_Arquitectura_MVC.puml) | [PNG](png/00_Arquitectura_MVC.png) |
 | 01 Carga TXT | [PlantUML](plantuml/01_Carga_TXT.puml) | [PNG](png/01_Carga_TXT.png) |
@@ -18,12 +14,12 @@ Nueve diagramas editables `.puml` y nueve imágenes PNG auténticas generadas co
 | 07 Observer Cerrojos | [PlantUML](plantuml/07_Observer_Cerrojos.puml) | [PNG](png/07_Observer_Cerrojos.png) |
 | 08 Campana y Flujo | [PlantUML](plantuml/08_Campana_y_Flujo.puml) | [PNG](png/08_Campana_y_Flujo.png) |
 
-Estos diagramas representan **colaboraciones seleccionadas**, no todas las firmas o dependencias existentes; los miembros visibles de los patrones son una selección contrastada con el código. La vista MVC se ha simplificado para no replicar todas las relaciones especializadas.
+Las vistas seleccionan clases, miembros y relaciones para explicar arquitectura, carga, motor, sesión, Swing, temas, Replay, Observer y campaña; no enumeran cada firma del programa. La [arquitectura](../../ARCHITECTURE.md) y las [responsabilidades](../../RESPONSIBILITIES.md) amplían la explicación.
 
-## Reproducción y alcance
+## Integridad y reproducción
 
-Se generaron localmente con Java y el JAR `plantuml-1.2026.9.jar` verificado SHA-256 `aa4a1d06f8911c4b842beff4828dd955be431692b631a312d04c0e9fab9581de`. Archivos de origen: los `.puml` versionados. Para re-renderizar, usar PlantUML 1.2026.9 sobre un **directorio de salida distinto** y comparar los PNG resultantes con `RENDER_GATE.json`. No se incorporan previsualizaciones Graphviz ni marcas de agua de StarUML Trial.
+[`RENDER_GATE.json`](RENDER_GATE.json) conserva hashes, dimensiones y versión del generador. [`SOURCE_INVENTORY_PINNED.tsv`](SOURCE_INVENTORY_PINNED.tsv) fija 50 fuentes Java y [`JAVA_TO_UML_TRACEABILITY.csv`](JAVA_TO_UML_TRACEABILITY.csv) relaciona sus tipos con las vistas. Se mantiene el nombre histórico de la carpeta para preservar rutas y referencias de integridad.
 
-La consigna del docente solicita literalmente un diagrama de clases **en StarUML**. Esta versión PlantUML + PNG **no acredita por sí sola** esa exigencia formal. Existe un `.mdj` de QA por separado que se preserva como respaldo, pero no se promueve ni se declara aceptado aquí. Elegibilidad RF-12/OQ-10, licencias RF-11 y aceptación TEAM siguen abiertas.
+`python -B scripts/verify-uml-pr17-readonly.py --root . --verify-java`, desde la raíz del repositorio, comprueba las nueve fuentes, los nueve PNG y los 50 blobs Java. El identificador de código de los registros es procedencia de estos archivos, no un HEAD permanente. Para volver a renderizar, usar la versión indicada en un directorio de salida separado y comparar contra el registro; no sobrescribir las fuentes o imágenes al verificar.
 
-Procedencia: el código funcional es integración del PR #17. `impaciencia` fue una implementación **individual** distinta y no debe confundirse con las ramas de compañeros. Esta publicación UML no toca Java, `main` ni las decisiones TEAM.
+La [carpeta de entrega](../../../../entregables/r10-20261113/README.md) incluye copias idénticas de los nueve pares.

@@ -1,125 +1,119 @@
 # Los Force Push — Sokoban
 
-Los Force Push es un Sokoban 2D en **Java/Swing** para el TPO de Procesos de Desarrollo de Software (UADE). La versión integrada en `main` reúne aportes del equipo sobre niveles, mecánicas, sesión y presentación; las reglas y decisiones están en el [registro del proyecto](docs/decisions/DECISION_LOG.md). La [guía para el equipo](docs/integration/PR17_TEAM_HANDOFF.md) facilita recorrer la versión común y preparar la puesta en común y la defensa.
+Trabajo Integrador de **Procesos de Desarrollo de Software**, Ingeniería en Informática, UADE. Docente: **Jonathan Leonel Pepe**.
 
-El juego incluye TXT externos, cinco niveles, movimiento cardinal, cajas normales/Fragile/KeyBox, ICE, Lock/muros dinámicos, Undo 15/5/3, Restart, victoria/progresión, HUD y score, tres temas visuales, animaciones ICE/Fragile y Replay independiente. [Auditoría técnica y pendientes](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+Sokoban 2D desarrollado en Java y Swing. Incluye cinco niveles TXT, cajas normales, frágiles y llave, hielo, cerrojos, muros dinámicos, Undo, Restart, victoria y puntuación. Las dos funcionalidades adicionales son el selector de temas visuales y la reproducción de partidas mediante Replay.
 
-La arquitectura cuenta con [nueve fuentes PlantUML editables y nueve imágenes PNG derivadas](docs/architecture/uml/pr17-rc-ffa27f9/README.md), generadas con PlantUML 1.2026.9. El formato StarUML solicitado por la consigna requiere una validación separada.
+| Integrante | Legajo |
+|---|---|
+| Juan Ignacio Antonini | 1155532 |
+| Lucas Capatti | 1109648 |
+| Santino Matra | 1190926 |
+| Martina García Rios | 1128267 |
+| Giuliano Calicchia | 1187567 |
 
-## Entregables académicos
+## Requisitos
 
-La [carpeta R10](entregables/r10-20261113/README.md) contiene portada e informe PDF/Word revisados el 15/11/2026, video auténtico de cinco niveles, nueve PNG/PlantUML, guion, borrador de correo y hashes actualizados. Código ejecutado: `ee2681148f8dde7425968b61b19b631e5532bb04` de `main`; la revisión documental no cambia el juego. [Validación Windows y límites](entregables/r10-20261113/VALIDACION_WINDOWS.md). La nómina está incorporada; faltan los CC y el envío. El ZIP anterior fue retirado y no se publica uno nuevo. StarUML queda pendiente de recepción y validación del `.mdj`; los PNG existentes provienen de PlantUML. Los derechos de assets conservan su estado documentado.
+- Un **JDK completo 17 o posterior**, con `java` y `javac` de la misma instalación. Un JRE solo no alcanza para compilar.
+- Windows con PowerShell 5.1 o 7, o Linux con Bash, `find`, `sort` y `mktemp`; escritorio gráfico para abrir la ventana.
+- Git para descargar por clonación. Swing está incluido en el JDK. No se necesitan Maven, Gradle ni bibliotecas externas; niveles, sprites y sonidos están incluidos.
 
-## Inicio rápido
+## Descarga y ejecución
 
-Se necesita un **JDK completo 17 o superior** con `java` y `javac` compatibles y un escritorio gráfico. Los scripts compilan con `--release 17`, UTF-8, `-Xlint:all -Werror`. La selección definitiva de toolchain sigue [OQ-11](docs/requirements/OPEN_QUESTIONS.md). No se necesitan Maven, Gradle ni bibliotecas externas; imágenes, WAV y niveles están en el clon. El audio depende del dispositivo disponible. Observer publica cambios Lock confirmados para avisos y SFX; los muros siguen derivados por el modelo.
-
-Para usar la versión integrada, clonar la rama predeterminada:
-
-```bash
+```text
 git clone https://github.com/smatrauade/Los-Force-Push.git
 cd Los-Force-Push
 java -version
 javac -version
 ```
 
-Windows (PowerShell 5.1 o 7):
+Desde la raíz del clon, en Windows:
 
 ```powershell
-powershell -NoProfile -File ./scripts/run-swing.ps1
-# Alternativa PowerShell 7:
-pwsh -NoProfile -File ./scripts/run-swing.ps1
+powershell -NoProfile -File .\scripts\run-swing.ps1
 ```
 
-El runner Windows selecciona `SPIKE_JDK_HOME`, luego `JAVA_HOME` y finalmente PATH. Para seleccionar un JDK en la sesión:
+Con PowerShell 7 también se puede usar `pwsh -NoProfile -File .\scripts\run-swing.ps1`.
+
+Si falta `javac`, aparece una versión anterior a 17 o `JAVA_HOME` apunta a un JRE, seleccioná un JDK completo ya instalado para esta sesión. Reemplazá la ruta del ejemplo por la de tu JDK:
 
 ```powershell
-$env:SPIKE_JDK_HOME = 'C:/ruta/al/JDK'
-powershell -NoProfile -File ./scripts/run-swing.ps1
+$env:SPIKE_JDK_HOME = 'C:\ruta\a\tu-jdk'
+& "$env:SPIKE_JDK_HOME\bin\java.exe" -version
+& "$env:SPIKE_JDK_HOME\bin\javac.exe" -version
+powershell -NoProfile -File .\scripts\run-swing.ps1
 ```
 
-Linux/macOS (Bash):
+El runner busca primero `SPIKE_JDK_HOME`, luego `JAVA_HOME` y por último PATH. No instala herramientas ni modifica la configuración global. Compila en una carpeta temporal y la elimina al cerrar el juego.
+
+En Linux, usá una ruta de clon **sin espacios** y colocá el JDK 17+ en PATH:
 
 ```bash
 bash scripts/run-swing.sh
 ```
 
-El runner Bash usa PATH. Seleccionar allí la pareja `java`/`javac` del JDK. Requiere `find`, `sort` y `mktemp`; compila en un temporal externo con recursos en classpath. Usar un checkout sin espacios: el argfile Bash actual no entrecomilla las rutas fuente. Los comandos Windows/macOS son instrucciones de ejecución; no implican QA nativa actual en esas plataformas.
+El runner Bash utiliza un archivo de argumentos de compilación que requiere esa restricción de ruta. Las instrucciones y el formato TXT se amplían en la [documentación](docs/README.md).
 
-## Uso del juego
+## Cómo jugar
 
-**NUEVA PARTIDA / DEMO** abre el mismo catálogo validado por las pruebas:
+Elegí **NUEVA PARTIDA / DEMO**. La campaña recorre `demo`, `campaign-b`, `ice_demo`, `fragile_demo` y `fragile-ice-demo`. Empujá las cajas hasta los destinos. La caja llave activa cerrojos, pero un cerrojo no reemplaza un destino de victoria. Esperá a que termine cada animación antes de volver a mover.
 
-| Orden | TXT distribuido | Mecánica / testigo de solución |
-|---|---|---|
-| 1 | [demo.txt](src/desktop/resources/levels/demo.txt) | Caja normal; → → → |
-| 2 | [campaign-b.txt](src/desktop/resources/levels/campaign-b.txt) | KeyBox, Lock y apertura/cierre de muros; → ← ↓ ↓ → → ↑ → ↑ ← ← |
-| 3 | [ice_demo.txt](src/desktop/resources/levels/ice_demo.txt) | Hielo; ↓ → |
-| 4 | [fragile_demo.txt](src/desktop/resources/levels/fragile_demo.txt) | Resistencia individual 4→1; → → → |
-| 5 | [fragile-ice-demo.txt](src/desktop/resources/levels/fragile-ice-demo.txt) | Fragile completa el deslizamiento y rompe; → ↓ → → → → → |
+| Control | Acción |
+|---|---|
+| Flechas | Caminar y empujar una caja; no se puede tirar ni empujar dos juntas |
+| `Z` / DESHACER | Retroceder cinco movimientos exitosos; historial de 15 y hasta tres usos por intento |
+| `R` / REINICIAR | Volver al estado inicial del nivel y reiniciar sus métricas |
+| `Esc` | Pausa o regreso, según la pantalla |
+| `M` | Activar o silenciar sonido |
+| `+` / `-` | Cambiar zoom |
+| OPCIONES | Elegir Original Cobre, Nocturno o Jade |
 
-Esperar el fin de la animación antes de la siguiente flecha. **SIGUIENTE NIVEL** aparece habilitado tras victoria si existe otro TXT. El último nivel conserva su resultado y no ofrece un Next inexistente. Continuar desde menú vuelve al resumen si el nivel ya terminó.
+Undo requiere cinco movimientos disponibles. Moverse después de deshacer no recupera usos; Restart o cambiar de nivel inicia otro intento. El HUD muestra nivel, movimientos, empujes, usos de Undo y puntaje: `max(0, 1000 - moves - 2*pushes - 10*undoUsesTotal)`.
 
-- Flechas: caminar/empujar una caja, sin tirar. El jugador no se desliza.
-- `Z` / **DESHACER**: vuelve cinco movimientos exitosos, historial de 15, hasta tres usos por intento. Requiere cinco disponibles; moverse después no recupera usos.
-- `R` / **REINICIAR**: estado inicial y las cuatro métricas a cero.
-- `Esc`: pausa/volver; `M`: sonido; `+`/`-`: zoom. OPCIONES: `ORIGINAL COBRE`, `NOCTURNO`, `JADE`.
-- HUD: nivel, movimientos, empujes, usos de Undo y score. Fórmula: `max(0, 1000 - moves - 2*pushes - 10*undoUsesTotal)`.
+Tras una victoria, **SIGUIENTE NIVEL** avanza si queda otro nivel. **VER REPLAY** ofrece Play/Pause/Step/Reset/Back sobre un tablero independiente: no altera la partida, el puntaje ni el progreso. Registra los movimientos exitosos de la secuencia final tras Undo y Restart. El límite es 10.000 movimientos; si la traza no se puede validar, se conserva la victoria y no se ofrece Replay.
 
-**VER REPLAY**, desde el resumen, ofrece Play/Pause/Step/Reset/Back. Usa otro tablero y cursor: no modifica la partida, score ni progresión. ESC/Back/navegación/cierre cancelan su timer. Registra sólo movimientos exitosos de la rama final tras Undo/Restart. Una traza inconsistente o un intento de más de 10.000 movimientos no ofrece Replay; la victoria sigue funcionando. Al avanzar se ofrece sólo la nueva traza completada. Los tres temas y zoom se comparten con la presentación; Replay avanza por pasos discretos sin SFX.
-
-**GUARDAR PARTIDA / CARGAR PARTIDA** permanecen deshabilitados y no están implementados. **ABRIR TXT** inicia un nivel nuevo; no restaura una partida. La persistencia no se agrega como obligación supuesta de Undo ni cuenta automáticamente como adicional.
-
-## TXT externos
-
-Elegir **ABRIR NIVEL TXT** o iniciar con una ruta:
-
-```bash
-bash scripts/run-swing.sh '/ruta/al/nivel.txt'
-```
+**ABRIR NIVEL TXT** inicia un nivel desde un archivo externo. También se puede pasar la ruta:
 
 ```powershell
-powershell -NoProfile -File ./scripts/run-swing.ps1 -LevelPath 'C:/niveles/mi nivel.txt'
+powershell -NoProfile -File .\scripts\run-swing.ps1 -LevelPath 'C:\niveles\mi nivel.txt'
 ```
 
-Archivo UTF-8 estricto, sin BOM, máximo 65.536 bytes; dimensiones hasta 100×100 y exactamente un jugador. Una entrada inválida informa error y conserva el nivel previo, sus métricas y Replay. Reiniciar no relee el archivo; para una edición externa, guardar y volver a abrirlo.
+En Linux: `bash scripts/run-swing.sh '/ruta/al/nivel.txt'`. La carga inválida informa el error y conserva la partida. **GUARDAR PARTIDA / CARGAR PARTIDA están deshabilitados**: no se implementó persistencia en disco. Abrir un TXT no restaura una partida guardada. Consultá el [formato y ejemplos de niveles](docs/requirements/TXT_FORMAT.md).
 
-Legacy usa `#` pared, espacio piso, `.` destino, `@` jugador, `$` caja, `+` jugador en destino y `*` caja en destino. C2 usa tokens separados por un espacio ASCII, cabecera y secciones:
+## Diseño y patrones
 
-```text
-!sokoban-txt 2
-[grid]
-# # # # #
-# @ $ . #
-# # # # #
-[attributes]
-```
+MVC separa las reglas en el modelo, las pantallas Swing en la vista y la coordinación en `GameController`. La responsabilidad única y la alta cohesión separan lectura TXT, motor, sesión y presentación. GRASP Information Expert ubica las consultas del mundo en `RuntimeState` y las de victoria en `VictoryEvaluator`; las fronteras `GameView` y `VisualThemeFactory` reducen el acoplamiento con implementaciones concretas.
 
-C2 ordinario admite aliases, formas largas e ICE (`{ice|empty}`, `{ice|player}`, `{ice|box}`). Fragile se carga por la definición dedicada, preservando ID y resistencia; Key/Lock/Wall por la extensión explícita. El controlador detecta la ruta mediante los parsers estrictos, sin depender del nombre del archivo. Los TXT distribuidos sirven de ejemplos ejecutables. [Contratos y límites efectivos](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+| Patrón | Clases principales | Problema que resuelve |
+|---|---|---|
+| Abstract Factory | `VisualThemeFactory`, `VisualThemes`, `VisualThemeController`, `VisualThemeApplier` | Cambiar juntas la paleta Swing y la presentación de sprites sin modificar reglas |
+| Command | `MoveCommand`, `ReplayRecorder`, `ReplayTrace`, `ReplayPlayer` | Registrar y reproducir movimientos en un estado aislado |
+| Observer | `LockChangeSubject`, `GameController`, suscriptores de interfaz y sonido | Notificar cambios confirmados de cerrojos sin acoplar el motor a Swing o audio |
 
-## Prototipo experimental de atributos individuales
+Undo conserva snapshots; Replay ejecuta comandos. Los muros se calculan en el modelo y no dependen de los observadores. La [arquitectura](docs/architecture/ARCHITECTURE.md) y las [decisiones de diseño](docs/decisions/DECISION_LOG.md) explican participantes, alternativas, SOLID y GRASP.
 
-El nombre de la API se conserva: `LevelLoader.loadExperimentalFragile(Path)` devuelve plantilla espacial y lista inmutable de ID/posición/resistencia inicial. El runtime se construye con **ambas** partes mediante `RuntimeState.fromExperimentalFragile`; la plantilla sola no representa las cajas. `LevelLoader.load(Path)` rechaza Fragile para evitar pérdida de identidad. D-020 adopta el subconjunto piso/Goal de [este contrato](docs/requirements/FRAGILE_TXT_CONTRACT_PROPOSAL.md); ICE y Lock/muros tienen extensiones implementadas que no constituyen ratificación global de OQ-07/OQ-08.
+## Estructura del proyecto
 
-## Capacidades y pruebas
+| Ruta | Contenido |
+|---|---|
+| `src/main/java` | Lectura TXT, mundo, movimiento, sesión, victoria y Replay |
+| `src/desktop/java` | Swing, controlador, temas, animaciones y sonido |
+| `src/desktop/resources/levels` | Cinco niveles distribuidos |
+| `src/desktop/resources/assets` | Sprites PNG y efectos WAV |
+| `src/test/java`, `src/desktop-test/java` | Pruebas del modelo y la presentación |
+| `scripts` | Ejecución, pruebas y verificadores documentales |
+| `docs` | Requisitos, arquitectura, decisiones, trazabilidad y pruebas |
 
-Con JDK 17, desde la raíz:
+## Entregables
 
-```bash
-bash scripts/test-replay-i3d1.sh
-bash scripts/test-integration-i2.sh
-bash scripts/verify-repo-readonly.sh --require-clean
-git diff --check
-```
+- [Video de gameplay](entregables/r10-20261113/VIDEO_GAMEPLAY.mp4).
+- Informe técnico: [PDF](entregables/r10-20261113/INFORME_TECNICO.pdf) y [DOCX editable](entregables/r10-20261113/INFORME_TECNICO.docx).
+- Portada del equipo: [PDF](entregables/r10-20261113/PORTADA_EQUIPO.pdf) y [DOCX](entregables/r10-20261113/PORTADA_EQUIPO.docx).
+- [Índice de nueve diagramas PNG y fuentes PlantUML](docs/architecture/uml/pr17-rc-ffa27f9/README.md).
+- [Evidencias de pruebas Windows](entregables/r10-20261113/VALIDACION_WINDOWS.md), [manifiesto SHA-256](entregables/r10-20261113/SHA256SUMS.txt) e [índice de entrega](entregables/r10-20261113/README.md).
 
-Sólo desktop headless: `bash scripts/run-swing.sh --test` o `powershell -NoProfile -File ./scripts/run-swing.ps1 -Test`. Ventana real requerida: `bash scripts/run-swing.sh --ui-test` o PowerShell `-UiTest`. Audio nativo opcional en Bash: `bash scripts/run-swing.sh --audio-test` (comprueba reproducción por dispositivo, sin acreditar escucha humana). El verificador documental requiere Git, Bash y Python 3.9+; no es dependencia del juego.
+## Pruebas y uso de IA
 
-[TEST_STRATEGY](docs/testing/TEST_STRATEGY.md) y [auditoría RC](docs/integration/PR17_FUNCTIONAL_RC_2026-11-04.md) identifican comandos, contenido probado, conteos y límites. Headless no acredita percepción visual ni escucha; QA automatizada Linux no certifica Windows, macOS ni aceptación humana.
+La ejecución Windows del 13/11/2026 registró **147 comprobaciones Core, 177 Desktop y 24 UI**, con JDK 26.0.1 y compilación `--release 17`. Son resultados históricos; su alcance, comandos y salidas están en la [estrategia de pruebas](docs/testing/TEST_STRATEGY.md). Una revisión documental no representa una nueva ejecución de esas suites.
 
-## Documentación técnica
-
-[AGENTS](AGENTS.md) → [REHYDRATION_INDEX](docs/continuity/REHYDRATION_INDEX.md) → [CURRENT_STATE](docs/continuity/CURRENT_STATE.md) orientan el ingreso al proyecto. Consultar [requisitos](docs/requirements/REQUIREMENTS.md), [preguntas abiertas](docs/requirements/OPEN_QUESTIONS.md), [decisiones E01–E11 y D-020](docs/decisions/DECISION_LOG.md), [arquitectura](docs/architecture/ARCHITECTURE.md), [responsabilidades](docs/architecture/RESPONSIBILITIES.md), [trazabilidad](docs/traceability/TRACEABILITY_MATRIX.md), [integración](docs/integration/README.md), [TODO](TODO.md) y [fuentes](docs/continuity/SOURCE_REGISTRY.md). [Índice documental](docs/README.md) y [CONTRIBUTING](CONTRIBUTING.md).
-
-## Contexto académico
-
-Entrega informada: **18/11/2026**, demo 15–20 minutos. La versión integrada está disponible para la puesta en común; RF-12/OQ-10 requiere confirmar la elegibilidad de selector + Replay. Los [43 assets](docs/punto5/ASSETS_REGISTRO_SHA256.csv) tienen integridad registrada, pero [titularidad/licencias](docs/assets/ASSET_POLICY.md) siguen pendientes. [StarUML](docs/architecture/uml/STARUML_STATUS.md), informe, video, declaración de IA y revisión/defensa del equipo requieren sus propios gates. El [PR #17](https://github.com/smatrauade/Los-Force-Push/pull/17) fue fusionado; esto no declara cumplida la entrega ni la aceptación académica.
+Se utilizaron ChatGPT y Codex como apoyo para analizar alternativas, revisar código, preparar pruebas y documentación y producir parte de los recursos visuales. El informe técnico declara ese uso. El [registro de recursos](docs/assets/ASSET_POLICY.md) describe la procedencia de los 31 PNG y 12 WAV.

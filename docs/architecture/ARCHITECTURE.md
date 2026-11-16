@@ -1,111 +1,60 @@
-# Arquitectura del juego integrado
+# Arquitectura del juego
 
-Las secciones del 04/11 describen componentes integrados en `main`; las propuestas y cortes anteriores conservan su fecha y alcance como historia del diseño.
+La aplicación separa lectura de niveles, estado del mundo, reglas de movimiento, sesión y presentación. El núcleo usa Java sin dependencias de Swing. La interfaz coordina eventos discretos sobre el EDT; no necesita un ciclo continuo de simulación.
 
-## Observer de presentación — 04/11/2026
+## Flujo MVC
 
-`LockChangeSubject` publica diferencias confirmadas después del render para MOVE/UNDO/RESTART y carga de otro nivel; no retiene ni modifica el mundo. Dos suscriptores reales actualizan el aviso Swing y solicitan audio MOVE; Undo/Restart conservan sus SFX propios. Suscripciones deduplicadas, unsubscribe/close y errores aislados; muros derivados exclusivamente por `RuntimeState`. `LockObserverTest`: 6 escenarios PASS. Adaptación selectiva del subject individual de `impaciencia`, sin importar su sesión ni reglas. [Auditoría y defensa de patrones](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+```text
+Flechas / botones de Swing
+    -> GameController
+    -> LevelProgression / GameSession
+    -> RuntimeMovementEngine -> RuntimeState
+    <- GamePresentation / RuntimeMoveResult / LevelResult
+    -> GameView -> BoardPanel, HUD, animación y sonido
+```
 
-## Replay integrado — 04/11/2026
+El modelo decide movimiento, resistencia, cerrojos, muros y victoria. `GameController` recibe intenciones, delega y publica resultados. `GameView` define la frontera de presentación; `SwingApplication` implementa las pantallas y `BoardPanel` dibuja. Esto permite sustituir la vista por sondas de pruebas sin abrir un `JFrame`.
 
-El Command existente se coordina con `GameController`: `ReplayRecorder` conserva acciones exitosas y `ReplayTrace` se ofrece sólo tras verificar estado final y métricas. No es autoridad del mundo. `ReplayPanel` invoca `ReplayPlayer` sobre un tablero independiente; no recibe controlador ni sesión. Play/Pause/Step/Reset/Back y navegación invalidan callbacks obsoletos por generación. El mismo coordinador de Abstract Factory aplica temas a ambos tableros. Alternativa descartada: reproducir sobre `GameSession`, que alteraría score/historial/progresión. Coste: verificación O(n), límite 10.000; overflow deshabilita sólo Replay. [Pruebas y límites](../integration/PR17_FUNCTIONAL_RC_2026-11-04.md).
+## Una autoridad del mundo
 
-## I3.D.1 — Command de reproducción determinista (04/11/2026)
+`RuntimeState` representa terreno, jugador, cajas con identidad/resistencia, cerrojos y asociaciones de muros. Las transiciones producen estados inmutables nuevos. `Board` se utiliza como representación ordinaria y proyección visual; no es una segunda grilla mutable que decida reglas.
 
-**Problema:** preservar una secuencia reproducible sin mutar la sesión oficial ni tratar Undo/Memento como una inversión física de movimientos. **Elección individual adaptada:** `MoveCommand` encapsula una `Direction` y su operación `execute(engine, state)`; `ReplayRecorder` almacena comandos exitosos, `ReplayTrace` congela el intento y `ReplayPlayer` invoca esas acciones sobre su **propio** `RuntimeMovementEngine` y `RuntimeState` inmutable. Es un Command concreto sin interfaz ceremonial cuando existe un solo tipo de acción. El receptor se suministra por contexto de reproducción, nunca se captura la `GameSession` real. No hay listener Observer, reloj Swing, persistencia, score alternativo ni motor de movimiento duplicado.
+`RuntimeMovementEngine.move` aplica colisiones y trayectorias. Un intento bloqueado conserva el estado. Un empuje en hielo puede recorrer varias celdas y cuenta como un movimiento/empuje; la fragilidad se resuelve al terminar el trayecto. Antes de publicar se comprueba que los muros que cierran no queden ocupados. El renderizador recibe el recorrido autoritativo en `RuntimeMoveResult` y no recalcula la física.
 
-**Alternativas descartadas para este corte:** almacenar snapshots completos de cada paso (duplica Memento y memoria); modificar sesión para observar replay (segunda autoridad); trasplantar `GameController` de `impaciencia` (contratos y score incompatibles); añadir `ReplayCommand` abstracto sin un segundo comando real (indirección sin variación). **Consecuencias:** verificación de trayectoria O(n) y memoria O(n), límite de 10.000 movimientos; estados y métricas completos verificados antes de habilitar reproducción; un desajuste deshabilita solo Replay. SRP/GRASP: modelo sigue en motor/sesión, Replay conserva su historial, Swing únicamente proyectará un cursor independiente en un incremento posterior.
+La inmutabilidad simplifica Undo y Replay y evita que una animación modifique la partida. Su coste es copiar y validar datos del tablero en las transiciones; los límites de 100×100 acotan la entrada. No se presenta como una optimización para tableros arbitrariamente grandes.
 
-**Autoría/procedencia:** idea y componentes iniciales `MoveCommand`, `ReplayRecorder`, `ReplayTrace`, `ReplayPlayer` provienen de la rama **personal** `impaciencia`; el diseño adaptado al PR #17 es código revisado, no fusión de la rama ni aceptación TEAM. OQ-10 queda OPEN; `src/test/java/ar/edu/uade/sokoban/replay/ReplayIntegrationTest.java` especifica los oráculos de este incremento.
+## Carga y validación
 
-Revisado 29/10/2026: contrato TXT soportado adoptado por su responsable; historia de PR #8/#9 preservada. La implementación sigue siendo experimental, sin ratificación del diseño por los PASS ni por los merges. El [UML integral v0.5](uml/sokoban-candidate.puml) se conserva como CANDIDATE; no es el diagrama completo del software actual.
+`LevelLoader` limita la lectura a 65.536 bytes y aplica UTF-8 estricto. `LevelParser`/`C2LevelParser` procesan niveles ordinarios; `ExperimentalFragileParser` conserva identidad y resistencia; `ExtendedLevelParser` interpreta KeyBox, Lock y muros. Estos nombres son los de las APIs existentes. `LevelBuilder` acumula filas y publica un tablero válido.
 
-## Flujo histórico inicial
+El controlador intenta las rutas estrictas de carga sin inferir el formato del nombre del archivo. Las conversiones `RuntimeState.fromExperimentalFragile` y `fromExtended` preservan los datos especiales. La plantilla Fragile sola no representa las cajas. Ante un error de lectura o validación, se conserva la sesión anterior. El [contrato TXT](../requirements/TXT_FORMAT.md) especifica formatos y límites.
 
-El flujo siguiente describe el corte anterior a I1/I2; el runtime integrado y la sesión actual se detallan al final.
+## Sesión, Undo, Restart y victoria
 
-~~~text
-SwingApplication / GameWindow (EDT, GameView)
-  -> GameController -> LevelLoader -> LevelParser
-                                      -> legacy / C2LevelParser -> LevelBuilder -> Level / Board
-                    -> MovementEngine(Board, Direction) -> MoveResult
-  <- GamePresentation(Board inmutable, nombre, moves, pushes)
-  -> BoardPanel -> PixelAssets -> /assets/sprites/*.png
-  -> SoundManager -> /assets/sfx/*.wav
-~~~
+`GameSession` conserva el estado inicial/actual, hasta 15 snapshots y métricas por intento. Cada snapshot contiene mundo, movimientos y empujes. Undo consume cinco snapshots y un uso; su total y el límite de tres usos no se restauran desde el snapshot. Restart vuelve al estado inicial y limpia historial y métricas.
 
-El core no importa Swing ni audio. GameController coordina y conserva una proyección del Board vigente; la vista comparte ese valor inmutable sin duplicar una grilla mutable. No hay GameSession ni loop/polling.
+`VictoryEvaluator` exige destinos y cajas, igual cantidad de ambos y todos los destinos cubiertos. KeyBox sobre Lock no reemplaza Goal. `LevelProgression` administra el catálogo, conserva resultados terminados y avanza. `ScoreCalculator` calcula el resultado saturado en cero; no se requiere una jerarquía Strategy para una sola fórmula.
 
-## Loading y C2-L7
+## Temas mediante Abstract Factory
 
-**Corte histórico:** el siguiente resumen describe C2-L7 y la carga de definición previa a la integración runtime. La carga integrada actual incluye ICE y rutas especiales descritas en el [contrato entre módulos](../punto5/INTEGRACION_EQUIPO.md).
+`VisualThemeFactory` entrega dos productos coordinados: `UiPalette` y `SpritePresentation`. `VisualThemes` ofrece Original Cobre, Nocturno y Jade. `VisualThemeController` aplica la familia al tablero, Replay, menú y controles; `VisualThemeApplier` restaura colores y bordes al volver al original.
 
-[LevelLoader](../../src/main/java/ar/edu/uade/sokoban/level/LevelLoader.java) limita lectura a 65.536 bytes y decodifica UTF-8 estricto. [LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/LevelParser.java) selecciona legacy o el helper interno sin estado [C2LevelParser](../../src/main/java/ar/edu/uade/sokoban/level/C2LevelParser.java) mediante el prefijo reservado. Las firmas públicas LevelLoader.load(Path), LevelParser.parse(String) y Level(Board) no cambian. El código expone `LevelLoader.loadExperimentalFragile(Path) → ExperimentalFragileLevel`: un método privado `readText` centraliza la política de bytes/UTF-8 de ambas entradas; el parser experimental interpreta y el agregado existente valida la definición. No se agrega clase, interfaz, estado compartido ni patrón GoF. [Comparación con alternativas](../requirements/TXT_LEVELS_EXECUTION_PLAN.md#g2--decisión-técnica-del-incremento-29102026).
+Los temas alternativos transforman imágenes en memoria y conservan alfa. `PixelAssets` invalida la caché por familia. Los PNG del repositorio y el estado de juego no cambian. Frente a condicionales por tema distribuidos en cada componente, esta colaboración concentra la variación; agregar una familia exige definir productos compatibles y mantener sus pruebas.
 
-C2 valida header/secciones, tokens ASCII (cuota del subconjunto soportado de 128 caracteres), dimensiones lógicas hasta 100×100 y [attributes] vacía. Sólo ofrece las siete combinaciones existentes; rechaza atributos/especiales. parse(String) no impone el techo de bytes de Loader. No hay caché compartida, fallback ante header inválido ni Level parcial.
+## Replay mediante Command
 
-LevelBuilder es concreto, interno y por carga; Board protege también la construcción directa. Builder/directa y Terrain/Occupant son elecciones experimentales/PREFERRED, sin interfaces o Director adicional. [UML implementado](uml/level-loading-spike-v1.puml).
+`MoveCommand` es un comando inmutable con una `Direction`; `execute(engine, state)` usa el motor como receptor. `ReplayRecorder` registra éxitos y ajusta la secuencia ante Undo/Restart. `ReplayTrace` congela y verifica el recorrido. `ReplayPlayer` ejecuta comandos sobre su propio estado y motor; nunca recibe la sesión activa.
 
-## Movimiento
+`ReplayPanel` ofrece Play/Pause/Step/Reset/Back. Su timer invalida callbacks al pausar, navegar, reiniciar o cerrar. La verificación tiene coste lineal y un límite de 10.000 movimientos; una traza inválida deshabilita solo Replay. Almacenar snapshots de todos los pasos duplicaría el historial; reproducir sobre la sesión alteraría puntaje y progreso. Un comando concreto alcanza mientras exista un único tipo de acción reproducible.
 
-MovementEngine es un servicio sin estado: Board + Direction → MoveResult. MOVED/PUSHED crean un Board validado nuevo; BLOCKED conserva la misma instancia. Mantiene terreno/cajas/jugador e inmutabilidad de estados anteriores. Sólo piso, destino, pared, límites y caja normal. Copiar/validar cuesta O(alto×ancho) por éxito; no es Memento ni una decisión definitiva sobre el modelo futuro. [UML](uml/movement-core-spike-v1.puml).
+## Observer y presentación
 
-En el corte de la rama `victoria`, el incremento añade `RuntimeMovementEngine` sobre `RuntimeState`: KeyBox, Lock y muros dinámicos. Un Lock se activa sólo con KeyBox; los muros asociados abren si al menos un Lock referenciado está activo y vuelven a cerrarse al retirar la llave. Un intento que dejaría ocupado un muro que cierra se bloquea y conserva el estado. `VictoryEvaluator` consulta destinos `GOAL`; Lock no es destino. `LevelProgression` congela el nivel al finalizar y avanza un `LevelCatalog` de formato explícito. En ese corte todavía no implementaba hielo, Fragile jugable ni Undo; se integraron después.
+`LockChangeSubject` compara estados confirmados y publica eventos inmutables de cambios de cerrojos y muros. `GameController` publica después de mostrar el estado; dos suscriptores actualizan avisos y sonido. Un error de presentación no revierte una transición ya confirmada. Las suscripciones se retiran al cerrar.
 
-## Swing y recursos — Punto 5
+Los muros son derivados por `RuntimeState`, no por listeners. Así se conserva el mismo resultado al mover, deshacer, reiniciar o reproducir. `BoardPanel` proyecta la animación con un timer cancelable; Undo, Restart, carga exitosa y navegación cancelan recorridos anteriores. `SoundManager` administra clips por ventana y permite continuar sin dispositivo de audio; no es Singleton.
 
-[GameView](../../src/desktop/java/ar/edu/uade/sokoban/desktop/GameView.java) permite sondas sin JFrame. Conserva render/showLoadError y ofrece métodos default onMove, animateBox, showVictory, configureUiCommands y playEffect. GameController publica onMove para MOVED/PUSHED/BLOCKED; los bloqueos no cambian proyección ni contadores. Además delega Undo y Restart en `GameSession`, calcula el resultado mediante `ScoreCalculator` y, tras publicar el runtime final, proyecta la trayectoria autoritativa como `BoxAnimation`; la vista nunca recalcula física.
+## Principios y consecuencias
 
-GameWindow representa MENU/GAME/PAUSE/OPTIONS/HELP/FINISH. ArrowBindings entrega Direction; sólo GAME permite mover y las flechas se ignoran mientras `BoardPanel.isAnimating()`. BoardPanel representa Board y escala 1x/2x/3x con nearest-neighbor; para ICE/Fragile proyecta frames deterministas desde `BoxAnimation`, suprime la caja final durante el recorrido y cancela su único timer al cambiar de estado, pausar, recargar o cerrar. `SwingApplication` difiere sólo la pantalla FINISH mientras anima; las sondas headless reciben la victoria de inmediato. PixelAssets carga/cacha PNG desde classpath; SoundManager posee clips por ventana, mute y degradación ante dispositivo ausente. No es Singleton ni servicio global del core.
+La [asignación de responsabilidades](RESPONSIBILITIES.md) detalla SRP, OCP, LSP, ISP, DIP y GRASP sobre clases reales. Las [decisiones](../decisions/DECISION_LOG.md) justifican las alternativas. La carga de archivos locales es síncrona y acotada, por lo que un filesystem lento puede demorar el EDT. No se promete carga asíncrona ni persistencia.
 
-La presentación admite tres familias visuales mediante una Abstract Factory acotada a la vista: [VisualThemeFactory](../../src/desktop/java/ar/edu/uade/sokoban/desktop/VisualThemeFactory.java) declara `UiPalette` y `SpritePresentation` como productos coordinados; [VisualThemes](../../src/desktop/java/ar/edu/uade/sokoban/desktop/VisualThemes.java) contiene las familias `ORIGINAL COBRE`, `NOCTURNO` y `JADE`; [VisualThemeController](../../src/desktop/java/ar/edu/uade/sokoban/desktop/VisualThemeController.java) es el único consumidor que cambia tablero, arte de menú y árbol Swing; [VisualThemeApplier](../../src/desktop/java/ar/edu/uade/sokoban/desktop/VisualThemeApplier.java) memoriza y restaura colores/bordes para que la vuelta al tema original sea exacta. Los PNG son inmutables: la familia original devuelve la imagen decodificada y las alternativas calculan un tinte determinista 55/45 en memoria conservando alfa; `PixelAssets` invalida la caché por familia. `BoardPanel` y `PixelTheme.Surface` leen la paleta activa. La fábrica no recibe ni devuelve estado de juego, y el cambio se aplica en EDT. Patrón implementado y probado, no ratificado por el equipo; el selector es candidato a adicional RF-12/OQ-10.
-
-UiCommands contiene callbacks opcionales de Undo/Restart/Save/Load/Next. En I2, `undo`, `restart` y `nextLevel` se habilitan según el estado de sesión; `save` y `loadSaved` siguen deshabilitados. `LevelResult` transporta el resultado final del intento: nivel, movimientos, pushes, usos de Undo y score calculado; `showVictory` muestra esa información sin detectar victoria ni calcular score en la vista. Los nombres futuros contemplados por el renderer son pistas de adaptación, no especificaciones del dominio.
-
-[INTEGRACION_EQUIPO](../punto5/INTEGRACION_EQUIPO.md) es el contrato entre módulos; [UML desktop implementado](uml/swing-playable-spike-v1.puml). Los [43 recursos](../punto5/ASSETS_REGISTRO_SHA256.csv) están versionados y el runner agrega src/desktop/resources al classpath; licencias pendientes según [ASSET_POLICY](../assets/ASSET_POLICY.md).
-
-La UI opera en EDT. La carga local acotada es síncrona y puede demorar ante E/S lenta; evaluar cancelación/SwingWorker sólo cuando ese escenario se autorice. Runners core limitados a java.base; desktop usa java.base,java.desktop. Release 17 es provisional, OQ-11 sigue OPEN.
-
-## Diseño integral propuesto, sin implementación
-
-El candidato incluye GameSession, RestorableLevelState, GameMemento/UndoManager, SessionMetrics, cajas especiales, LockObserver/OpenableWall, ScoreStrategy, LevelCatalog, Repository y AudioService. Esos nombres no implican clases presentes; el SoundManager y LevelResult del desktop son implementaciones de presentación con alcance propio.
-
-- Memento, Observer, Strategy, Builder y fronteras candidatas mantienen sus estados de [DECISION_LOG](../decisions/DECISION_LOG.md); no adoptar interfaces ceremoniales.
-- SessionMetrics fuera del snapshot es TEAM-PROPOSAL; E09/E10 aceptan comportamientos parciales, no esa clase ni una fórmula.
-- La individualidad de resistencia (E02), disposición (E01), cierre (E06) y umbral Undo (E07) ya tienen alcance votado; los detalles permanecen en [OPEN_QUESTIONS](../requirements/OPEN_QUESTIONS.md).
-- E04/E08 tienen regla TEAM decidida; implementación y bordes pertenecen a Model/Movement y sesión. No inferir rotura, consecutividad, ocupación de muros o criterios de victoria desde el UML.
-- El candidato propone polimorfismo de cajas; herencia/composición sigue abierta. No exigir resistencia a todas las cajas ni distribuir instanceof/getClass por la vista.
-
-ExperimentalFragileParser y ExperimentalFragileLevel representan atributos individuales sin producir un Level jugable. El agregado valida IDs y posiciones únicos, límites, piso/destino vacío y resistencia positiva. Siguiente trabajo TXT/niveles: contrastar el consumidor real con el contrato soportado, adoptado por MODULE_OWNER_DECISION en [D-020](../decisions/DECISION_LOG.md#d-020--decisión-del-responsable-txt--29102026). Sintaxis/rango/validación del lector actual resueltos; extensiones especiales e integración runtime OPEN_DEPENDENCY. No ampliar mecánicas en mantenimiento documental. [STARUML_STATUS](uml/STARUML_STATUS.md) separa los diagramas implementados, el candidato preservado y el .mdj pendiente. Los informes de [Loading](../experiments/LEVEL_LOADING_R1.md), [Movement](../experiments/MOVEMENT_R1.md) y [Swing V1](../experiments/SWING_VERTICAL_SLICE_V1.md) son antecedentes fechados.
-
-## Patrones y brechas de defensa — 29/10/2026
-
-La tabla describe ese corte histórico; la sesión I2 actual se identifica al final.
-
-Revisión documental contra el código integrado por PR #11/#12; [evidencia docente](../decisions/DECISION_LOG.md#evidencia-docente-adicional--29102026). AS_IMPLEMENTED no implica aceptación TEAM.
-
-| Problema | Implementación real | Candidato / brecha de defensa |
-|---|---|---|
-| Ensamblar filas y publicar nivel válido | LevelBuilder concreto interno, addRow/build por carga | Justificar Builder simplificado frente a construcción directa; sin familia de productos ni jerarquía Creator GoF |
-| Separar UI de reglas | GameController delega a Loader/MovementEngine y publica GamePresentation; GameView permite sondas | MVC verificable por dependencias; no transferir reglas al renderer |
-| Identidad/resistencia inicial Fragile | ExperimentalFragileLevel separado del Level jugable | Integración runtime pendiente; no duplicar este agregado en R7 |
-| Notificar cambios de Lock a muros asociados | No implementado | Observer indicado por docente según ASR; candidato Lock→Walls depende de OQ-07 |
-| Deshacer y calcular score | `GameSession` mantiene un historial de snapshots con `undo()`, limita cinco movimientos por uso, 15 snapshots y tres usos consecutivos; `restart()` restaura el estado inicial y reinicia métricas. `ScoreCalculator` aplica penalidades incrementalmente con `applyPenalty` desde 1000, con −1 por movimiento, −2 adicionales por push y −10 por uso de Undo; `LevelResult` expone el resumen final. | `Command`/`Memento` y `Strategy` son candidatos de diseño si se formalizan con un problema real y no se sostienen por la implementación actual; la fórmula y los límites están documentados, pero no se debe afirmar una clase de patrón sin su evidencia en código. |
-| Audio y adicionales | SoundManager por ventana; sin persistencia operativa | No Singleton GoF; State/Factory/Decorator no están acreditados por ejemplos o nombres |
-| Familias visuales conmutables | `VisualThemeFactory` (Abstract Factory de vista) con tres familias concretas en `VisualThemes`; `VisualThemeController`/`VisualThemeApplier` aplican y restauran; selector en OPCIONES; `VisualThemeTest` 7/7 headless | Patrón justificado por familia real de productos coordinados y consumidores efectivos; no ratificado TEAM, QA GUI nativa pendiente y elegibilidad RF-12/OQ-10 abierta |
-
-Cada patrón a defender necesita problema, intención, roles reales, variación, alternativa, consecuencias y prueba del código entregado. Los diagramas candidatos no acreditan esas colaboraciones. Esa reconciliación no ejecutó R7. El incremento posterior 5ac2bba implementó la entrada filesystem de definición experimental; gameplay e integración runtime siguen pendientes.
-
-## Frontera runtime I1 local — 03/11/2026
-
-En el worktree auxiliar I1, `LevelCatalog` diferencia explícitamente `STANDARD`, `EXTENDED` y `EXPERIMENTAL_FRAGILE`; `LevelLoader.load` rechaza la conversión Fragile sin ID, mientras `loadExperimentalFragile` y `RuntimeState.fromExperimentalFragile` conservan ID/resistencia (D-020). `RuntimeState` es el **único estado jugable**; `RuntimeMovementEngine` resuelve ICE/E03, Fragile/E04 y eventos Lock/Wall, emitiendo `RuntimeMoveResult.boxPath` y `boxShattered` como datos de transición. `GameSession`/`LevelProgression` coordinan juego y niveles; `Board` es una **proyección visual**, no segunda autoridad. El uso de trayectorias para animación EDT se conserva como pendiente de I3, sin certificarlo por pasar tests headless. Esta sección describe **solo la integración local aún no confirmada**, no `main` ni UML final. [Auditoría y evidencia](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
-
-<!-- I1_PR17_PUBLICATION_2026_11_03 -->
-
-## Estado arquitectónico de I1 publicado — 03/11/2026
-
-El PR Draft #17 (`6abb8ad003ad9af6642fc1a1e11a91f5d238f2b2`) incorpora la reconciliación del runtime de `victoria` con ICE/Fragile de `Objetivo2`: `RuntimeState`/`RuntimeMovementEngine` mantienen una única autoridad de mundo; identidad y resistencia Fragile se conservan; `GameSession`/`LevelProgression` continúan como eje de sesión/campaña. El `Board` permanece como representación legacy/proyección, no estado paralelo de `GameController`. Las referencias de «pendiente» en secciones históricas superiores describen cortes anteriores. La integración de Undo/Restart/Score de Martina y la animación completa ICE/Fragile quedan para I2/I3. UML final y ratificación del equipo aún pendientes. [Evidencia del incremento](../integration/I1_LOCAL_VALIDATION_2026-11-03.md).
-
-## I2 — avance local 04/11/2026
-
-Auxiliar `integration/i2-martina-stage-2026-11-03`, base `9aebe525` y fuente `efd0fcd2`: integración local verificada antes del commit, estrictamente local sin publicación (`REMOTE_PUSH=NOT_RUN`). `GameSession` conserva el mundo, historial y métricas; `LevelProgression.CompletedLevel` retiene `(victory, metrics, undoUsesTotal)` permitiendo que el score histórico persista tras `advance()` y `restart()`; `ScoreCalculator` calcula la fórmula saturada acordada y `GameController` expone el resultado a `SwingApplication`, cuyo HUD (`status`) y pantalla de victoria reciben el puntaje. Con OpenJDK 17.0.20.1 se ejecutaron **58 comprobaciones Undo** (`GameSessionUndoTest`), **258 casos core I1**, **36 casos desktop** y **44 assets**: `bash scripts/test-integration-i2.sh` exit 0. Casos INT-05, INT-06 e INT-08 `PASS` verificados localmente. El reset al cambiar de nivel es provisional; no hay aceptación del código por el equipo (`TEAM_ACCEPTANCE=NOT_RECORDED`). Siguiente gate: revisión funcional del equipo y verificación remota antes de cualquier publicación.
+Los [nueve diagramas](uml/pr17-rc-ffa27f9/README.md) muestran colaboraciones seleccionadas. Sus fuentes, PNG y referencias Java tienen verificaciones de integridad; no pretenden enumerar todos los métodos existentes.

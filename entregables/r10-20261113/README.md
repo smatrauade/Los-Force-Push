@@ -1,21 +1,17 @@
-# Entrega Los Force Push
+# Entrega académica de Los Force Push
 
-Portada e informe revisados el **15/11/2026**. Código ejecutado y grabado: `main@ee2681148f8dde7425968b61b19b631e5532bb04`.
-Esta carpeta reúne los documentos y la evidencia de la entrega; no modifica el juego.
+Material del Trabajo Integrador de Procesos de Desarrollo de Software, UADE. La [portada](PORTADA_EQUIPO.pdf) identifica a los cinco integrantes y sus legajos. Para ejecutar el juego, consultar el [README principal](../../README.md).
 
-- [Portada PDF](PORTADA_EQUIPO.pdf) y [Word editable](PORTADA_EQUIPO.docx), con los cinco integrantes y sus legajos.
-- [Informe PDF](INFORME_TECNICO.pdf) y [Word editable](INFORME_TECNICO.docx).
-- [Video auténtico](VIDEO_GAMEPLAY.mp4): 7:56.8; cinco niveles, temas, Replay, Undo, Restart y selector TXT real.
-- [Nueve diagramas PNG](diagramas_png) y [nueve fuentes PlantUML](fuentes_plantuml), sin cambios.
-- [Guion de defensa de 18 minutos](GUION_DEFENSA.txt).
-- [Borrador de correo sin enviar](BORRADOR_CORREO.txt): completar las direcciones reales de CC.
-- [Validación Windows](VALIDACION_WINDOWS.md), [procedencia](PROCEDENCIA.json), [instrucciones](README_ENTREGA.txt) y [hashes actuales](SHA256SUMS.txt).
+| Material | Archivos |
+|---|---|
+| Portada | [PDF](PORTADA_EQUIPO.pdf), [DOCX](PORTADA_EQUIPO.docx) |
+| Informe técnico y declaración de IA | [PDF](INFORME_TECNICO.pdf), [DOCX editable](INFORME_TECNICO.docx) |
+| Video de gameplay | [MP4](VIDEO_GAMEPLAY.mp4), 7:56.8 |
+| Diagramas de clases | [Nueve PNG](diagramas_png), [nueve fuentes PlantUML](fuentes_plantuml), [índice por vista](../../docs/architecture/uml/pr17-rc-ffa27f9/README.md) |
+| Pruebas Windows | [Registro](VALIDACION_WINDOWS.md), [Core](evidencia/core.txt), [Desktop](evidencia/desktop.txt), [UI](evidencia/ui.txt) |
+| Procedencia e integridad | [Procedencia](PROCEDENCIA.json), [SHA-256](SHA256SUMS.txt), [registro UML](UML_RENDER_GATE.json) |
+| Preparación de la exposición y envío | [Guion de 18 minutos](GUION_DEFENSA.txt), [borrador de correo sin enviar](BORRADOR_CORREO.txt), [instrucciones](README_ENTREGA.txt) |
 
-El ZIP anterior fue retirado del repositorio y no tiene reemplazo. Los archivos se consultan o descargan individualmente desde esta carpeta.
-El manifiesto cubre todos sus archivos actuales, salvo el propio manifiesto. `.gitattributes` conserva sus bytes en Windows.
+El video muestra la campaña de cinco niveles, temas visuales, Replay, Undo, Restart y apertura de un TXT externo. La evidencia corresponde a la ejecución del 13/11/2026 identificada en el registro, sin atribuirle nuevas pruebas por las revisiones documentales.
 
-La QA R10 de 147 pruebas core, 177 desktop y 24 UI corresponde a la ejecución histórica del código indicado; esta revisión verifica documentos e integridad, sin repetir gameplay. El video tiene señal AAC; la escucha humana sigue pendiente. No se acredita un runtime Java 17 nativo.
-
-**StarUML: pendiente de recepción y validación.** Se necesita la exportación real `.mdj`, con métodos y referencias completos, para contrastarla con código y diagramas antes de incorporarla. Un enlace a un editor no acredita el archivo. Los PNG actuales fueron generados con PlantUML y no se presentan como exportaciones StarUML.
-
-Los derechos de assets conservan su estado documentado. El correo no fue enviado y no se afirma aprobación docente por la publicación de estos documentos.
+El manifiesto incluye todos los archivos de esta carpeta excepto el propio manifiesto. Los materiales se descargan individualmente; no se distribuye un ZIP académico en el repositorio. La procedencia de recursos se describe en [recursos e IA](../../docs/punto5/USO_IA_Y_LICENCIAS.md).
