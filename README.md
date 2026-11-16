@@ -106,14 +106,18 @@ Undo conserva snapshots; Replay ejecuta comandos. Los muros se calculan en el mo
 
 ## Entregables
 
-- [Video de gameplay](entregables/r10-20261113/VIDEO_GAMEPLAY.mp4).
-- Informe técnico: [PDF](entregables/r10-20261113/INFORME_TECNICO.pdf) y [DOCX editable](entregables/r10-20261113/INFORME_TECNICO.docx).
-- Portada del equipo: [PDF](entregables/r10-20261113/PORTADA_EQUIPO.pdf) y [DOCX](entregables/r10-20261113/PORTADA_EQUIPO.docx).
+- [Video de gameplay](entregables/VIDEO_GAMEPLAY.mp4).
+- Informe técnico: [PDF](entregables/INFORME_TECNICO.pdf) y [DOCX editable](entregables/INFORME_TECNICO.docx).
+- Portada del equipo: [PDF](entregables/PORTADA_EQUIPO.pdf) y [DOCX](entregables/PORTADA_EQUIPO.docx).
 - [Índice de nueve diagramas PNG y fuentes PlantUML](docs/architecture/uml/pr17-rc-ffa27f9/README.md).
-- [Evidencias de pruebas Windows](entregables/r10-20261113/VALIDACION_WINDOWS.md), [manifiesto SHA-256](entregables/r10-20261113/SHA256SUMS.txt) e [índice de entrega](entregables/r10-20261113/README.md).
+- [Evidencias de pruebas Windows](entregables/VALIDACION_WINDOWS.md), [manifiesto SHA-256](entregables/SHA256SUMS.txt) e [índice de entrega](entregables/README.md).
 
 ## Pruebas y uso de IA
 
 La ejecución Windows del 13/11/2026 registró **147 comprobaciones Core, 177 Desktop y 24 UI**, con JDK 26.0.1 y compilación `--release 17`. Son resultados históricos; su alcance, comandos y salidas están en la [estrategia de pruebas](docs/testing/TEST_STRATEGY.md). Una revisión documental no representa una nueva ejecución de esas suites.
 
 Se utilizaron ChatGPT y Codex como apoyo para analizar alternativas, revisar código, preparar pruebas y documentación y producir parte de los recursos visuales. El informe técnico declara ese uso. El [registro de recursos](docs/assets/ASSET_POLICY.md) describe la procedencia de los 31 PNG y 12 WAV.
+
+## Defensa y demostración
+
+[Presentación y guion para cinco integrantes](entregables/README.md). En Ubuntu: `bash INICIAR_JUEGO.sh` (menú) o `bash DEMO_CARGAR_TXT.sh` (nivel externo). En Windows: `INICIAR_JUEGO.cmd` y `DEMO_CARGAR_TXT.cmd`. Consultar [operación y requisitos](docs/demo/DEFENSA_OPERACION.md).

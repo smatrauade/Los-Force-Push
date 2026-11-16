@@ -8,3 +8,9 @@ src/desktop/resources/levels/**/*.txt text eol=lf whitespace=-blank-at-eol
 
 # Frozen documentation manifests and diagram bytes must match their hashes.
 docs/architecture/uml/pr17-rc-ffa27f9/** -text
+
+# Delivery bytes and platform launchers.
+entregables/** -text
+*.sh text eol=lf
+*.cmd -text
+scripts/demo/*.ps1 text eol=lf

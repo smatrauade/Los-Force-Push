@@ -37,4 +37,4 @@ El selector cambia familias visuales completas sin modificar las reglas. Replay 
 
 No se implementó persistencia de partidas: los controles de guardar/cargar están deshabilitados. Abrir un nivel TXT crea una partida nueva. No se agregan requisitos de guardado por asociar Undo con snapshots.
 
-La [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) relaciona cada requisito con sus clases y pruebas. Los [entregables publicados](../../entregables/r10-20261113/README.md) identifican los formatos disponibles sin atribuir a PlantUML otro formato de origen.
+La [trazabilidad](../traceability/TRACEABILITY_MATRIX.md) relaciona cada requisito con sus clases y pruebas. Los [entregables publicados](../../entregables/README.md) identifican los formatos disponibles sin atribuir a PlantUML otro formato de origen.

@@ -35,6 +35,7 @@ fi
 git diff --check
 git diff --cached --check
 "$python_command" -B - <<'PY'
+import xml.etree.ElementTree as ET
 import csv, hashlib, io, pathlib, re, struct, subprocess, sys, wave, zlib, json, zipfile
 from urllib.parse import unquote
 from pathlib import Path
@@ -47,7 +48,7 @@ docs/decisions/DECISION_LOG.md docs/traceability/TRACEABILITY_MATRIX.md
 docs/testing/TEST_STRATEGY.md docs/references/BIBLIOGRAPHY.md
 docs/assets/ASSET_POLICY.md docs/punto5/USO_IA_Y_LICENCIAS.md
 scripts/check-repo-context.py scripts/verify-repo-readonly.sh
-scripts/verify-uml-pr17-readonly.py entregables/r10-20261113/README.md""".split()
+scripts/verify-uml-pr17-readonly.py entregables/README.md""".split()
 errors=[]
 for name in required:
     if not (root/name).is_file(): errors.append('Missing: '+name)
@@ -149,9 +150,11 @@ if uml_registry.is_file():
 # UML_PR17_PINNED_PNG_REGISTRY_END
 # Delivery formats are accepted only at their exact manifested paths. Game
 # asset rules remain unchanged; copied UML bytes must match the pinned registry.
-delivery = root/'entregables/r10-20261113'
-delivery_prefix = 'entregables/r10-20261113/'
-delivery_base = {'.gitattributes','BORRADOR_CORREO.txt','GUION_DEFENSA.txt',
+delivery = root/'entregables'
+delivery_prefix = 'entregables/'
+delivery_base = {'.gitattributes','BORRADOR_CORREO.txt','GUION_DEFENSA_5_INTEGRANTES.md','TARJETA_OPERADOR_DEMO_18_MIN.txt',
+    'Los_Force_Push_Sokoban_Defensa_18-11-2026.pptx','Los_Force_Push_Sokoban_Defensa_18-11-2026.pdf',
+    'Los_Force_Push_Sokoban_ENTREGA_FINAL.mdj',
     'INFORME_TECNICO.docx','INFORME_TECNICO.pdf','PORTADA_EQUIPO.docx',
     'PORTADA_EQUIPO.pdf','PROCEDENCIA.json','README.md','README_ENTREGA.txt',
     'UML_RENDER_GATE.json','VALIDACION_WINDOWS.md','VIDEO_GAMEPLAY.mp4',
@@ -167,7 +170,7 @@ try:
         if name not in delivery_names or name in delivery_hashes:
             raise ValueError('Unknown/duplicate delivery checksum path')
         delivery_hashes[name]=digest
-    if set(delivery_hashes)!=delivery_names or len(delivery_hashes)!=34:
+    if set(delivery_hashes)!=delivery_names or len(delivery_hashes)!=38:
         raise ValueError('Incomplete delivery manifest')
     actual={n[len(delivery_prefix):] for n in paths if n.startswith(delivery_prefix)}
     if actual != delivery_names | {'SHA256SUMS.txt'}:
@@ -200,21 +203,36 @@ for name in paths:
     data=p.read_bytes()
     if len(data)>10*1024*1024:
         errors.append('Large file: '+name); continue
-    if name.startswith(delivery_prefix) and p.suffix.lower() in {'.pdf','.docx','.mp4','.png'}:
+    if name.startswith(delivery_prefix) and p.suffix.lower() in {'.pdf','.docx','.pptx','.mp4','.png','.mdj'}:
         relative=name[len(delivery_prefix):]
         if relative not in delivery_hashes:
             errors.append('Unauthorized delivery binary: '+name); continue
         if p.suffix=='.pdf' and (not data.startswith(b'%PDF-') or b'%%EOF' not in data[-1024:]):
             errors.append('Invalid delivery PDF: '+name)
-        elif p.suffix=='.docx':
+        elif p.suffix in {'.docx','.pptx'}:
             try:
                 with zipfile.ZipFile(io.BytesIO(data)) as package:
                     members=package.infolist()
                     if (sum(m.file_size for m in members)>20*1024*1024 or
                         any(Path(m.filename).is_absolute() or '..' in Path(m.filename).parts for m in members) or
-                        'word/document.xml' not in package.namelist() or package.testzip() is not None):
+                        ('word/document.xml' if p.suffix=='.docx' else 'ppt/presentation.xml') not in package.namelist() or package.testzip() is not None):
                         raise ValueError('Invalid package')
-            except (ValueError,zipfile.BadZipFile): errors.append('Invalid delivery DOCX: '+name)
+                    if p.suffix=='.pptx':
+                        slides=[n for n in package.namelist() if re.fullmatch(r'ppt/slides/slide[0-9]+\.xml',n)]
+                        if len(slides)!=9: raise ValueError('Invalid slide count')
+                        import xml.etree.ElementTree as ET
+                        for n in slides: ET.fromstring(package.read(n))
+            except (ValueError,zipfile.BadZipFile,ET.ParseError): errors.append('Invalid delivery '+p.suffix[1:].upper()+': '+name)
+        elif p.suffix=='.mdj':
+            try:
+                model=json.loads(data)
+                def diagrams(node):
+                    if isinstance(node,dict):
+                        return int(node.get('_type')=='UMLClassDiagram')+sum(diagrams(v) for v in node.values())
+                    if isinstance(node,list): return sum(diagrams(v) for v in node)
+                    return 0
+                if model.get('_type')!='Project' or diagrams(model)!=9: raise ValueError('Invalid StarUML model')
+            except (ValueError,TypeError,AttributeError): errors.append('Invalid delivery MDJ: '+name)
         elif p.suffix=='.mp4' and (len(data)<12 or data[4:8]!=b'ftyp'):
             errors.append('Invalid delivery MP4: '+name)
         # Copied PNG format/dimensions are checked against the identical source.
@@ -237,7 +255,7 @@ for name in paths:
         except (ValueError, struct.error, zlib.error, wave.Error, EOFError): valid=False
         if not valid: errors.append('Invalid asset format: '+name)
         continue
-    text_suffixes={'.md','.puml','.json','.csv','.py','.ps1','.sh','.java','.txt',
+    text_suffixes={'.md','.puml','.json','.csv','.py','.ps1','.sh','.cmd','.java','.txt',
                    '.xml','.properties','.yml','.yaml','.toml','.ini','.cfg','.html','.css','.js','.ts','.svg'}
     if p.suffix.lower() not in text_suffixes and name != 'docs/architecture/uml/pr17-rc-ffa27f9/SOURCE_INVENTORY_PINNED.tsv' and p.name not in {'.gitkeep','.gitignore','.gitattributes','.editorconfig','LICENSE'}:
         errors.append('Unexpected file type: '+name)
