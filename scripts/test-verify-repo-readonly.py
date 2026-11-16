@@ -3,6 +3,8 @@
 import argparse
 import csv
 import hashlib
+import io
+import zipfile
 import os
 from pathlib import Path
 import shutil
@@ -77,17 +79,30 @@ def main():
                 stream.write('\n'.join(lines + [lines[1]]) + '\n')
 
         def corrupt_delivery(directory, name, data):
-            write(directory, 'entregables/r10-20261113/'+name, data)
-            manifest=directory/'entregables/r10-20261113/SHA256SUMS.txt'
+            write(directory, 'entregables/'+name, data)
+            manifest=directory/'entregables/SHA256SUMS.txt'
             lines=manifest.read_text(encoding='utf-8').splitlines()
             digest=hashlib.sha256(data).hexdigest()
             with manifest.open('w',encoding='utf-8',newline='\n') as stream:
                 stream.write('\n'.join(digest+'  '+name if x.endswith('  '+name) else x for x in lines)+'\n')
 
+        def missing_slide(directory):
+            name='Los_Force_Push_Sokoban_Defensa_18-11-2026.pptx'
+            data=io.BytesIO()
+            with zipfile.ZipFile(directory/'entregables'/name) as source, zipfile.ZipFile(data,'w') as target:
+                for info in source.infolist():
+                    if info.filename!='ppt/slides/slide9.xml':
+                        target.writestr(info,source.read(info))
+            corrupt_delivery(directory,name,data.getvalue())
+
         cases = [
             ('valid repository', None, None),
             ('invalid PDF with updated hash', lambda d: corrupt_delivery(d, 'INFORME_TECNICO.pdf', b'not PDF'), 'Invalid delivery PDF:'),
             ('invalid DOCX with updated hash', lambda d: corrupt_delivery(d, 'INFORME_TECNICO.docx', b'not DOCX'), 'Invalid delivery DOCX:'),
+            ('invalid PPTX with updated hash', lambda d: corrupt_delivery(d, 'Los_Force_Push_Sokoban_Defensa_18-11-2026.pptx', b'not PPTX'), 'Invalid delivery PPTX:'),
+            ('invalid MDJ with updated hash', lambda d: corrupt_delivery(d, 'Los_Force_Push_Sokoban_ENTREGA_FINAL.mdj', b'{}'), 'Invalid delivery MDJ:'),
+            ('PPTX missing slide with updated hash', missing_slide, 'Invalid delivery PPTX:'),
+            ('MDJ missing diagrams with updated hash', lambda d: corrupt_delivery(d, 'Los_Force_Push_Sokoban_ENTREGA_FINAL.mdj', b'{"_type":"Project","ownedElements":[]}'), 'Invalid delivery MDJ:'),
             ('truncated PNG', lambda d: corrupt(d, png, (d / png).read_bytes()[:40]), 'Invalid asset format:'),
             ('PNG CRC corruption', lambda d: corrupt(d, png, (d / png).read_bytes()[:-1] + b'X'), 'Invalid asset format:'),
             ('invalid WAV', lambda d: corrupt(d, wav, b'RIFF\x04\x00\x00\x00WAVE'), 'Invalid asset format:'),
@@ -104,12 +119,12 @@ def main():
             ('missing public document', lambda d: (d / 'docs/architecture/ARCHITECTURE.md').unlink(), 'Missing: docs/architecture/ARCHITECTURE.md'),
             ('broken anchor', lambda d: write(d, 'anchor.md', b'[readme](README.md#does-not-exist)\n'), 'BROKEN_ANCHOR'),
             ('escaping link', lambda d: write(d, 'escape.md', b'[outside](../outside.md)\n'), 'Broken/escaping link:'),
-            ('copied UML altered', lambda d: write(d, 'entregables/r10-20261113/fuentes_plantuml/00_Arquitectura_MVC.puml', b'altered'), 'Delivery hash mismatch:'),
+            ('copied UML altered', lambda d: write(d, 'entregables/fuentes_plantuml/00_Arquitectura_MVC.puml', b'altered'), 'Delivery hash mismatch:'),
             ('pinned UML source altered', lambda d: write(d, 'docs/architecture/uml/pr17-rc-ffa27f9/plantuml/00_Arquitectura_MVC.puml', b'altered'), 'Delivery UML PUML mismatch:'),
             ('pinned Java altered', lambda d: write(d, 'src/main/java/ar/edu/uade/sokoban/replay/MoveCommand.java', b'altered'), 'BLOCKED_UML_JAVA_BLOB_'),
-            ('delivery PDF altered', lambda d: write(d, 'entregables/r10-20261113/INFORME_TECNICO.pdf', b'altered'), 'Delivery hash mismatch:'),
-            ('video altered', lambda d: write(d, 'entregables/r10-20261113/VIDEO_GAMEPLAY.mp4', b'altered'), 'Video hash mismatch'),
-            ('unlisted delivery binary', lambda d: write(d, 'entregables/r10-20261113/unlisted.pdf', b'%PDF-fixture'), 'Invalid delivery manifest:'),
+            ('delivery PDF altered', lambda d: write(d, 'entregables/INFORME_TECNICO.pdf', b'altered'), 'Delivery hash mismatch:'),
+            ('video altered', lambda d: write(d, 'entregables/VIDEO_GAMEPLAY.mp4', b'altered'), 'Video hash mismatch'),
+            ('unlisted delivery binary', lambda d: write(d, 'entregables/unlisted.pdf', b'%PDF-fixture'), 'Invalid delivery manifest:'),
             ('academic ZIP rejected', lambda d: write(d, 'entregables/academic.zip', b'fixture'), 'Forbidden/residue path:'),
             ('synthetic secret', lambda d: write(d, 'synthetic.txt', (('gh' + 'p_') + 'A' * 30).encode()), 'Possible secret:'),
         ]

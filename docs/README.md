@@ -15,4 +15,4 @@ Para descargar y ejecutar el juego, comenzá por el [README principal](../README
 | [Recursos](assets/ASSET_POLICY.md) | Procedencia, formatos e inventario de imágenes y sonidos |
 | [Uso de IA](punto5/USO_IA_Y_LICENCIAS.md) | Asistencia utilizada y declaración de procedencia |
 | [Bibliografía](references/BIBLIOGRAPHY.md) | Referencias conceptuales del diseño |
-| [Entrega académica](../entregables/r10-20261113/README.md) | Informe, portada, video, diagramas y evidencia |
+| [Entrega académica](../entregables/README.md) | Informe, portada, video, diagramas y evidencia |

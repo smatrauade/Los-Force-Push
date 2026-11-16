@@ -16,7 +16,7 @@ Martina García Rios — 1128267
 Giuliano Calicchia — 1187567
 
 Repositorio: https://github.com/smatrauade/Los-Force-Push
-Material: https://github.com/smatrauade/Los-Force-Push/tree/main/entregables/r10-20261113
+Material: https://github.com/smatrauade/Los-Force-Push/tree/main/entregables
 
 Saludos cordiales,
 Equipo Los Force Push

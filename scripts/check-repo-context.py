@@ -81,7 +81,7 @@ def main():
         'docs/requirements/TXT_FORMAT.md','docs/architecture/ARCHITECTURE.md',
         'docs/architecture/RESPONSIBILITIES.md','docs/decisions/DECISION_LOG.md',
         'docs/traceability/TRACEABILITY_MATRIX.md','docs/testing/TEST_STRATEGY.md',
-        'docs/assets/ASSET_POLICY.md','entregables/r10-20261113/README.md']
+        'docs/assets/ASSET_POLICY.md','entregables/README.md']
     errors=[]
     for name in required:
         path=root/name

@@ -30,4 +30,4 @@ OBS Studio 33.0.1 capturó ventana y audio de aplicación, con micrófono y escr
 
 La compilación a release 17 no prueba un runtime JDK 17 nativo. La automatización no se presenta como ensayo humano de periféricos, percepción visual o escucha. Los hashes identifican los archivos y no certifican derechos de recursos, aprobación docente ni entrega por correo.
 
-El MP4 y las salidas de tests se mantienen como evidencia histórica. Los [diagramas PlantUML/PNG](../../docs/architecture/uml/pr17-rc-ffa27f9/README.md) tienen un registro técnico propio; los documentos editables/PDF y los hashes actuales se identifican en el [índice](README.md).
+El MP4 y las salidas de tests se mantienen como evidencia histórica. Los [diagramas PlantUML/PNG](../docs/architecture/uml/pr17-rc-ffa27f9/README.md) tienen un registro técnico propio; los documentos editables/PDF y los hashes actuales se identifican en el [índice](README.md).

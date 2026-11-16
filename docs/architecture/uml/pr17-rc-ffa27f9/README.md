@@ -22,4 +22,4 @@ Las vistas seleccionan clases, miembros y relaciones para explicar arquitectura,
 
 `python -B scripts/verify-uml-pr17-readonly.py --root . --verify-java`, desde la raíz del repositorio, comprueba las nueve fuentes, los nueve PNG y los 50 blobs Java. El identificador de código de los registros es procedencia de estos archivos, no un HEAD permanente. Para volver a renderizar, usar la versión indicada en un directorio de salida separado y comparar contra el registro; no sobrescribir las fuentes o imágenes al verificar.
 
-La [carpeta de entrega](../../../../entregables/r10-20261113/README.md) incluye copias idénticas de los nueve pares.
+La [carpeta de entrega](../../../../entregables/README.md) incluye copias idénticas de los nueve pares.

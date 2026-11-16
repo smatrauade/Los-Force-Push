@@ -17,7 +17,7 @@ La matriz relaciona el alcance académico con el código presente y los oráculo
 | RF-11: imágenes/sonido | `PixelAssets`, `SoundManager`, recursos de classpath | `DesktopVisualAssetsTest`, `NativeAudioSmokeTest`; [inventario de 43 archivos](../punto5/ASSETS_REGISTRO_SHA256.csv) |
 | RF-12: temas y Replay | `VisualThemeFactory` y colaboración; `MoveCommand` y colaboración | `VisualThemeTest`, `ReplayIntegrationTest`, `ReplayControllerTest`, `ReplayPresentationTest` |
 | RT-01: Java/Swing | Core y desktop separados, runners PS1/Bash | [Requisitos y ejecución](../../README.md) |
-| RT-02: materiales de entrega | README, informe, portada, video, diagramas | [Índice con formatos disponibles](../../entregables/r10-20261113/README.md) y manifiesto |
+| RT-02: materiales de entrega | README, informe, portada, video, diagramas | [Índice con formatos disponibles](../../entregables/README.md) y manifiesto |
 | RT-03: diseño y defensa | MVC, principios y patrones con participantes reales | [Arquitectura](../architecture/ARCHITECTURE.md), [responsabilidades](../architecture/RESPONSIBILITIES.md), [decisiones](../decisions/DECISION_LOG.md) |
 | RT-04: declaración de IA | Informe técnico y procedencia de recursos | [Declaración](../punto5/USO_IA_Y_LICENCIAS.md) e informe |
 
