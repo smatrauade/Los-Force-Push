@@ -1,185 +1,124 @@
-# Los Force Push / Sokoban — Guion de defensa para cinco integrantes
+# Los Force Push / Sokoban — Guion de defensa
 
-**Asignatura:** Procesos de Desarrollo de Software — UADE
+**Asignatura:** Procesos de Desarrollo de Software — UADE · Ingeniería en Informática
 **Docente:** Jonathan Leonel Pepe
-**Fecha de exposición:** miércoles 18 de noviembre de 2026
-**Objetivo temporal:** 18 minutos de exposición y demostración en vivo (margen de 15–20 minutos)
-**Estado del documento:** guion de trabajo para la defensa; reparto y tiempos sujetos a ensayo final.
+**Fecha de defensa:** 18 de noviembre de 2026
 
-## 1. Criterios de la defensa
+Guía de los temas, decisiones de diseño y funcionalidades de Sokoban, organizada por integrante y diapositiva.
 
-Las indicaciones de la cátedra establecen una **DEMO en vivo**, explicación de funcionalidades y patrones de diseño, con duración de **15 a 20 minutos**. No es obligatorio mostrar código ni diagramas en pantalla. El modelo StarUML, informe y demás entregables se mantienen disponibles para consulta y evaluación académica, aunque no se proyecten.
+La [presentación editable](Los_Force_Push_Sokoban_Defensa_18-11-2026.pptx) contiene estas explicaciones ampliadas en sus notas del presentador. La [copia PDF](Los_Force_Push_Sokoban_Defensa_18-11-2026.pdf) reproduce las nueve diapositivas. La [tarjeta de demostración](TARJETA_OPERADOR_DEMO_18_MIN.txt) conserva un recorrido reproducible de referencia.
 
-La estructura expositiva de **siete bloques** se utiliza como **índice conceptual para explicar**. No debe confundirse con los **nueve diagramas de clases** existentes en el `.mdj` final. Las siete secciones conceptuales son: (1) Arquitectura MVC; (2) Modelo y movimiento; (3) Sesión, Undo y puntaje; (4) Carga TXT; (5) Abstract Factory; (6) Command; y (7) Observer.
+## 1. Distribución de temas
 
-Las dos funcionalidades **adicionales** que se defienden son **temas visuales / Abstract Factory** y **Replay / Command**. **Observer** se utiliza para comunicar los cambios de cerrojos, que son parte de las mecánicas requeridas. **Undo** se implementa mediante snapshots internos; no debe describirse como un GoF Memento formal. La lógica de apertura/cierre de muros pertenece al modelo, no a los observadores. No afirmar que existe persistencia de partidas: los botones Guardar/Cargar están deshabilitados.
-
-## 2. Distribución propuesta y cronograma
-
-| Tiempo | Integrante | Bloques conceptuales | Evidencia visual/demo |
+| Diapositiva | Integrante | Tema | Tiempo orientativo |
 |---|---|---|---|
-| 00:00–03:15 | **Lucas Capatti** | Presentación, MVC y carga TXT | Menú; archivo TXT; nivel `demo` y primera victoria |
-| 03:15–06:45 | **Santino Matra** | Modelo y movimiento | `campaign-b` (llave/cerrojo), `ice_demo` (hielo), `fragile_demo` (frágil) |
-| 06:45–10:15 | **Martina García Rios** | Sesión, Undo, Restart y puntaje | `fragile-ice-demo`, cinco movimientos, Undo y victoria |
-| 10:15–13:45 | **Juan Ignacio Antonini** | Abstract Factory y Observer | Selector de tres temas; referencia al cerrojo demostrado |
-| 13:45–17:30 | **Giuliano Calicchia** | Command / Replay y decisiones de diseño | Replay en partida terminada: Step/Reset/Play/Back |
-| 17:30–18:00 | **Lucas (cierre)** | Resultado y enlace a entregables | Pantalla final / portada breve |
+| 1 | Lucas Capatti | Introducción al proyecto | 00:00–00:25 |
+| 2 | Lucas Capatti | MVC, carga TXT y construcción de niveles | 00:25–01:45 |
+| 3 | Juan Ignacio Antonini | Cerrojos, muros, victoria y Observer | 01:45–05:30 |
+| 4 | Santino Matra | Motor e inmutabilidad | 05:30–06:40 |
+| 5 | Santino Matra | Movimiento, hielo, cajas frágiles y GRASP | 06:40–09:15 |
+| 6 | Martina García Rios | Undo, Restart, snapshots y puntaje | 09:15–13:00 |
+| 7 | Giuliano Calicchia | Interfaz y Abstract Factory | 13:00–16:45 |
+| 8 | Lucas Capatti | Command y Replay | 16:45–18:25 |
+| 9 | Lucas Capatti | Cierre y decisiones de diseño | 18:25–18:45 |
 
-**Distribución orientativa.** Cada integrante debe comprender todas las decisiones y patrones, no solamente su bloque.
+Distribución: 3:45 minutos por integrante (18:45 en total). Lucas interviene al inicio y al cierre.
 
-**Operador único recomendado:** una persona maneja teclado y mouse durante toda la demo para evitar traspasos y errores. Los cinco pueden exponer y pedir acciones al operador. Si Lucas opera, que no intente leer, mover y cambiar ventanas simultáneamente durante su sección: ensayar el relevo o preparar una persona de apoyo.
+## 2. Introducción, MVC y carga TXT — Lucas (diapositivas 1–2)
 
----
+Sokoban es un juego de rompecabezas 2D desarrollado en Java con Swing. Su objetivo es empujar cajas hasta los destinos; además incorpora hielo, cajas frágiles y llave, cerrojos, muros dinámicos, Undo, Restart y puntuación. Sus dos funcionalidades adicionales son el cambio de familias visuales y Replay.
 
-## 3. Texto sugerido para exponer, con indicaciones en vivo
+**MVC.** La necesidad es separar las reglas de movimiento y el estado de la interfaz gráfica. El modelo conserva el mundo, aplica las reglas y calcula el resultado; el controlador coordina las acciones del jugador; la vista representa el resultado. Esto permite probar las reglas sin abrir ventanas y cambiar la apariencia sin modificar el motor. `GameController` coordina; `GameSession` administra el intento; `RuntimeMovementEngine` resuelve la transición sobre `RuntimeState`; `GameView` define la frontera hacia Swing.
 
-### Persona 1 — Lucas Capatti | 00:00–03:15
+**Construcción de niveles.** Los TXT permiten incorporar distintas configuraciones de tablero sin cambiar el código. `LevelLoader` realiza la lectura y los parsers interpretan y validan el formato. `LevelBuilder` reúne filas de manera incremental y publica una definición `Level`/`Board` válida. Es una aplicación simplificada de la intención de Builder, no una estructura GoF completa con Director y múltiples constructores. Una carga inválida conserva la sesión anterior. Los datos especiales se conservan en las definiciones correspondientes; la entrada válida no garantiza que cualquier puzzle tenga solución.
 
-**Tema: presentación, MVC y carga TXT.**
+**Demo de referencia:** menú, selector ABRIR NIVEL TXT, `demo.txt`, iniciar la campaña y completar el primer nivel (`→ → →`, 993 puntos previstos sin Undo).
 
-**Texto oral:**
+## 3. Cerrojos, victoria y Observer — Juan (diapositiva 3)
 
-> Buenas tardes. Somos **Los Force Push** y vamos a presentar nuestro trabajo integrador: una versión de **Sokoban** desarrollada en **Java con Swing**. La idea del juego es mover un personaje por un tablero y empujar cajas hasta sus destinos, respetando obstáculos. A partir de esa mecánica agregamos cajas especiales, hielo, cerrojos, muros dinámicos, seguimiento de movimientos, Undo, puntaje y dos funcionalidades adicionales con patrones de diseño.
->
-> Una decisión importante fue separar las responsabilidades. En la **arquitectura MVC**, la vista Swing muestra el tablero, los controles y las animaciones; el **GameController** recibe las acciones del usuario y coordina el caso de uso; mientras que el modelo representa el mundo y determina si cada movimiento es válido. De esta manera, la interfaz no necesita calcular por sí misma cómo se empuja una caja o cuándo se gana.
->
-> Los niveles se definen en archivos **TXT externos**. Se leen y validan antes de reemplazar la partida actual. Si un archivo no cumple el formato, el juego informa el problema y mantiene la sesión que ya estaba abierta. El contenido del nivel no está escrito dentro de la interfaz: los parsers construyen una definición válida y a partir de ella se inicia el estado de juego.
->
-> Primero vamos a mostrar una partida sencilla. Las flechas permiten desplazarse y empujar; no podemos tirar de las cajas ni mover dos a la vez. Cuando todos los destinos quedan cubiertos, aparece la victoria y su resultado.
+Cuando una caja llave ocupa un cerrojo, el modelo determina la apertura de los muros asociados. Sólo una caja llave activa el cerrojo; un muro se abre cuando al menos uno de sus cerrojos asociados está activo. Retirar la llave puede cerrar el muro, pero se rechaza una transición que lo cerraría sobre una celda ocupada. El cerrojo no equivale a un destino.
 
-**Demostración:** mostrar brevemente **ABRIR NIVEL TXT** y elegir una copia preparada de `demo.txt` desde `src/desktop/resources/levels/demo.txt` mediante el selector (opcional si el tiempo apremia). Volver al menú; elegir **NUEVA PARTIDA / DEMO** y resolver el primer nivel con `→ → →`. Mostrar la pantalla de victoria y el contador. **No intentar abrir el código ni los nueve diagramas.**
+El problema de diseño es comunicar el cambio a distintos componentes sin que el motor necesite conocer la interfaz o el sistema de audio. **Observer** es un patrón de comportamiento que establece una relación de uno a muchos: un sujeto mantiene observadores y los notifica ante cambios relevantes. En nuestra implementación, `GameController` publica los estados confirmados mediante `LockChangeSubject`; sus observadores permiten que la vista informe el cambio y que se soliciten los efectos sonoros. El contrato es `Observer.onLockChange(Event)`. El sujeto permite suscripción y desuscripción y compara los estados anterior y posterior. Un error de tipo `RuntimeException` de un suscriptor no revierte una transición ya confirmada.
 
-**Transición:** «Ahora Santino va a mostrar cómo esas reglas se extienden a los tipos de caja y los terrenos especiales».
+La separación clave es que el modelo **decide** y Observer **notifica**. La vista recibe el nuevo estado por MVC y los observadores reaccionan a eventos confirmados. Esto reduce el acoplamiento y protege la autoridad del modelo. No se delegan las reglas de apertura y cierre a Swing ni al audio.
 
-### Persona 2 — Santino Matra | 03:15–06:45
+`VictoryEvaluator` verifica que exista al menos una caja y un destino, que las cantidades coincidan y que todos los destinos estén cubiertos. `LevelProgression` conserva el resultado, finaliza el nivel y habilita el avance cuando corresponde.
 
-**Tema: estado del mundo, motor y movimiento.**
+**Demo de referencia:** `campaign-b`, primer empuje de caja llave; explicar el muro y los avisos; completar el recorrido hasta victoria (983 puntos previstos sin Undo).
 
-**Texto oral:**
+## 4. Motor e inmutabilidad — Santino (diapositivas 4–5)
 
-> El tablero no se maneja como una colección de imágenes que se mueven libremente: existe un **RuntimeState** que contiene terreno, posición del jugador, cajas, cerrojos y muros. El **RuntimeMovementEngine** recibe el estado y la dirección de movimiento, comprueba las reglas y genera el nuevo estado. En nuestro diseño trabajamos con estados inmutables para no mezclar la lógica con el dibujo o las animaciones.
->
-> Hay tres tipos de caja. La **normal** se empuja hasta una celda disponible. La **llave** puede activar un cerrojo; cuando queda sobre el cerrojo correcto, los muros asociados se abren. Ese cerrojo no equivale a un destino de victoria. La **frágil** tiene una resistencia individual: cada empuje la reduce, y puede romperse al llegar a cero.
->
-> En los terrenos de **hielo**, las cajas se deslizan según las reglas del motor. El jugador no se desliza automáticamente. En un empuje, el recorrido completo se decide en el modelo y la animación solamente lo representa. Así evitamos que el dibujo y el cálculo produzcan resultados diferentes.
->
-> Esto refleja la idea de **alta cohesión y bajo acoplamiento**: el motor resuelve movimientos, el estado conoce el mundo y Swing presenta el resultado. Una acción bloqueada no cambia el mundo ni aumenta los contadores.
+El modelo dispone de una única representación autoritativa del mundo. Cada movimiento válido genera un nuevo `RuntimeState` en lugar de modificar el anterior; si el movimiento está bloqueado, el motor conserva el estado y no aumenta las métricas. La sesión mantiene la referencia al estado actual. Inmutabilidad no significa que todos los objetos de la aplicación sean inmutables.
 
-**Demostración:** desde la victoria de `demo`, pulsar **SIGUIENTE NIVEL**. Resolver `campaign-b` con la secuencia validada en pruebas: `→ ← ↓ ↓ → → ↑ → ↑ ← ←`; destacar la llave y el cambio de muro. Avanzar a `ice_demo`, usar `↓ →`, observar deslizamiento y esperar la animación. Avanzar a `fragile_demo`, usar `→ → →`, mostrar el comportamiento frágil. Si se extiende demasiado, dar prioridad a `campaign-b` y `ice_demo` y mencionar el nivel frágil al pasar al siguiente bloque.
+Esta decisión permite conservar estados anteriores sin que las transiciones posteriores los alteren accidentalmente. Facilita Undo y Replay y simplifica la separación entre reglas y animación. Tiene costes de copia y validación; no se afirma un ahorro de rendimiento cuantificado.
 
-**Transición:** «Con ese motor funcionando, Martina va a explicar cómo conservamos el progreso y podemos deshacer movimientos sin recalcular todo».
+El motor concentra las colisiones, empujes, deslizamientos y resistencia. Una caja sobre hielo continúa hasta salir de la superficie o encontrar un obstáculo; el jugador no se desliza. Aunque recorra varias celdas, se contabiliza un movimiento y un empuje. Una caja frágil pierde una unidad de resistencia por empuje; al agotarse se rompe. Si el empuje incluye hielo, primero se calcula la trayectoria y luego se resuelve la rotura. No es necesario un choque para romperla.
 
-### Persona 3 — Martina García Rios | 06:45–10:15
+**Justificación:** GRASP Alta cohesión y Bajo acoplamiento permiten separar las reglas de la presentación; Experto en Información asigna las consultas del mundo a `RuntimeState`. SRP separa motivos de cambio: el motor decide la transición y el panel la representa. `RuntimeMoveResult` comunica la trayectoria y la rotura; `BoardPanel` y `BoxAnimation` las representan sin recalcular la física. No hay un solucionador general de niveles.
 
-**Tema: GameSession, Undo, Restart y cálculo de puntaje.**
+**Demo de referencia:** `ice_demo` (`↓ →`), seguido de `fragile_demo` (`→ → →`), con 996 y 991 puntos previstos sin Undo.
 
-**Texto oral:**
+## 5. Undo, Restart, Memento y puntaje — Martina (diapositiva 6)
 
-> El motor sabe resolver un movimiento, pero no administra toda una partida. Para eso tenemos **GameSession**, que conserva el estado inicial, el estado actual, los contadores y el historial. Cada movimiento exitoso permite guardar una instantánea del mundo y sus métricas reversibles.
->
-> El requisito de **Undo** era particular: no retroceder un paso, sino **cinco movimientos exitosos por uso**, con un historial máximo de quince y hasta tres usos consecutivos por intento. Una acción de Undo restaura el estado, los movimientos y los empujes de ese momento; sin embargo, el uso acumulado de Undo sigue contando para el puntaje. Esto no es lo mismo que Replay: Undo restaura snapshots de una partida activa; Replay reproduce comandos en otra partida separada.
->
-> **Restart** vuelve al estado inicial del nivel y reinicia el historial y los contadores del intento. La victoria se decide comprobando las cajas y los destinos; luego se presenta un resumen de movimientos, empujes, usos de Undo y puntaje.
->
-> El criterio de puntaje que elegimos es **máximo entre cero y mil menos los movimientos, menos dos veces los empujes y menos diez veces los usos de Undo**. Lo concentra una clase **ScoreCalculator**, en lugar de poner esa fórmula dentro de la ventana. Es un ejemplo de asignar una responsabilidad específica a un componente concreto.
+El problema de Undo es recuperar una situación previa incluso cuando una caja cambia de resistencia, se desliza o desaparece. Invertir manualmente un movimiento podría no recuperar toda la información perdida. Por eso la solución utiliza snapshots privados de estado y métricas reversibles, una adaptación de la intención de **Memento**, patrón de comportamiento que permite guardar y restaurar estados sin romper el encapsulamiento.
 
-**Demostración:** entrar en `fragile-ice-demo`. Esperar la animación del primer empuje. Realizar cinco movimientos exitosos: `→ ↓ → → →`; pulsar **DESHACER** (`Z`), que debe restaurar el inicio. Resolver ahora con `→ ↓ → → → → →`, esperando las animaciones. Mostrar la victoria y la penalización de Undo. Como referencia, sin Undo la solución de siete movimientos se registró históricamente con 989 puntos; con un único uso de Undo y exactamente esa solución, el puntaje esperado es **979**. Si el entorno o el recorrido difiere, explicar la fórmula sin afirmar un número prefijado. Señalar el botón **REINICIAR**, pero no pulsarlo al final: interesa conservar la victoria para la sección Replay.
+`GameSession` conserva hasta quince snapshots correspondientes a movimientos exitosos. Cada Undo recupera exactamente cinco movimientos, con un máximo de tres usos por intento; volver a moverse no recupera ese presupuesto. La sesión administra sus propias instantáneas, sin Caretaker independiente: no se presenta como una implementación GoF completa con sus tres roles separados. El mundo, los movimientos y los empujes se restauran; el total de usos de Undo permanece registrado. Restart inicia otro intento, recupera el estado inicial y reinicia historial y métricas.
 
-**Transición:** «Con la lógica y los resultados separados de la ventana, Juan va a explicar cómo cambiamos la apariencia y cómo avisamos los eventos de cerrojos».
+`ScoreCalculator` concentra el cálculo y `LevelResult` representa el resumen de la sesión. La fórmula documentada es `max(0, 1000 - movimientos - 2*empujes - 10*usosUndo)`. Los usos de Undo se penalizan con diez puntos, aunque al restaurar movimientos y empujes la puntuación puede subir respecto al momento anterior al deshacer. Separar el cálculo del panel evita que la vista administre reglas de puntuación.
 
-### Persona 4 — Juan Ignacio Antonini | 10:15–13:45
+**Demo de referencia:** nivel `fragile-ice-demo`, reinicio, cinco movimientos exitosos y Undo, repetición de la solución hasta victoria. El puntaje previsto para siete movimientos, dos empujes y un Undo es 979.
 
-**Tema: Abstract Factory y Observer.**
+## 6. Interfaz y Abstract Factory — Giuliano (diapositiva 7)
 
-**Texto oral:**
+La primera funcionalidad adicional permite cambiar el estilo visual completo sin modificar la partida. El problema no es sólo elegir colores aislados, sino obtener productos visuales que pertenezcan a una misma familia.
 
-> Una de las **dos funcionalidades adicionales** es el cambio de tema visual. Queríamos que los colores de la interfaz y la apariencia de los sprites cambien de manera coherente, sin modificar las reglas del juego. Para eso aplicamos **Abstract Factory**.
->
-> La interfaz **VisualThemeFactory** define los productos que debe entregar cada familia: una **UiPalette** para los colores de Swing y una **SpritePresentation** para transformar la representación visual de los sprites. Tenemos tres familias: **Original Cobre, Nocturno y Jade**. El controlador de temas selecciona una familia y actualiza la presentación. La alternativa era distribuir condiciones por tema en muchos componentes; la fábrica concentra esa variación y facilita mantener familias consistentes.
->
-> También usamos **Observer** para los cambios de cerrojos. Cuando una transición ya fue confirmada, **LockChangeSubject** compara el estado anterior con el nuevo y publica un evento. Los suscriptores de la presentación lo utilizan para mostrar avisos y reproducir efectos de sonido. **Los observadores no deciden si el muro se abre**: eso lo calcula el modelo. Esta separación evita acoplar las reglas a ventanas o dispositivos de audio.
->
-> Los dos casos muestran el mismo criterio de diseño: responsabilidades delimitadas y comunicación mediante contratos, en lugar de acumular todas las decisiones en una sola clase.
+**Abstract Factory** es un patrón creacional que permite obtener familias de productos relacionados sin depender de sus implementaciones concretas. En nuestro juego `VisualThemeFactory` ofrece `UiPalette` (paleta) y `SpritePresentation` (transformación de imágenes). Las familias concretas Original Cobre, Nocturno y Jade proporcionan productos compatibles y la presentación consume la fábrica seleccionada. `VisualThemeController`, `VisualThemeApplier`, `BoardPanel` y `PixelAssets` coordinan y aplican la familia visual. Los temas alternativos mezclan 55 % de color original y 45 % de tinte, preservando la transparencia. No se sobrescriben los sprites almacenados.
 
-**Demostración:** desde la pantalla de victoria, ir a **VOLVER AL MENÚ → OPCIONES**, mostrar Original Cobre, Nocturno y Jade, y volver a la partida terminada por **CONTINUAR** (ruta corroborada por la prueba UI del repositorio). Para Observer, **referirse al cambio de cerrojo ya mostrado en `campaign-b`**; no reiniciar la campaña sólo para repetirlo. Dejar disponible la pantalla de victoria con el botón **VER REPLAY**.
+Esta organización concentra la variación de la estética, evita distribuir la lógica de selección por el motor y favorece OCP: añadir una familia exige su implementación y registro, pero no cambiar las reglas. Abstract Factory no construye niveles. Builder ensambla progresivamente un objeto; Abstract Factory provee familias de productos.
 
-**Transición:** «Por último, Giuliano va a mostrar la segunda funcionalidad adicional: reproducir una partida completa sin modificar la partida original».
+**Demo de referencia:** opciones, recorrer Original Cobre, Nocturno y Jade; regresar mediante CONTINUAR y preservar estado y métricas.
 
-### Persona 5 — Giuliano Calicchia | 13:45–17:30
+## 7. Command y Replay — Lucas (diapositiva 8)
 
-**Tema: Command, Replay y cierre técnico.**
+Para nuestra segunda funcionalidad adicional utilizamos **Command**, un patrón de comportamiento que consiste en encapsular una acción dentro de un objeto, permitiendo almacenarla y ejecutarla posteriormente.
 
-**Texto oral:**
+En lugar de guardar una imagen o una copia del tablero por cada movimiento, guardamos las acciones necesarias para reconstruir la partida desde su estado inicial. Cada movimiento exitoso se representa mediante un comando que conoce la dirección y solicita al motor que lo ejecute. Los comandos pueden ejecutarse individualmente o de forma secuencial, utilizando las mismas reglas que en la partida original.
 
-> La segunda **funcionalidad adicional** es **Replay**, que permite observar cómo se resolvió un nivel después de terminarlo. Para implementarlo utilizamos el patrón de comportamiento **Command**.
->
-> Cada **MoveCommand** representa una dirección y tiene una operación de ejecución sobre el motor. **ReplayRecorder** registra los movimientos exitosos y ajusta esa secuencia cuando se utiliza Undo o Restart. Al finalizar una partida válida, genera una **ReplayTrace** que puede verificarse. **ReplayPlayer** recibe esa traza y ejecuta los comandos sobre un estado propio, independiente de la sesión que acabamos de ganar.
->
-> La decisión importa porque si reprodujéramos sobre la partida real, podríamos alterar el puntaje, los contadores o incluso el avance de niveles. Con el estado aislado, los controles **Play, Pause, Step, Reset y Back** permiten recorrer la secuencia sin tocar el progreso. Además, la reproducción es opcional: si una traza no puede validarse, la victoria sigue siendo válida.
->
-> En conjunto, aplicamos **MVC** como arquitectura, principios **SOLID y GRASP** para asignar responsabilidades y los patrones **Abstract Factory, Command y Observer** para resolver problemas concretos. No agregamos patrones sólo por incluirlos: por ejemplo, el puntaje utiliza una sola fórmula, así que no requería Strategy; y Undo usa snapshots internos sin presentarlo como un Memento formal.
->
-> La implementación se encuentra en el repositorio público con instrucciones de ejecución, pruebas, informe, video y modelo de clases StarUML. Nuestro objetivo fue entregar un juego funcional, pero también un diseño que podamos explicar, validar y extender.
+La reproducción trabaja sobre un estado independiente: podemos pausarla, reiniciarla o regresar a la pantalla de victoria sin modificar el progreso ni el puntaje. Mientras que Undo recupera estados anteriores, Replay vuelve a ejecutar las acciones que permitieron llegar al resultado.
 
-**Demostración:** en la victoria del último nivel, seleccionar **VER REPLAY**. Mostrar **STEP**, **RESET**, **PLAY**, **PAUSE** y **BACK**, indicando que se usa un tablero independiente. No navegar hacia otra partida antes de mostrar Replay. Si el ritmo queda corto de tiempo, mostrar `STEP → RESET → PLAY → BACK` y explicar Pause verbalmente.
+| Participante | Código | Responsabilidad |
+|---|---|---|
+| Comando concreto | `MoveCommand` | Encapsula la dirección y delega la ejecución al motor. |
+| Receptor | `RuntimeMovementEngine` | Aplica las reglas al estado recibido. |
+| Invocador | `ReplayPlayer` | Ejecuta los comandos sobre un estado propio. |
+| Cliente/coordinación | `GameController`, `ReplayRecorder` | Coordinan la creación, el registro y la preparación de la reproducción. |
+| Traza | `ReplayTrace` | Conserva estado inicial, secuencia y datos necesarios para verificar el resultado. |
 
-**Transición:** «Lucas, cerramos con una síntesis de lo que se entregó».
+La implementación es una variante simplificada porque sólo necesitamos un tipo de acción parametrizada por dirección, no una jerarquía de comandos concretos. En el primer nivel se registran tres comandos hacia la derecha; al ejecutarlos en orden, el motor reconstruye el tablero final en Replay sin modificar la sesión original.
 
-### Cierre — Lucas | 17:30–18:00
+Cuando Undo tiene éxito se eliminan los cinco comandos deshechos; Restart inicia un registro nuevo. Los intentos bloqueados no se registran. Replay representa la secuencia efectiva del intento final, no todas las pulsaciones ni todos los intentos. Antes de habilitarlo, `ReplayRecorder.verified` comprueba que pueda reconstruirse el estado final y las métricas de movimientos y empujes. Una traza inválida o que supere el límite de 10.000 comandos deshabilita Replay sin anular la victoria; no se trata de un sistema antitrampas.
 
-> Para cerrar: mostramos las reglas del Sokoban, niveles externos, cajas especiales, Undo y puntaje, junto con las dos funcionalidades adicionales, **temas y Replay**. Las decisiones de diseño se documentaron y contrastaron con pruebas. La implementación, los diagramas StarUML y los demás entregables están disponibles en el repositorio. Gracias; quedamos atentos a sus preguntas.
+**Justificación:** elegimos Command porque necesitábamos convertir acciones de ejecución inmediata en objetos almacenables y ejecutables posteriormente, reutilizando el motor y aislando la reproducción de la partida activa.
 
----
+**Demo de referencia:** VER REPLAY, STEP, RESET, PLAY, PAUSE y BACK; comprobar que las métricas de victoria se conservan.
 
-## 4. Hoja de operación: demo reproducible
+## 8. Cierre y síntesis — Lucas (diapositiva 9)
 
-**No leer en voz alta; entregar al operador.** Las siguientes soluciones corresponden a `ReleaseCampaignTest.java` y `ReleaseUiSmokeTest.java` del repositorio y deben ensayarse con la interfaz real antes del miércoles.
+| Concepto | Decisión de diseño |
+|---|---|
+| MVC | Separar modelo, coordinación y presentación. |
+| Builder (simplificado) | Construir y validar niveles incrementalmente. |
+| Inmutabilidad, SRP y GRASP | Conservar una autoridad del estado y concentrar reglas. |
+| Observer | Notificar cambios a los suscriptores sin delegar las reglas del mundo. |
+| Memento (adaptación con snapshots) | Guardar y restaurar estados para Undo. |
+| Abstract Factory | Proporcionar familias visuales compatibles. |
+| Command | Encapsular y registrar acciones para Replay. |
 
-| Nivel / efecto | Acciones | Puntaje de solución simple sin Undo |
-|---|---|---:|
-| `demo` | `→ → →` | 993 |
-| `campaign-b` | `→ ← ↓ ↓ → → ↑ → ↑ ← ←` | 983 |
-| `ice_demo` | `↓ →` | 996 |
-| `fragile_demo` | `→ → →` | 991 |
-| `fragile-ice-demo` | `→ ↓ → → → → →` | 989 |
+Los tres patrones GoF centrales son Abstract Factory, Command y Observer. La carga incremental y el historial se relacionan con las intenciones de Builder y Memento mediante implementaciones simplificadas. Los patrones no son un fin en sí mismos: responden a necesidades concretas del videojuego.
 
-Para demostrar Undo en `fragile-ice-demo`: **primero** `→ ↓ → → →`, luego `Z`, **después** la secuencia completa de siete movimientos. La puntuación prevista en ese recorrido es 979, siempre que se reproduzcan exactamente las acciones indicadas y se complete una sola vez Undo. **Esperar a que finalicen las animaciones** entre acciones relevantes, especialmente en hielo y rotura de cajas. La pantalla debe tener el foco del teclado.
+## 9. Materiales y referencias
 
-Si no es imprescindible recorrer los cinco niveles durante la clase, reducir las acciones, **no** la explicación de los tres patrones: al menos demostrar un caso de llave/cerrojo, uno de hielo/fragilidad, Undo, un tema alternativo y Replay de un nivel finalizado.
-
-## 5. Control previo y contingencias
-
-- Usar un clon y una versión del juego ya revisados; en Windows el runner oficial desde la raíz del repositorio es `INICIAR_JUEGO.cmd` (doble clic). Requiere JDK completo 17+ y un escritorio gráfico.
-- Tener abierto de antemano el juego, probar teclas, volumen, zoom y selector TXT, cerrar notificaciones y conocer la ruta local exacta de los niveles. **Usar los accesos directos de demostración, que compilan y abren el juego automáticamente; no resolver errores en público.**
-- Definir un único operador y una señal acordada para pasar de orador o de nivel. Las animaciones deben terminar antes de continuar.
-- Si una carga TXT falla, el juego conserva la partida. Explicar el error en vez de prometer que la entrada es válida; usar un TXT probado.
-- Si falla la demo en vivo, intentar reiniciarla una sola vez. El video de gameplay ya publicado sirve como **evidencia de respaldo**, pero no debe presentarse como equivalente a haber realizado la demo en vivo.
-- No decir que se puede guardar/cargar partidas en disco: esos controles están deshabilitados. No confundir el Replay con Undo ni Observer con la lógica del muro.
-- Ensayar con cronómetro y dejar unos 60–90 segundos de margen de movimiento/transiciones dentro de los 18 minutos. Una persona distinta del operador lleva el tiempo.
-
-## 6. Preguntas de defensa posibles (todos deben poder responder)
-
-**¿Por qué MVC?** Para desacoplar las reglas del juego de Swing; el controlador interpreta acciones y delega en el modelo, mientras la vista presenta resultados.
-
-**¿Por qué estados inmutables?** Ayudan a mantener una fuente autoritativa y simplifican la restauración y validación; su coste es crear nuevas estructuras al mover.
-
-**¿Undo es Memento?** No afirmamos una implementación formal de ese GoF. GameSession conserva snapshots de estado y métricas; Replay usa Command.
-
-**¿Qué diferencia a Abstract Factory de cambiar colores con if/switch?** La fábrica proporciona una familia consistente de paleta y tratamiento de sprites mediante un contrato, evitando condicionales repartidos por las vistas.
-
-**¿Quién abre el muro: Observer o RuntimeState?** El modelo determina la apertura. Observer comunica a la vista y el sonido un cambio ya confirmado.
-
-**¿Por qué Replay no modifica el puntaje?** ReplayPlayer ejecuta sobre una copia/estado independiente y no actualiza GameSession ni LevelProgression.
-
-**¿Por qué no Strategy para el puntaje?** No existe un conjunto de políticas intercambiables en la implementación; ScoreCalculator encapsula una sola fórmula de manera suficiente.
-
-**¿El formato TXT garantiza que todo nivel se pueda resolver?** No. La validación garantiza estructura y consistencia según las reglas; solvabilidad general no se demuestra por leer un archivo válido.
-
-
-## Presentación visual
-
-- [Presentación editable (PowerPoint)](Los_Force_Push_Sokoban_Defensa_18-11-2026.pptx)
-- [Copia PDF](Los_Force_Push_Sokoban_Defensa_18-11-2026.pdf)
-- [Guía operativa de demo](../docs/demo/DEFENSA_OPERACION.md)
-
-El material visual acompaña la exposición y no sustituye la demostración.
+- [Presentación de la defensa](Los_Force_Push_Sokoban_Defensa_18-11-2026.pptx) y [PDF](Los_Force_Push_Sokoban_Defensa_18-11-2026.pdf).
+- [Informe técnico](INFORME_TECNICO.pdf), [modelo StarUML](Los_Force_Push_Sokoban_ENTREGA_FINAL.mdj) y [video de gameplay](VIDEO_GAMEPLAY.mp4).
+- [Arquitectura](../docs/architecture/ARCHITECTURE.md), [decisiones](../docs/decisions/DECISION_LOG.md), [responsabilidades](../docs/architecture/RESPONSIBILITIES.md), [formato TXT](../docs/requirements/TXT_FORMAT.md) y [pruebas](../docs/testing/TEST_STRATEGY.md).
+- [Guía de ejecución y demostración](../docs/demo/DEFENSA_OPERACION.md), [índice de entregables](README.md) y [manifiesto SHA-256](SHA256SUMS.txt).

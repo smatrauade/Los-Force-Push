@@ -1,45 +1,35 @@
-LOS FORCE PUSH — TARJETA DE OPERACIÓN PARA LA DEFENSA (18/11/2026)
+LOS FORCE PUSH — TARJETA DE DEMOSTRACIÓN DE REFERENCIA (18/11/2026)
 ===================================================================
+Recorrido de 18:45 (3:45 por integrante). Las soluciones sin Undo
+corresponden al recorrido de referencia de la campaña; esperar cada animación.
 
-REF TECNICA: ReleaseCampaignTest.java; version 04cfceb5 (secuencias validas historicamente)
-Preparar JDK 17+, ventana y foco; esperar animaciones.
+00:00–01:45 LUCAS: introducción, MVC y TXT.
+ABRIR NIVEL TXT: src/desktop/resources/levels/demo.txt; volver al menú.
+NUEVA PARTIDA / DEMO: RIGHT RIGHT RIGHT -> victoria prevista 993.
 
-00:00-03:15 LUCAS: MVC + TXT
-[Opcional] ABRIR NIVEL TXT: seleccionar src/desktop/resources/levels/demo.txt; volver al menú.
-NUEVA PARTIDA / DEMO: RIGHT RIGHT RIGHT -> VICTORIA 993.
+01:45–05:30 JUAN: cerrojos, muros, victoria y Observer.
+SIGUIENTE NIVEL (campaign-b): RIGHT; mostrar cambio de cerrojo.
+LEFT DOWN DOWN RIGHT RIGHT UP RIGHT UP LEFT LEFT -> victoria prevista 983.
 
-03:15-06:45 SANTINO: modelo y movimiento
-SIGUIENTE NIVEL (campaign-b):
-RIGHT LEFT DOWN DOWN RIGHT RIGHT UP RIGHT UP LEFT LEFT -> VICTORIA 983.
-SIGUIENTE NIVEL (ice_demo): DOWN RIGHT -> VICTORIA 996.
-SIGUIENTE NIVEL (fragile_demo): RIGHT RIGHT RIGHT -> VICTORIA 991.
+05:30–09:15 SANTINO: motor e inmutabilidad, hielo y fragilidad.
+SIGUIENTE NIVEL (ice_demo): DOWN RIGHT -> victoria prevista 996.
+SIGUIENTE NIVEL (fragile_demo): RIGHT RIGHT RIGHT -> victoria prevista 991.
 
-06:45-10:15 MARTINA: sesión, Undo, puntaje
-SIGUIENTE NIVEL (fragile-ice-demo).
-Primero: RIGHT DOWN RIGHT RIGHT RIGHT (5 movimientos exitosos).
-Pulsar Z (Undo cinco) y verificar restauración.
-Luego: RIGHT DOWN RIGHT RIGHT RIGHT RIGHT RIGHT -> VICTORIA, puntaje previsto 979.
-NO pulsar Restart después de la victoria; conservar Replay disponible.
+09:15–13:00 MARTINA: Undo, Restart, snapshots y puntaje.
+SIGUIENTE NIVEL (fragile-ice-demo): RIGHT; esperar rotura; R (Restart).
+RIGHT DOWN RIGHT RIGHT RIGHT (5 movimientos exitosos); Z (Undo).
+RIGHT DOWN RIGHT RIGHT RIGHT RIGHT RIGHT -> victoria prevista 979.
+Sin Undo, la solución equivale a 989 puntos. Las cifras son referencias.
 
-10:15-13:45 JUAN: Abstract Factory y Observer
-VOLVER AL MENU -> OPCIONES -> recorrer Original Cobre, Nocturno, Jade.
-VOLVER -> CONTINUAR (retorna a pantalla de victoria).
-Recordar cerrojo mostrado en campaign-b; NO reiniciar partida.
+13:00–16:45 GIULIANO: interfaz y Abstract Factory.
+VOLVER AL MENÚ -> OPCIONES -> Original Cobre, Nocturno, Jade.
+VOLVER -> CONTINUAR, conservar la victoria.
 
-13:45-17:30 GIULIANO: Command y Replay
+16:45–18:45 LUCAS: Command, Replay y cierre.
 VER REPLAY -> STEP -> RESET -> PLAY -> PAUSE -> BACK.
-Si falta tiempo: STEP -> RESET -> PLAY -> BACK, Pause se explica oralmente.
+Comprobar que no se alteran las métricas de victoria.
 
-17:30-18:00 LUCAS: cierre.
-
-REGLAS:
-- No cargar TXT a mitad de campaña salvo emergencia: reemplaza la sesión.
-- Replay requiere una partida completada y traza validada.
-- Esperar fin de animaciones; no apurar teclas sobre hielo o rotura.
-- Operador único. No presentar archivo de continuidades o charlas privadas.
-- No confundir: Undo=snapshots, Replay=Command, muros=modelo, Observer=notificación.
-- Si se omite algún nivel por tiempo, conservar un cierre válido para mostrar Replay.
-
-Secuencias: ReleaseCampaignTest.java (commit exacto). Puntajes esperados en
-soluciones sin Undo: 993, 983, 996, 991, 989. Con un Undo en el último
-nivel y la solución rehecha: 979 (si se ejecuta exactamente lo indicado).
+Reglas de referencia: esperar las animaciones; no cargar otro TXT durante
+la campaña si se quiere preservar la sesión; Replay requiere una traza
+validada. Undo restaura snapshots; Replay ejecuta comandos; Observer
+notifica cambios confirmados, no controla las reglas del mundo.
